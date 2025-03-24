@@ -26,11 +26,22 @@ use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reservations = Reservation::with('chauffeur', 'client', 'car', 'trip', 'carDriver')->paginate(10);
+        // Récupération des réservations avec les relations nécessaires
+        $reservations = Reservation::with(['chauffeur', 'client', 'car', 'trip', 'carDriver']);
+    
+        // Filtrage par statut si un statut est sélectionné
+        if ($request->has('status') && !empty($request->status)) {
+            $reservations = $reservations->where('status', $request->status);
+        }
+    
+        // Pagination
+        $reservations = $reservations->paginate(10);
+    
         return view('reservations.index', compact('reservations'));
     }
+    
 
     public function create()
     {
@@ -405,5 +416,13 @@ $date = $request->date;
         return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
     }
     
+    public function confirmedReservations()
+{
+    $reservations = Reservation::with('chauffeur', 'client', 'car', 'trip', 'carDriver')
+        ->where('status', 'Confirmée') // Filtre les réservations confirmées
+        ->paginate(10);
+
+    return view('reservations.confirmed', compact('reservations'));
+}
 
 }

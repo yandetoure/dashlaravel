@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');
 
 // Affichage des formulaires d'inscription
 Route::get('/register/agent', [UserController::class, 'createAgent'])->name('register.agent.form');
