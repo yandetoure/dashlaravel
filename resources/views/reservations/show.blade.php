@@ -55,7 +55,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="p-3 bg-light rounded shadow-sm">
-                        <h6><i class="bi bi-tag"></i> <strong>Statut :</strong> 
+                        <h6><i class="bi bi-tag"></i> <strong>Statut :</strong> <span class="badge {{ $reservation->status == 'En_attente' ? 'bg-warning text-dark' : ($reservation->status == 'confirmée' ? 'bg-success' : 'bg-danger') }}">
+                        {{ ucfirst($reservation->status) }}
+                    </span>
                             @if($reservation->status == 'En_attente')
                                 <span class="badge bg-warning text-dark">En attente</span>
                             @elseif($reservation->status == 'confirmée')
