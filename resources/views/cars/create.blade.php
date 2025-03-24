@@ -20,36 +20,40 @@
         <form action="{{ route('cars.store') }}" method="POST" class="mt-3">
             @csrf
 
-            <!-- Marque -->
-            <div class="mb-4">
-                <label for="marque" class="form-label fw-semibold">Marque</label>
-                <input type="text" name="marque" id="marque" class="form-control rounded-3 p-3 shadow-sm" 
-                       placeholder="Ex: Toyota, BMW..." value="{{ old('marque') }}" required>
+            <div class="row mb-4">
+                <!-- Marque -->
+                <div class="col-md-6">
+                    <label for="marque" class="form-label fw-semibold">Marque</label>
+                    <input type="text" name="marque" id="marque" class="form-control rounded-3 p-3 shadow-sm" 
+                           placeholder="Ex: Toyota, BMW..." value="{{ old('marque') }}" required>
+                </div>
+
+                <!-- Modèle -->
+                <div class="col-md-6">
+                    <label for="model" class="form-label fw-semibold">Modèle</label>
+                    <input type="text" name="model" id="model" class="form-control rounded-3 p-3 shadow-sm" 
+                           placeholder="Ex: Corolla, X5..." value="{{ old('model') }}" required>
+                </div>
             </div>
 
-            <!-- Modèle -->
-            <div class="mb-4">
-                <label for="model" class="form-label fw-semibold">Modèle</label>
-                <input type="text" name="model" id="model" class="form-control rounded-3 p-3 shadow-sm" 
-                       placeholder="Ex: Corolla, X5..." value="{{ old('model') }}" required>
+            <div class="row mb-4">
+                <!-- Couleur -->
+                <div class="col-md-6">
+                    <label for="color" class="form-label fw-semibold">Couleur</label>
+                    <input type="text" name="color" id="color" class="form-control rounded-3 p-3 shadow-sm" 
+                           placeholder="Ex: Rouge..." value="{{ old('color') }}" required>
+                </div>
+
+                <!-- Année -->
+                <div class="col-md-6">
+                    <label for="year" class="form-label fw-semibold">Année</label>
+                    <input type="number" name="year" id="year" class="form-control rounded-3 p-3 shadow-sm" 
+                           placeholder="Ex: 2023" value="{{ old('year') }}" required>
+                </div>
             </div>
 
-            <!-- Modèle -->
             <div class="mb-4">
-                <label for="color" class="form-label fw-semibold">Couleur</label>
-                <input type="text" name="color" id="color" class="form-control rounded-3 p-3 shadow-sm" 
-                       placeholder="Ex: Rouge..." value="{{ old('color') }}" required>
-            </div>
-
-            <!-- Année -->
-            <div class="mb-4">
-                <label for="year" class="form-label fw-semibold">Année</label>
-                <input type="number" name="year" id="year" class="form-control rounded-3 p-3 shadow-sm" 
-                       placeholder="Ex: 2023" value="{{ old('year') }}" required>
-            </div>
-
-            <!-- Matricule -->
-            <div class="mb-4">
+                <!-- Matricule -->
                 <label for="matricule" class="form-label fw-semibold">Matricule</label>
                 <input type="text" name="matricule" id="matricule" class="form-control rounded-3 p-3 shadow-sm" 
                        placeholder="Ex: AB-123-CD" value="{{ old('matricule') }}" required>

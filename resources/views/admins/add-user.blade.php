@@ -4,37 +4,52 @@
 @section('content')
 <style>
     .container {
-    max-width: 600px; /* Réduit la largeur du formulaire */
-}
+        max-width: 800px; /* Réduit la largeur du formulaire */
+    }
 
-.card {
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
+    .card {
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-.card-header {
-    font-weight: bold;
-    text-align: center;
-}
+    .card-header {
+        font-weight: bold;
+        text-align: center;
+    }
 
-.form-control {
-    border-radius: 8px;
-    padding: 10px;
-}
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+    }
 
-.btn-success {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 16px;
-}
+    .btn-success {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 16px;
+    }
 
-.alert {
-    border-radius: 8px;
-    padding: 10px;
-}
+    .alert {
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    /* Disposition des champs par deux */
+    .row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .col-6 {
+        flex: 1;
+    }
+
+    .col-6 input, .col-6 select {
+        width: 100%;
+    }
 
 </style>
+
 <div class="container mt-5">
     <div class="card">
         <div class="card-header bg-primary text-white">
@@ -54,9 +69,8 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.create.account') }}" method="POST"  enctype="multipart/form-data">
+            <form action="{{ route('admin.create.account') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                
                 <div class="mb-3">
                     <label for="user_type" class="form-label">Type d'utilisateur</label>
                     <select class="form-control" name="role" id="user_type" required>
@@ -69,14 +83,20 @@
                     </select>
                 </div>
 
-                <div class="mb-3" id="first_name_field">
-                    <label for="first_name" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" name="first_name" id="first_name">
-                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3" id="first_name_field">
+                            <label for="first_name" class="form-label">Prénom</label>
+                            <input type="text" class="form-control" name="first_name" id="first_name">
+                        </div>
+                    </div>
 
-                <div class="mb-3" id="last_name_field">
-                    <label for="last_name" class="form-label">Nom</label>
-                    <input type="text" class="form-control" name="last_name" id="last_name">
+                    <div class="col-6">
+                        <div class="mb-3" id="last_name_field">
+                            <label for="last_name" class="form-label">Nom</label>
+                            <input type="text" class="form-control" name="last_name" id="last_name">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mb-3 d-none" id="company_name_field">
@@ -84,24 +104,36 @@
                     <input type="text" class="form-control" name="name" id="name">
                 </div>
 
-                <div class="mb-3">
-                    <label for="address" class="form-label">Adresse</label>
-                    <input type="text" class="form-control" name="address" id="address" required>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" name="address" id="address" required>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Numéro de téléphone</label>
+                            <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="phone_number" class="form-label">Numéro de téléphone</label>
-                    <input type="text" class="form-control" name="phone_number" id="phone_number" required>
-                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" required>
+                        </div>
+                    </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="profile_photo" class="form-label">Photo de profil</label>
-                    <input type="file" class="form-control" name="profile_photo" id="profile_photo" accept="image/*">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="profile_photo" class="form-label">Photo de profil</label>
+                            <input type="file" class="form-control" name="profile_photo" id="profile_photo" accept="image/*">
+                        </div>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-success">Créer l'utilisateur</button>

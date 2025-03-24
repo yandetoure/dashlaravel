@@ -56,9 +56,53 @@ public function store(Request $request)
     'jour' => $request->jour,
     'heure' => $request->heure,
     'motif' => $request->motif,
-    'garagiste' => $request->garagiste,
-    'prix' => $request->prix,
-    'statut' => false, // ou true selon votre logique
+    'statut' => false,
+]);
+
+    return redirect()->route('maintenances.index')->with('success', 'Maintenance ajoutée avec succès.');
+}
+
+
+public function update(Request $request)
+{
+    $request->validate([
+        'garagiste_id' => 'required|exists:users,id',
+        'jour' => 'required|date',
+        'heure' => 'required',
+        'motif' => 'required',
+        'garagiste_id' => 'required',
+        'diagnostique' => 'required',
+        'note' => 'nullable',
+        'prix' => ''
+    ]);
+
+    // Trouver le chauffeur de la voiture
+    $chauffeur = User::whereHas('roles', function ($query) {
+        $query->where('name', 'chauffeur');
+    })->where('car_id', $request->car_id)->first();
+
+    if (!$chauffeur) {
+        return back()->withErrors(['car_id' => "Aucun chauffeur n'est assigné à cette voiture."]);
+    }
+
+    // Vérifier et mettre à jour son jour de repos si nécessaire
+    $this->mettreAJourJourRepos($chauffeur);
+
+    // Vérifier si le jour sélectionné correspond au jour de repos
+    if ($chauffeur->jour_repos === Carbon::parse($request->jour)->translatedFormat('l')) {
+        return back()->withErrors(['jour' => "Ce chauffeur est en repos ce jour-là ({$chauffeur->jour_repos})."]);
+    }
+
+   // Créer la nouvelle maintenance
+   Maintenance::create([
+    'jour' => $request->jour,
+    'heure' => $request->heure,
+    'motif' => $request->motif,
+    'diagnostique' => $request->diagnostique,
+    'note' => $request->note,
+    'garagiste_id' => $request->garagiste_id,
+    'note' => $request->note,
+    'statut' => false,
 ]);
 
     return redirect()->route('maintenances.index')->with('success', 'Maintenance ajoutée avec succès.');
@@ -73,7 +117,7 @@ private function mettreAJourJourRepos(User $chauffeur)
 
     if ($derniereMiseAJour->diffInDays(now()) >= 7) {
         $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-        $jourRepos = $jours[array_rand($jours)]; // Jour aléatoire
+        $jourRepos = $jours[array_rand($jours)];
         $chauffeur->update(['jour_repos' => $jourRepos]);
     }
 }

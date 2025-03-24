@@ -21,6 +21,8 @@ use App\Mail\ReservationUpdated;
 use App\Mail\ReservationCancelleddriver;
 use App\Mail\ReservationCancelledclient;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 
 class ReservationController extends Controller
 {
@@ -132,11 +134,13 @@ public function storeByAgent(Request $request)
         'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users,email'],
         'date' => 'required|date',
         'heure_ramassage' => 'required',
+        'adresse_rammassage' => 'required|string|max:255',
         'heure_vol' => 'required',
         'numero_vol' => 'required',
         'nb_personnes' => 'required|integer|min:1',
         'nb_valises' => 'required|integer|min:0',
         'nb_adresses' => 'required|integer|min:0',
+        'phone_number' => ['required', 'regex:/^[0-9]{9}$/', 'unique:users,phone_number'],
     ]);
 
     // Vérification qu'au moins un choix de client est fait
@@ -154,32 +158,37 @@ public function storeByAgent(Request $request)
         return back()->withErrors(['chauffeur_id' => 'Aucun chauffeur disponible pour ce créneau.']);
     }
 
-    $car = Car::find($chauffeur->car_id);
+      // Vérification de la voiture du chauffeur
+      $car = $chauffeur->car_drivers()->with('car')->first()?->car;
 
-    if (!$car) {
-        return back()->withErrors(['cardriver_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
-    }
+      if (!$car) {
+          return back()->withErrors(['date' => "Le chauffeur n'a pas de voiture assignée."]);
+      }
 
     // Récupérer la relation CarDriver
-    $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->firstOrFail();
+    $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->first();
+if (!$carDriver) {
+    return back()->withErrors(['chauffeur_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
+}
 
-    if (!$carDriver) {
-        return back()->withErrors(['chauffeur_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
-    }
 
     // Vérifier la disponibilité du chauffeur (pas de réservation avant 3 heures)
     $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
-        ->where('status', 'Confirmée')
-        ->orderBy('date', 'desc')
-        ->first();     
+    ->where('status', 'Confirmée')
+    ->orderByDesc('date')
+    ->orderByDesc('heure_ramassage')
+    ->first();
+
 
     if ($lastReservation) {
-        $lastReservationTime = Carbon::parse($lastReservation->heure_ramassage);
-        $requestHeureRamassage = Carbon::parse($request->heure_ramassage);
-        if ($lastReservationTime->diffInHours($requestHeureRamassage) < 3) {
+        $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
+        $requestDateTime = Carbon::parse("{$request->date} {$request->heure_ramassage}");
+    
+        if ($lastReservationDateTime->diffInHours($requestDateTime) < 3) {
             return back()->withErrors(['date' => 'Le chauffeur ne peut pas être réservé moins de 3 heures après sa dernière réservation.']);
         }
     }
+    
 
     // Vérification du jour de repos du chauffeur
     if ($chauffeur->day_off === Carbon::parse($request->date)->format('l')) {
@@ -206,6 +215,7 @@ public function storeByAgent(Request $request)
             'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($password),
+            'phone_number' => $request->phone_number,
         ]);
         $clientId = $client->id;
     } else {
@@ -225,6 +235,7 @@ $date = $request->date;
         'last_name' => $request->last_name,
         'email' => $request->email,
         'id_agent' => $idAgent,
+        'adresse_rammassage' => $request->adresse_rammassage,
         'date' => $request->date,
         'heure_ramassage' => $request->heure_ramassage,
         'heure_vol' => $request->heure_vol,
@@ -234,7 +245,8 @@ $date = $request->date;
         'nb_adresses' => $request->nb_adresses,
         'tarif' => $tarif,
         'status' => 'En_attente',
-        'cardriver_id' => $carDriver->id, // Stocke l'ID de la relation CarDriver
+        'phone_number' => $request->phone_number,
+        'cardriver_id' => $carDriver->id,
     ]);
 
     return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès par l’agent.');
@@ -242,21 +254,30 @@ $date = $request->date;
 
     private function findAvailableDriver($date, $heure_ramassage)
     {
-        // Recherche du chauffeur disponible
-        $chauffeur = User::whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
-            $query->where('status', 'Confirmée')
-                ->whereDate('date', '=', $date)
-                ->where('heure_ramassage', '=', $heure_ramassage);
+        return User::whereHas('roles', function ($query) {
+            $query->where('name', 'chauffeur');
         })
-        ->whereNotIn('id', function ($query) use ($date) { 
-            $query->select('chauffeur_id')
-                ->from('maintenances')
-                ->whereDate('jour', '=', Carbon::parse($date)->format('Y-m-d'));
+        ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
+            $query->where('date', $date)
+                  ->where('heure_ramassage', '>=', Carbon::parse($heure_ramassage)->subHours(3))
+                  ->where('heure_ramassage', '<=', Carbon::parse($heure_ramassage)->addHours(3))
+                  ->where('status', 'Confirmée');
         })
-        ->first();
-
+        ->whereDoesntHave('cars.maintenances', function ($query) use ($date) {
+            $query->where('jour', $date);
+        })
+        
+            ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
+                $query->where('status', 'Confirmée')
+                    ->whereDate('date', '=', $date)
+                    ->whereRaw('TIMESTAMPDIFF(HOUR, heure_ramassage, ?) < 3', [$heure_ramassage]);
+            })
+            ->first();
+        
         return $chauffeur;
     }
+
+
 
     public function confirm(Reservation $reservation)
     {

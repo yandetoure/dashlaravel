@@ -39,7 +39,7 @@ class UserController extends Controller
 
         // Validation des données du formulaire
         $request->validate([
-            'role' => ['required', 'in:admin,client,chauffeur,entreprise,agent,super-admin'],
+            'role' => ['required', 'in:admin,client,chauffeur,garagiste,agent,super-admin'],
             'first_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['nullable', 'string', 'max:255'],
             'name' => ['nullable', 'string', 'max:255'],

@@ -62,10 +62,22 @@ class User extends Authenticatable
 
     // Dans le modèle Reservation
  
-    public function reservations()
-    {
-        return $this->hasMany(Reservation::class);
-    }
+    public function car()
+{
+    return $this->hasOne(Car::class);
+}
+
     
+// Dans le modèle User
+public function car_drivers()
+{
+    return $this->hasMany(CarDriver::class, 'chauffeur_id');
+}
+
+// Dans le modèle CarDriver (relation vers Reservation)
+public function reservations()
+{
+    return $this->hasMany(Reservation::class, 'cardriver_id');
+}
 
 }

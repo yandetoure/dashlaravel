@@ -26,7 +26,7 @@ class Reservation extends Model
         'first_name',
         'last_name',
         'client_id',
-        'entreprise',
+        'adresse_rammassage',
         'cardriver_id',
     ];
 

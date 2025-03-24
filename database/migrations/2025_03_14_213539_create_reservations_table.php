@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('cardriver_id')->constrained('car_drivers')->onDelete('cascade');
-            $table->foreignId('entreprise_id')->constrained('users')->onDelete('cascade');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->date('date');
             $table->time('heure_ramassage');
+            $table->string('adresse_rammassage');
             $table->time('heure_vol')->nullable();
             $table->time('heure_convocation')->nullable();
             $table->string('numero_vol');

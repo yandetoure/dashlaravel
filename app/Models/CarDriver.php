@@ -23,4 +23,9 @@ class CarDriver extends Model
         return $this->belongsTo(Car::class, 'car_id');
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'cardriver_id');
+    }
+
 }

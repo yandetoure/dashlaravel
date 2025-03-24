@@ -121,7 +121,7 @@
                 </summary>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                    <a href="{{ route('cardrivers.index') }}" class="nav-link">Liste des voiture avec chauffeur</a>
+                    <a href="{{ route('cardrivers.index') }}" class="nav-link">Voitures & Chauffeurs</a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('cardrivers.create') }}" class="nav-link">Ajouter un filiation</a>
@@ -139,10 +139,10 @@
                 </summary>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                    <a href="{{ route('maintenances.index') }}" class="nav-link">Liste des voiture en maintenance</a>
+                    <a href="{{ route('maintenances.index') }}" class="nav-link">Voitures</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('maintenances.create') }}" class="nav-link">Envoyer une voiture en maintenance</a>
+                        <a href="{{ route('maintenances.create') }}" class="nav-link">Créer</a>
                     </li>
                 </ul>
             </details>
@@ -181,41 +181,85 @@
     </ul>
 
     <style>
+
         #sidebar {
-            text-align: center;
-            font-weight: bold;
-            color: rgb(6, 60, 113);
-        }
-        .title {
-            font-size: 22px;
-        }
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            color: rgb(6, 60, 113);
-            font-weight: bold;
-            cursor: pointer; /* Change le curseur pour indiquer que c'est cliquable */
-        }
-        .nav-link:hover {
-            background-color: rgba(6, 60, 113, 0.1); /* Ajoute un effet de survol */
-            border-radius: 10px;
-        }
-        .material-icons {
-            color: rgb(6, 60, 113);
-            font-size: 20px;
-            margin-right: 20px;
-        }
-        details {
-            padding-left: 20px; /* Indentation du sous-menu */
-            border: none; /* Supprime les bordures par défaut */
-        }
-        summary {
-            list-style: none; /* Supprime le style de liste par défaut */
-            outline: none; /* Supprime le contour par défaut */
-        }
-        summary::-webkit-details-marker {
-            display: none; /* Masque le marqueur par défaut */
-        }
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(to bottom, #0a3d62, #0c2461);
+    color: white;
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-weight: bold;
+}
+
+.title {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.material-icons {
+    font-size: 20px;
+    margin-right: 10px;
+    color: white;
+}
+
+details {
+    border: none;
+}
+
+summary {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+summary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+details[open] summary {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+details ul {
+    padding-left: 15px;
+}
+
+details ul .nav-link {
+    font-size: 14px;
+    padding-left: 30px;
+    color: #f1f1f1;
+}
+
+details ul .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
     </style>
 </div>

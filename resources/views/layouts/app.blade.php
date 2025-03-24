@@ -24,7 +24,7 @@
             @endauth
 
             <!-- Contenu principal -->
-            <div class="flex-1">
+            <div class="main-content flex-1">
                 @include('layouts.navigation')
 
                 <!-- Page Heading -->
@@ -45,4 +45,32 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
+
+    <style>
+        /* Conteneur principal : Sidebar + Contenu */
+.min-h-screen {
+    display: flex;
+    height: 100vh; /* Prend toute la hauteur de l'écran */
+}
+
+/* Sidebar fixe */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Contenu principal */
+.main-content {
+    flex: 1;
+    margin-left: 200px;
+    overflow-y: auto;
+}
+
+    </style>
 </html>
+

@@ -8,14 +8,14 @@ return new class extends Migration {
     {
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->constrained()->onDelete('cascade'); // Lien avec la voiture
+            $table->foreignId('car_id')->constrained()->onDelete('cascade');
             $table->date('jour');
             $table->time('heure');
             $table->string('motif');
             $table->text('diagnostique')->nullable();
             $table->string('garagiste');
             $table->decimal('prix', 10, 2)->default(0);
-            $table->boolean('statut')->default(false); // false = non payé, true = payé
+            $table->boolean('statut')->default(false);
             $table->text('note')->nullable();
             $table->timestamps();
         });
