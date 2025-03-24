@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Dans resources/css/app.css ou un autre fichier CSS */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.min-h-screen {
+    min-height: 100vh; /* Prend toute la hauteur de la page */
+}
+
+.flex {
+    display: flex; /* Affichage flex */
+}
+
+.flex-1 {
+    flex: 1; /* Prend tout l'espace restant */
+}
+

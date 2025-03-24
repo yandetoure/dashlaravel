@@ -1,15 +1,51 @@
 <?php declare(strict_types=1); 
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TripController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CarDriverController;
+
+use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\ReservationController;
+use Spatie\Permission\Middlewares\RoleMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('cars', CarController::class); 
+Route::resource('auth', UserController::class); 
+Route::resource('trips', TripController::class); 
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/create-account', [UserController::class, 'createAccountPage'])
+        ->name('admin.create.account.page');
+
+    Route::post('/admin/create-account', [UserController::class, 'createAccount'])
+        ->name('admin.create.account');
+
+    Route::get('/clients', [UserController::class, 'lisclient'])->name('clients.index');
+    Route::get('/drivers', [UserController::class, 'listdriver'])->name('drivers.index');
+    Route::get('/agents', [UserController::class, 'listagent'])->name('agents.index');
+    Route::get('/admin', [UserController::class, 'listadmin'])->name('admins.index');
+    Route::get('/superaddmin', [UserController::class, 'listsuperadmin'])->name('superadmins.index');
+
+});
+
+Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'])->name('reservations.confirmed');
+
+Route::get('/reservations/cancelled', [ReservationController::class, 'cancelled'])->name('reservations.cancelled');
+
+Route::get('/assign-day-off', [UserController::class, 'createDayOff'])->name('admins.assign-day-off');
+
+Route::post('/assign-day-off', [UserController::class, 'assignRandomDayOff'])->name('admin.assign-day-off');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -44,7 +80,74 @@ Route::middleware('auth')->group(function () {
     // Route pour le super admin
     Route::get('/superadmin/dashboard', function () {
         return view('dashboards.superadmin');
-    })->name('dashboard.superadmin'); // Correction du nom
+    })->name('dashboard.superadmin'); 
+
+
+    Route::resource('maintenances', MaintenanceController::class);
+
+});
+
+
+// Affichage des formulaires d'inscription
+Route::get('/register/agent', [UserController::class, 'createAgent'])->name('register.agent.form');
+Route::get('/register/driver', [UserController::class, 'createDriver'])->name('register.driver.form');
+Route::get('/register/admin', [UserController::class, 'createAdmin'])->name('register.admin.form');
+Route::get('/register/client', [UserController::class, 'createClient'])->name('register.client.form');
+
+// Soumission des formulaires d'inscription
+Route::post('/register/agent', [UserController::class, 'storeAgent'])->name('register.agent');
+Route::post('/register/driver', [UserController::class, 'storeDriver'])->name('register.driver');
+Route::post('/register/admin', [UserController::class, 'storeAdmin'])->name('register.admin');
+Route::post('/register/client', [UserController::class, 'storeClient'])->name('register.client');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/car_drivers', [CarDriverController::class, 'index'])->name('cardrivers.index');
+    Route::get('/car_drivers/create', [CarDriverController::class, 'create'])->name('cardrivers.create');
+    Route::post('/car_drivers', [CarDriverController::class, 'store'])->name('cardrivers.store');
+    Route::delete('/car_drivers/{car_id}/{user_id}', [CarDriverController::class, 'destroy'])->name('car_drivers.destroy');
+});
+
+
+Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(function () {
+    // Affichage de toutes les réservations
+    Route::get('/', [ReservationController::class, 'index'])->name('index');
+
+    // Formulaire pour créer une réservation
+    Route::get('create', [ReservationController::class, 'create'])->name('create');
+    
+    // Enregistrement d'une nouvelle réservation
+    Route::post('store', [ReservationController::class, 'store'])->name('store');
+    
+    // Confirmation d'une réservation
+    Route::post('{reservation}/confirm', [ReservationController::class, 'confirm'])->name('confirm');
+    
+    // Annulation d'une réservation
+    Route::post('{reservation}/cancel', [ReservationController::class, 'cancel'])->name('cancel');
+    
+    // Suppression d'une réservation
+    Route::delete('{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
+
+    Route::post('store-agent', [ReservationController::class, 'storeByAgent'])->name('storeByAgent');
+
+    Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
+});
+// Dans votre fichier de routes (web.php)
+Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
+
+Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
+
+Route::middleware(['auth'])->group(function () {
+    // Routes réservées aux Chauffeurs
+    Route::get('/chauffeur/reservations', [ReservationController::class, 'chauffeurReservations'])->name('chauffeur.reservations')->middleware('role:chauffeur');
+
+    // Routes réservées aux Clients
+    Route::get('/client/reservations', [ReservationController::class, 'clientReservations'])->name('client.reservations')->middleware('role:client');
+
+    // Routes réservées aux Admin et Super Admin
+    Route::get('/admin/reservations', [ReservationController::class, 'adminReservations'])->name('admin.reservations')->middleware('role:admin');
+    Route::get('/superadmin/reservations', [ReservationController::class, 'superAdminReservations'])->name('superadmin.reservations')->middleware('role:superadmin');
+    
 });
 
 

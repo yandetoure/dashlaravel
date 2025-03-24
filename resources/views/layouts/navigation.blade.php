@@ -1,20 +1,30 @@
 <?php declare(strict_types=1); ?>
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
+    <style>
+    .custom-profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+</style>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <p class="text-sm text-gray-500">Rôle : {{ Auth::user()->getRoleNames()->first() }}</p>
+                        <!-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> -->
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        <!-- {{ __('Dashboard') }} -->
                     </x-nav-link>
                 </div>
             </div>
@@ -25,9 +35,9 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <!-- Photo de profil -->
-                            <img src="{{ Auth::user()->profile_photo }}" alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full mr-2">
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="{{ Auth::user()->name }}" class="custom-profile-img mr-2">
                             <div>
-                                @if (Auth::user()->role === 'client')
+                                @if (Auth::user()->role ===  'entreprise' || Auth::user()->role === 'client')
                                     {{ Auth::user()->name }}
                                 @else
                                     {{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}
@@ -58,6 +68,9 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                <div class="notifications"> <!-- Espace entre le nom et l'icône de notification -->
+                                <span class="material-icons text-gray-500">notifications</span>
+                </div>
             </div>
 
             <!-- Hamburger -->

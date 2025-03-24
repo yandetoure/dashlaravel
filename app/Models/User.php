@@ -27,6 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_photo',
+        'day_off', 
+        'day_off_assigned_at'
     ];
 
     /**
@@ -51,4 +53,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Dans le modèle User
+    public function cars()
+    {
+        return $this->belongsToMany(Car::class, 'car_drivers', 'chauffeur_id', 'car_id');
+    }
+
+    // Dans le modèle Reservation
+ 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+    
+
 }
