@@ -117,6 +117,8 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
     // Formulaire pour créer une réservation
     Route::get('create', [ReservationController::class, 'create'])->name('create');
     
+    Route::get('client-create', [ReservationController::class, 'clientcreate'])->name('clientcreate');
+
     // Enregistrement d'une nouvelle réservation
     Route::post('store', [ReservationController::class, 'store'])->name('store');
     

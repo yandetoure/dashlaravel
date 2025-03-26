@@ -28,6 +28,6 @@
     <p>Merci de confirmer cette réservation dès que possible.</p>
 
     <p>Cordialement,</p>
-    <p>L'équipe des réservations</p>
+    <p>L'équipe des réservations de CPRO Services</p>
 </body>
 </html>

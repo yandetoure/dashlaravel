@@ -19,7 +19,7 @@
                         <a href="" class="nav-link">Liste des Réservations</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">Ajouter une Réservation</a>
+                    <li class="nav-item"><a href="{{ route('reservations.clientcreate') }}" class="nav-link">Ajouter une réservation</a></li>
                     </li>
                     <li class="nav-item">
                         <a href="" class="nav-link">Réservations Confirmées</a>

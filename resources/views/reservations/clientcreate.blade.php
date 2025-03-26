@@ -1,77 +1,118 @@
 <?php declare(strict_types=1); ?>
-@extends('layouts.app')
 
 @section('content')
+<div class="container">
+    <h1 class="mb-4 text-center">Créer une Réservation</h1>
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
 <div class="container">
     <h1>Créer une Réservation</h1>
 
     <form action="{{ route('reservations.store') }}" method="POST">
-        @csrf
-
-        <!-- Formulaire pour les détails de la réservation -->
-
-        <div class="form-group">
-            <label for="trip_id">Trajet</label>
-            <select name="trip_id" id="trip_id" class="form-control" required>
-            <option selected disabled>-- Sélectionner un trajet --</option>
-                @foreach($trips as $trip)
-                    <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
-                @endforeach
-            </select>
+    @csrf
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="trip_id" class="form-label">Trajet</label>
+                <select name="trip_id" id="trip_id" class="form-select" required>
+                    <option selected disabled>-- Sélectionner un trajet --</option>
+                    @foreach($trips as $trip)
+                        <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="first_name" class="form-label">Prénom</label>
+                <input type="text" name="first_name" id="first_name" class="form-control" value="{{ $client->first_name }}" required>
+            </div>
+            <div class="col-md-6">
+                <label for="last_name" class="form-label">Nom</label>
+                <input type="text" name="last_name" id="last_name" class="form-control" value="{{ $client->last_name }}" required>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" name="date" id="date" class="form-control" required>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" name="email" id="email" class="form-control" value="{{ $client->email }}" required>
+            </div>
+            <div class="col-6">
+                <label for="phone_number" class="form-label">Numéro de téléphone</label>
+                <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ $client->phone_number }}" required>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="heure_ramassage">Heure de ramassage</label>
-            <input type="time" name="heure_ramassage" id="heure_ramassage" class="form-control" required>
+        <div class="row mb-3">
+        <div class="col-md-6">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" name="date" id="date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="heure_ramassage" class="form-label">Heure de ramassage</label>
+                <input type="time" name="heure_ramassage" id="heure_ramassage" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="heure_vol" class="form-label">Heure de vol</label>
+                <input type="time" name="heure_vol" id="heure_vol" class="form-control" required>
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="heure_convocation" class="form-label">Heure de convocation</label>
+                <input type="time" name="heure_convocation" id="heure_convocation" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="numero_vol" class="form-label">Numéro du vol</label>
+                <input type="text" name="numero_vol" id="numero_vol" class="form-control" required>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="heure_vol">Heure de vol</label>
-            <input type="time" name="heure_vol" id="heure_vol" class="form-control" required>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="nb_personnes" class="form-label">Nombre de personnes</label>
+                <input type="number" name="nb_personnes" id="nb_personnes" class="form-control" required min="1">
+            </div>
+            <div class="col-md-6">
+                <label for="nb_valises" class="form-label">Nombre de valises</label>
+                <input type="number" name="nb_valises" id="nb_valises" class="form-control" required min="0">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="heure_convocation">Heure de convocation</label>
-            <input type="time" name="heure_convocation" id="heure_convocation" class="form-control" required>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="nb_adresses" class="form-label">Nombre de dépôts supplémentaires</label>
+                <input type="number" name="nb_adresses" id="nb_adresses" class="form-control" required min="0">
+            </div>
+            <div class="col-md-6">
+                <label for="nb_accompagnants" class="form-label">Nombre d'accompagnants</label>
+                <input type="number" name="nb_accompagnants" id="nb_accompagnants" class="form-control" required min="0">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="numero_vol">Numéro du vol</label>
-            <input type="text" name="numero_vol" id="numero_vol" class="form-control" required>
+        <div class="row mb-3">
+        <div class="col-md-6">
+                <label for="adresse_rammassage" class="form-label">Adresse de ramassage</label>
+                <input type="text" name="adresse_rammassage" id="adresse_rammassage" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="tarif" class="form-label">Tarif</label>
+                <input type="text" name="tarif" id="tarif" class="form-control" readonly>
+            </div>
         </div>
-
-    <div class="form-group">
-        <label for="nb_personnes">Nombre de personnes</label>
-        <input type="number" name="nb_personnes" id="nb_personnes" class="form-control" required min="1">
-    </div>
-
-    <div class="form-group">
-        <label for="nb_valises">Nombre de valises</label>
-        <input type="number" name="nb_valises" id="nb_valises" class="form-control" required min="0">
-    </div>
-
-    <div class="form-group">
-        <label for="nb_adresses">Nombre de dépôts supplémentaires</label>
-        <input type="number" name="nb_adresses" id="nb_adresses" class="form-control" required min="0">
-    </div>
-
-    <div class="form-group">
-        <label for="nb_accompagnants">Nombre d'accompagnants</label>
-        <input type="number" name="nb_accompagnants" id="nb_accompagnants" class="form-control" required min="0">
-    </div>
-
-    <div class="form-group">
-        <label for="tarif">Tarif</label>
-        <input type="text" name="tarif" id="tarif" class="form-control" value="{{ old('tarif') }}" readonly>
-    </div>
-
-
-        <button type="submit" class="btn btn-primary mt-3">Créer la Réservation</button>
+        
+        <button type="submit" class="btn btn-primary w-100">Créer la Réservation</button>
     </form>
 </div>
 

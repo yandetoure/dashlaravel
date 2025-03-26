@@ -9,7 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('days:assign')->weekly()->mondays()->at('08:00'); // Planifier l'assignation des jours de repos chaque lundi à 8h
+        $schedule->command('days:assign')->weekly()->mondays()->at('08:00');
     }
 
     protected function commands()
