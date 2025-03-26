@@ -41,7 +41,10 @@ class ReservationConfirmedDriver extends Mailable
         return new Content(
             view: 'emails.reservation_confirmed_driver',
             with: [
+
                 'reservation' => $this->reservation,
+                'client' => $this->reservation->client,
+                'chauffeur' => $this->reservation->carDriver->chauffeur
             ],
         );
     }

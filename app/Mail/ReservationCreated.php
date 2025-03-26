@@ -42,6 +42,8 @@ class ReservationCreated extends Mailable
             view: 'emails.reservation_created_else',
             with: [
                 'reservation' => $this->reservation,
+                'client' => $this->reservation->client,
+                'chauffeur' => $this->reservation->carDriver->chauffeur            
             ],
         );
     }

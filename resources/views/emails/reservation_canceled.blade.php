@@ -16,7 +16,7 @@
     <ul>
         <li><strong>Client :</strong> {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</li>
         <li><strong>Numéro :</strong> {{ $reservation->client->phone_number }}</li>
-        <li><strong>Chauffeur :</strong> {{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }}</li>
+        <li><strong>Chauffeur assigné :</strong> {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->first_name }}</li>
         <li><strong>Date :</strong> {{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</li>
         <li><strong>Heure de ramassage :</strong> {{ $reservation->heure_ramassage }}</li>
         <li><strong>Numéro de vol :</strong> {{ $reservation->numero_vol }}</li>

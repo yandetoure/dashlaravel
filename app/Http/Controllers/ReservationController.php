@@ -121,13 +121,13 @@ class ReservationController extends Controller
     }
 
 
-        // Récupérer le trajet choisi
-        $trip = Trip::find($request->trip_id);
+        // // Récupérer le trajet choisi
+        // $trip = Trip::find($request->trip_id);
 
-        // Vérifier que le chauffeur est bien à Dakar (ou à la ville de départ du trajet)
-        if ($carDriver->current_location !== $trip->departure) {
-            return back()->withErrors(['chauffeur_id' => 'Le chauffeur n\'est pas à la ville de départ pour effectuer cette réservation.']);
-        }
+        // // Vérifier que le chauffeur est bien à Dakar (ou à la ville de départ du trajet)
+        // if ($carDriver->current_location !== $trip->departure) {
+        //     return back()->withErrors(['chauffeur_id' => 'Le chauffeur n\'est pas à la ville de départ pour effectuer cette réservation.']);
+        // }
         
         // Vérifier la disponibilité du chauffeur (pas de réservation avant 3 heures)
         $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
@@ -236,13 +236,13 @@ class ReservationController extends Controller
             return back()->withErrors(['chauffeur_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
         }
 
-        // Récupérer le trajet choisi
-        $trip = Trip::find($request->trip_id);
+        // // Récupérer le trajet choisi
+        // $trip = Trip::find($request->trip_id);
 
-        // Vérifier que le chauffeur est bien à la ville de départ du trajet
-        if ($carDriver->current_location !== $trip->departure) {
-            return back()->withErrors(['chauffeur_id' => 'Le chauffeur n\'est pas à la ville de départ pour effectuer cette réservation.']);
-        }
+        // // Vérifier que le chauffeur est bien à la ville de départ du trajet
+        // if ($carDriver->current_location !== $trip->departure) {
+        //     return back()->withErrors(['chauffeur_id' => 'Le chauffeur n\'est pas à la ville de départ pour effectuer cette réservation.']);
+        // }
 
         // Vérifier la disponibilité du chauffeur (pas de réservation avant 3 heures)
         $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
@@ -277,10 +277,27 @@ class ReservationController extends Controller
         // Calcul du tarif
         $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, $request->nb_adresses);
 
+                // Si le client n'existe pas, on le crée et on assigne le rôle client
+                if (!$request->client_id) {
+                    $client = User::create([
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'email' => $request->email,
+                        'password' => Hash::make(Str::random(12)), // Générer un mot de passe aléatoire
+                        'phone_number' => $request->phone_number,
+                    ]);
+        
+                    // Assigner le rôle client
+                    $client->assignRole('client');
+        
+                    // Envoi d'un e-mail contenant le mot de passe
+                    Mail::to($client->email)->send(new AccountCreatedMail($client, $client->password));
+                }
+
         // Création de la réservation
         $reservation = Reservation::create([
             'trip_id' => $request->trip_id,
-            'client_id' => null, // Initialiser à null pour l'instant
+            'client_id' => $client->id,
             'chauffeur_id' => $chauffeur->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -300,27 +317,8 @@ class ReservationController extends Controller
             'cardriver_id' => $carDriver->id,
         ]);
 
-        // Si le client n'existe pas, on le crée et on assigne le rôle client
-        if (!$request->client_id) {
-            $client = User::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'password' => Hash::make(Str::random(12)), // Générer un mot de passe aléatoire
-                'phone_number' => $request->phone_number,
-            ]);
-
-            // Assigner le rôle client
-            $client->assignRole('client');
-
-            // Mettre à jour l'identifiant du client dans la réservation
-            $reservation->client_id = $client->id;
-            $reservation->save();
-
-            // Envoi d'un e-mail contenant le mot de passe
-            Mail::to($client->email)->send(new AccountCreatedMail($client, $client->password));
-        }
-
+         // Assurez-vous que la réservation est chargée avec les relations nécessaires
+    $reservation->load(['client', 'carDriver.chauffeur']);
         // Envoi des e-mails de réservation
         $this->envoyerEmailReservation($reservation, 'created');
 
@@ -357,6 +355,9 @@ class ReservationController extends Controller
 
     public function confirm(Reservation $reservation)
     {
+
+         // Assurez-vous que la réservation est chargée avec les relations nécessaires
+        $reservation->load(['client', 'carDriver.chauffeur']);
         $reservation->update(['status' => 'confirmée']);
     // Envoyer les e-mails lors de la confirmation de la réservation
     $this->envoyerEmailReservation($reservation, 'confirmée');
@@ -371,6 +372,10 @@ class ReservationController extends Controller
         if ($now->diffInMinutes($heureRamassage, false) <= 120) {
             return back()->withErrors(['status' => 'Annulation impossible moins de 2h avant le départ.']);
         }
+
+
+         // Assurez-vous que la réservation est chargée avec les relations nécessaires
+        $reservation->load(['client', 'carDriver.chauffeur']);
 
         $reservation->update(['status' => 'annulée']);
         $this->envoyerEmailReservation($reservation, 'annulée');

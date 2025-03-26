@@ -8,14 +8,14 @@
     <title>Nouvelle réservation</title>
 </head>
 <body>
-    <h1>Bonjour {{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }},</h1>
+    <h1>Bonjour {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }},</h1>
 
-    <p>Nous vous informons que vous devez effectuer une nouvelle réservation</p>
+    <p>Nous vous informons que vous devez effectuer un nouveau trajet</p>
     <p>Voici les détails de votre réservation :</p>
 
     <ul>
-        <li><strong>Chauffeur :</strong> {{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }}</li>
-        <li><strong>Numéro chauffeur :</strong> {{ $reservation->chauffeur->phone_number }}</li>
+        <li><strong>Chauffeur assigné :</strong> {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->first_name }}</li>
+        <li><strong>Client :</strong> {{ $reservation->client->first_name }}  {{ $reservation->carDriver->chauffeur->first_name }}</li>
         <li><strong>Numéro client :</strong> {{ $reservation->client->phone_number }}</li>
         <li><strong>Date :</strong> {{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</li>
         <li><strong>Heure de ramassage :</strong> {{ $reservation->heure_ramassage }}</li>

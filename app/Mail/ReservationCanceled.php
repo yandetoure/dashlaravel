@@ -41,7 +41,10 @@ class ReservationCanceled extends Mailable
         return new Content(
             view: 'emails.reservation_canceled',
             with: [
+
                 'reservation' => $this->reservation,
+                'client' => $this->reservation->client,
+                'chauffeur' => $this->reservation->carDriver->chauffeur
             ],
         );
     }
