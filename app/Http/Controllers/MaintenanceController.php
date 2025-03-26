@@ -27,6 +27,7 @@ class MaintenanceController extends Controller
 public function store(Request $request)
 {
     $request->validate([
+        'garagiste_id' => 'required|exists:users,id',
         'car_id' => 'required',
         'jour' => 'required|date',
         'heure' => 'required',
@@ -56,6 +57,7 @@ public function store(Request $request)
     'jour' => $request->jour,
     'heure' => $request->heure,
     'motif' => $request->motif,
+    'garagiste_id' => $request->garagiste_id,
     'statut' => false,
 ]);
 
@@ -73,7 +75,7 @@ public function update(Request $request)
         'garagiste_id' => 'required',
         'diagnostique' => 'required',
         'note' => 'nullable',
-        'prix' => ''
+        'prix' => 'required|numeric|min:0',
     ]);
 
     // Trouver le chauffeur de la voiture
@@ -102,10 +104,11 @@ public function update(Request $request)
     'note' => $request->note,
     'garagiste_id' => $request->garagiste_id,
     'note' => $request->note,
+    'prix' => $request->prix,
     'statut' => false,
 ]);
 
-    return redirect()->route('maintenances.index')->with('success', 'Maintenance ajoutée avec succès.');
+    return redirect()->route('maintenances.index')->with('success', 'Maintenance modifiée avec succès.');
 }
 
 /**

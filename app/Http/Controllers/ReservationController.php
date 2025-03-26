@@ -238,7 +238,7 @@ $date = $request->date;
     $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, $request->nb_adresses);
 
     // Création de la réservation
-    Reservation::create([
+    $reservation = Reservation::create([
         'trip_id' => $request->trip_id,
         'client_id' =>  $clientId,
         'chauffeur_id' =>  $chauffeur->id,
@@ -259,7 +259,8 @@ $date = $request->date;
         'phone_number' => $request->phone_number,
         'cardriver_id' => $carDriver->id,
     ]);
-
+       // Envoi des e-mails
+       $this->envoyerEmailReservation($reservation, 'created');
     return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès par l’agent.');
 }
 
@@ -293,8 +294,9 @@ $date = $request->date;
     public function confirm(Reservation $reservation)
     {
         $reservation->update(['status' => 'confirmée']);
-        $this->envoyerEmailReservation($reservation);
-        return back()->with('success', 'Réservation confirmée.');
+    // Envoyer les e-mails lors de la confirmation de la réservation
+    $this->envoyerEmailReservation($reservation, 'confirmed');
+         return back()->with('success', 'Réservation confirmée.');
     }
 
     public function cancel(Reservation $reservation)
@@ -344,12 +346,12 @@ $date = $request->date;
          Mail::to($reservation->client->email)->send(new ReservationCreatedclient($reservation));
          Mail::to('dht321@gmail.com')->send(new ReservationCreated($reservation));
  
-         if ($status === 'updated') {
+         if ($status === 'confirmée') {
              Mail::to($reservation->chauffeur->email)->send(new ReservationCreatedclient($reservation));
              Mail::to($reservation->client->email)->send(new ReservationCreatedclient($reservation));
              Mail::to('dht321@gmail.com')->send(new ReservationCreatedclient($reservation));
 
-         } elseif ($status === 'canceled') {
+         } elseif ($status === 'annulée') {
              Mail::to($reservation->chauffeur->email)->send(new ReservationCreatedclient($reservation));
              Mail::to($reservation->client->email)->send(new ReservationCreatedclient($reservation));
              Mail::to('dht321@gmail.com')->send(new ReservationCreatedclient($reservation));

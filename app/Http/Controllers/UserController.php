@@ -128,9 +128,9 @@ class UserController extends Controller
         public function createDayOff()
         {
             // Vérifie si l'utilisateur a le rôle requis
-            // if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('superadmin')) {
-            //     abort(403, 'Accès interdit. Vous devez être administrateur pour créer un compte.');
-            // }
+            if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('superadmin')) {
+                abort(403, 'Accès interdit. Vous devez être administrateur pour créer un compte.');
+            }
         
             return view('admins.assign-day-off');  // Vérifie que la vue existe
         }
@@ -142,9 +142,12 @@ class UserController extends Controller
         
             // Récupérer les chauffeurs sans jour de repos assigné ou avec un jour de repos non assigné récemment
             $chauffeurs = User::role('chauffeur')
-                              ->whereNull('day_off')  // Chauffeurs sans jour de repos
-                              ->orWhereNull('day_off_assigned_at')  // Chauffeurs dont le jour de repos n'a pas été assigné
-                              ->get();
+            ->where(function ($query) {
+                $query->whereNull('day_off')
+                      ->orWhereNull('day_off_assigned_at');
+            })
+            ->get();
+        
         
             // Pour chaque chauffeur
             foreach ($chauffeurs as $chauffeur) {

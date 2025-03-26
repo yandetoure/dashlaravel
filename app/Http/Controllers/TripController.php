@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Trip;
@@ -28,5 +29,34 @@ class TripController extends Controller
         Trip::create($request->all());
 
         return redirect()->route('trips.index')->with('success', 'Trajet ajouté avec succès.');
+    }
+
+    public function show(Trip $trip)
+    {
+        return view('trips.show', compact('trip'));
+    }
+
+    public function edit(Trip $trip)
+    {
+        return view('trips.edit', compact('trip'));
+    }
+
+    public function update(Request $request, Trip $trip)
+    {
+        $request->validate([
+            'departure' => 'required|string|max:255',
+            'destination' => 'required|string|max:255',
+        ]);
+
+        $trip->update($request->all());
+
+        return redirect()->route('trips.index')->with('success', 'Trajet mis à jour avec succès.');
+    }
+
+    public function destroy(Trip $trip)
+    {
+        $trip->delete();
+
+        return redirect()->route('trips.index')->with('success', 'Trajet supprimé avec succès.');
     }
 }

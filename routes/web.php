@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource('maintenances', MaintenanceController::class);
-
+    Route::resource('cars', CarController::class);
 });
 
 Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');
