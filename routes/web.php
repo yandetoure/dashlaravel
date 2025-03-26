@@ -44,8 +44,8 @@ Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'
 Route::get('/reservations/cancelled', [ReservationController::class, 'cancelled'])->name('reservations.cancelled');
 
 Route::get('/assign-day-off', [UserController::class, 'createDayOff'])->name('admins.assign-day-off');
-
 Route::post('/assign-day-off', [UserController::class, 'assignRandomDayOff'])->name('admin.assign-day-off');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

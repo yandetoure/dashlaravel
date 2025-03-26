@@ -128,28 +128,23 @@ class UserController extends Controller
         public function createDayOff()
         {
             // Vérifie si l'utilisateur a le rôle requis
-            if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('superadmin')) {
+            if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('super-admin')) {
                 abort(403, 'Accès interdit. Vous devez être administrateur pour créer un compte.');
             }
         
             return view('admins.assign-day-off');  // Vérifie que la vue existe
         }
-
-        public function assignRandomDayOff()
+        public function assignRandomDayOff(Request $request)
         {
             // Jours disponibles
             $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
         
             // Récupérer les chauffeurs sans jour de repos assigné ou avec un jour de repos non assigné récemment
             $chauffeurs = User::role('chauffeur')
-            ->where(function ($query) {
-                $query->whereNull('day_off')
-                      ->orWhereNull('day_off_assigned_at');
-            })
-            ->get();
+                              ->whereNull('day_off')
+                              ->orWhereNull('day_off_assigned_at')
+                              ->get();
         
-        
-            // Pour chaque chauffeur
             foreach ($chauffeurs as $chauffeur) {
                 // Récupérer les jours de repos déjà assignés à d'autres chauffeurs (ou ceux assignés récemment)
                 $occupiedDays = User::role('chauffeur')
@@ -174,8 +169,10 @@ class UserController extends Controller
                 }
             }
         
-            return redirect()->route('admins.assign-day-off')->with('success', 'Jour de repos assigné avec succès.');
+            return redirect()->route('drivers.index')->with('success', 'Jours de repos assignés avec succès.');
         }
+        
+        
         
 
 
