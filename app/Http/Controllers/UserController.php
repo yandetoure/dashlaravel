@@ -134,6 +134,7 @@ class UserController extends Controller
         
             return view('admins.assign-day-off');  // Vérifie que la vue existe
         }
+        
         public function assignRandomDayOff(Request $request)
         {
             // Jours disponibles
