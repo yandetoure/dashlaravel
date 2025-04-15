@@ -20,7 +20,7 @@
         }
         
         .active {
-            color: #ef4444;
+            color: #3b82f6;
             font-weight: 600;
         }
         
@@ -29,19 +29,31 @@
             border-radius: 10px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        
-        .cta-banner {
-            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+
+
+        /* Couleurs personnalisées */
+        .bg-primary {
+            background-color: rgb(168, 16, 16);
         }
         
-        .rating-stars {
-            color: #f59e0b;
+        .bg-primary-dark {
+            background-color: rgb(120, 10, 10);
         }
         
-        .entreprise-banner {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
-            background-size: cover;
-            background-position: center;
+        .text-primary {
+            color: rgb(168, 16, 16);
+        }
+        
+        .border-primary {
+            border-color: rgb(168, 16, 16);
+        }
+        
+        .focus\:ring-primary:focus {
+            --tw-ring-color: rgb(168, 16, 16);
+        }
+        
+        .hover\:bg-primary-dark:hover {
+            background-color: rgb(120, 10, 10);
         }
     </style>
 </head>
@@ -51,15 +63,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="#accueil" class="text-xl font-bold text-red-600">CPRO<span class="text-gray-800">-VLC</span></a>
+                <a href="#accueil" class="text-xl font-bold text-primary">CPRO<span class="text-gray-800">-VLC</span></a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#accueil" class="text-gray-700 hover:text-red-600 transition nav-link active">Accueil</a>
-                    <a href="#services" class="text-gray-700 hover:text-red-600 transition nav-link">Services</a>
-                    <a href="#reservation" class="text-gray-700 hover:text-red-600 transition nav-link">Réservation</a>
-                    <a href="#tarifs" class="text-gray-700 hover:text-red-600 transition nav-link">Tarifs</a>
-                    <a href="#contact" class="text-gray-700 hover:text-red-600 transition nav-link">Contact</a>
-                    <a href="#compte" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
+                    <a href="#accueil" class="text-gray-700 hover:text-blue-600 transition nav-link active">Accueil</a>
+                    <a href="#services" class="text-gray-700 hover:text-blue-600 transition nav-link">Services</a>
+                    <a href="#reservation" class="text-gray-700 hover:text-blue-600 transition nav-link">Réservation</a>
+                    <a href="#tarifs" class="text-gray-700 hover:text-blue-600 transition nav-link">Tarifs</a>
+                    <a href="#contact" class="text-gray-700 hover:text-blue-600 transition nav-link">Contact</a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="menu-btn" class="text-gray-700">
@@ -71,12 +82,11 @@
         
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
-            <a href="#accueil" class="block py-2 text-gray-700 hover:text-red-600 nav-link active">Accueil</a>
-            <a href="#services" class="block py-2 text-gray-700 hover:text-red-600 nav-link">Services</a>
-            <a href="#reservation" class="block py-2 text-gray-700 hover:text-red-600 nav-link">Réservation</a>
-            <a href="#tarifs" class="block py-2 text-gray-700 hover:text-red-600 nav-link">Tarifs</a>
-            <a href="#contact" class="block py-2 text-gray-700 hover:text-red-600 nav-link">Contact</a>
-            <a href="#compte" class="block py-2 text-gray-700 hover:text-red-600 nav-link">Mon compte</a>
+            <a href="#accueil" class="block py-2 text-gray-700 hover:text-blue-600 nav-link active">Accueil</a>
+            <a href="#services" class="block py-2 text-gray-700 hover:text-blue-600 nav-link">Services</a>
+            <a href="#reservation" class="block py-2 text-gray-700 hover:text-blue-600 nav-link">Réservation</a>
+            <a href="#tarifs" class="block py-2 text-gray-700 hover:text-blue-600 nav-link">Tarifs</a>
+            <a href="#contact" class="block py-2 text-gray-700 hover:text-blue-600 nav-link">Contact</a>
         </div>
     </nav>
 
@@ -87,7 +97,7 @@
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <h1 class="text-4xl md:text-5xl font-bold mb-6">Transport confortable vers l'aéroport AIBD</h1>
                     <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et transferts privés vers l'aéroport international Blaise Diagne.</p>
-                    <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
+                    <a href="#reservation" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
                 </div>
                 <div class="md:w-1/2">
                     <div class="booking-form p-8 max-w-md mx-auto">
@@ -95,40 +105,23 @@
                         <form>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Type de service</label>
-                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option>Navette partagée</option>
                                     <option>Voiture avec chauffeur</option>
                                     <option>Transfert privé</option>
-                                    <option>Location hors Dakar</option>
-                                    <option>Service entreprises</option>
                                 </select>
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Date</label>
-                                <input type="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Heure</label>
-                                <input type="time" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="time" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Vérifier disponibilité</button>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Vérifier disponibilité</button>
                         </form>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Publicité Réservation -->
-    <section class="cta-banner py-12 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center justify-between">
-                <div class="md:w-2/3 mb-6 md:mb-0">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-4">Vous voyagez bientôt ? Réservez dès maintenant !</h2>
-                    <p class="text-lg opacity-90">Évitez les mauvaises surprises et garantissez votre transport vers l'aéroport AIBD en réservant à l'avance. Nos chauffeurs professionnels vous attendront à l'heure convenue, peu importe votre destination de départ.</p>
-                </div>
-                <div class="md:w-1/3 text-center md:text-right">
-                    <a href="#reservation" class="inline-block bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300">Faire une réservation</a>
                 </div>
             </div>
         </div>
@@ -139,13 +132,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Services</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous offrons des solutions de transport adaptées à tous vos besoins vers l'aéroport AIBD et au-delà</p>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous offrons des solutions de transport adaptées à tous vos besoins vers l'aéroport AIBD</p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Service 1 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                    <div class="text-red-600 mb-4">
+                    <div class="text-blue-600 mb-4">
                         <i class="fas fa-shuttle-van text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Navettes partagées</h3>
@@ -168,7 +161,7 @@
                 
                 <!-- Service 2 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                    <div class="text-red-600 mb-4">
+                    <div class="text-blue-600 mb-4">
                         <i class="fas fa-car text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Voiture avec chauffeur</h3>
@@ -191,7 +184,7 @@
                 
                 <!-- Service 3 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                    <div class="text-red-600 mb-4">
+                    <div class="text-blue-600 mb-4">
                         <i class="fas fa-bus text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts privés</h3>
@@ -211,180 +204,6 @@
                         </li>
                     </ul>
                 </div>
-                
-                <!-- Service 4 -->
-                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                    <div class="text-red-600 mb-4">
-                        <i class="fas fa-road text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Location hors Dakar</h3>
-                    <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Voyages inter-régions</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Véhicules adaptés</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Trajets sur mesure</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Service 5 -->
-                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                    <div class="text-red-600 mb-4">
-                        <i class="fas fa-building text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Services entreprises</h3>
-                    <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Transferts d'employés</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Accompagnement clients</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Facturation centralisée</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Service 6 -->
-                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                    <div class="text-red-600 mb-4">
-                        <i class="fas fa-plane text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts aéroport</h3>
-                    <p class="text-gray-600 mb-4">Service spécialisé pour les arrivées et départs à l'aéroport AIBD.</p>
-                    <ul class="text-gray-600 space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Surveillance des vols</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Assistance bagages</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Ponctualité garantie</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Entreprises -->
-    <section class="entreprise-banner py-20 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Solutions de transport pour entreprises</h2>
-                    <p class="text-xl mb-8">Confiez-nous les déplacements professionnels de vos collaborateurs et bénéficiez d'un service sur mesure, fiable et sécurisé.</p>
-                    
-                    <div class="space-y-6 mb-8">
-                        <div class="flex items-start">
-                            <div class="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-xl">Gestion simplifiée</h4>
-                                <p class="opacity-90">Une seule interface pour gérer tous les trajets de vos employés avec facturation centralisée.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-xl">Chauffeurs sélectionnés</h4>
-                                <p class="opacity-90">Nos chauffeurs professionnels sont formés aux standards les plus exigeants.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-xl">Parc véhicules diversifié</h4>
-                                <p class="opacity-90">Des berlines aux minibus, nous avons le véhicule adapté à chaque besoin.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <a href="#contact" class="inline-block bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300">Demander un devis</a>
-                </div>
-                
-                <div class="md:w-1/2">
-                    <div class="bg-white bg-opacity-90 p-8 rounded-lg text-gray-800 max-w-md ml-auto">
-                        <h3 class="text-2xl font-bold mb-6">Avantages pour les entreprises</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <div class="text-red-600 mr-3 mt-1">
-                                    <i class="fas fa-percentage"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Tarifs préférentiels</h4>
-                                    <p class="text-gray-600">Des réductions volume pour les clients professionnels.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <div class="text-red-600 mr-3 mt-1">
-                                    <i class="fas fa-file-invoice-dollar"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Facturation mensuelle</h4>
-                                    <p class="text-gray-600">Simplifiez votre gestion administrative.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <div class="text-red-600 mr-3 mt-1">
-                                    <i class="fas fa-headset"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Service dédié</h4>
-                                    <p class="text-gray-600">Un interlocuteur unique pour vos réservations.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <div class="text-red-600 mr-3 mt-1">
-                                    <i class="fas fa-chart-line"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold">Reporting complet</h4>
-                                    <p class="text-gray-600">Analysez et optimisez vos dépenses de transport.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Publicité Réservation -->
-    <section class="cta-banner py-12 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center justify-between">
-                <div class="md:w-2/3 mb-6 md:mb-0">
-                    <h2 class="text-2xl md:text-3xl font-bold mb-4">Vous voyagez bientôt ? Réservez dès maintenant !</h2>
-                    <p class="text-lg opacity-90">Évitez les mauvaises surprises et garantissez votre transport vers l'aéroport AIBD en réservant à l'avance. Nos chauffeurs professionnels vous attendront à l'heure convenue, peu importe votre destination de départ.</p>
-                </div>
-                <div class="md:w-1/3 text-center md:text-right">
-                    <a href="#reservation" class="inline-block bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300">Faire une réservation</a>
-                </div>
             </div>
         </div>
     </section>
@@ -399,7 +218,7 @@
                     
                     <div class="space-y-6">
                         <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
+                            <div class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
                             </div>
                             <div>
@@ -409,7 +228,7 @@
                         </div>
                         
                         <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
+                            <div class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
                             </div>
                             <div>
@@ -419,7 +238,7 @@
                         </div>
                         
                         <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
+                            <div class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
                             </div>
                             <div>
@@ -436,19 +255,19 @@
                         <form>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Nom complet</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Téléphone</label>
-                                <input type="tel" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="tel" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Point de départ</label>
-                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option>Hôtel Terrou-Bi</option>
                                     <option>Radisson Blu</option>
                                     <option>King Fahd Palace</option>
@@ -459,126 +278,10 @@
                             </div>
                             <div class="mb-6">
                                 <label class="block text-gray-700 mb-2">Nombre de passagers</label>
-                                <input type="number" min="1" max="8" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="number" min="1" max="8" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Finaliser la réservation</button>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Finaliser la réservation</button>
                         </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Compte Client -->
-    <section id="compte" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Application mobile" class="rounded-lg shadow-xl">
-                </div>
-                <div class="md:w-1/2">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Créez votre compte client</h2>
-                    <p class="text-xl text-gray-600 mb-8">Accédez à toutes vos réservations passées et futures, consultez votre historique de trajets et notez vos chauffeurs.</p>
-                    
-                    <div class="space-y-6 mb-8">
-                        <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Gestion des réservations</h4>
-                                <p class="text-gray-600">Consultez, modifiez ou annulez facilement vos réservations.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-history"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Historique complet</h4>
-                                <p class="text-gray-600">Retrouvez tous vos trajets passés avec les détails et factures.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Notation des chauffeurs</h4>
-                                <p class="text-gray-600">Évaluez votre expérience pour nous aider à améliorer nos services.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                        <a href="#" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-center">
-                            Créer un compte
-                        </a>
-                        <a href="/login" class="bg-white border border-red-600 text-red-600 hover:bg-red-50 font-bold py-3 px-6 rounded-lg transition duration-300 text-center">
-                            Se connecter
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Notation Chauffeur -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-red-50 rounded-xl p-8 md:p-12">
-                <div class="md:flex items-center">
-                    <div class="md:w-1/2 mb-8 md:mb-0">
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Comment s'est passé votre trajet ?</h2>
-                        <p class="text-gray-600 mb-6">Votre avis compte ! Notez votre chauffeur et partagez votre expérience pour nous aider à améliorer continuellement nos services.</p>
-                        <div class="flex items-center">
-                            <div class="rating-stars mr-4">
-                                <i class="fas fa-star text-2xl"></i>
-                                <i class="fas fa-star text-2xl"></i>
-                                <i class="fas fa-star text-2xl"></i>
-                                <i class="fas fa-star text-2xl"></i>
-                                <i class="fas fa-star text-2xl"></i>
-                            </div>
-                            <span class="text-gray-700 font-semibold">4.8/5 moyenne</span>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2">
-                        <div class="bg-white p-6 rounded-lg shadow-md">
-                            <h3 class="text-xl font-bold text-gray-800 mb-4">Noter un chauffeur</h3>
-                            <form>
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 mb-2">Numéro de réservation</label>
-                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Ex: DKR123456">
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 mb-2">Note (1 à 5 étoiles)</label>
-                                    <div class="flex space-x-2">
-                                        <button type="button" class="text-gray-300 hover:text-yellow-400 focus:outline-none">
-                                            <i class="fas fa-star text-2xl"></i>
-                                        </button>
-                                        <button type="button" class="text-gray-300 hover:text-yellow-400 focus:outline-none">
-                                            <i class="fas fa-star text-2xl"></i>
-                                        </button>
-                                        <button type="button" class="text-gray-300 hover:text-yellow-400 focus:outline-none">
-                                            <i class="fas fa-star text-2xl"></i>
-                                        </button>
-                                        <button type="button" class="text-gray-300 hover:text-yellow-400 focus:outline-none">
-                                            <i class="fas fa-star text-2xl"></i>
-                                        </button>
-                                        <button type="button" class="text-gray-300 hover:text-yellow-400 focus:outline-none">
-                                            <i class="fas fa-star text-2xl"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="block text-gray-700 mb-2">Commentaire (optionnel)</label>
-                                    <textarea rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Décrivez votre expérience..."></textarea>
-                                </div>
-                                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Envoyer l'évaluation</button>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -596,11 +299,11 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Tarif 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-red-600 text-white py-6 px-8">
+                    <div class="bg-blue-600 text-white py-6 px-8">
                         <h3 class="text-xl font-bold">Navette partagée</h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">5 000 FCFA</span>
-                            <span class="text-red-200">/personne</span>
+                            <span class="text-blue-200">/personne</span>
                         </div>
                     </div>
                     <div class="p-8">
@@ -622,17 +325,17 @@
                                 <span>Bagages inclus (1 par personne)</span>
                             </li>
                         </ul>
-                        <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
+                        <a href="#reservation" class="block text-center bg-gray-100 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
                 
                 <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
-                    <div class="bg-red-800 text-white py-6 px-8">
+                    <div class="bg-blue-800 text-white py-6 px-8">
                         <h3 class="text-xl font-bold">Voiture avec chauffeur</h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">15 000 FCFA</span>
-                            <span class="text-red-200">/trajet</span>
+                            <span class="text-blue-200">/trajet</span>
                         </div>
                     </div>
                     <div class="p-8">
@@ -654,17 +357,17 @@
                                 <span>Bagages inclus (2 par personne)</span>
                             </li>
                         </ul>
-                        <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
+                        <a href="#reservation" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
                 
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-red-600 text-white py-6 px-8">
+                    <div class="bg-blue-600 text-white py-6 px-8">
                         <h3 class="text-xl font-bold">Transfert premium</h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">25 000 FCFA</span>
-                            <span class="text-red-200">/trajet</span>
+                            <span class="text-blue-200">/trajet</span>
                         </div>
                     </div>
                     <div class="p-8">
@@ -686,14 +389,14 @@
                                 <span>Eau et journaux offerts</span>
                             </li>
                         </ul>
-                        <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
+                        <a href="#reservation" class="block text-center bg-gray-100 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
             </div>
             
             <div class="mt-12 text-center">
                 <p class="text-gray-600 mb-4">* Les tarifs peuvent varier selon la distance et le nombre de passagers.</p>
-                <a href="#contact" class="text-red-600 hover:text-red-800 font-semibold">Contactez-nous pour un devis personnalisé</a>
+                <a href="#contact" class="text-blue-600 hover:text-blue-800 font-semibold">Contactez-nous pour un devis personnalisé</a>
             </div>
         </div>
     </section>
@@ -713,7 +416,7 @@
                         
                         <div class="space-y-6">
                             <div class="flex items-start">
-                                <div class="text-red-600 mr-4 mt-1">
+                                <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-map-marker-alt text-xl"></i>
                                 </div>
                                 <div>
@@ -723,7 +426,7 @@
                             </div>
                             
                             <div class="flex items-start">
-                                <div class="text-red-600 mr-4 mt-1">
+                                <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-phone-alt text-xl"></i>
                                 </div>
                                 <div>
@@ -734,7 +437,7 @@
                             </div>
                             
                             <div class="flex items-start">
-                                <div class="text-red-600 mr-4 mt-1">
+                                <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-envelope text-xl"></i>
                                 </div>
                                 <div>
@@ -745,7 +448,7 @@
                             </div>
                             
                             <div class="flex items-start">
-                                <div class="text-red-600 mr-4 mt-1">
+                                <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-clock text-xl"></i>
                                 </div>
                                 <div>
@@ -759,10 +462,10 @@
                         <div class="mt-8">
                             <h4 class="font-bold text-gray-800 mb-4">Suivez-nous</h4>
                             <div class="flex space-x-4">
-                                <a href="#" class="bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-700 transition">
+                                <a href="#" class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-700 transition">
                                     <i class="fab fa-facebook-f"></i>
                                 </a>
-                                <a href="#" class="bg-red-400 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-500 transition">
+                                <a href="#" class="bg-blue-400 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-500 transition">
                                     <i class="fab fa-twitter"></i>
                                 </a>
                                 <a href="#" class="bg-pink-600 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-700 transition">
@@ -779,19 +482,19 @@
                         <form>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Nom complet</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Téléphone</label>
-                                <input type="tel" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <input type="tel" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 mb-2">Sujet</label>
-                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option>Demande d'information</option>
                                     <option>Réservation</option>
                                     <option>Réclamation</option>
@@ -801,9 +504,9 @@
                             </div>
                             <div class="mb-6">
                                 <label class="block text-gray-700 mb-2">Message</label>
-                                <textarea rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                                <textarea rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Envoyer le message</button>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Envoyer le message</button>
                         </form>
                     </div>
                 </div>
@@ -816,7 +519,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="md:flex justify-between">
                 <div class="mb-8 md:mb-0">
-                    <a href="#accueil" class="text-xl font-bold text-white">Dakar<span class="text-red-400">Transport</span></a>
+                    <a href="#accueil" class="text-xl font-bold text-white">Dakar<span class="text-blue-400">Transport</span></a>
                     <p class="mt-4 text-gray-400 max-w-xs">Service de transport professionnel vers l'aéroport international Blaise Diagne de Dakar.</p>
                 </div>
                 
@@ -829,7 +532,6 @@
                             <li><a href="#reservation" class="text-gray-400 hover:text-white transition">Réservation</a></li>
                             <li><a href="#tarifs" class="text-gray-400 hover:text-white transition">Tarifs</a></li>
                             <li><a href="#contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
-                            <li><a href="#compte" class="text-gray-400 hover:text-white transition">Mon compte</a></li>
                         </ul>
                     </div>
                     
@@ -840,8 +542,6 @@
                             <li><a href="#" class="text-gray-400 hover:text-white transition">Location voiture</a></li>
                             <li><a href="#" class="text-gray-400 hover:text-white transition">Transferts privés</a></li>
                             <li><a href="#" class="text-gray-400 hover:text-white transition">Service VIP</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white transition">Location hors Dakar</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white transition">Services entreprises</a></li>
                         </ul>
                     </div>
                     
@@ -917,22 +617,6 @@
                 if (link.getAttribute('href') === `#${current}`) {
                     link.classList.add('active');
                 }
-            });
-        });
-        
-        // Rating stars interaction
-        const stars = document.querySelectorAll('.rating-stars button');
-        stars.forEach((star, index) => {
-            star.addEventListener('click', () => {
-                stars.forEach((s, i) => {
-                    if (i <= index) {
-                        s.classList.remove('text-gray-300');
-                        s.classList.add('text-yellow-400');
-                    } else {
-                        s.classList.remove('text-yellow-400');
-                        s.classList.add('text-gray-300');
-                    }
-                });
             });
         });
     </script>

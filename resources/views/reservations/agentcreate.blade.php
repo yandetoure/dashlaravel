@@ -170,5 +170,35 @@ function updateTarif() {
 }
 
 </script>
+<script>
+    document.getElementById("heure_ramassage").addEventListener("change", validateHeureConvocation);
+    document.getElementById("heure_convocation").addEventListener("change", validateHeureConvocation);
+
+    function validateHeureConvocation() {
+        const heureRamassage = document.getElementById("heure_ramassage").value;
+        const heureConvocation = document.getElementById("heure_convocation").value;
+
+        if (!heureRamassage || !heureConvocation) return;
+
+        const [hrR, minR] = heureRamassage.split(':').map(Number);
+        const [hrC, minC] = heureConvocation.split(':').map(Number);
+
+        const dateRamassage = new Date(2000, 0, 1, hrR, minR); // date arbitraire
+        const dateConvocation = new Date(2000, 0, 1, hrC, minC);
+
+        const diffMs = dateRamassage - dateConvocation;
+        const diffHeures = diffMs / (1000 * 60 * 60);
+
+        const convocationInput = document.getElementById("heure_convocation");
+
+        if (diffHeures < 2) {
+            convocationInput.setCustomValidity("L'heure de convocation doit être au moins 2 heures avant l'heure de ramassage.");
+        } else {
+            convocationInput.setCustomValidity("");
+        }
+
+        convocationInput.reportValidity();
+    }
+</script>
 
 @endsection

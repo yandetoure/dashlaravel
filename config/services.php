@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1); 
 
 return [
 
@@ -13,6 +13,15 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+
+    'google_calendar' => [
+        'credentials_path' => env('GOOGLE_CALENDAR_CREDENTIALS_PATH'),
+        'client_id' => env('GOOGLE_CALENDAR_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CALENDAR_CLIENT_SECRET'),
+        'refresh_token' => env('GOOGLE_CALENDAR_REFRESH_TOKEN'),
+        'calendar_id' => env('GOOGLE_CALENDAR_ID'),
+        "timezone" => "Africa/Dakar"
+    ],
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),

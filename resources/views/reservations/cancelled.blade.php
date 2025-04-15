@@ -17,17 +17,15 @@
         <tbody>
             @foreach($reservations as $reservation)
                 <tr>
-                    <td>{{ $reservation->id }}</td>
-                    <td>{{ $reservation->client->name }}</td>
-                    <td>{{ $reservation->date }}</td>
+            <td>{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</td>
+            <td>{{ $reservation->carDriver->chauffeur->first_name ?? 'Non assigné' }} {{ $reservation->carDriver->chauffeur->last_name ?? 'Non assigné' }}</td>
+            <td>{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</td>
+            <td>{{ \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') }}</td>
+            <td>{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}</td>
                     <td><span class="badge bg-danger">Annulée</span></td>
                     <td>
                         <a href="{{ route('reservations.show', $reservation->id) }}" class="btn btn-info btn-sm">Voir</a>
-                        <form action="{{ route('reservations.restore', $reservation->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn btn-success btn-sm">Restaurer</button>
-                        </form>
+                        <!--  -->
                         <form action="{{ route('reservations.destroy', $reservation->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')

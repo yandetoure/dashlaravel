@@ -256,4 +256,36 @@ private function registerUser(Request $request, string $role)
     return back()->with('success', 'L\'utilisateur a été créé avec succès et un mot de passe lui a été envoyé.');
 }
 
+// Affiche le formulaire d'édition
+public function edit(User $user)
+{
+    return view('profile.edit', compact('user'));
+}
+
+public function update(Request $request)
+{
+    $user = $request->user();
+
+    $request->validate([
+        'first_name' => ['required', 'string', 'max:255'],
+        'last_name' => ['required', 'string', 'max:255'],
+        'address' => ['nullable', 'string', 'max:255'],
+        'phone_number' => ['required', 'regex:/^[0-9]{9}$/', 'unique:users,phone_number,' . $user->id],
+        'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        'profile_photo' => ['nullable', 'image', 'max:2048'],
+    ]);
+
+    $data = $request->only(['first_name', 'last_name', 'address', 'phone_number', 'email']);
+
+    // Gestion de la photo de profil
+    if ($request->hasFile('profile_photo')) {
+        $data['profile_photo'] = $request->file('profile_photo')->store('profile_photos', 'public');
+    }
+
+    $user->update($data);
+
+    return back()->with('status', 'Profil mis à jour avec succès.');
+}
+
+
 }

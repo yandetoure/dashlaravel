@@ -22,13 +22,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationCreatedclient;
-use App\Mail\ReservationUpdatedclient;
-use App\Mail\ReservationUpdateddriver;
-use App\Mail\ReservationCancelledclient;
-use App\Mail\ReservationCancelleddriver;
 use App\Mail\ReservationConfirmed;
 use App\Mail\ReservationConfirmedclient;
 use App\Mail\ReservationConfirmedDriver;
+use Google_Client;
+use Google_Service_Calendar;
+use Google_Service_Calendar_Event;
+
 
 
 class ReservationController extends Controller
@@ -183,7 +183,11 @@ class ReservationController extends Controller
             'email' => $client->email,
         ]);
 
-        $this->envoyerEmailReservation($reservation, 'created');
+
+         // Assurez-vous que la réservation est chargée avec les relations nécessaires
+         $reservation->load(['client', 'carDriver.chauffeur']);
+         // Envoi des e-mails de réservation
+         $this->envoyerEmailReservation($reservation, 'created');
 
         return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès.');
     }
@@ -277,22 +281,23 @@ class ReservationController extends Controller
         // Calcul du tarif
         $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, $request->nb_adresses);
 
-                // Si le client n'existe pas, on le crée et on assigne le rôle client
-                if (!$request->client_id) {
-                    $client = User::create([
-                        'first_name' => $request->first_name,
-                        'last_name' => $request->last_name,
-                        'email' => $request->email,
-                        'password' => Hash::make(Str::random(12)), // Générer un mot de passe aléatoire
-                        'phone_number' => $request->phone_number,
-                    ]);
+        if ($request->client_id) {
+            // Client existant sélectionné
+            $client = User::find($request->client_id);
+        } else {
+            // Création d'un nouveau client
+            $client = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make(Str::random(12)),
+                'phone_number' => $request->phone_number,
+            ]);
         
-                    // Assigner le rôle client
-                    $client->assignRole('client');
+            $client->assignRole('client');
         
-                    // Envoi d'un e-mail contenant le mot de passe
-                    Mail::to($client->email)->send(new AccountCreatedMail($client, $client->password));
-                }
+            Mail::to($client->email)->send(new AccountCreatedMail($client, $client->password));
+        }        
 
         // Création de la réservation
         $reservation = Reservation::create([
@@ -355,14 +360,17 @@ class ReservationController extends Controller
 
     public function confirm(Reservation $reservation)
     {
-
-         // Assurez-vous que la réservation est chargée avec les relations nécessaires
+        // Chargez les relations nécessaires
         $reservation->load(['client', 'carDriver.chauffeur']);
         $reservation->update(['status' => 'confirmée']);
-    // Envoyer les e-mails lors de la confirmation de la réservation
-    $this->envoyerEmailReservation($reservation, 'confirmée');
+        
+        // Envoyer les e-mails lors de la confirmation de la réservation
+        $this->envoyerEmailReservation($reservation, 'confirmée');
+        // Ajouter l'événement à Google Calendar
+        $this->addToGoogleCalendar($reservation);
          return back()->with('success', 'Réservation confirmée.');
     }
+    
 
     public function cancel(Reservation $reservation)
     {
@@ -453,9 +461,6 @@ class ReservationController extends Controller
     public function show($id)
 {
     $reservation = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip', 'carDriver'])->findOrFail($id);
-    
-    // dd($reservation);  // Cela vous permet de voir l'objet complet de la réservation avec toutes les relations.
-
     return view('reservations.show', compact('reservation'));
 }
 
@@ -488,12 +493,123 @@ class ReservationController extends Controller
     }
     
     public function confirmedReservations()
+    {
+        $reservations = Reservation::with('chauffeur', 'client', 'car', 'trip', 'carDriver')
+            ->where('status', 'Confirmée')
+            ->paginate(10);
+
+        return view('reservations.confirmed', compact('reservations'));
+    }
+
+    private function addToGoogleCalendar($reservation)
+    {
+        $client = $reservation->client;
+        $chauffeur = $reservation->carDriver->chauffeur;
+        $fly_number = $reservation-> numero_vol;
+        $clientName = "{$client->first_name} {$client->last_name}";
+        $clientPhone = $client->phone_number;
+        $driverName =  "{$chauffeur->first_name}";
+        $nb_personnes =  "{$reservation->nb_personnes}";
+        $nb_valises =  "{$reservation->nb_valises}";
+        $tarif =  "{$reservation->tarif}";
+        $heure_ramassage =  "{$reservation->heure_ramassage}";
+        $clientSummary = " $driverName/ {$reservation->trip->departure}{$reservation->trip->destination}/ $heure_ramassage/";
+        $description = "Réservation avec $clientName 
+        Téléphone : $clientPhone
+        Numéro vol : $fly_number
+        nb_personnes : $nb_personnes
+        nb_valises : $nb_valises
+        tarif : $tarif";
+    
+        // Formatage sécurisé des dates
+        $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
+        $end = $start->copy()->addHour();
+    
+        $googleClient = new \Google_Client();
+        $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+        $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
+        $googleClient->setAccessType('offline');
+    
+        $tokenPath = storage_path('app/google-calendar/token.json');
+        if (!file_exists($tokenPath)) {
+            throw new \Exception("Le fichier de jeton n'existe pas. Veuillez authentifier votre application.");
+        }
+    
+        $accessToken = json_decode(file_get_contents($tokenPath), true);
+        $googleClient->setAccessToken($accessToken);
+    
+        if ($googleClient->isAccessTokenExpired()) {
+            if (isset($accessToken['refresh_token'])) {
+                $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
+                file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
+            } else {
+                throw new \Exception("Le jeton d'accès a expiré et aucun refresh token n'est disponible.");
+            }
+        }
+    
+        $service = new \Google_Service_Calendar($googleClient);
+        $calendarId = config('services.google_calendar.calendar_id');
+    
+        $event = new \Google_Service_Calendar_Event([
+            'summary' => $clientSummary,
+            'description' => $description,
+            'start' => [
+                'dateTime' => $start->toIso8601String(),
+                'timeZone' => config('services.google_calendar.timezone'),
+            ],
+            'end' => [
+                'dateTime' => $end->toIso8601String(),
+                'timeZone' => config('services.google_calendar.timezone'),
+            ],
+        ]);
+    
+        try {
+            $service->events->insert($calendarId, $event);
+        } catch (\Google_Service_Exception $e) {
+            logger()->error('Erreur Google Calendar : ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    
+    public function mesReservationsClient()
 {
-    $reservations = Reservation::with('chauffeur', 'client', 'car', 'trip', 'carDriver')
-        ->where('status', 'Confirmée') // Filtre les réservations confirmées
+    $client = Auth::user();
+
+    // Vérifie que l'utilisateur est bien un client
+    if (!$client->hasRole('client')) {
+        abort(403, 'Accès non autorisé.');
+    }
+
+    // Récupère les réservations du client connecté
+    $reservations = Reservation::with(['trip', 'carDriver.chauffeur', 'carDriver.car'])
+        ->where('client_id', $client->id)
+        ->orderByDesc('date')
         ->paginate(10);
 
-    return view('reservations.confirmed', compact('reservations'));
+    return view('reservations.client', compact('reservations'));
 }
+
+
+public function mesReservationsChauffeur()
+{
+    $chauffeur = Auth::user();
+
+    // Vérifie que l'utilisateur est bien un chauffeur
+    if (!$chauffeur->hasRole('chauffeur')) {
+        abort(403, 'Accès non autorisé.');
+    }
+
+    // Récupère les IDs des relations CarDriver du chauffeur
+    $carDriverIds = CarDriver::where('chauffeur_id', $chauffeur->id)->pluck('id');
+
+    // Récupère les réservations assignées au chauffeur connecté via carDriver_id
+    $reservations = Reservation::with(['trip', 'client', 'carDriver.car', 'chauffeur','car', 'trip', 'carDriver'])
+        ->whereIn('cardriver_id', $carDriverIds)
+        ->orderByDesc('date')
+        ->paginate(10);
+
+    return view('reservations.chauffeur', compact('reservations'));
+}
+
 
 }

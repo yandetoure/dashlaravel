@@ -16,7 +16,7 @@
                 </summary>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="" class="nav-link">Liste des Réservations</a>
+                        <a href="{{ route('reservations.client.mes') }}" class="nav-link">Liste des Réservations</a>
                     </li>
                     <li class="nav-item">
                     <li class="nav-item"><a href="{{ route('reservations.clientcreate') }}" class="nav-link">Ajouter une réservation</a></li>

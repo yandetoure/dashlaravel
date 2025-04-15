@@ -94,11 +94,9 @@
         @csrf
         <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i> Annuler</button>
     </form>
-
+    @endif
     <a href="{{ route('reservations.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Retour</a>
 </div>
-
-            @endif
 
         </div>
     </div>

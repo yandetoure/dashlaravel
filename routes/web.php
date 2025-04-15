@@ -11,6 +11,8 @@ use App\Http\Controllers\CarDriverController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
+// use Google_Client;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Route pour l'admin
     Route::get('/admin/dashboard', function () {
@@ -135,6 +138,7 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
 
     Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
 });
+
 // Dans votre fichier de routes (web.php)
 Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
 
@@ -153,5 +157,60 @@ Route::middleware(['auth'])->group(function () {
     
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mes-reservations-client', [ReservationController::class, 'mesReservationsClient'])->name('reservations.client.mes');
+    Route::get('/mes-reservations-chauffeur', [ReservationController::class, 'mesReservationsChauffeur'])->name('reservations.chauffeur.mes');
+});
+
+Route::get('/google-auth', function () {
+    $client = new Google_Client();
+    $client->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+    $client->addScope(Google_Service_Calendar::CALENDAR);
+    $client->setAccessType('offline');
+    $client->setPrompt('consent');
+
+    $authUrl = $client->createAuthUrl();
+    return redirect($authUrl);
+});
+
+Route::get('/google-auth', function () {
+    $client = new Google_Client();
+    $client->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+    $client->addScope(Google_Service_Calendar::CALENDAR);
+    $client->setAccessType('offline');
+    $client->setPrompt('consent');
+
+    $authUrl = $client->createAuthUrl();
+    return redirect($authUrl);
+});
+Route::get('/oauth2callback', function () {
+    $client = new Google_Client();
+    $client->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+    $client->addScope(Google_Service_Calendar::CALENDAR);
+    $client->setAccessType('offline');
+    $client->setRedirectUri('http://localhost:8000/oauth2callback');
+
+    // Vérifiez si le code d'autorisation est présent
+    if (!request()->has('code')) {
+        return response()->json(['error' => 'No code provided'], 400);
+    }
+
+    try {
+        // Échange le code d'autorisation contre un token d'accès
+        $accessToken = $client->fetchAccessTokenWithAuthCode(request('code'));
+
+        // Vérifiez si des erreurs sont présentes dans le token d'accès
+        if (array_key_exists('error', $accessToken)) {
+            throw new Exception($accessToken['error']);
+        }
+
+        // Sauvegarde du token dans un fichier local
+        file_put_contents(storage_path('app/google-calendar/token.json'), json_encode($accessToken));
+
+        return response()->json(['message' => 'Authentification réussie, token sauvegardé']);
+    } catch (Exception $e) {
+        return response()->json(['error' => 'Erreur lors de l\'authentification : ' . $e->getMessage()], 400);
+    }
+});
 
 require __DIR__.'/auth.php';
