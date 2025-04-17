@@ -1,37 +1,70 @@
 <?php declare(strict_types=1); ?>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <style>
-    .custom-profile-img {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
+ .custom-profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FFD700;
+    transition: transform 0.3s ease-in-out;
+}
+
+.nav-container {
+    background: linear-gradient(to right, #2C3E50, #4CA1AF);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    border-radius: 8px;
+}
+
+.nav-link {
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    padding: 12px 16px;
+    border-radius: 6px;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.notification-icon {
+    cursor: pointer;
+    color: #FFD700;
+    transition: transform 0.3s ease-in-out;
+}
+
+.notification-icon:hover {
+    transform: scale(1.2);
+}
+
+/* Effet du menu utilisateur */
+.nav-container button {
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-container button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+/* Menu mobile */
+@media screen and (max-width: 768px) {
     .nav-container {
-        background-color: white;
-        box-shadow: 0px 4px 6px rgba(234, 236, 237, 0.08);
-        padding: 10px 20px;
+        padding: 10px 15px;
     }
-    .nav-link {
-        font-weight: 500;
-        color:rgba(194, 195, 198, 0.73);
-        transition: color 0.3s ease-in-out;
-    }
-    .nav-link:hover {
-        color:rgb(255, 255, 255);
-    }
-    .notification-icon {
-        cursor: pointer;
-        transition: color 0.3s ease-in-out;
-    }
-    .notification-icon:hover {
-        color: #1a202c;
-    }
+}
+
 </style>
 
 <nav x-data="{ open: false }" class="nav-container border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-            <!-- Logo -->
+            <!-- Logo / Rôle -->
             <div class="flex items-center">
                 <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
                     <p class="text-sm text-gray-600">Rôle : {{ Auth::user()->getRoleNames()->first() }}</p>
@@ -45,10 +78,10 @@
                 </a>
             </div>
 
-            <!-- Menu utilisateur + Notifications -->
+            <!-- Notifications + Menu utilisateur -->
             <div class="hidden sm:flex items-center space-x-6">
                 <!-- Icône de notification -->
-                <div class="notification-icon text-gray-500">
+                <div class="notification-icon">
                     <span class="material-icons">notifications</span>
                 </div>
 

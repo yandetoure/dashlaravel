@@ -96,6 +96,41 @@
     </form>
     @endif
     <a href="{{ route('reservations.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Retour</a>
+    <div class="mt-3">
+    @php
+    $phone = preg_replace('/[^0-9]/', '', $reservation->client->phone_number); // Nettoyage du numéro
+    $phone = '221' . $phone; // Ajout de l'indicatif du Sénégal
+    $message = urlencode(
+        "Bonjour " . $reservation->client->first_name . ",\n\n" .
+        "Votre réservation #{$reservation->id} a bien été confirmée.\n\n" .
+        "Détails de la réservation :\n" .
+        "Client : " . $reservation->client->first_name . " " . $reservation->client->last_name . "\n" .
+        "Téléphone : " . $reservation->client->phone_number . "\n" .
+        "Adresse de Récupération : " . $reservation->adresse_rammassage . "\n" .
+        "Chauffeur : " . ($reservation->carDriver->chauffeur->first_name ?? 'Non assigné') . " " . ($reservation->carDriver->chauffeur->last_name ?? '') . "\n" .
+        "Numéro Chauffeur : " . ($reservation->carDriver->chauffeur->phone_number ?? 'Non précisé') . "\n" .
+        "Voiture : " . ($reservation->carDriver->car->marque ?? 'Non précisé') . " - " . ($reservation->carDriver->car->model ?? 'Non précisé') . "\n" .
+        "Matricule : " . ($reservation->carDriver->car->matricule ?? 'Non précisé') . "\n" .
+        "Nombre de Valises : " . $reservation->nb_valises . "\n" .
+        "Date : " . \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') . "\n" .
+        "Heure Ramassage : " . \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') . "\n" .
+        "Heure Vol : " . \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') . "\n" .
+        "Statut : " . ucfirst($reservation->status) . "\n" .
+        "Numéro de Vol : " . ($reservation->numero_vol ?? 'Non précisé') . "\n" .
+        "Nombre de Personnes : " . $reservation->nb_personnes . "\n\n" .
+        "Merci de votre confiance !"
+    );
+    @endphp
+
+    <a 
+        href="https://wa.me/{{ $phone }}?text={{ $message }}" 
+        class="btn btn-success" 
+        target="_blank"
+    >
+        <i class="bi bi-whatsapp"></i> Envoyer par WhatsApp
+    </a>
+
+    </div>
 </div>
 
         </div>

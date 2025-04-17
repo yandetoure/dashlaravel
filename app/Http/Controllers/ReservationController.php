@@ -369,8 +369,9 @@ class ReservationController extends Controller
         // Ajouter l'événement à Google Calendar
         $this->addToGoogleCalendar($reservation);
          return back()->with('success', 'Réservation confirmée.');
+         
     }
-    
+
 
     public function cancel(Reservation $reservation)
     {

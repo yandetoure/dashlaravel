@@ -1,7 +1,5 @@
 <?php declare(strict_types=1); ?>
 
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -11,9 +9,83 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        
-            #sidebar {
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body class="body">
+
+<div id="sidebar" class="d-flex flex-column flex-shrink-0 p-3 sidebar">
+    <!-- Logo -->
+    <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+        <i class="fas fa-car text-warning fs-4 me-2"></i>
+        <span class="logo-text fs-5 fw-bold text-white">CPRO-VLC</span>
+    </div>
+
+    
+   <!-- User Profile -->
+    <div class="flex items-center justify-center text-white mb-4 border-b pb-3">
+        <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Photo de profil" class="rounded-full w-[45px] h-[45px] object-cover mr-3">
+        <div>
+        <div class="font-semibold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+        <small class="text-light text-opacity-75">
+            {{ Auth::user()->getRoleNames()->first() }}
+        </small>
+    </div>
+</div>
+
+
+    <!-- Partie scrollable -->
+    <div class="sidebar-links">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <!-- Réservations -->
+            <li><a href="{{ route('dashboard.superadmin') }}" class="nav-link"><span class="material-icons">assignment</span> Tableau de bord</a></li>
+        <li><a href="{{ route('reservations.index') }}" class="nav-link"><span class="material-icons">assignment</span> Liste des réservations</a></li>
+        <li><a href="{{ route('reservations.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une réservation</a></li>
+        <li><a href="{{ route('reservations.confirmed') }}" class="nav-link"><span class="material-icons">check_circle</span> Réservations Confirmées</a></li>
+        <li><a href="{{ route('reservations.cancelled') }}" class="nav-link"><span class="material-icons">cancel</span> Réservations Annulées</a></li>
+
+        <!-- Trajets -->
+        <li><a href="{{ route('trips.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
+        <li><a href="{{ route('trips.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter un trajet</a></li>
+
+        <!-- Super Admin -->
+        <li><a href="{{ route('superadmins.index') }}" class="nav-link"><span class="material-icons">people</span> Liste des Super Admins</a></li>
+        <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Super Admin</a></li>
+
+        <!-- Admin -->
+        <li><a href="{{ route('admins.index') }}" class="nav-link"><span class="material-icons">people</span> Liste des admin</a></li>
+        <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un admin</a></li>
+
+        <!-- Agents -->
+        <li><a href="{{ route('agents.index') }}" class="nav-link"><span class="material-icons">people</span> Liste des agents</a></li>
+        <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Agent</a></li>
+
+        <!-- Chauffeurs -->
+        <li><a href="{{ route('drivers.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
+        <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li>
+        <li><a href="{{ route('admin.assign-day-off') }}" class="nav-link"><span class="material-icons">event_busy</span> Jour de repos</a></li>
+
+        <!-- Voitures assignées -->
+        <li><a href="{{ route('cardrivers.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
+        <li><a href="{{ route('cardrivers.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter un filiation</a></li>
+
+        <!-- Maintenance -->
+        <li><a href="{{ route('maintenances.index') }}" class="nav-link"><span class="material-icons">build</span> Voitures (Maintenance)</a></li>
+        <li><a href="{{ route('maintenances.create') }}" class="nav-link"><span class="material-icons">add</span> Créer maintenance</a></li>
+
+        <!-- Clients -->
+        <li><a href="{{ route('clients.index') }}" class="nav-link"><span class="material-icons">person</span> Liste des Clients</a></li>
+        <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Client</a></li>
+
+        <!-- Voitures -->
+        <li><a href="{{ route('cars.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des Voitures</a></li>
+        <li><a href="{{ route('cars.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une voiture</a></li>
+    </ul>
+    </div>
+</div>
+
+<style>
+    #sidebar {
         width: 250px;
         height: 100vh;
         background: linear-gradient(to bottom, #0a3d62, #0c2461);
@@ -23,20 +95,32 @@
         top: 0;
         left: 0;
         font-weight: bold;
+        display: flex;
+        flex-direction: column;
     }
 
-    .title {
-        font-size: 22px;
-        text-align: center;
-        margin-bottom: 15px;
-        color: #fff;
+    .sticky-header {
+        flex-shrink: 0;
+        padding: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-links {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 15px;
+    }
+
+    .logo-text {
+        color: white;
     }
 
     .nav-link {
         display: flex;
         align-items: center;
         padding: 10px;
-        color: white;
+        color: #f1f1f1;
+        font-weight: bold;
         text-decoration: none;
         border-radius: 8px;
         transition: background 0.3s ease-in-out;
@@ -46,264 +130,20 @@
         background: rgba(255, 255, 255, 0.2);
     }
 
-    .nav-link.active {
-        background: rgba(255, 255, 255, 0.3);
-    }
-
     .material-icons {
         font-size: 20px;
         margin-right: 10px;
         color: white;
     }
 
-    details {
-        border: none;
-    }
-
-    summary:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    details[open] summary {
-        background: rgba(255, 255, 255, 0.3);
-    }
-
-    details ul {
-        padding-left: 15px;
-    }
-
-    details ul .nav-link {
-        font-size: 14px;
-        padding-left: 30px;
-        color: #f1f1f1;
-    }
-
-    details ul .nav-link:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-        .main-content {
-            transition: all 0.3s;
-        }
-        .main-content-expanded {
-            margin-left: 70px;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-        }
-    </style>
-</head>
-<body class="body">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
     
-<div id="sidebar" class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar" style="width: 250px; height: 100vh;">
-<div class="p-4 flex items-center space-x-2 border-b border-blue-700">
-        <i class="fas fa-car text-2xl text-yellow-300"></i>
-        <span class="logo-text text-xl font-bold">CPRO-VLC</span>
-    </div>
+</style>
 
-    <!-- <div class="p-4 flex items-center space-x-4 border-b border-blue-700">
-        <div class="w-10 h-10 rounded-full bg-blue-600 overflow-hidden">
-        <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Photo de profil" class="profile-img">
-        </div>
-        <div class="sidebar-text">
-            <div class="font-medium">{{ Auth::user()->getRoleNames()->first() }}</div>
-            <div class="text-xs text-blue-200"> {{ Auth::user()->role === 'entreprise' || Auth::user()->role === 'client' ? Auth::user()->name : Auth::user()->first_name . ' ' . Auth::user()->last_name }}
-            </div>
-        </div>
-    </div> -->
-<!-- 
-    <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <span class="title">Tableau de bord</span>
-    </a> -->
-
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">assignment</span> Réservations
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a href="{{ route('reservations.index') }}" class="nav-link">Liste des réservations</a></li>
-                    <li class="nav-item"><a href="{{ route('reservations.create') }}" class="nav-link">Ajouter une réservation</a></li>
-                    <li class="nav-item"><a href="{{ route('reservations.confirmed') }}" class="nav-link">Réservations Confirmées</a></li>
-                    <li class="nav-item"><a href="{{ route('reservations.cancelled') }}" class="nav-link">Réservations Annulées</a></li>
-                </ul>
-            </details>
-        </li>
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">directions_car</span> Trajets
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('trips.index') }}" class="nav-link">Liste des trajets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('trips.create') }}" class="nav-link">Ajouter un trajet</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">people</span> Super Admin
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('superadmins.index') }}" class="nav-link">Liste des Super Admins</a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('admin.create.account.page') }}" class="nav-link">Ajouter un Super Admin</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">people</span> Admin
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('admins.index') }}" class="nav-link">Liste des admin</a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('admin.create.account.page') }}" class="nav-link">Ajouter un admin</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-        
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">people</span> Agents
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('agents.index') }}" class="nav-link">Liste des agents</a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('admin.create.account.page') }}" class="nav-link">Ajouter un Agent</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">directions_car</span> Chauffeurs
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('drivers.index') }}" class="nav-link">Liste des chauffeurs</a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('admin.create.account.page') }}" class="nav-link">Ajouter un Chauffeur</a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('admin.assign-day-off') }}" class="nav-link">Jour de repos</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">directions_car</span> Voiture assignées
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('cardrivers.index') }}" class="nav-link">Voitures & Chauffeurs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('cardrivers.create') }}" class="nav-link">Ajouter un filiation</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                    <span class="material-icons">directions_car</span> Maintenance
-                    <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a href="{{ route('maintenances.index') }}" class="nav-link">Voitures</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('maintenances.create') }}" class="nav-link">Créer</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                <span class="material-icons">person</span> Clients
-                <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('clients.index') }}" class="nav-link">Liste des Clients</a>
-                    </li>
-                    <li class="nav-item">
-                    <a href="{{ route('admin.create.account.page') }}" class="nav-link">Ajouter un Client</a>
-                    </li>
-                </ul>
-            </details>
-        </li>
-
-        <li class="nav-item">
-            <details>
-                <summary class="nav-link">
-                <span class="material-icons">person</span> Voitures
-                <span class="material-icons">expand_more</span>
-                </summary>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('cars.index') }}" class="nav-link">Liste des Voiture</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('cars.create') }}" class="nav-link">Ajouter une voiture</a>
-                    </li>
-    </ul>
-</div>
 
 
         
         <!-- Main Content -->
-        <div id="main-content" class="main-content flex-1 flex flex-col overflow-hidden ml-64">
+        <div id="main-content" class="main-contentflex flex-col overflow-hidden ml-64">
             <!-- Top Navigation -->
             <header class="bg-white shadow-sm z-10">
                 <div class="flex items-center justify-between px-6 py-3">
