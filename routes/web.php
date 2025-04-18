@@ -139,7 +139,6 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
     Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
 });
 
-// Dans votre fichier de routes (web.php)
 Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
 
 Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');

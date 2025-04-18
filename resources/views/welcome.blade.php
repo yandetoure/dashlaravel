@@ -1,4 +1,6 @@
 <?php declare(strict_types=1); ?>
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -59,7 +61,11 @@
                     <a href="#reservation" class="text-gray-700 hover:text-red-600 transition nav-link">Réservation</a>
                     <a href="#tarifs" class="text-gray-700 hover:text-red-600 transition nav-link">Tarifs</a>
                     <a href="#contact" class="text-gray-700 hover:text-red-600 transition nav-link">Contact</a>
-                    <a href="#compte" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
+                    @auth
+                        <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
+                    @else
+                        <a href="#compte" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
+                    @endauth
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="menu-btn" class="text-gray-700">
@@ -597,21 +603,21 @@
                 <!-- Tarif 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Navette partagée</h3>
+                        <h3 class="text-xl font-bold">Location voiture</h3>
                         <div class="mt-4">
-                            <span class="text-3xl font-bold">5 000 FCFA</span>
-                            <span class="text-red-200">/personne</span>
+                            <span class="text-3xl font-bold">60 000 FCFA</span>
+                            <span class="text-red-200">/Jour</span>
                         </div>
                     </div>
                     <div class="p-8">
                         <ul class="space-y-3 text-gray-600 mb-8">
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Départs toutes les heures</span>
+                                <span>Chauffeur professionnel</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Arrêts multiples</span>
+                                <span>Plein carburant</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
@@ -619,7 +625,7 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Bagages inclus (1 par personne)</span>
+                                <span>Circulez partout à Dakar</span>
                             </li>
                         </ul>
                         <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
@@ -629,9 +635,9 @@
                 <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
                     <div class="bg-red-800 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Voiture avec chauffeur</h3>
+                        <h3 class="text-xl font-bold">Transfert AIBD</h3>
                         <div class="mt-4">
-                            <span class="text-3xl font-bold">15 000 FCFA</span>
+                            <span class="text-3xl font-bold">32 500 FCFA</span>
                             <span class="text-red-200">/trajet</span>
                         </div>
                     </div>
@@ -683,7 +689,7 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Eau et journaux offerts</span>
+                                <span>Wifi à bord</span>
                             </li>
                         </ul>
                         <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
@@ -718,7 +724,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Adresse</h4>
-                                    <p class="text-gray-600">Avenue Blaise Diagne, Dakar, Sénégal</p>
+                                    <p class="text-gray-600">Sacré cœur, Dakar, Sénégal</p>
                                 </div>
                             </div>
                             
@@ -728,8 +734,8 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Téléphone</h4>
-                                    <p class="text-gray-600">+221 33 123 45 67</p>
-                                    <p class="text-gray-600">+221 77 123 45 67 (WhatsApp)</p>
+                                    <p class="text-gray-600">+221 77 705 67 67</p>
+                                    <p class="text-gray-600">+221 77 705 69 69 (WhatsApp)</p>
                                 </div>
                             </div>
                             
@@ -739,7 +745,7 @@
                                 </div>
                                 <div>
                                     <h4 class="font-bold text-gray-800">Email</h4>
-                                    <p class="text-gray-600">contact@dakartransport.sn</p>
+                                    <p class="text-gray-600">221cproservices@gmail.com</p>
                                     <p class="text-gray-600">reservation@dakartransport.sn</p>
                                 </div>
                             </div>
@@ -857,7 +863,7 @@
             </div>
             
             <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 mb-4 md:mb-0">© 2023 DakarTransport. Tous droits réservés.</p>
+                <p class="text-gray-400 mb-4 md:mb-0">© 2023 CPRO-VLC. Tous droits réservés.</p>
                 <div class="flex space-x-6">
                     <a href="#" class="text-gray-400 hover:text-white transition">
                         <i class="fab fa-facebook-f"></i>

@@ -12,13 +12,6 @@
     transition: transform 0.3s ease-in-out;
 }
 
-.nav-container {
-    background: linear-gradient(to right, #2C3E50, #4CA1AF);
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px 20px;
-    border-radius: 8px;
-}
-
 .nav-link {
     font-weight: 600;
     color: white;
@@ -59,6 +52,19 @@
     }
 }
 
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color:rgb(255, 255, 255);
+    /* background: linear-gradient(to right, #2C3E50, #4CA1AF); */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    border-radius: 0 0 8px 8px;
+}
+
 </style>
 
 <nav x-data="{ open: false }" class="nav-container border-b border-gray-200">
@@ -66,14 +72,26 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo / Rôle -->
             <div class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="flex items-center space-x-2">
-                    <p class="text-sm text-gray-600">Rôle : {{ Auth::user()->getRoleNames()->first() }}</p>
+                <a href="/" class="flex items-center space-x-2">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </a>
             </div>
 
             <!-- Navigation Links -->
+            @php
+            $role = Auth::user()->getRoleNames()->first();
+            $dashboardRoute = match($role) {
+                'admin' => route('dashboard.admin'),
+                'superadmin', 'super-admin' => route('dashboard.superadmin'),
+                'client' => route('dashboard.client'),
+                'entreprise' => route('dashboard.entreprise'),
+                'agent' => route('dashboard.agent'),
+                'chauffeur' => route('dashboard.chauffeur'),
+                default => '#',
+                };
+            @endphp
             <div class="hidden sm:flex space-x-6">
-                <a href="{{ route('dashboard') }}" class="nav-link">
+            <a href="{{ $dashboardRoute }}" class="nav-link">
                     Dashboard
                 </a>
             </div>
@@ -81,17 +99,17 @@
             <!-- Notifications + Menu utilisateur -->
             <div class="hidden sm:flex items-center space-x-6">
                 <!-- Icône de notification -->
-                <div class="notification-icon">
-                    <span class="material-icons">notifications</span>
+                <div class="notification-icon-not">
+                    <!-- <span class="material-icons">notifications</span> -->
                 </div>
 
                 <!-- Menu utilisateur -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="flex items-center space-x-2 bg-white text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md border border-transparent transition duration-150">
+                        <button class="flex items-center space-x-2 bg-white text-gray-600 hover:text-gray-800">
                             <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="{{ Auth::user()->name }}" class="custom-profile-img">
                             <span>
-                                {{ Auth::user()->role === 'entreprise' || Auth::user()->role === 'client' ? Auth::user()->name : Auth::user()->first_name . ' ' . Auth::user()->last_name }}
+                                {{ Auth::user()->role === 'entreprise' || Auth::user()->role === 'client' ? Auth::user()->name : Auth::user()->last_name }}
                             </span>
                             <svg class="h-4 w-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>

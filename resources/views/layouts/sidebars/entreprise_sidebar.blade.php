@@ -5,20 +5,15 @@
 <div id="sidebar" class="sidebar">
     <!-- Header fixe -->
     <div class="sticky-header">
-        <!-- Logo -->
-        <div class="d-flex align-items-center mb-4 border-bottom pb-3">
-            <i class="fas fa-car text-warning fs-4 me-2"></i>
-            <span class="logo-text fs-5 fw-bold text-white">CPRO-VLC</span>
-        </div>
 
         <!-- User Profile -->
-        <div class="d-flex align-items-center mb-4 border-bottom pb-3 text-white">
+        <div class="d-flex align-items-center border-bottom pb-3">
             <div class="me-3">
                 <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Photo de profil" class="rounded-circle" style="width: 45px; height: 45px; object-fit: cover;">
             </div>
             <div>
                 <div class="fw-semibold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-                <small class="text-light text-opacity-75">
+                <small class=" text-opacity-75">
                     {{ Auth::user()->getRoleNames()->first() }}
                 </small>
             </div>
@@ -73,15 +68,16 @@
         </ul>
     </div>
 </div>
-
 <style>
+    
     #sidebar {
         width: 250px;
         height: 100vh;
-        background: linear-gradient(to bottom, #0a3d62, #0c2461);
-        color: white;
+        background-color:rgb(255, 255, 255);
+        margin-top: 100px;
+        /* background: linear-gradient(to bottom, #0a3d62, #0c2461); */
+        color:rgba(56, 55, 51, 0.78);
         position: fixed;
-        top: 0;
         left: 0;
         font-weight: bold;
         display: flex;
@@ -90,7 +86,7 @@
 
     .sticky-header {
         flex-shrink: 0;
-        padding: 15px;
+        padding: 18px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -101,27 +97,34 @@
     }
 
     .logo-text {
-        color: white;
+        color:rgb(104, 6, 6);
     }
 
     .nav-link {
         display: flex;
         align-items: center;
         padding: 10px;
-        color: #f1f1f1;
         font-weight: bold;
         text-decoration: none;
         border-radius: 8px;
         transition: background 0.3s ease-in-out;
+        color:rgb(104, 6, 6) !important;
+        font-size: 14px;
     }
 
     .nav-link:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
+    background-color:rgba(19, 19, 19, 0.23) !important;    
+}
 
     .material-icons {
-        font-size: 20px;
-        margin-right: 10px;
-        color: white;
+        font-size: 20px !important;
+        color:rgb(104, 6, 6);
+        margin-right: 5px !important;  
     }
+    .nav-link.active {
+    background-color: #d6d6d6 !important;
+    color: rgb(0, 0, 0) !important;
+}
+
+    
 </style>

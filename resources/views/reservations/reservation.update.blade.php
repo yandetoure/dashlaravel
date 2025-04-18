@@ -22,6 +22,7 @@
         <input type="time" class="form-control" id="heure_vol" name="heure_vol" value="{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}">
     </div>
 
+    
     <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>
 </form>
 
