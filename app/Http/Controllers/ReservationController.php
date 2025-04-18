@@ -35,6 +35,8 @@ class ReservationController extends Controller
 {
     public function index(Request $request)
     {
+        $chauffeurs = User::role('chauffeur')->get(); // récupère tous les utilisateurs ayant le rôle 'chauffeur'
+
         // Récupération des réservations avec les relations nécessaires
         $reservations = Reservation::with(['chauffeur', 'client', 'car', 'trip', 'carDriver']);
     
@@ -46,7 +48,7 @@ class ReservationController extends Controller
         // Pagination
         $reservations = $reservations->paginate(10);
     
-        return view('reservations.index', compact('reservations'));
+        return view('reservations.index', compact('reservations', 'chauffeurs'));
     }
     
     public function clientcreate()
@@ -471,25 +473,31 @@ class ReservationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Valider les données
+        // Validation
         $validatedData = $request->validate([
             'date' => 'required|date',
             'heure_ramassage' => 'required|date_format:H:i',
             'heure_vol' => 'nullable|date_format:H:i',
+            'chauffeur_id' => 'required|exists:users,id'
         ]);
-
-        // Trouver la réservation à mettre à jour
+    
+        // Récupérer la réservation
         $reservation = Reservation::findOrFail($id);
-
-        // Mettre à jour les informations de la réservation
+    
+        // Mettre à jour les champs
         $reservation->date = Carbon::parse($request->date)->format('Y-m-d');
         $reservation->heure_ramassage = $request->heure_ramassage;
         $reservation->heure_vol = $request->heure_vol;
-
-        // Sauvegarder les modifications
+    
+        // Récupérer le CarDriver lié au chauffeur
+        $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
+    
+        if ($carDriver) {
+            $reservation->cardriver_id = $carDriver->id;
+        }
+    
         $reservation->save();
-
-        // Rediriger avec un message de succès
+    
         return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
     }
     
@@ -612,5 +620,109 @@ public function mesReservationsChauffeur()
     return view('reservations.chauffeur', compact('reservations'));
 }
 
+
+
+public function agentCreateReservation()
+{
+    $trips = Trip::all();
+
+    $chauffeurs = User::whereHas('roles', function ($query) {
+        $query->where('name', 'chauffeur');
+    })->get();
+
+    $clients = User::whereHas('roles', function ($query) {
+        $query->where('name', 'client');
+    })->get();
+
+    return view('reservations.agentcreatereservation', compact('chauffeurs', 'clients', 'trips'));
+}
+
+
+public function agentStoreReservation(Request $request)
+{
+    $request->validate([
+        'trip_id' => 'required|exists:trips,id',
+        'chauffeur_id' => 'required|exists:users,id',
+        'client_id' => 'required|exists:users,id',
+        'date' => 'required|date',
+        'heure_ramassage' => 'required',
+        'heure_vol' => 'required',
+        'numero_vol' => 'required',
+        'nb_personnes' => 'required|integer|min:1',
+        'nb_valises' => 'required|integer|min:0',
+        'nb_adresses' => 'required|integer|min:1',
+        'status' => 'required|string|in:En_attente,Confirmée,Annulée',
+        'adresse_rammassage' => 'required|string', // Ajoute cette ligne pour valider ce champ
+
+    ]);
+
+    $client = User::findOrFail($request->client_id);
+    $chauffeur = User::findOrFail($request->chauffeur_id);
+
+    $car = $chauffeur->car_drivers()->with('car')->first()?->car;
+    if (!$car) {
+        return back()->withErrors(['chauffeur_id' => "Ce chauffeur n'a pas de voiture assignée."]);
+    }
+
+    $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->first();
+    if (!$carDriver) {
+        return back()->withErrors(['chauffeur_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
+    }
+
+    // Vérifications habituelles
+    $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
+        ->where('status', 'Confirmée')
+        ->orderByDesc('date')
+        ->orderByDesc('heure_ramassage')
+        ->first();
+
+    if ($lastReservation) {
+        $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
+        $requestDateTime = Carbon::parse("{$request->date} {$request->heure_ramassage}");
+
+        if ($lastReservationDateTime->diffInHours($requestDateTime) < 3) {
+            return back()->withErrors(['date' => 'Le chauffeur ne peut pas être réservé moins de 3 heures après sa dernière réservation.']);
+        }
+    }
+
+    if ($chauffeur->day_off === Carbon::parse($request->date)->format('l')) {
+        return back()->withErrors(['date' => "Le chauffeur est en repos ce jour-là ({$chauffeur->day_off})."]);
+    }
+
+    $maintenance = Maintenance::where('car_id', $car->id)
+        ->where('jour', $request->date)
+        ->first();
+
+    if ($maintenance) {
+        return back()->withErrors(['date' => "La voiture du chauffeur est en maintenance ce jour-là."]);
+    }
+
+    $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, $request->nb_adresses);
+
+    $reservation = Reservation::create([
+        'client_id' => $client->id,
+        'trip_id' => $request->trip_id,
+        'date' => $request->date,
+        'heure_ramassage' => $request->heure_ramassage,
+        'heure_vol' => $request->heure_vol,
+        'numero_vol' => $request->numero_vol,
+        'nb_personnes' => $request->nb_personnes,
+        'nb_valises' => $request->nb_valises,
+        'nb_adresses' => $request->nb_adresses,
+        'tarif' => $tarif,
+        'status' => $request->status,
+        'cardriver_id' => $carDriver->id,
+        'first_name' => $client->first_name,
+        'last_name' => $client->last_name,
+        'email' => $client->email,
+        'adresse_rammassage' => $request->adresse_rammassage, // Ajoute ce champ ici
+
+    ]);
+
+    $reservation->load(['client', 'carDriver.chauffeur']);
+    $this->envoyerEmailReservation($reservation, 'created');
+
+    return redirect()->route('reservations.index')->with('success', 'Réservation créée par l’agent avec succès.');
+}
 
 }

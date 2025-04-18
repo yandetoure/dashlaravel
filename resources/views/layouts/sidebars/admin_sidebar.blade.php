@@ -24,8 +24,10 @@
     <div class="sidebar-links">
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
+            
             <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
             <li><a href="{{ route('reservations.create') }}"  class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
+            <li><a href="{{ route('reservations.agent.create.reservation') }}"  class="nav-link {{ request()->routeIs('reservations.agent.create.reservation') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation manuellement</a></li>
             <li><a href="{{ route('reservations.confirmed') }}" class="nav-link {{ request()->routeIs('reservations.confirmed') ? 'active' : '' }}">            <span class="material-icons">check_circle</span> Réservations Confirmées</a></li>
             <li><a href="{{ route('reservations.cancelled') }}" class="nav-link {{ request()->routeIs('reservations.cancelled') ? 'active' : '' }}">            <span class="material-icons">cancel</span> Réservations Annulées</a></li>
 
@@ -65,6 +67,11 @@
             <!-- Voitures -->
             <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}">            <span class="material-icons">directions_car</span> Liste des Voitures</a></li>
             <li><a href="{{ route('cars.create') }}" class="nav-link {{ request()->routeIs('cars.create') ? 'active' : '' }}">            <span class="material-icons">add</span> Ajouter une voiture</a></li>
+
+            <!-- Voitures -->
+<li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des Voitures</a></li>
+<li><a href="{{ route('cars.create') }}" class="nav-link {{ request()->routeIs('cars.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une voiture</a></li>
+
         </ul>
     </div>
 </div>

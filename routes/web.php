@@ -22,10 +22,6 @@ Route::resource('cars', CarController::class);
 Route::resource('auth', UserController::class); 
 Route::resource('trips', TripController::class); 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/admin/create-account', [UserController::class, 'createAccountPage'])
         ->name('admin.create.account.page');
@@ -55,10 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    // Route pour l'admin
-    Route::get('/admin/dashboard', function () {
-        return view('dashboards.admin');
-    })->name('dashboard.admin');
+    // // Route pour l'admin
+    // Route::get('/admin/dashboard', function () {
+    //     return view('dashboards.admin');
+    // })->name('dashboard.admin');
 
     // Route pour le client
     Route::get('/client/dashboard', function () {
@@ -89,6 +85,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('maintenances', MaintenanceController::class);
     Route::resource('cars', CarController::class);
 });
+Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [UserController::class, 'showAdminDashboard'])->name('dashboard.admin');
 
 Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');
 
@@ -137,7 +134,14 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
     Route::post('store-agent', [ReservationController::class, 'storeByAgent'])->name('storeByAgent');
 
     Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
+
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+
 });
+
+Route::get('/reservations/agent/create', [ReservationController::class, 'agentCreateReservation'])->name('reservations.agent.create.reservation');
+Route::post('/reservations/agent/store', [ReservationController::class, 'agentStoreReservation'])->name('reservations.agent.store');
+
 
 Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
 

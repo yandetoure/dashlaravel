@@ -2,124 +2,138 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="mb-4 text-center">Créer une Réservation</h1>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-primary font-weight-bold">Créer une réservation pour un client</h2>
+
     @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+        <div class="alert alert-danger">
+            <strong>Erreur(s) :</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
-    
-    <form action="{{ route('reservations.storeByAgent') }}" method="POST" class="p-4 shadow rounded bg-white">
+
+    <form action="{{ route('reservations.storeByAgent') }}" method="POST" class="bg-light p-4 rounded shadow-sm">
         @csrf
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="client_id" class="form-label">Client</label>
-                <select name="client_id" id="client_id" class="form-select">
-                    <option selected disabled>-- Sélectionner un client --</option>
-                    @foreach($clients as $client)
-                        <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="trip_id" class="form-label">Trajet</label>
-                <select name="trip_id" id="trip_id" class="form-select" required>
-                    <option selected disabled>-- Sélectionner un trajet --</option>
-                    @foreach($trips as $trip)
-                        <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="first_name" class="form-label">Prénom</label>
-                <input type="text" name="first_name" id="first_name" class="form-control">
-            </div>
-            <div class="col-md-6">
-                <label for="last_name" class="form-label">Nom</label>
-                <input type="text" name="last_name" id="last_name" class="form-control">
-            </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" name="email" id="email" class="form-control">
+        <!-- Informations de l'utilisateur -->
+        <div class="card shadow-sm mb-4 p-3">
+            <h5 class="mb-3 text-dark">Informations de l'utilisateur</h5>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="first_name" class="form-label">Prénom <span class="text-danger">*</span></label>
+                    <input type="text" name="first_name" id="first_name" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="last_name" class="form-label">Nom <span class="text-danger">*</span></label>
+                    <input type="text" name="last_name" id="last_name" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                </div>
             </div>
-            <div class="col-6">
-                    <label for="phone_number" class="form-label">Numéro de téléphone</label>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="phone_number" class="form-label">Numéro de téléphone <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Informations de la réservation -->
+        <div class="card shadow-sm mb-4 p-3">
+            <h5 class="mb-3 text-dark">Informations de la réservation</h5>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="client_id" class="form-label">Client <span class="text-danger">*</span></label>
+                    <select name="client_id" id="client_id" class="form-select" required>
+                        <option value="">-- Sélectionner un client --</option>
+                        @foreach($clients as $client)
+                            <option value="{{ $client->id }}">{{ $client->first_name }} {{ $client->last_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="trip_id" class="form-label">Trajet <span class="text-danger">*</span></label>
+                    <select name="trip_id" id="trip_id" class="form-select" required>
+                        <option value="">-- Sélectionner un trajet --</option>
+                        @foreach($trips as $trip)
+                            <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
+                    <input type="date" name="date" id="date" class="form-control" required>
+                </div>
             </div>
         </div>
 
         <div class="row mb-3">
-        <div class="col-md-6">
-                <label for="date" class="form-label">Date</label>
-                <input type="date" name="date" id="date" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-                <label for="heure_ramassage" class="form-label">Heure de ramassage</label>
+            <div class="col-md-4">
+                <label for="heure_ramassage" class="form-label">Heure de ramassage <span class="text-danger">*</span></label>
                 <input type="time" name="heure_ramassage" id="heure_ramassage" class="form-control" required>
             </div>
-            <div class="col-md-6">
-                <label for="heure_vol" class="form-label">Heure de vol</label>
+            <div class="col-md-4">
+                <label for="heure_vol" class="form-label">Heure de vol <span class="text-danger">*</span></label>
                 <input type="time" name="heure_vol" id="heure_vol" class="form-control" required>
             </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="heure_convocation" class="form-label">Heure de convocation</label>
+            <div class="col-md-4">
+                <label for="heure_convocation" class="form-label">Heure de convocation <span class="text-danger">*</span></label>
                 <input type="time" name="heure_convocation" id="heure_convocation" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-                <label for="numero_vol" class="form-label">Numéro du vol</label>
-                <input type="text" name="numero_vol" id="numero_vol" class="form-control" required>
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="nb_personnes" class="form-label">Nombre de personnes</label>
+            <div class="col-md-4">
+                <label for="numero_vol" class="form-label">Numéro du vol <span class="text-danger">*</span></label>
+                <input type="text" name="numero_vol" id="numero_vol" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="nb_personnes" class="form-label">Nombre de personnes <span class="text-danger">*</span></label>
                 <input type="number" name="nb_personnes" id="nb_personnes" class="form-control" required min="1">
             </div>
-            <div class="col-md-6">
-                <label for="nb_valises" class="form-label">Nombre de valises</label>
+            <div class="col-md-4">
+                <label for="nb_valises" class="form-label">Nombre de valises <span class="text-danger">*</span></label>
                 <input type="number" name="nb_valises" id="nb_valises" class="form-control" required min="0">
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="nb_adresses" class="form-label">Nombre de dépôts supplémentaires</label>
-                <input type="number" name="nb_adresses" id="nb_adresses" class="form-control" required min="0">
+        <hr class="my-4">
+
+        <!-- Détails supplémentaires -->
+        <div class="card shadow-sm mb-4 p-3">
+            <h5 class="mb-3 text-dark">Détails supplémentaires</h5>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="nb_adresses" class="form-label">Nombre de dépôts supplémentaires</label>
+                    <input type="number" name="nb_adresses" id="nb_adresses" class="form-control" min="0">
+                </div>
+                <div class="col-md-4">
+                    <label for="nb_accompagnants" class="form-label">Nombre d'accompagnants</label>
+                    <input type="number" name="nb_accompagnants" id="nb_accompagnants" class="form-control" min="0">
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="nb_accompagnants" class="form-label">Nombre d'accompagnants</label>
-                <input type="number" name="nb_accompagnants" id="nb_accompagnants" class="form-control" required min="0">
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="adresse_rammassage" class="form-label">Adresse de ramassage</label>
+                    <input type="text" name="adresse_rammassage" id="adresse_rammassage" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="tarif" class="form-label">Tarif</label>
+                    <input type="text" name="tarif" id="tarif" class="form-control" readonly>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-3">
-        <div class="col-md-6">
-                <label for="adresse_rammassage" class="form-label">Adresse de ramassage</label>
-                <input type="text" name="adresse_rammassage" id="adresse_rammassage" class="form-control" required>
-            </div>
-            <div class="col-md-6">
-                <label for="tarif" class="form-label">Tarif</label>
-                <input type="text" name="tarif" id="tarif" class="form-control" readonly>
-            </div>
-        </div>
-        
-        <button type="submit" class="btn btn-primary w-100">Créer la Réservation</button>
+        <button type="submit" class="btn btn-primary w-100 mt-4">Créer la Réservation</button>
     </form>
 </div>
 
@@ -169,36 +183,34 @@ function updateTarif() {
     document.getElementById('tarif').value = tarif + ' F';
 }
 
-</script>
-<script>
-    document.getElementById("heure_ramassage").addEventListener("change", validateHeureConvocation);
-    document.getElementById("heure_convocation").addEventListener("change", validateHeureConvocation);
+ // === LOGIQUE HEURE AUTOMATIQUE ===
+ document.getElementById("heure_vol").addEventListener("change", calculerHeures);
 
-    function validateHeureConvocation() {
-        const heureRamassage = document.getElementById("heure_ramassage").value;
-        const heureConvocation = document.getElementById("heure_convocation").value;
+function calculerHeures() {
+    const heureVol = document.getElementById("heure_vol").value;
 
-        if (!heureRamassage || !heureConvocation) return;
+    if (!heureVol) return;
 
-        const [hrR, minR] = heureRamassage.split(':').map(Number);
-        const [hrC, minC] = heureConvocation.split(':').map(Number);
+    const [heure, minute] = heureVol.split(':').map(Number);
+    let dateVol = new Date(2000, 0, 1, heure, minute);
 
-        const dateRamassage = new Date(2000, 0, 1, hrR, minR); // date arbitraire
-        const dateConvocation = new Date(2000, 0, 1, hrC, minC);
+    // Heure de convocation = vol - 3h30
+    let dateConvocation = new Date(dateVol.getTime() - (3 * 60 + 30) * 60000);
 
-        const diffMs = dateRamassage - dateConvocation;
-        const diffHeures = diffMs / (1000 * 60 * 60);
+    // Heure de ramassage = convocation - 1h
+    let dateRamassage = new Date(dateConvocation.getTime() - 60 * 60000);
 
-        const convocationInput = document.getElementById("heure_convocation");
-
-        if (diffHeures < 2) {
-            convocationInput.setCustomValidity("L'heure de convocation doit être au moins 2 heures avant l'heure de ramassage.");
-        } else {
-            convocationInput.setCustomValidity("");
-        }
-
-        convocationInput.reportValidity();
+    // Format HH:MM
+    function formatHeure(date) {
+        let h = date.getHours().toString().padStart(2, '0');
+        let m = date.getMinutes().toString().padStart(2, '0');
+        return `${h}:${m}`;
     }
+
+    document.getElementById("heure_convocation").value = formatHeure(dateConvocation);
+    document.getElementById("heure_ramassage").value = formatHeure(dateRamassage);
+}
+
 </script>
 
 @endsection

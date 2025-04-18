@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('cardriver_id')->constrained('car_drivers')->onDelete('cascade');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->nullable();
             $table->date('date');
             $table->time('heure_ramassage');
             $table->string('adresse_rammassage');

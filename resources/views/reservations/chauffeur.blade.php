@@ -3,104 +3,108 @@
 
 @section('content')
 
+@php
+    \Carbon\Carbon::setLocale('fr');
+@endphp
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
         <div>
             <h1 class="text-3xl font-bold text-gray-800">Gestion des Réservations</h1>
-            <!-- <p class="text-gray-600">Visualisez et gérez toutes les réservations de votre flotte</p> -->
+            <p class="text-gray-600">Visualisez et gérez toutes les réservations de votre flotte</p>
         </div>
     </div>
 
     @if ($reservations->count() > 0)
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach ($reservations as $reservation)
-                <div class="col">
-                    <div class="card shadow-lg rounded-3 p-3 bg-white border border-light">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-4">
+                <div class="reservation-card bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">#RES-{{ str_pad((string) $reservation->id, 6, '0', STR_PAD_LEFT) }}</h3>
+                                <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($reservation->date)->translatedFormat('d F Y') }}</p>
+                            </div>
+                            <span class="status-badge 
+                                {{ $reservation->status === 'confirmed' ? 'confirmed' : ($reservation->status === 'pending' ? 'pending' : 'cancelled') }}">
+                                @if($reservation->status === 'confirmée')
+                                    <i class="fas fa-check-circle mr-1"></i> Confirmée
+                                @elseif($reservation->status === 'En_attente')
+                                    <i class="fas fa-clock mr-1"></i> En attente
+                                @else
+                                    <i class="fas fa-times-circle mr-1"></i> Annulée
+                                @endif
+                            </span>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Client -->
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex justify-center items-center text-blue-600 mr-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
                                 <div>
-                                    <h5 class="card-title font-weight-bold text-dark">#RES-{{ str_pad((string) $reservation->id, 6, '0', STR_PAD_LEFT) }}</h5>
-                                    <p class="text-muted"><i class="fas fa-calendar-day"></i> {{ \Carbon\Carbon::parse($reservation->date)->format('d M Y') }}</p>
+                                    <p class="text-sm text-gray-500">Client</p>
+                                    <p class="font-medium">{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</p>
                                 </div>
-                                <span class="badge 
-                                    {{ $reservation->status === 'confirmée' ? 'bg-success' : ($reservation->status === 'en_attente' ? 'bg-warning' : 'bg-danger') }} text-white">
-                                    @if($reservation->status === 'confirmée')
-                                        <i class="fas fa-check-circle mr-1"></i> Confirmée
-                                    @elseif($reservation->status === 'En_attente')
-                                        <i class="fas fa-clock mr-1"></i> En attente
-                                    @else
-                                        <i class="fas fa-times-circle mr-1"></i> Annulée
-                                    @endif
-                                </span>
                             </div>
 
-                            <div class="d-flex flex-column">
-                                <!-- Client -->
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="rounded-circle bg-primary text-white p-2 mr-3">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-muted"><i class="fas fa-id-card-alt"></i> Client</p>
-                                        <p class="font-weight-bold">{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</p>
-                                    </div>
+                            <!-- Chauffeur -->
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex justify-center items-center text-green-600 mr-3">
+                                    <i class="fas fa-id-card"></i>
                                 </div>
-
-                                <!-- Chauffeur -->
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="rounded-circle bg-success text-white p-2 mr-3">
-                                        <i class="fas fa-car"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-muted"><i class="fas fa-id-badge"></i> Chauffeur</p>
-                                        <p class="font-weight-bold">{{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }}</p>
-                                    </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Chauffeur</p>
+                                    <p class="font-medium">{{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }}</p>
                                 </div>
+                            </div>
 
-                                <!-- Voyage -->
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="rounded-circle bg-info text-white p-2 mr-3">
-                                        <i class="fas fa-route"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-muted"><i class="fas fa-map-signs"></i> Voyage</p>
-                                        <p class="font-weight-bold">{{ $reservation->trip->departure }} → {{ $reservation->trip->destinatio }} </p>
-                                    </div>
+                            <!-- Voyage -->
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 flex justify-center items-center text-purple-600 mr-3">
+                                    <i class="fas fa-route"></i>
                                 </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Voyage</p>
+                                    <p class="font-medium">{{ $reservation->trip->name }}</p>
+                                </div>
+                            </div>
 
-                                <!-- Heure Ramassage -->
-                                <div class="d-flex align-items-center mb-3">
-                                    <div class="rounded-circle bg-warning text-white p-2 mr-3">
-                                        <i class="fas fa-clock"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-muted"><i class="fas fa-hourglass-start"></i> Heure de ramassage</p>
-                                        <p class="font-weight-bold">{{ $reservation->heure_ramassage }}</p>
-                                    </div>
+                            <!-- Heure Ramassage -->
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-yellow-100 flex justify-center items-center text-yellow-600 mr-3">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Heure de ramassage</p>
+                                    <p class="font-medium">{{ $reservation->heure_ramassage }}</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="card-footer bg-light d-flex justify-content-between align-items-center border-top">
-                            <div class="d-flex">
-                                <a href="{{ route('reservations.confirm', $reservation) }}" class="btn btn-success btn-sm mr-2" title="Confirmer la réservation">
-                                    <i class="fas fa-check"></i> Confirmer
-                                </a>
-                                <a href="{{ route('reservations.cancel', $reservation) }}" class="btn btn-danger btn-sm mr-2" title="Annuler la réservation">
-                                    <i class="fas fa-times"></i> Annuler
-                                </a>
-                                <form action="{{ route('reservations.destroy', $reservation) }}" method="POST" onsubmit="return confirm('Supprimer cette réservation ?')" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-secondary btn-sm" title="Supprimer la réservation">
-                                        <i class="fas fa-trash-alt"></i> Supprimer
-                                    </button>
-                                </form>
-                            </div>
-                            <button class="btn btn-outline-secondary btn-sm" title="Plus d'options">
-                                <i class="fas fa-ellipsis-h"></i>
-                            </button>
+                    <div class="bg-gray-50 px-5 py-3 flex justify-between items-center border-t border-gray-100">
+                        <div class="flex space-x-2">
+                            <a href="{{ route('reservations.confirm', $reservation) }}" class="action-btn bg-green-100 text-green-600 hover:bg-green-200 p-2 rounded-full">
+                                <i class="fas fa-check"></i>
+                            </a>
+                            <a href="{{ route('reservations.cancel', $reservation) }}" class="action-btn bg-red-100 text-red-600 hover:bg-red-200 p-2 rounded-full">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            <form action="{{ route('reservations.destroy', $reservation) }}" method="POST" onsubmit="return confirm('Supprimer cette réservation ?')" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="action-btn bg-gray-100 text-gray-600 hover:bg-gray-200 p-2 rounded-full">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </div>
+                        <button class="action-btn bg-gray-100 text-gray-600 hover:bg-gray-200 px-3 py-1 rounded-lg text-sm">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
                     </div>
                 </div>
             @endforeach
@@ -113,5 +117,86 @@
         <p class="text-center text-gray-600">Aucune réservation trouvée.</p>
     @endif
 </div>
+
+<style>
+    .reservation-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #e5e7eb;
+        background: linear-gradient(to bottom, #f9fafb, #ffffff);
+    }
+
+    .reservation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .confirmed {
+        background-color: #34d399; /* emerald-400 */
+        color: white;
+    }
+
+    .pending {
+        background-color: #fbbf24; /* amber-400 */
+        color: white;
+    }
+
+    .cancelled {
+        background-color: #f87171; /* red-400 */
+        color: white;
+    }
+
+    .action-btn {
+        transition: transform 0.2s ease-in-out, background-color 0.2s;
+        border-radius: 0.5rem;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .card-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 9999px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .client-icon {
+        background-color: #e0f2fe;
+        color: #0284c7;
+    }
+
+    .chauffeur-icon {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .trip-icon {
+        background-color: #ede9fe;
+        color: #7c3aed;
+    }
+
+    .time-icon {
+        background-color: #fef3c7;
+        color: #ca8a04;
+    }
+    
+</style>
 
 @endsection

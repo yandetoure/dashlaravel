@@ -3,6 +3,12 @@
 
 @section('content')
 
+@php
+    \Carbon\Carbon::setLocale('fr');
+@endphp
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
         <div>
@@ -12,20 +18,20 @@
     </div>
 
     @if ($reservations->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach ($reservations as $reservation)
-                <div class="reservation-card bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                <div class="reservation-card bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                     <div class="p-5">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                            <h3 class="text-lg font-semibold text-gray-800">#RES-{{ str_pad((string) $reservation->id, 6, '0', STR_PAD_LEFT) }}</h3>
-                            <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($reservation->date)->format('d M Y') }}</p>
+                                <h3 class="text-lg font-semibold text-gray-800">#RES-{{ str_pad((string) $reservation->id, 6, '0', STR_PAD_LEFT) }}</h3>
+                                <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($reservation->date)->translatedFormat('d F Y') }}</p>
                             </div>
                             <span class="status-badge 
                                 {{ $reservation->status === 'confirmed' ? 'confirmed' : ($reservation->status === 'pending' ? 'pending' : 'cancelled') }}">
-                                @if($reservation->status === 'confirmed')
+                                @if($reservation->status === 'confirmée')
                                     <i class="fas fa-check-circle mr-1"></i> Confirmée
-                                @elseif($reservation->status === 'pending')
+                                @elseif($reservation->status === 'En_attente')
                                     <i class="fas fa-clock mr-1"></i> En attente
                                 @else
                                     <i class="fas fa-times-circle mr-1"></i> Annulée
@@ -112,32 +118,85 @@
     @endif
 </div>
 
-<!-- Styles personnalisés -->
-@push('styles')
-    <style>
-        .status-badge {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-        }
-        .confirmed {
-            background-color: #10B981;
-            color: white;
-        }
-        .pending {
-            background-color: #F59E0B;
-            color: white;
-        }
-        .cancelled {
-            background-color: #EF4444;
-            color: white;
-        }
-        .action-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        .action-btn:hover {
-            transform: scale(1.05);
-        }
-    </style>
-@endpush
+<style>
+    .reservation-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #e5e7eb;
+        background: linear-gradient(to bottom, #f9fafb, #ffffff);
+    }
+
+    .reservation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .confirmed {
+        background-color: #34d399; /* emerald-400 */
+        color: white;
+    }
+
+    .pending {
+        background-color: #fbbf24; /* amber-400 */
+        color: white;
+    }
+
+    .cancelled {
+        background-color: #f87171; /* red-400 */
+        color: white;
+    }
+
+    .action-btn {
+        transition: transform 0.2s ease-in-out, background-color 0.2s;
+        border-radius: 0.5rem;
+    }
+
+    .action-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .card-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 9999px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .client-icon {
+        background-color: #e0f2fe;
+        color: #0284c7;
+    }
+
+    .chauffeur-icon {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .trip-icon {
+        background-color: #ede9fe;
+        color: #7c3aed;
+    }
+
+    .time-icon {
+        background-color: #fef3c7;
+        color: #ca8a04;
+    }
+    
+</style>
+
 @endsection

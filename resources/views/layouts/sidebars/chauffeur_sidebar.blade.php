@@ -24,7 +24,6 @@
     <div class="sidebar-links">
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
-            <li><a href="{{ route('dashboard.driver') }}" class="nav-link"><span class="material-icons">assignment</span> Tableau de bord</a></li>
 
             <li><a href="{{ route('reservations.chauffeur.mes') }}" class="nav-link"><span class="material-icons">assignment</span> Mes réservations</a></li>
             <li><a href="{{ route('reservations.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une réservation</a></li>

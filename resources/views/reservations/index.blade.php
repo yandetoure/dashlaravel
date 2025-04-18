@@ -87,6 +87,19 @@
                                     <label for="heure_vol" class="form-label">Heure Vol</label>
                                     <input type="time" class="form-control" name="heure_vol" value="{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}">
                                 </div>
+                                <div class="mb-3">
+                        <label for="chauffeur_id" class="form-label">Chauffeur</label>
+                        <select class="form-select" name="chauffeur_id" required>
+                            <option value="">-- Sélectionner un chauffeur --</option>
+                            @foreach ($chauffeurs as $chauffeur)
+                                <option value="{{ $chauffeur->id }}"
+                                    {{ $reservation->carDriver && $reservation->carDriver->chauffeur->id == $chauffeur->id ? 'selected' : '' }}>
+                                    {{ $chauffeur->first_name }} {{ $chauffeur->last_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
 
                                 <button type="submit" class="btn btn-primary w-100">Sauvegarder</button>
                             </form>

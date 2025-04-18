@@ -288,4 +288,28 @@ public function update(Request $request)
 }
 
 
+public function getUserStatistics()
+{
+    // Exemple pour obtenir les statistiques par rôle
+    $roles = ['admin', 'client', 'chauffeur', 'agent']; // Liste des rôles
+    $statistics = [];
+
+    foreach ($roles as $role) {
+        $statistics[$role] = User::role($role)->count();  // Supposons que tu utilises Spatie pour gérer les rôles
+    }
+
+    return $statistics;
+}
+
+
+public function showAdminDashboard()
+{
+    $statistics = $this->getUserStatistics();
+
+    // dd($statistics); // Décommenter uniquement pour debug
+
+    return view('dashboards.admin', compact('statistics'));
+}
+
+
 }

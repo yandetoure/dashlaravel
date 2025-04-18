@@ -24,7 +24,7 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
            <!-- Exemple pour le dashboard -->
-<li><a href="{{ route('dashboard.superadmin') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
+<!-- <li><a href="{{ route('dashboard.superadmin') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li> -->
 
 <!-- Réservations -->
 <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
