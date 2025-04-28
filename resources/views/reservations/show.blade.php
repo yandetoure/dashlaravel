@@ -122,6 +122,44 @@
     );
     @endphp
 
+    @if($reservation->status == 'confirmée' && !$reservation->avis)
+    <hr>
+    <div class="mt-4">
+        <h5><i class="bi bi-star-fill text-warning"></i> Laissez une note</h5>
+        <form action="{{ route('reservations.avis', $reservation->id) }}" method="POST">
+            @csrf
+            <div class="mb-3 d-flex gap-2">
+                @for ($i = 1; $i <= 5; $i++)
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="note" id="note{{ $i }}" value="{{ $i }}">
+                        <label class="form-check-label" for="note{{ $i }}">
+                            <i class="bi bi-star{{ $i <= 3 ? '-fill' : '' }}"></i> {{ $i }}
+                        </label>
+                    </div>
+                @endfor
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Commentaire (optionnel)</label>
+                <textarea name="comment" id="comment" rows="3" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Envoyer l’avis</button>
+        </form>
+    </div>
+@endif
+
+@if($reservation->avis)
+    <hr>
+    <div class="mt-4">
+        <h5><i class="bi bi-star-fill text-warning"></i> Avis laissé</h5>
+        <p>
+            @for($i = 1; $i <= 5; $i++)
+                <i class="bi {{ $i <= $reservation->avis->note ? 'bi-star-fill text-warning' : 'bi-star' }}"></i>
+            @endfor
+        </p>
+        <p><strong>Commentaire :</strong> {{ $reservation->avis->commentaire ?? 'Aucun commentaire.' }}</p>
+    </div>
+@endif
+
     <a 
         href="https://wa.me/{{ $phone }}?text={{ $message }}" 
         class="btn btn-success" 

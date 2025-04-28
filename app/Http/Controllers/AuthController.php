@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
     /**
      * Création d'un compte par un admin ou super admin
@@ -173,9 +173,6 @@ class UserController extends Controller
             return redirect()->route('drivers.index')->with('success', 'Jours de repos assignés avec succès.');
         }
         
-        
-        
-
 
     public function createAgent()
 {

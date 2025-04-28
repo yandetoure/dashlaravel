@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1); 
 
 return [
 
@@ -18,6 +18,11 @@ return [
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
+    // 'defaults' => [
+    //     'guard' => 'api',
+    //     'passwords' => 'users',
+    // ],
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -35,12 +40,23 @@ return [
     |
     */
 
+    // 'guards' => [
+    //     'web' => [
+    //         'driver' => 'session',
+    //         'provider' => 'users',
+    //     ],
+    // ],
+
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
-    ],
+        'api' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+],
 
     /*
     |--------------------------------------------------------------------------

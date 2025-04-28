@@ -25,47 +25,47 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
             <li><a href="{{ route('dashboard.agent') }}" class="nav-link"><span class="material-icons">assignment</span> Tableau de bord</a></li>
-            <li><a href="{{ route('reservations.index') }}" class="nav-link"><span class="material-icons">assignment</span> Liste des réservations</a></li>
+            <!-- <li><a href="{{ route('reservations.index') }}" class="nav-link"><span class="material-icons">assignment</span> Liste des réservations</a></li>
             <li><a href="{{ route('reservations.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une réservation</a></li>
             <li><a href="{{ route('reservations.confirmed') }}" class="nav-link"><span class="material-icons">check_circle</span> Réservations Confirmées</a></li>
-            <li><a href="{{ route('reservations.cancelled') }}" class="nav-link"><span class="material-icons">cancel</span> Réservations Annulées</a></li>
+            <li><a href="{{ route('reservations.cancelled') }}" class="nav-link"><span class="material-icons">cancel</span> Réservations Annulées</a></li> -->
 
             <!-- Trajets -->
-            <li><a href="{{ route('trips.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
-            <li><a href="{{ route('trips.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter un trajet</a></li>
+            <li><a href="{{ route('trips.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Trajets</a></li>
+            <!-- <li><a href="{{ route('trips.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter un trajet</a></li> -->
 
             <!-- Super Admin -->
             <li><a href="{{ route('superadmins.index') }}" class="nav-link"><span class="material-icons">people</span> Liste des Super Admins</a></li>
-            <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Super Admin</a></li>
+            <!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Super Admin</a></li> -->
 
             <!-- Admin -->
-            <li><a href="{{ route('admins.index') }}" class="nav-link"><span class="material-icons">people</span> Liste des admin</a></li>
-            <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un admin</a></li>
+            <li><a href="{{ route('admins.index') }}" class="nav-link"><span class="material-icons">people</span> Utilisateurs</a></li>
+            <!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un admin</a></li> -->
 
             <!-- Agents -->
-            <li><a href="{{ route('agents.index') }}" class="nav-link"><span class="material-icons">people</span> Liste des agents</a></li>
-            <li><a href="{{ route('register.agent.form') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Agent</a></li>
+            <li><a href="{{ route('agents.index') }}" class="nav-link"><span class="material-icons">people</span> Utilisateurs</a></li>
+            <!-- <li><a href="{{ route('register.agent.form') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Agent</a></li> -->
 
             <!-- Chauffeurs -->
             <li><a href="{{ route('drivers.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
-            <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li>
-            <li><a href="{{ route('admin.assign-day-off') }}" class="nav-link"><span class="material-icons">event_busy</span> Jour de repos</a></li>
+            <!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li> -->
+            <!-- <li><a href="{{ route('admin.assign-day-off') }}" class="nav-link"><span class="material-icons">event_busy</span> Jour de repos</a></li> -->
 
             <!-- Voitures assignées -->
             <li><a href="{{ route('cardrivers.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
-            <li><a href="{{ route('cardrivers.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter un filiation</a></li>
+            <!-- <li><a href="{{ route('cardrivers.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter un filiation</a></li> -->
 
             <!-- Maintenance -->
             <li><a href="{{ route('maintenances.index') }}" class="nav-link"><span class="material-icons">build</span> Voitures (Maintenance)</a></li>
-            <li><a href="{{ route('maintenances.create') }}" class="nav-link"><span class="material-icons">add</span> Créer maintenance</a></li>
+            <!-- <li><a href="{{ route('maintenances.create') }}" class="nav-link"><span class="material-icons">add</span> Créer maintenance</a></li> -->
 
             <!-- Clients -->
             <li><a href="{{ route('clients.index') }}" class="nav-link"><span class="material-icons">person</span> Liste des Clients</a></li>
-            <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Client</a></li>
+            <!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Client</a></li> -->
 
             <!-- Voitures -->
             <li><a href="{{ route('cars.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des Voitures</a></li>
-            <li><a href="{{ route('cars.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une voiture</a></li>
+            <!-- <li><a href="{{ route('cars.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une voiture</a></li> -->
         </ul>
     </div>
 </div>

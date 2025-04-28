@@ -18,7 +18,7 @@
     </div>
 
     @if ($reservations->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-3 md:grid-cols-2 gap-6">
             @foreach ($reservations as $reservation)
                 <div class="reservation-card bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                     <div class="p-5">
@@ -28,7 +28,7 @@
                                 <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($reservation->date)->translatedFormat('d F Y') }}</p>
                             </div>
                             <span class="status-badge 
-                                {{ $reservation->status === 'confirmed' ? 'confirmed' : ($reservation->status === 'pending' ? 'pending' : 'cancelled') }}">
+                                {{ $reservation->status === 'confirmée' ? 'confirmée' : ($reservation->status === 'En_attente' ? 'En_attente' : 'annulé') }}">
                                 @if($reservation->status === 'confirmée')
                                     <i class="fas fa-check-circle mr-1"></i> Confirmée
                                 @elseif($reservation->status === 'En_attente')

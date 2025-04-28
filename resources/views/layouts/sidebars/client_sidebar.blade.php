@@ -24,49 +24,40 @@
     <div class="sidebar-links">
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
-           <!-- Exemple pour le tableau de bord -->
 <li><a href="{{ route('dashboard.client') }}" class="nav-link {{ request()->routeIs('dashboard.client') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
 
-<!-- Réservations -->
+        <!-- Réservations -->
 <li><a href="{{ route('reservations.client.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Mes réservations</a></li>
-<li><a href="{{ route('reservations.create') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
+<li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
 
 <!-- Trajets -->
 <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
-<li><a href="{{ route('trips.create') }}" class="nav-link {{ request()->routeIs('trips.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un trajet</a></li>
-
-<!-- Super Admin -->
-<li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des Super Admins</a></li>
-<li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Super Admin</a></li>
-
-<!-- Admin -->
-<li><a href="{{ route('admins.index') }}" class="nav-link {{ request()->routeIs('admins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des admin</a></li>
-<li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un admin</a></li>
+<!-- <li><a href="{{ route('trips.create') }}" class="nav-link {{ request()->routeIs('trips.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un trajet</a></li> -->
 
 <!-- Agents -->
-<li><a href="{{ route('agents.index') }}" class="nav-link {{ request()->routeIs('agents.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des agents</a></li>
-<li><a href="{{ route('register.agent.form') }}" class="nav-link {{ request()->routeIs('register.agent.form') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Agent</a></li>
+<!-- <li><a href="{{ route('agents.index') }}" class="nav-link {{ request()->routeIs('agents.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des agents</a></li> -->
+<!-- <li><a href="{{ route('register.agent.form') }}" class="nav-link {{ request()->routeIs('register.agent.form') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Agent</a></li> -->
 
 <!-- Chauffeurs -->
 <li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
-<li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li>
-<li><a href="{{ route('admin.assign-day-off') }}" class="nav-link {{ request()->routeIs('admin.assign-day-off') ? 'active' : '' }}"><span class="material-icons">event_busy</span> Jour de repos</a></li>
+<!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li>
+<li><a href="{{ route('admin.assign-day-off') }}" class="nav-link {{ request()->routeIs('admin.assign-day-off') ? 'active' : '' }}"><span class="material-icons">event_busy</span> Jour de repos</a></li> -->
 
 <!-- Voitures assignées -->
-<li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
-<li><a href="{{ route('cardrivers.create') }}" class="nav-link {{ request()->routeIs('cardrivers.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un filiation</a></li>
+<!-- <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li> -->
+<!-- <li><a href="{{ route('cardrivers.create') }}" class="nav-link {{ request()->routeIs('cardrivers.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un filiation</a></li> -->
 
 <!-- Maintenance -->
-<li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Voitures (Maintenance)</a></li>
-<li><a href="{{ route('maintenances.create') }}" class="nav-link {{ request()->routeIs('maintenances.create') ? 'active' : '' }}"><span class="material-icons">add</span> Créer maintenance</a></li>
+<!-- <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Voitures (Maintenance)</a></li> -->
+<!-- <li><a href="{{ route('maintenances.create') }}" class="nav-link {{ request()->routeIs('maintenances.create') ? 'active' : '' }}"><span class="material-icons">add</span> Créer maintenance</a></li> -->
 
 <!-- Clients -->
-<li><a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.index') ? 'active' : '' }}"><span class="material-icons">person</span> Liste des Clients</a></li>
-<li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Client</a></li>
+<!-- <li><a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.index') ? 'active' : '' }}"><span class="material-icons">person</span> Liste des Clients</a></li> -->
+<!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Client</a></li> -->
 
 <!-- Voitures -->
-<li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des Voitures</a></li>
-<li><a href="{{ route('cars.create') }}" class="nav-link {{ request()->routeIs('cars.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une voiture</a></li>
+<!-- <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des Voitures</a></li> -->
+<!-- <li><a href="{{ route('cars.create') }}" class="nav-link {{ request()->routeIs('cars.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une voiture</a></li> -->
 
         </ul>
     </div>

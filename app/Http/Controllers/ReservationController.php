@@ -83,23 +83,21 @@ class ReservationController extends Controller
     {
         // Récupérer le client connecté
         $client = Auth::user();
+        $client_id = $client->id; 
 
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
-            'chauffeur_id' => 'required|exists:users,id',
             'date' => 'required|date',
             'heure_ramassage' => 'required',
             'heure_vol' => 'required',
             'numero_vol' => 'required',
             'nb_personnes' => 'required|integer|min:1',
             'nb_valises' => 'required|integer|min:0',
-            'nb_adresses' => 'required|integer|min:1',
-            'status' => 'required|string|in:En_attente,Confirmée,Annulée',
-            'tarif' => 'required|numeric|min:0',
+            'adresse_rammassage' => 'required|string|max:255',
+            // 'nb_adresses' => 'required|integer|min:1',
+            // 'status' => 'required|string|in:En_attente,Confirmée,Annulée',
         ]);
 
-        $user = Auth::user();        
-        $client_id = $client->id; 
 
         
         // Recherche d'un chauffeur disponible
@@ -175,6 +173,7 @@ class ReservationController extends Controller
             'heure_vol' => $request->heure_vol,
             'numero_vol' => $request->numero_vol,
             'nb_personnes' => $request->nb_personnes,
+            'adresse_rammassage' => $request->adresse_rammassage,
             'nb_valises' => $request->nb_valises,
             'nb_adresses' => $request->nb_adresses,
             'tarif' => $tarif,
@@ -207,11 +206,11 @@ class ReservationController extends Controller
             'heure_ramassage' => 'required',
             'adresse_rammassage' => 'required|string|max:255',
             'heure_vol' => 'required',
-            'numero_vol' => 'required',
-            'nb_personnes' => 'required|integer|min:1',
+            // 'numero_vol' => 'required',
+            // 'nb_personnes' => 'required|integer|min:1',
             'nb_valises' => 'required|integer|min:0',
-            'nb_adresses' => 'required|integer|min:0',
-            'phone_number' => ['required', 'regex:/^[0-9]{9}$/', 'unique:users,phone_number'],
+            // 'nb_adresses' => 'required|integer|min:0',
+            'phone_number' => ['nullable', 'regex:/^[0-9]{9}$/', 'unique:users,phone_number'],
         ]);
 
         // Vérification qu'au moins un choix de client est fait
@@ -723,6 +722,47 @@ public function agentStoreReservation(Request $request)
     $this->envoyerEmailReservation($reservation, 'created');
 
     return redirect()->route('reservations.index')->with('success', 'Réservation créée par l’agent avec succès.');
+}
+
+
+public function calendar(Request $request)
+{
+    // Récupérer l'ID du chauffeur connecté
+    $chauffeurId = Auth::user()->id;
+    
+    // Récupérer les réservations du chauffeur pour le mois courant
+    $month = $request->input('month', Carbon::now()->month); // Par défaut, le mois courant
+    $year = $request->input('year', Carbon::now()->year); // Par défaut, l'année courante
+
+    $reservations = Reservation::where('cardriver_id', $chauffeurId) // Utilisation de cardriver_id
+    ->whereYear('date', $year)
+    ->whereMonth('date', $month)
+    ->orderBy('date')
+    ->get();
+
+
+    // Organiser les réservations par date
+    $reservationsByDay = $reservations->groupBy(function ($item) {
+        return Carbon::parse($item->date)->format('Y-m-d'); // Format pour les jours
+    });
+
+    // Passer les réservations à la vue
+    return view('reservations.drivercalendar', compact('reservationsByDay', 'month', 'year'));
+}
+
+public function storeAvis(Request $request, Reservation $reservation)
+{
+    $request->validate([
+        'note' => 'required|integer|min:1|max:5',
+        'comment' => 'nullable|string|max:1000',
+    ]);
+
+    $reservation->avis()->create([
+        'note' => $request->note,
+        'comment' => $request->commentaire,
+    ]);
+
+    return redirect()->back()->with('success', 'Merci pour votre avis !');
 }
 
 }

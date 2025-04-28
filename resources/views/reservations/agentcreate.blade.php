@@ -24,22 +24,22 @@
             <h5 class="mb-3 text-dark">Informations de l'utilisateur</h5>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="first_name" class="form-label">Prénom <span class="text-danger">*</span></label>
-                    <input type="text" name="first_name" id="first_name" class="form-control" required>
+                    <label for="first_name" class="form-label">Prénom <span class="text-danger"></span></label>
+                    <input type="text" name="first_name" id="first_name" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    <label for="last_name" class="form-label">Nom <span class="text-danger">*</span></label>
-                    <input type="text" name="last_name" id="last_name" class="form-control" required>
+                    <label for="last_name" class="form-label">Nom <span class="text-danger"></span></label>
+                    <input type="text" name="last_name" id="last_name" class="form-control">
                 </div>
                 <div class="col-md-4">
-                    <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
-                    <input type="email" name="email" id="email" class="form-control" required>
+                    <label for="email" class="form-label">E-mail <span class="text-danger"></span></label>
+                    <input type="email" name="email" id="email" class="form-control">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="phone_number" class="form-label">Numéro de téléphone <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="phone_number" id="phone_number" required>
+                    <label for="phone_number" class="form-label">Numéro de téléphone <span class="text-danger"></span></label>
+                    <input type="text" class="form-control" name="phone_number" id="phone_number">
                 </div>
             </div>
         </div>
@@ -153,9 +153,9 @@ function updateTarif() {
     // Tarifs de base
     var tarifBasePersonnes = 32500;  // Tarif de base pour les 1 à 3 personnes
     var tarifParPersonneSupplementaire = 5000; // 5000F par personne supplémentaire
-    var tarifParValiseSupplementaire = 1000;  // 1000F par valise supplémentaire
+    var tarifParValiseSupplementaire = 5000;  // 1000F par valise supplémentaire
     var tarifDepotSupplementaire = 2000; // 2000F par dépôt supplémentaire
-    var tarifAccompagnant = 3000; // 3000F par accompagnant
+    var tarifAccompagnant = 15000; // 3000F par accompagnant
 
     var tarif = 0;
 

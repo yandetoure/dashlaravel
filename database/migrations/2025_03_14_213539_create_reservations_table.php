@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('cardriver_id')->constrained('car_drivers')->onDelete('cascade');
+            $table->foreignId('cardriver_id')->nullable()->constrained('car_drivers')->onDelete('set null');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->nullable();
@@ -29,8 +29,9 @@ return new class extends Migration
             $table->integer('nb_adresses')->unsigned()->nullable();
             $table->integer('tarif');
             $table->enum('status', ['En_attente', 'Confirmée', 'Annulée'])->default('En_attente');
+            $table->unsignedTinyInteger('note')->nullable()->comment('Note sur 5 étoiles');
             $table->unsignedBigInteger('id_agent')->nullable();
-            $table->foreignId('trip_id')->constrained('trips')->onDelete('cascade');
+            $table->foreignId('trip_id')->nullable()->constrained('trips')->onDelete('set null');
             $table->timestamps();
         });
     }

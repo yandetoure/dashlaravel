@@ -8,7 +8,7 @@ return new class extends Migration {
     {
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->constrained()->onDelete('cascade');
+            $table->foreignId('car_id')->nullable()->constrained()->onDelete('set null');
             $table->date('jour');
             $table->time('heure');
             $table->string('motif');

@@ -26,7 +26,7 @@
             <!-- Réservations -->
 
             <li><a href="{{ route('reservations.chauffeur.mes') }}" class="nav-link"><span class="material-icons">assignment</span> Mes réservations</a></li>
-            <li><a href="{{ route('reservations.create') }}" class="nav-link"><span class="material-icons">add</span> Ajouter une réservation</a></li>
+            <li><a href="{{ route('reservations.calendar') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
 
             <!-- Trajets -->
             <li><a href="{{ route('trips.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des trajets</a></li>

@@ -1,8 +1,8 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
@@ -18,22 +18,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('cars', CarController::class); 
-Route::resource('auth', UserController::class); 
-Route::resource('trips', TripController::class); 
-
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/create-account', [UserController::class, 'createAccountPage'])
+Route::middleware('auth:')->group(function () {
+    Route::get('/admin/create-account', [AuthController::class, 'createAccountPage'])
         ->name('admin.create.account.page');
 
-    Route::post('/admin/create-account', [UserController::class, 'createAccount'])
+    Route::post('/admin/create-account', [AuthController::class, 'createAccount'])
         ->name('admin.create.account');
 
-    Route::get('/clients', [UserController::class, 'lisclient'])->name('clients.index');
-    Route::get('/drivers', [UserController::class, 'listdriver'])->name('drivers.index');
-    Route::get('/agents', [UserController::class, 'listagent'])->name('agents.index');
-    Route::get('/admin', [UserController::class, 'listadmin'])->name('admins.index');
-    Route::get('/superaddmin', [UserController::class, 'listsuperadmin'])->name('superadmins.index');
+    Route::get('/clients', [AuthController::class, 'lisclient'])->name('clients.index');
+    Route::get('/drivers', [AuthController::class, 'listdriver'])->name('drivers.index');
+    Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
+    Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
+    Route::get('/superaddmin', [AuthController::class, 'listsuperadmin'])->name('superadmins.index');
+
+    Route::Resource('cars', CarController::class); 
+    Route::Resource('auth', AuthController::class); 
+    Route::resource('trips', TripController::class); 
 
 });
 
@@ -41,9 +41,8 @@ Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'
 
 Route::get('/reservations/cancelled', [ReservationController::class, 'cancelled'])->name('reservations.cancelled');
 
-Route::get('/assign-day-off', [UserController::class, 'createDayOff'])->name('admins.assign-day-off');
-Route::post('/assign-day-off', [UserController::class, 'assignRandomDayOff'])->name('admin.assign-day-off');
-
+Route::get('/assign-day-off', [AuthController::class, 'createDayOff'])->name('admins.assign-day-off');
+Route::post('/assign-day-off', [AuthController::class, 'assignRandomDayOff'])->name('admin.assign-day-off');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -52,9 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // // Route pour l'admin
-    // Route::get('/admin/dashboard', function () {
-    //     return view('dashboards.admin');
-    // })->name('dashboard.admin');
+    Route::get('/admin/dashboard', function () {
+        return view('dashboards.admin');
+    })->name('dashboard.admin');
 
     // Route pour le client
     Route::get('/client/dashboard', function () {
@@ -85,21 +84,21 @@ Route::middleware('auth')->group(function () {
     Route::resource('maintenances', MaintenanceController::class);
     Route::resource('cars', CarController::class);
 });
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [UserController::class, 'showAdminDashboard'])->name('dashboard.admin');
+Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AuthController::class, 'showAdminDashboard'])->name('dashboard.admin');
 
 Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');
 
 // Affichage des formulaires d'inscription
-Route::get('/register/agent', [UserController::class, 'createAgent'])->name('register.agent.form');
-Route::get('/register/driver', [UserController::class, 'createDriver'])->name('register.driver.form');
-Route::get('/register/admin', [UserController::class, 'createAdmin'])->name('register.admin.form');
-Route::get('/register/client', [UserController::class, 'createClient'])->name('register.client.form');
+Route::get('/register/agent', [AuthController::class, 'createAgent'])->name('register.agent.form');
+Route::get('/register/driver', [AuthController::class, 'createDriver'])->name('register.driver.form');
+Route::get('/register/admin', [AuthController::class, 'createAdmin'])->name('register.admin.form');
+Route::get('/register/client', [AuthController::class, 'createClient'])->name('register.client.form');
 
 // Soumission des formulaires d'inscription
-Route::post('/register/agent', [UserController::class, 'storeAgent'])->name('register.agent');
-Route::post('/register/driver', [UserController::class, 'storeDriver'])->name('register.driver');
-Route::post('/register/admin', [UserController::class, 'storeAdmin'])->name('register.admin');
-Route::post('/register/client', [UserController::class, 'storeClient'])->name('register.client');
+Route::post('/register/agent', [AuthController::class, 'storeAgent'])->name('register.agent');
+Route::post('/register/driver', [AuthController::class, 'storeDriver'])->name('register.driver');
+Route::post('/register/admin', [AuthController::class, 'storeAdmin'])->name('register.admin');
+Route::post('/register/client', [AuthController::class, 'storeClient'])->name('register.client');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -135,8 +134,14 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
 
     Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
 
-    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
 
+});
+
+Route::post('/reservations/{reservation}/avis', [ReservationController::class, 'storeAvis'])->name('reservations.avis');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('reservations/calendar', [ReservationController::class, 'calendar'])->name('reservations.calendar');
 });
 
 Route::get('/reservations/agent/create', [ReservationController::class, 'agentCreateReservation'])->name('reservations.agent.create.reservation');

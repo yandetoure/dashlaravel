@@ -79,6 +79,7 @@
 
             <!-- Navigation Links -->
             @php
+            $role = Auth::check() ? Auth::user()->getRoleNames()->first() : null;
             $role = Auth::user()->getRoleNames()->first();
             $dashboardRoute = match($role) {
                 'admin' => route('dashboard.admin'),
