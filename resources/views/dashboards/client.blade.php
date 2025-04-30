@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-20">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-2">
 
             <!-- Widgets -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -20,12 +20,12 @@
                 </div>
                 
                 <!-- Stats Cards -->
-                <div class="flex flex-wrap gap-6 mb-6">
+                <div class="flex flex-wrap gap-2 mb-6">
                 <div class="bg-white rounded-lg shadow p-6 transition duration-300 card-hover flex-1 min-w-[250px] max-w-[300px]">
                 <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Clients ce mois</p>
-                                <h3 class="text-2xl font-bold text-gray-800">142</h3>
+                                <h3 class="text-2xl font-bold text-gray-800">{{ $reservationsCount }}</h3>
                                 <p class="text-sm text-green-500 mt-1">
                                     <i class="fas fa-arrow-up mr-1"></i> 12% vs mois dernier
                                 </p>

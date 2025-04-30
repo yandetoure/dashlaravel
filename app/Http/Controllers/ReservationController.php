@@ -332,30 +332,77 @@ class ReservationController extends Controller
     }
 
 
+    // private function findAvailableDriver($date, $heure_ramassage)
+    // {
+    //     return User::whereHas('roles', function ($query) {
+    //         $query->where('name', 'chauffeur');
+    //     })
+    //     ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
+    //         $query->where('date', $date)
+    //               ->where('heure_ramassage', '>=', Carbon::parse($heure_ramassage)->subHours(3))
+    //               ->where('heure_ramassage', '<=', Carbon::parse($heure_ramassage)->addHours(3))
+    //               ->where('status', 'Confirmée');
+    //     })
+    //     ->whereDoesntHave('cars.maintenances', function ($query) use ($date) {
+    //         $query->where('jour', $date);
+    //     })
+        
+    //         ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
+    //             $query->where('status', 'Confirmée')
+    //                 ->whereDate('date', '=', $date)
+    //                 ->whereRaw('TIMESTAMPDIFF(HOUR, heure_ramassage, ?) < 3', [$heure_ramassage]);
+    //         })
+    //         ->first();
+        
+    //     return $chauffeur;
+    // }
+
     private function findAvailableDriver($date, $heure_ramassage)
-    {
-        return User::whereHas('roles', function ($query) {
-            $query->where('name', 'chauffeur');
-        })
-        ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
-            $query->where('date', $date)
-                  ->where('heure_ramassage', '>=', Carbon::parse($heure_ramassage)->subHours(3))
-                  ->where('heure_ramassage', '<=', Carbon::parse($heure_ramassage)->addHours(3))
-                  ->where('status', 'Confirmée');
-        })
-        ->whereDoesntHave('cars.maintenances', function ($query) use ($date) {
-            $query->where('jour', $date);
-        })
-        
-            ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
-                $query->where('status', 'Confirmée')
-                    ->whereDate('date', '=', $date)
-                    ->whereRaw('TIMESTAMPDIFF(HOUR, heure_ramassage, ?) < 3', [$heure_ramassage]);
-            })
+{
+    $chauffeurs = User::role('chauffeur')->get();
+    $requestDateTime = Carbon::parse("$date $heure_ramassage");
+
+    foreach ($chauffeurs as $chauffeur) {
+        // Vérifier le jour de repos
+        if ($chauffeur->day_off === Carbon::parse($date)->format('l')) {
+            continue; // chauffeur en repos
+        }
+
+        $carDriver = $chauffeur->car_drivers()->first();
+        if (!$carDriver) {
+            continue; // pas de voiture assignée
+        }
+
+        // Vérifier si la voiture est en maintenance
+        $maintenance = Maintenance::where('car_id', $carDriver->car_id)
+            ->where('jour', $date)
             ->first();
-        
+        if ($maintenance) {
+            continue; // voiture en maintenance
+        }
+
+        // Vérifier s'il a une réservation récente
+        $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
+            ->where('status', 'Confirmée')
+            ->orderByDesc('date')
+            ->orderByDesc('heure_ramassage')
+            ->first();
+
+        if ($lastReservation) {
+            $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
+            if ($lastReservationDateTime->diffInHours($requestDateTime) < 3) {
+                continue; // pas disponible à cause de la règle des 3 heures
+            }
+        }
+
+        // Chauffeur trouvé
         return $chauffeur;
     }
+
+    // Aucun chauffeur disponible
+    return null;
+}
+
 
 
 
@@ -764,5 +811,76 @@ public function storeAvis(Request $request, Reservation $reservation)
 
     return redirect()->back()->with('success', 'Merci pour votre avis !');
 }
+
+
+public function checkAvailability(Request $request)
+{
+    $request->validate([
+        'trip_id' => 'required|exists:trips,id',
+        'date' => 'required|date',
+        'heure_ramassage' => 'required',
+    ]);
+
+    $trip = Trip::find($request->trip_id);
+    $date = $request->date;
+    $heureRamassage = $request->heure_ramassage;
+
+    $chauffeurs = User::role('chauffeur')->get();
+
+    foreach ($chauffeurs as $chauffeur) {
+        // Vérification jour de repos
+        if ($chauffeur->day_off === Carbon::parse($date)->format('l')) {
+            continue;
+        }
+
+        // Vérification voiture
+        $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->first();
+        if (!$carDriver || !$carDriver->car) {
+            continue;
+        }
+
+        // Vérification maintenance
+        $maintenance = Maintenance::where('car_id', $carDriver->car->id)
+            ->where('jour', $date)
+            ->first();
+        if ($maintenance) {
+            continue;
+        }
+
+        // ⚡️ NOUVEAU : vérifier TOUTES les réservations du chauffeur
+        $reservations = Reservation::where('cardriver_id', $carDriver->id)
+            ->where('status', 'Confirmée')
+            ->where('date', $date) // on peut même vérifier toutes dates proches si besoin
+            ->get();
+
+        $disponible = true;
+
+        foreach ($reservations as $reservation) {
+            $reservationDateTime = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
+            $requestDateTime = Carbon::parse("{$date} {$heureRamassage}");
+
+            if ($reservationDateTime->diffInHours($requestDateTime) < 3) {
+                $disponible = false;
+                break; // Ce chauffeur a un conflit de réservation
+            }
+        }
+
+        if ($disponible) {
+            // Chauffeur trouvé disponible
+            return response()->json([
+                'available' => true,
+                'chauffeur' => $chauffeur->only(['id', 'first_name', 'last_name']),
+                'car' => $carDriver->car->only(['id', 'immatriculation', 'model']),
+            ]);
+        }
+    }
+
+    // Aucun chauffeur disponible
+    return response()->json([
+        'available' => false,
+        'message' => 'Aucun chauffeur disponible pour cette date et heure.',
+    ]);
+}
+
 
 }

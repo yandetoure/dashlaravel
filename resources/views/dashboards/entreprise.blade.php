@@ -20,7 +20,7 @@
                 </div>
                 
                 <!-- Stats Cards -->
-                <div class="flex flex-wrap gap-6 mb-6">
+                <div class="flex flex-wrap gap-2 mb-6">
                 <div class="bg-white rounded-lg shadow p-6 transition duration-300 card-hover flex-1 min-w-[250px] max-w-[300px]">
                 <div class="flex items-center justify-between">
                             <div>

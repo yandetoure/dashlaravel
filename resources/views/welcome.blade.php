@@ -85,45 +85,55 @@
             <a href="#compte" class="block py-2 text-gray-700 hover:text-red-600 nav-link">Mon compte</a>
         </div>
     </nav>
+<!-- Hero Section -->
+<section id="accueil" class="hero pt-24 pb-32 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex items-center justify-between">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Transport confortable vers l'aéroport AIBD</h1>
+                <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et transferts privés vers l'aéroport international Blaise Diagne.</p>
+                <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
+            </div>
 
-    <!-- Hero Section -->
-    <section id="accueil" class="hero pt-24 pb-32 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center justify-between">
-                <div class="md:w-1/2 mb-10 md:mb-0">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Transport confortable vers l'aéroport AIBD</h1>
-                    <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et transferts privés vers l'aéroport international Blaise Diagne.</p>
-                    <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
-                </div>
-                <div class="md:w-1/2">
-                    <div class="booking-form p-8 max-w-md mx-auto">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Réserver votre trajet</h3>
-                        <form>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Type de service</label>
-                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                                    <option>Navette partagée</option>
-                                    <option>Voiture avec chauffeur</option>
-                                    <option>Transfert privé</option>
-                                    <option>Location hors Dakar</option>
-                                    <option>Service entreprises</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Date</label>
-                                <input type="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Heure</label>
-                                <input type="time" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                            </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Vérifier disponibilité</button>
-                        </form>
-                    </div>
+            <div class="md:w-1/2">
+                <div class="booking-form p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Réserver votre trajet</h3>
+
+                    <form id="availability-form" class="text-gray-800">
+                        <div class="mb-4">
+                            <label class="block mb-2">Type de service</label>
+                            <select id="trip_id" name="trip_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="1">Navette AIBD</option>
+                                {{-- <option value="2">Voiture avec chauffeur</option>
+                                <option value="3">Transfert privé</option>
+                                <option value="4">Location hors Dakar</option>
+                                <option value="5">Service entreprises</option> --}}
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block mb-2">Date</label>
+                            <input type="date" id="date" name="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block mb-2">Heure</label>
+                            <input type="time" id="heure_ramassage" name="heure_ramassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                        </div>
+
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                            Vérifier disponibilité
+                        </button>
+                    </form>
+
+                    <div id="availability-result" class="mt-4 text-center font-semibold"></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+
 
     <!-- Publicité Réservation -->
     <section class="cta-banner py-12 text-white">
@@ -154,7 +164,7 @@
                     <div class="text-red-600 mb-4">
                         <i class="fas fa-shuttle-van text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Navettes partagées</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Location mini-bus</h3>
                     <p class="text-gray-600 mb-4">Service économique de navette partagée avec des départs réguliers depuis différents points de Dakar.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
@@ -862,7 +872,7 @@
                                 <div>
                                     <h4 class="font-bold text-gray-800">Horaires</h4>
                                     <p class="text-gray-600">Service disponible 24h/24, 7j/7</p>
-                                    <p class="text-gray-600">Bureau: Lundi - Samedi, 8h - 20h</p>
+                                    <p class="text-gray-600">Bureau: Lundi - Samedi, 8h - 18h</p>
                                 </div>
                             </div>
                         </div>
@@ -1047,5 +1057,39 @@
             });
         });
     </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('#availability-form').on('submit', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: '/reservations/check-availability',
+            method: 'POST',
+            data: {
+                trip_id: $('#trip_id').val(),
+                date: $('#date').val(),
+                heure_ramassage: $('#heure_ramassage').val(),
+                _token: '{{ csrf_token() }}' // important pour sécuriser la requête
+            },
+            success: function(response) {
+                if (response.available) {
+                    $('#availability-result').html(
+                        '✅ Chauffeur disponible : ' + response.chauffeur.first_name + ' ' + response.chauffeur.last_name
+                    ).css('color', 'green');
+                } else {
+                    $('#availability-result').html('❌ ' + response.message).css('color', 'red');
+                }
+            },
+            error: function(xhr) {
+                $('#availability-result').html('Erreur lors de la vérification.').css('color', 'red');
+            }
+        });
+    });
+});
+</script>
+
 </body>
 </html>

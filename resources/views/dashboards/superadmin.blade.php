@@ -20,12 +20,14 @@
                 </div>
                 
                 <!-- Stats Cards -->
-                <div class="flex flex-wrap gap-6 mb-6">
+                <div class="flex flex-wrap gap-2 mb-6">
                 <div class="bg-white rounded-lg shadow p-6 transition duration-300 card-hover flex-1 min-w-[250px] max-w-[300px]">
                 <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Clients ce mois</p>
                                 <h3 class="text-2xl font-bold text-gray-800">142</h3>
+                                <h1>Nombre de réservations : {{ $reservationsCount }}</h1>
+
                                 <p class="text-sm text-green-500 mt-1">
                                     <i class="fas fa-arrow-up mr-1"></i> 12% vs mois dernier
                                 </p>
@@ -41,6 +43,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Réservations</p>
                                 <h3 class="text-2xl font-bold text-gray-800">89</h3>
+                                <h1>Nombre d'utilisateurs : {{ $usersCount }}</h1>
                                 <p class="text-sm text-green-500 mt-1">
                                     <i class="fas fa-arrow-up mr-1"></i> 8% vs mois dernier
                                 </p>
@@ -56,6 +59,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Véhicules en maintenance</p>
                                 <h3 class="text-2xl font-bold text-gray-800">7</h3>
+                                <h1>Nombre d'utilisateurs : {{ $usersCount }}</h1>
                                 <p class="text-sm text-red-500 mt-1">
                                     <i class="fas fa-arrow-up mr-1"></i> 2 de plus que la moyenne
                                 </p>
