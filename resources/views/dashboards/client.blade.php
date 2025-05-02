@@ -25,7 +25,7 @@
                 <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Clients ce mois</p>
-                                <h3 class="text-2xl font-bold text-gray-800">{{ $reservationsCount }}</h3>
+                                {{-- <h3 class="text-2xl font-bold text-gray-800">{{ $reservationsCount }}</h3> --}}
                                 <p class="text-sm text-green-500 mt-1">
                                     <i class="fas fa-arrow-up mr-1"></i> 12% vs mois dernier
                                 </p>
