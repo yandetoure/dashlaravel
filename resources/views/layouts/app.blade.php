@@ -67,7 +67,6 @@
 /* Contenu principal */
 .main-content {
     flex: 1;
-    margin-left: 200px;
     overflow-y: auto;
 }
 .main-content main {
