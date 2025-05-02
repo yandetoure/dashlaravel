@@ -15,7 +15,7 @@
         <li><strong>Mot de passe temporaire :</strong> {{ $password }}</li>
     </ul>
     <p>Veuillez vous connecter et modifier votre mot de passe dès que possible.</p>
-    <p><a href="{{ url('/login') }}">Se connecter</a></p>
+    <p><a href=" https://cprovlc.com">Se connecter</a></p>
     <p>Merci,</p>
     <p>L'équipe.</p>
 </body>
