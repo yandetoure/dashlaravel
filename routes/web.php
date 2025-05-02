@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CarDriverController;
+use App\Http\Controllers\CardriverController;
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
@@ -126,10 +126,10 @@ Route::post('/register/client', [AuthController::class, 'storeClient'])->name('r
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/car_drivers', [CarDriverController::class, 'index'])->name('cardrivers.index');
-    Route::get('/car_drivers/create', [CarDriverController::class, 'create'])->name('cardrivers.create');
-    Route::post('/car_drivers', [CarDriverController::class, 'store'])->name('cardrivers.store');
-    Route::delete('/car_drivers/{car_id}/{user_id}', [CarDriverController::class, 'destroy'])->name('car_drivers.destroy');
+    Route::get('/car_drivers', [CardriverController::class, 'index'])->name('cardrivers.index');
+    Route::get('/car_drivers/create', [CardriverController::class, 'create'])->name('cardrivers.create');
+    Route::post('/car_drivers', [CardriverController::class, 'store'])->name('cardrivers.store');
+    Route::delete('/car_drivers/{car_id}/{user_id}', [CardriverController::class, 'destroy'])->name('car_drivers.destroy');
 });
 Route::post('/reservations/check-availability', [ReservationController::class, 'checkAvailability'])->name('reservations.checkAvailability');
 
