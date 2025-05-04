@@ -2,12 +2,352 @@
 @extends('layouts.app')
 
 @section('content')
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Réservations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .reservation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .status-badge {
+            top: -10px;
+            right: -10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="text-3xl font-bold text-dark mb-2">Mes Réservations</h1>
+            <p class="text-gray-600">Consultez l'historique de vos trajets réservés</p>
+            
+            <div class="flex items-center mt-6">
+                <div class="relative flex-grow max-w-md">
+                    <input type="text" placeholder="Rechercher une réservation..." 
+                           class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <button class="ml-4 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                    <i class="fas fa-filter mr-2"></i>Filtrer
+                </button>
+            </div>
+        </header>
 
+        <!-- Reservations List -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Reservation Card 1 -->
+            <div class="reservation-card bg-white rounded-xl shadow-md p-6 relative border-l-4 border-primary transition duration-300">
+                <div class="absolute status-badge bg-secondary text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Confirmée
+                </div>
+                
+                <div class="flex items-start mb-4">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-full mr-4">
+                        <i class="fas fa-car text-primary text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-dark">Trajet #TRJ-78945</h3>
+                        <p class="text-gray-500 text-sm">15 Juin 2023</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-user text-gray-400 w-6"></i>
+                        <span class="ml-2 text-gray-700">Jean Dupont</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-gray-400 w-6"></i>
+                        <span class="ml-2 text-gray-700">+33 6 12 34 56 78</span>
+                    </div>
+                    <div class="flex">
+                        <i class="fas fa-map-marker-alt text-gray-400 mt-1 w-6"></i>
+                        <div class="ml-2">
+                            <p class="text-gray-700 font-medium">Adresse de ramassage</p>
+                            <p class="text-gray-500 text-sm">12 Rue de la Paix, 75002 Paris</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <i class="fas fa-flag-checkered text-gray-400 mt-1 w-6"></i>
+                        <div class="ml-2">
+                            <p class="text-gray-700 font-medium">Destination</p>
+                            <p class="text-gray-500 text-sm">Aéroport Charles de Gaulle</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-user-tie text-gray-400 w-6"></i>
+                                <div class="ml-2">
+                                    <p class="text-gray-700 font-medium">Chauffeur</p>
+                                    <p class="text-gray-500 text-sm">Pierre Martin</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone text-gray-400 w-6"></i>
+                                <span class="ml-2 text-gray-700">+33 6 98 76 54 32</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center pt-3">
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Heure</p>
+                            <p class="font-medium"><i class="fas fa-clock text-primary mr-1"></i> 08:30</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Personnes</p>
+                            <p class="font-medium"><i class="fas fa-users text-primary mr-1"></i> 3</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Valises</p>
+                            <p class="font-medium"><i class="fas fa-suitcase text-primary mr-1"></i> 4</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between">
+                    <button class="text-primary hover:text-blue-600 font-medium">
+                        <i class="fas fa-phone-alt mr-2"></i>Appeler
+                    </button>
+                    <button class="text-red-500 hover:text-red-600 font-medium">
+                        <i class="fas fa-times-circle mr-2"></i>Annuler
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reservation Card 2 -->
+            <div class="reservation-card bg-white rounded-xl shadow-md p-6 relative border-l-4 border-yellow-400 transition duration-300">
+                <div class="absolute status-badge bg-yellow-400 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    En attente
+                </div>
+                
+                <div class="flex items-start mb-4">
+                    <div class="bg-yellow-400 bg-opacity-10 p-3 rounded-full mr-4">
+                        <i class="fas fa-car text-yellow-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-dark">Trajet #TRJ-78231</h3>
+                        <p class="text-gray-500 text-sm">20 Juin 2023</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-user text-gray-400 w-6"></i>
+                        <span class="ml-2 text-gray-700">Jean Dupont</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-gray-400 w-6"></i>
+                        <span class="ml-2 text-gray-700">+33 6 12 34 56 78</span>
+                    </div>
+                    <div class="flex">
+                        <i class="fas fa-map-marker-alt text-gray-400 mt-1 w-6"></i>
+                        <div class="ml-2">
+                            <p class="text-gray-700 font-medium">Adresse de ramassage</p>
+                            <p class="text-gray-500 text-sm">8 Avenue des Champs-Élysées, 75008 Paris</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <i class="fas fa-flag-checkered text-gray-400 mt-1 w-6"></i>
+                        <div class="ml-2">
+                            <p class="text-gray-700 font-medium">Destination</p>
+                            <p class="text-gray-500 text-sm">Gare de Lyon</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-info-circle text-yellow-500 w-6"></i>
+                            <p class="ml-2 text-yellow-600">Chauffeur non encore assigné</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center pt-3">
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Heure</p>
+                            <p class="font-medium"><i class="fas fa-clock text-yellow-500 mr-1"></i> 14:15</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Personnes</p>
+                            <p class="font-medium"><i class="fas fa-users text-yellow-500 mr-1"></i> 2</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Valises</p>
+                            <p class="font-medium"><i class="fas fa-suitcase text-yellow-500 mr-1"></i> 2</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-gray-100 flex justify-end">
+                    <button class="text-red-500 hover:text-red-600 font-medium">
+                        <i class="fas fa-times-circle mr-2"></i>Annuler
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reservation Card 3 -->
+            <div class="reservation-card bg-white rounded-xl shadow-md p-6 relative border-l-4 border-green-500 transition duration-300">
+                <div class="absolute status-badge bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    Complétée
+                </div>
+                
+                <div class="flex items-start mb-4">
+                    <div class="bg-green-500 bg-opacity-10 p-3 rounded-full mr-4">
+                        <i class="fas fa-car text-green-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-dark">Trajet #TRJ-77654</h3>
+                        <p class="text-gray-500 text-sm">5 Juin 2023</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-user text-gray-400 w-6"></i>
+                        <span class="ml-2 text-gray-700">Jean Dupont</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-gray-400 w-6"></i>
+                        <span class="ml-2 text-gray-700">+33 6 12 34 56 78</span>
+                    </div>
+                    <div class="flex">
+                        <i class="fas fa-map-marker-alt text-gray-400 mt-1 w-6"></i>
+                        <div class="ml-2">
+                            <p class="text-gray-700 font-medium">Adresse de ramassage</p>
+                            <p class="text-gray-500 text-sm">25 Rue de Rivoli, 75004 Paris</p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <i class="fas fa-flag-checkered text-gray-400 mt-1 w-6"></i>
+                        <div class="ml-2">
+                            <p class="text-gray-700 font-medium">Destination</p>
+                            <p class="text-gray-500 text-sm">Disneyland Paris</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-gray-100 pt-3 mt-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-user-tie text-gray-400 w-6"></i>
+                                <div class="ml-2">
+                                    <p class="text-gray-700 font-medium">Chauffeur</p>
+                                    <p class="text-gray-500 text-sm">Luc Bernard</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone text-gray-400 w-6"></i>
+                                <span class="ml-2 text-gray-700">+33 6 45 67 89 01</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-center pt-3">
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Heure</p>
+                            <p class="font-medium"><i class="fas fa-clock text-green-500 mr-1"></i> 09:00</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Personnes</p>
+                            <p class="font-medium"><i class="fas fa-users text-green-500 mr-1"></i> 4</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-xs text-gray-500">Valises</p>
+                            <p class="font-medium"><i class="fas fa-suitcase text-green-500 mr-1"></i> 3</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between">
+                    <button class="text-primary hover:text-blue-600 font-medium">
+                        <i class="fas fa-redo mr-2"></i>Réserver à nouveau
+                    </button>
+                    <button class="text-gray-600 hover:text-dark font-medium">
+                        <i class="fas fa-star mr-2"></i>Noter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div class="hidden text-center py-20">
+            <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                <i class="fas fa-car text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-medium text-gray-700 mb-2">Aucune réservation trouvée</h3>
+            <p class="text-gray-500 mb-6">Vous n'avez pas encore effectué de réservation.</p>
+            <button class="bg-primary text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                Réserver maintenant
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript pour gérer les interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Exemple: Confirmation d'annulation
+            const cancelButtons = document.querySelectorAll('button:contains("Annuler")');
+            cancelButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if(confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+                        // Logique d'annulation ici
+                        this.closest('.reservation-card').classList.add('opacity-50');
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Annulation...';
+                        setTimeout(() => {
+                            this.closest('.reservation-card').remove();
+                            // Vérifier s'il ne reste plus de cartes
+                            if(document.querySelectorAll('.reservation-card').length === 0) {
+                                document.querySelector('.hidden').classList.remove('hidden');
+                            }
+                        }, 1500);
+                    }
+                });
+            });
+
+            // Exemple: Filtrage (simplifié)
+            const searchInput = document.querySelector('input[type="text"]');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                document.querySelectorAll('.reservation-card').forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    if(cardText.includes(searchTerm)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+{{-- 
 @php
     \Carbon\Carbon::setLocale('fr');
 @endphp
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> --}}
 
+
+
+
+{{-- 
 
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
@@ -199,4 +539,5 @@
     
 </style>
 
+ --}}
 @endsection

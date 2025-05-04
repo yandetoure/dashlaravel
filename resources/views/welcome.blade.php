@@ -53,7 +53,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="#accueil" class="text-xl font-bold text-red-600">CPRO<span class="text-gray-800">-VLC</span></a>
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#accueil" class="text-gray-700 hover:text-red-600 transition nav-link active">Accueil</a>
@@ -937,7 +937,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="md:flex justify-between">
                 <div class="mb-8 md:mb-0">
-                    <a href="#accueil" class="text-xl font-bold text-white">Dakar<span class="text-red-400">Transport</span></a>
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                     <p class="mt-4 text-gray-400 max-w-xs">Service de transport professionnel vers l'aéroport international Blaise Diagne de Dakar.</p>
                 </div>
                 

@@ -1,57 +1,97 @@
 <?php declare(strict_types=1); ?>
 @extends('layouts.app')
-
 @section('content')
-    <div class="container mt-5">
-        <style>
-            .table-spacing td, .table-spacing th {
-                padding-left: 25px;
-                padding-right: 25px;
-            }
-        </style>
+<div class="bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- En-tête de page -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 text-center">
+                <span class="inline-block mr-2">📋</span> Liste des Chauffeurs
+            </h1>
+            <p class="mt-2 text-center text-gray-600">Gestion de l'équipe de conducteurs</p>
+        </div>
 
-        <div class="card shadow-lg p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="text-center">📋 Liste des Chauffeurs</h1>
-                <!-- Formulaire pour assigner un jour de repos -->
-                <form action="{{ route('admin.assign-day-off') }}" method="POST" style="display:inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">Assigner un jour de repos</button>
-                </form>
+        <!-- Carte principale -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Barre de recherche et bouton d'action -->
+            <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                <div class="relative flex-1 max-w-md">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <input type="text" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:ring-blue-500 focus:border-blue-500" placeholder="Rechercher un chauffeur...">
+                </div>
+                
+                <div class="flex space-x-2">
+                    <form action="{{ route('admin.assign-day-off') }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center">
+                            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Assigner un jour de repos
+                        </button>
+                    </form>
+                </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped shadow-sm rounded table-spacing">
-                    <thead class="table-dark text-center">
+            <!-- Tableau -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-blue-50">
                         <tr>
-                            <th class="text-nowrap">ID</th>
-                            <th class="text-nowrap">Prénom</th>
-                            <th class="text-nowrap">Nom</th>
-                            <th class="text-nowrap">Email</th>
-                            <th class="text-nowrap">Adresse</th>
-                            <th class="text-nowrap">Numéro</th>
-                            <th class="text-nowrap">Jour de Repos</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prénom</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adresse</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Numéro</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jour de Repos</th>
                         </tr>
                     </thead>
-                    <tbody class="text-center align-middle">
-                        @foreach($drivers as $driver)       
-                            <tr>
-                                <td class="px-4">{{ $driver->id }}</td>
-                                <td class="px-4">{{ $driver->first_name }}</td>
-                                <td class="px-4">{{ $driver->last_name }}</td>
-                                <td class="px-4">{{ $driver->email }}</td>
-                                <td class="px-4">{{ $driver->address }}</td>
-                                <td class="px-4">{{ $driver->phone_number }}</td>
-                                <td class="px-4">{{ $driver->day_off ?? 'Non précisé' }}</td> 
-                          </tr>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($drivers as $driver)
+                            <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $driver->id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $driver->first_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $driver->last_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $driver->email }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $driver->address }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $driver->phone_number }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $driver->day_off ?? 'Non précisé' }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Aucun résultat (montré conditionnellement) -->
+            @if(count($drivers) == 0)
+            <div class="px-6 py-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">Aucun chauffeur trouvé</h3>
+                <p class="mt-1 text-sm text-gray-500">Commencez par ajouter un nouveau chauffeur.</p>
+            </div>
+            @endif
 
-            <div class="d-flex justify-content-center mt-4">
-                {{ $drivers->links() }}
+            <!-- Pagination -->
+            <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+                <div class="flex justify-between items-center">
+                    <div class="hidden sm:block">
+                        <p class="text-sm text-gray-700">
+                            Affichage des chauffeurs
+                        </p>
+                    </div>
+                    <div>
+                        {{ $drivers->links() }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
