@@ -3,7 +3,8 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style>
- .custom-profile-img {
+ /* Styles du profil */
+.custom-profile-img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -12,6 +13,7 @@
     transition: transform 0.3s ease-in-out;
 }
 
+/* Liens de navigation */
 .nav-link {
     font-weight: 600;
     color: white;
@@ -25,6 +27,7 @@
     transform: translateY(-2px);
 }
 
+/* Icône de notification */
 .notification-icon {
     cursor: pointer;
     color: #FFD700;
@@ -50,21 +53,44 @@
     .nav-container {
         padding: 10px 15px;
     }
+
+    /* Cacher le logo desktop sur mobile */
+    .logo-desktop {
+        display: none;
+    }
+
+    /* Afficher le logo mobile uniquement sur mobile */
+    .logo-mobile {
+        display: block;
+        width: 80px; /* Ajustez la taille du logo pour la version mobile */
+    }
 }
 
+@media screen and (min-width: 768px) {
+    /* Afficher le logo desktop/tablette */
+    .logo-desktop {
+        display: block;
+        width: 100px; /* Ajustez la taille du logo pour la version desktop/tablette */
+    }
+
+    /* Cacher le logo mobile sur desktop/tablette */
+    .logo-mobile {
+        display: none;
+    }
+}
+
+/* Menu global */
 .nav-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    background-color:rgb(255, 255, 255);
-    /* background: linear-gradient(to right, #2C3E50, #4CA1AF); */
+    background-color: rgb(255, 255, 255);
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     padding: 15px 20px;
     border-radius: 0 0 8px 8px;
 }
-
 </style>
 
 <nav x-data="{ open: false }" class="nav-container border-b border-gray-200">
@@ -73,8 +99,19 @@
             <!-- Logo / Rôle -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center space-x-2">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
+                    <!-- Logo pour desktop/tablette -->
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;"class="logo-desktop">
+                    
+                    <!-- Logo pour mobile -->
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Mobile" class="logo-mobile">
                 </a>
+            </div>
+            
+            <!-- Nom de l'utilisateur au centre sur mobile -->
+            <div class="sm:hidden user-center">
+                <span class="text-gray-800 font-semibold text-lg">
+                    {{ Auth::user()->role === 'client' ? Auth::user()->name : Auth::user()->first_name . ' ' . Auth::user()->last_name }}
+                </span>
             </div>
 
             <!-- Navigation Links -->
@@ -91,8 +128,8 @@
                 default => '#',
                 };
             @endphp
-            <div class="hidden sm:flex space-x-6">
-            <a href="{{ $dashboardRoute }}" class="nav-link">
+            <div class="hidden sm:flex space-x-6 ">
+                <a href="{{ $dashboardRoute }}" class="nav-link">
                     Dashboard
                 </a>
             </div>

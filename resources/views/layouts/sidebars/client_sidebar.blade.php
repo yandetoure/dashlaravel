@@ -1,11 +1,10 @@
 <?php declare(strict_types=1); ?>
 
- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
 
 <div id="sidebar" class="sidebar">
     <!-- Header fixe -->
     <div class="sticky-header">
-
         <!-- User Profile -->
         <div class="d-flex align-items-center border-bottom pb-3">
             <div class="me-3">
@@ -24,74 +23,58 @@
     <div class="sidebar-links">
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
-<li><a href="{{ route('dashboard.client') }}" class="nav-link {{ request()->routeIs('dashboard.client') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
-
-        <!-- Réservations -->
-<li><a href="{{ route('reservations.client.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Mes réservations</a></li>
-<li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
-
-<!-- Trajets -->
-<li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
-<!-- <li><a href="{{ route('trips.create') }}" class="nav-link {{ request()->routeIs('trips.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un trajet</a></li> -->
-
-<!-- Agents -->
-<!-- <li><a href="{{ route('agents.index') }}" class="nav-link {{ request()->routeIs('agents.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des agents</a></li> -->
-<!-- <li><a href="{{ route('register.agent.form') }}" class="nav-link {{ request()->routeIs('register.agent.form') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Agent</a></li> -->
-
-<!-- Chauffeurs -->
-<li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
-<!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li>
-<li><a href="{{ route('admin.assign-day-off') }}" class="nav-link {{ request()->routeIs('admin.assign-day-off') ? 'active' : '' }}"><span class="material-icons">event_busy</span> Jour de repos</a></li> -->
-
-<!-- Voitures assignées -->
-<!-- <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li> -->
-<!-- <li><a href="{{ route('cardrivers.create') }}" class="nav-link {{ request()->routeIs('cardrivers.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un filiation</a></li> -->
-
-<!-- Maintenance -->
-<!-- <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Voitures (Maintenance)</a></li> -->
-<!-- <li><a href="{{ route('maintenances.create') }}" class="nav-link {{ request()->routeIs('maintenances.create') ? 'active' : '' }}"><span class="material-icons">add</span> Créer maintenance</a></li> -->
-
-<!-- Clients -->
-<!-- <li><a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.index') ? 'active' : '' }}"><span class="material-icons">person</span> Liste des Clients</a></li> -->
-<!-- <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Client</a></li> -->
-
-<!-- Voitures -->
-<!-- <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des Voitures</a></li> -->
-<!-- <li><a href="{{ route('cars.create') }}" class="nav-link {{ request()->routeIs('cars.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une voiture</a></li> -->
-
+            <li><a href="{{ route('dashboard.client') }}" class="nav-link {{ request()->routeIs('dashboard.client') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
+            <li><a href="{{ route('reservations.client.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Mes réservations</a></li>
+            <li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
+            <!-- Trajets -->
+            <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
+            <!-- Chauffeurs -->
+            <li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
         </ul>
     </div>
 </div>
+
+<!-- Bouton menu burger -->
+<button class="menu-toggle" onclick="toggleSidebar()">
+    <span class="material-icons">menu</span>
+</button>
+
 <style>
-    
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
     #sidebar {
         width: 250px;
         height: 100vh;
-        background-color:rgb(255, 255, 255);
-        margin-top: 100px;
-        /* background: linear-gradient(to bottom, #0a3d62, #0c2461); */
-        color:rgba(56, 55, 51, 0.78);
+        background-color: rgb(255, 255, 255);
+        color: rgba(56, 55, 51, 0.78);
         position: fixed;
+        top: 0;
         left: 0;
         font-weight: bold;
         display: flex;
         flex-direction: column;
+        transition: transform 0.3s ease-in-out;
+        z-index: 1050;
+    }
+
+    #sidebar.hidden {
+        transform: translateX(-100%);
     }
 
     .sticky-header {
         flex-shrink: 0;
         padding: 18px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid #ccc;
+        margin-top: 70px;
     }
 
     .sidebar-links {
         flex-grow: 1;
         overflow-y: auto;
         padding: 15px;
-    }
-
-    .logo-text {
-        color:rgb(104, 6, 6);
     }
 
     .nav-link {
@@ -102,23 +85,55 @@
         text-decoration: none;
         border-radius: 8px;
         transition: background 0.3s ease-in-out;
-        color:rgb(104, 6, 6) !important;
+        color: rgb(104, 6, 6) !important;
         font-size: 14px;
     }
 
     .nav-link:hover {
-    background-color:rgba(19, 19, 19, 0.23) !important;    
-}
+        background-color: rgba(19, 19, 19, 0.23) !important;
+    }
+
+    .nav-link.active {
+        background-color: #d6d6d6 !important;
+        color: rgb(0, 0, 0) !important;
+    }
 
     .material-icons {
         font-size: 20px !important;
-        color:rgb(104, 6, 6);
-        margin-right: 5px !important;  
+        color: rgb(104, 6, 6);
+        margin-right: 5px !important;
     }
-    .nav-link.active {
-    background-color: #d6d6d6 !important;
-    color: rgb(0, 0, 0) !important;
-}
 
-    
+    /* Menu burger */
+    .menu-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1100;
+        background-color: white;
+        border: none;
+        font-size: 28px;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        #sidebar {
+            transform: translateX(-100%);
+        }
+
+        #sidebar.show {
+            transform: translateX(0);
+        }
+
+        .menu-toggle {
+            display: block;
+        }
+    }
 </style>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('show');
+    }
+</script>

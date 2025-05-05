@@ -1,5 +1,5 @@
 <?php declare(strict_types=1); ?>
-<div class="w-64 bg-white shadow-md h-screen p-4">
+<div class="w-0 p-0 md:w-64 md:p-4 bg-white shadow-md h-screen">
     @if(Auth::check())
         @php
             $role = Auth::user()->getRoleNames()->first();
@@ -15,7 +15,7 @@
             @include('layouts.sidebars.chauffeur_sidebar')
         @elseif($role === 'agent')
             @include('layouts.sidebars.agent_sidebar')
-            @elseif($role === 'super-admin')
+        @elseif($role === 'super-admin')
             @include('layouts.sidebars.superadmin_sidebar')
         @elseif($role === 'entreprise')
             @include('layouts.sidebars.entreprise_sidebar')

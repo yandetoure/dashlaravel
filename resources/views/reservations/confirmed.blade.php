@@ -88,6 +88,8 @@
     <!-- Pagination -->
 </div>
 
+</body>
+</html>
 @endsection
 
 @section('scripts')
