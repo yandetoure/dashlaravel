@@ -1,143 +1,104 @@
-<?php declare(strict_types=1); ?>
 @extends('layouts.app')
 
 @section('content')
-<style>
-    .container {
-        max-width: 800px; /* Réduit la largeur du formulaire */
-    }
-
-    .card {
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-header {
-        font-weight: bold;
-        text-align: center;
-    }
-
-    .form-control {
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    .btn-success {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        font-size: 16px;
-    }
-
-    .alert {
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    /* Disposition des champs par deux */
-    .row {
-        display: flex;
-        gap: 15px;
-    }
-
-    .col-6 {
-        flex: 1;
-    }
-
-    .col-6 input, .col-6 select {
-        width: 100%;
-    }
-
-</style>
-
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h4>Ajouter un utilisateur</h4>
-        </div>
-        <div class="card-body">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('admin.create.account') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-3">
-                    <label for="user_type" class="form-label">Type d'utilisateur</label>
-                    <select class="form-control" name="role" id="user_type" required>
-                        <option value="client">Client</option>
-                        <option value="agent">Agent</option>
-                        <option value="entreprise">Entreprise</option>
-                        <option value="chauffeur">Chauffeur</option>
-                        <option value="admin">Admin</option>
-                        <option value="super-admin">Super-Admin</option>
-                    </select>
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3" id="first_name_field">
-                            <label for="first_name" class="form-label">Prénom</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name">
+<div class="bg-gray-50 py-8">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Carte du formulaire -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- En-tête du formulaire -->
+            <div class="bg-blue-600 py-4 px-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-white text-center">Ajouter un utilisateur</h2>
+            </div>
+            
+            <!-- Corps du formulaire -->
+            <div class="p-6">
+                <!-- Message de succès -->
+                @if(session('success'))
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded" role="alert">
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+                
+                <!-- Messages d'erreur -->
+                @if($errors->any())
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
+                        <ul class="list-disc ml-4">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                
+                <form action="{{ route('admin.create.account') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    
+                    <!-- Type d'utilisateur -->
+                    <div class="mb-6">
+                        <label for="user_type" class="block text-sm font-medium text-gray-700 mb-1">Type d'utilisateur</label>
+                        <select id="user_type" name="role" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <option value="client">Client</option>
+                            <option value="agent">Agent</option>
+                            <option value="entreprise">Entreprise</option>
+                            <option value="chauffeur">Chauffeur</option>
+                            <option value="admin">Admin</option>
+                            <option value="super-admin">Super-Admin</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Nom et prénom -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div id="first_name_field">
+                            <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                            <input type="text" id="first_name" name="first_name" placeholder="Entrez le prénom" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        
+                        <div id="last_name_field">
+                            <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                            <input type="text" id="last_name" name="last_name" placeholder="Entrez le nom de famille" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         </div>
                     </div>
-
-                    <div class="col-6">
-                        <div class="mb-3" id="last_name_field">
-                            <label for="last_name" class="form-label">Nom</label>
-                            <input type="text" class="form-control" name="last_name" id="last_name">
+                    
+                    <!-- Nom de l'entreprise (caché par défaut) -->
+                    <div id="company_name_field" class="mb-6 hidden">
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom de l'entreprise</label>
+                        <input type="text" id="name" name="name" placeholder="Entrez le nom de l'entreprise" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    
+                    <!-- Adresse et téléphone -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                            <input type="text" id="address" name="address" placeholder="Adresse complète" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                        </div>
+                        
+                        <div>
+                            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Numéro de téléphone</label>
+                            <input type="text" id="phone_number" name="phone_number" placeholder="+33 X XX XX XX XX" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                         </div>
                     </div>
-                </div>
-
-                <div class="mb-3 d-none" id="company_name_field">
-                    <label for="name" class="form-label">Nom de l'entreprise</label>
-                    <input type="text" class="form-control" name="name" id="name">
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Adresse</label>
-                            <input type="text" class="form-control" name="address" id="address" required>
+                    
+                    <!-- Email et photo de profil -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="email" name="email" placeholder="exemple@domaine.com" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                        </div>
+                        
+                        <div>
+                            <label for="profile_photo" class="block text-sm font-medium text-gray-700 mb-1">Photo de profil</label>
+                            <input type="file" id="profile_photo" name="profile_photo" accept="image/*" class="block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         </div>
                     </div>
-
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="phone_number" class="form-label">Numéro de téléphone</label>
-                            <input type="text" class="form-control" name="phone_number" id="phone_number" required>
-                        </div>
+                    
+                    <!-- Bouton de soumission -->
+                    <div>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-md shadow-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Créer l'utilisateur
+                        </button>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" id="email" required>
-                        </div>
-                    </div>
-
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="profile_photo" class="form-label">Photo de profil</label>
-                            <input type="file" class="form-control" name="profile_photo" id="profile_photo" accept="image/*">
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-success">Créer l'utilisateur</button>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -151,13 +112,13 @@ document.addEventListener('DOMContentLoaded', function () {
         let companyNameField = document.getElementById('company_name_field');
 
         if (userType === 'entreprise') {
-            companyNameField.classList.remove('d-none');
-            firstNameField.classList.add('d-none');
-            lastNameField.classList.add('d-none');
+            companyNameField.classList.remove('hidden');
+            firstNameField.classList.add('hidden');
+            lastNameField.classList.add('hidden');
         } else {
-            companyNameField.classList.add('d-none');
-            firstNameField.classList.remove('d-none');
-            lastNameField.classList.remove('d-none');
+            companyNameField.classList.add('hidden');
+            firstNameField.classList.remove('hidden');
+            lastNameField.classList.remove('hidden');
         }
     });
 });
