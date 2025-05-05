@@ -882,5 +882,45 @@ public function checkAvailability(Request $request)
     ]);
 }
 
+public function showCalendar()
+{
+    $googleClient = new \Google_Client();
+    $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+    $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
+    $googleClient->setAccessType('offline');
+
+    $tokenPath = storage_path('app/google-calendar/token.json');
+    if (!file_exists($tokenPath)) {
+        throw new \Exception("Token manquant.");
+    }
+
+    $accessToken = json_decode(file_get_contents($tokenPath), true);
+    $googleClient->setAccessToken($accessToken);
+
+    if ($googleClient->isAccessTokenExpired()) {
+        if (isset($accessToken['refresh_token'])) {
+            $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
+            file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
+        } else {
+            throw new \Exception("Jeton expiré.");
+        }
+    }
+
+    $service = new \Google_Service_Calendar($googleClient);
+    $calendarId = config('services.google_calendar.calendar_id');
+    $googleEvents = $service->events->listEvents($calendarId);
+
+    $events = [];
+    foreach ($googleEvents->getItems() as $event) {
+        $events[] = [
+            'title' => $event->getSummary(),
+            'start' => $event->getStart()->getDateTime() ?: $event->getStart()->getDate(),
+            'end' => $event->getEnd()->getDateTime() ?: $event->getEnd()->getDate(),
+            'description' => $event->getDescription(), // <== Ajout
+        ];
+    }
+
+    return view('calendars.calendar', compact('events'));
+}
 
 }

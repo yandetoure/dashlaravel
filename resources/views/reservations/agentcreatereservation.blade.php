@@ -173,9 +173,9 @@
 
         var tarifBasePersonnes = 32500;
         var tarifParPersonneSupplementaire = 5000;
-        var tarifParValiseSupplementaire = 1000;
+        var tarifParValiseSupplementaire = 5000;
         var tarifDepotSupplementaire = 2000;
-        var tarifAccompagnant = 3000;
+        var tarifAccompagnant = 15000;
 
         var tarif = 0;
 

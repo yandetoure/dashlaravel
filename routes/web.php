@@ -245,5 +245,7 @@ Route::get('/oauth2callback', function () {
         return response()->json(['error' => 'Erreur lors de l\'authentification : ' . $e->getMessage()], 400);
     }
 });
+Route::get('/calendar', [ReservationController::class, 'showCalendar']);
+
 
 require __DIR__.'/auth.php';

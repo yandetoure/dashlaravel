@@ -24,9 +24,12 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Réservations -->
            <!-- Exemple pour le dashboard -->
-<!-- <li><a href="{{ route('dashboard.superadmin') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li> -->
+           <h6>Dashboard</h6>
+ <li><a href="{{ route('dashboard.superadmin') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
 
 <!-- Réservations -->
+           <h6>Reservations</h6>
+
 <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
 <!-- <li><a href="{{ route('reservations.create') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
 <li><a href="{{ route('reservations.confirmed') }}" class="nav-link {{ request()->routeIs('reservations.confirmed') ? 'active' : '' }}"><span class="material-icons">check_circle</span> Réservations Confirmées</a></li>
@@ -37,6 +40,8 @@
 <!-- <li><a href="{{ route('trips.create') }}" class="nav-link {{ request()->routeIs('trips.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un trajet</a></li> -->
 
 <!-- Super Admin -->
+           <h6>Utilisateurs</h6>
+
 <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des Super Admins</a></li>
 <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un Super Admin</a></li>
 
@@ -54,6 +59,8 @@
 <li><a href="{{ route('admin.assign-day-off') }}" class="nav-link {{ request()->routeIs('admin.assign-day-off') ? 'active' : '' }}"><span class="material-icons">event_busy</span> Jour de repos</a></li> -->
 
 <!-- Voitures assignées -->
+           <h6>Voitures</h6>
+
 <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
 <!-- <li><a href="{{ route('cardrivers.create') }}" class="nav-link {{ request()->routeIs('cardrivers.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter un filiation</a></li> -->
 
@@ -131,6 +138,4 @@
     background-color: #d6d6d6 !important;
     color: rgb(0, 0, 0) !important;
 }
-
-    
 </style>
