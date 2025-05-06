@@ -28,15 +28,11 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        .status-badge {
-            top: -10px;
-            right: -10px;
-        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div>
     <!-- En-tête stylisé -->
     <div class="bg-gray-50 rounded-lg shadow-md p-6 mb-8">
         <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">Liste des Réservations</h1>

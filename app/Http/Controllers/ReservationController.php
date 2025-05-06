@@ -193,7 +193,6 @@ class ReservationController extends Controller
         return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès.');
     }
 
-
     public function storeByAgent(Request $request)
     {
         $request->validate([
@@ -408,16 +407,37 @@ class ReservationController extends Controller
 
     public function confirm(Reservation $reservation)
     {
-        // Chargez les relations nécessaires
+        // Charge les relations nécessaires
         $reservation->load(['client', 'carDriver.chauffeur']);
-        $reservation->update(['status' => 'confirmée']);
-        
-        // Envoyer les e-mails lors de la confirmation de la réservation
+
+        // Met à jour le statut et l'ID de l'agent
+        $reservation->update([
+            'status' => 'confirmée',
+            'id_agent' => auth()->id(),  // Enregistre l’agent connecté
+        ]);
+
+        // Envoyer les e-mails lors de la confirmation
         $this->envoyerEmailReservation($reservation, 'confirmée');
-        // Ajouter l'événement à Google Calendar
+
+        // Ajouter à Google Calendar
         $this->addToGoogleCalendar($reservation);
-         return back()->with('success', 'Réservation confirmée.');
-         
+
+        // Ajouter 5 points au client
+        if ($reservation->client) {
+            $reservation->client->points += 5;
+            $reservation->client->loyalty_points += 1;
+            $reservation->client->save();
+        }
+        
+
+        // Ajouter 1 point à l'agent (utilisateur connecté)
+        $agent = auth()->user();
+        if ($agent) {
+            $agent->points += 5;
+            $agent->save();
+        }
+
+        return back()->with('success', 'Réservation confirmée.');
     }
 
 
@@ -425,19 +445,34 @@ class ReservationController extends Controller
     {
         $now = Carbon::now();
         $heureRamassage = Carbon::parse($reservation->heure_ramassage);
-
+    
+        $reservation->load(['client', 'carDriver.chauffeur']);
+    
         if ($now->diffInMinutes($heureRamassage, false) <= 120) {
             return back()->withErrors(['status' => 'Annulation impossible moins de 2h avant le départ.']);
         }
-
-
-         // Assurez-vous que la réservation est chargée avec les relations nécessaires
-        $reservation->load(['client', 'carDriver.chauffeur']);
-
-        $reservation->update(['status' => 'annulée']);
+    
+        // Mettre à jour le statut et l'agent qui a annulé
+        $reservation->update([
+            'status' => 'annulée',
+            'id_agent' => auth()->id(), // l'agent qui annule
+        ]);
+    
+        // Retirer 5 points au client
+        if ($reservation->client) {
+            $reservation->client->points = max(0, $reservation->client->points - 5);
+            $reservation->client->loyalty_points = max(0, $reservation->client->loyalty_points - 0.5);
+            $reservation->client->save();
+        }
+        
+    
+        // Envoyer email
         $this->envoyerEmailReservation($reservation, 'annulée');
+    
         return back()->with('success', 'Réservation annulée.');
     }
+    
+
 
     public function destroy(Reservation $reservation)
     {
@@ -500,10 +535,13 @@ class ReservationController extends Controller
 
     public function cancelled()
     {
+        // Récupérer toutes les réservations annulées
         $reservations = Reservation::where('status', 'annulée')->get();
+    
+        // Retourner la vue avec les réservations annulées
         return view('reservations.cancelled', compact('reservations'));
     }
-
+    
     /**
      * Affiche une réservation spécifique.
      */

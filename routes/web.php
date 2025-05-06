@@ -7,6 +7,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CardriverController;
+use App\Http\Controllers\ClientDashboardController;
 use App\Http\Controllers\DashController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
@@ -91,7 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [DashController::class, 'adminIndex'])->name('dashboard.admin');
 
     // Routes pour le Client
-    Route::get('/client/dashboard', [DashController::class, 'clientIndex'])->name('dashboard.client');
+    Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard.client');
 
     // Routes pour le Chauffeur
     Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->name('dashboard.chauffeur');
@@ -247,5 +248,10 @@ Route::get('/oauth2callback', function () {
 });
 Route::get('/calendar', [ReservationController::class, 'showCalendar']);
 
+//DashboardStts
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
+// });
 
 require __DIR__.'/auth.php';

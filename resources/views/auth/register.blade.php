@@ -1,117 +1,335 @@
-<?php declare(strict_types=1); ?>
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
-        @csrf
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulaire d'inscription</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Type d'utilisateur -->
-        <div>
-            <x-input-label for="user_type" :value="__('Inscription en tant que')" />
-            <select id="user_type" name="user_type" class="block mt-1 w-full" required>
-                <option value="client">Client</option>
-                <option value="entreprise">Entreprise</option>
-            </select>
-            <x-input-error :messages="$errors->get('user_type')" class="mt-2" />
-        </div>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Pour les clients : Prénom et Nom -->
-        <div id="client-fields">
-            <div class="mt-4">
-                <x-input-label for="first_name" :value="__('Prénom')" />
-                <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" autocomplete="given-name"/>
-                <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
-            </div>
-
-            <div class="mt-4">
-                <x-input-label for="last_name" :value="__('Nom')" />
-                <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" autocomplete="family-name"/>
-                <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
-            </div>
-        </div>
-
-        <!-- Pour les entreprises : Nom de l'entreprise -->
-        <div id="entreprise-fields" class="hidden">
-            <div class="mt-4">
-                <x-input-label for="name" :value="__('Nom de l\'entreprise')" />
-                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autocomplete="organization"/>
-                <x-input-error :messages="$errors->get('name')" class="mt-2" />
-            </div>
-        </div>
-
-        <!-- Adresse -->
-        <div class="mt-4">
-            <x-input-label for="address" :value="__('Adresse')" />
-            <x-text-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required />
-            <x-input-error :messages="$errors->get('address')" class="mt-2" />
-        </div>
-
-        <!-- Numéro de téléphone -->
-        <div class="mt-4">
-            <x-input-label for="phone_number" :value="__('Numéro de téléphone')" />
-            <x-text-input id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" :value="old('phone_number')" required />
-            <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
-        </div>
-
-        <!-- Email -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username"/>
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Mot de passe -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Mot de passe')" />
-            <x-text-input id="password" class="block mt-1 w-full"
-                          type="password" name="password" required autocomplete="new-password"/>
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirmation du mot de passe -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirmer le mot de passe')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                          type="password" name="password_confirmation" required autocomplete="new-password"/>
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <!-- Photo de profil -->
-        <div class="mt-4">
-            <x-input-label for="profile_photo" :value="__('Photo de profil')" />
-            <input id="profile_photo" class="block mt-1 w-full" type="file" name="profile_photo" accept="image/*">
-            <x-input-error :messages="$errors->get('profile_photo')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Déjà inscrit ?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('S\'inscrire') }}
-            </x-primary-button>
-        </div>
-    </form>
-
-    <!-- Script pour afficher les champs en fonction du type d'utilisateur -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const userTypeSelect = document.getElementById("user_type");
-    const clientFields = document.getElementById("client-fields");
-    const entrepriseFields = document.getElementById("entreprise-fields");
-
-    function toggleFields() {
-        if (userTypeSelect.value === "client") {
-            clientFields.classList.remove("hidden");
-            entrepriseFields.classList.add("hidden");
-        } else {
-            clientFields.classList.add("hidden");
-            entrepriseFields.classList.remove("hidden");
+    <style>
+        .form-label {
+            font-size: 0.9rem;
         }
+
+        .form-control {
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .logo-mobile {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 120px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        button.btn-lg {
+            font-size: 1rem;
+            padding: 0.6rem 1.5rem;
+        }
+
+        .is-invalid {
+            border-color: red;
+        }
+
+        .invalid-feedback {
+            display: block;
+            font-size: 0.8rem;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 rounded-4 w-100" style="max-width: 800px;">
+        
+        <!-- Logo centré -->
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Mobile" class="logo-mobile">
+
+        <h2 class="text-center mb-4 fw-bold text-primary">Inscription</h2>
+
+        <!-- Affichage des erreurs de Laravel -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0 small">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="mt-3" id="registrationForm" novalidate>
+            @csrf
+
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="first_name" class="form-label">Prénom</label>
+                    <input type="text" name="first_name" id="first_name" class="form-control rounded-3 shadow-sm @error('first_name') is-invalid @enderror" 
+                           placeholder="Ex: Jean" required value="{{ old('first_name') }}">
+                    <div class="invalid-feedback @if(!$errors->has('first_name')) d-none @endif">
+                        @error('first_name')
+                            {{ $message }}
+                        @else
+                            Le prénom doit contenir au moins 3 caractères.
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="last_name" class="form-label">Nom</label>
+                    <input type="text" name="last_name" id="last_name" class="form-control rounded-3 shadow-sm @error('last_name') is-invalid @enderror" 
+                           placeholder="Ex: Dupont" required value="{{ old('last_name') }}">
+                    <div class="invalid-feedback @if(!$errors->has('last_name')) d-none @endif">
+                        @error('last_name')
+                            {{ $message }}
+                        @else
+                            Le nom est requis.
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="address" class="form-label">Adresse</label>
+                    <input type="text" name="address" id="address" class="form-control rounded-3 shadow-sm @error('address') is-invalid @enderror" 
+                           placeholder="Ex: 123 Rue Principale" required value="{{ old('address') }}">
+                    <div class="invalid-feedback @if(!$errors->has('address')) d-none @endif">
+                        @error('address')
+                            {{ $message }}
+                        @else
+                            L'adresse est requise.
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="phone_number" class="form-label">Téléphone</label>
+                    <input type="text" name="phone_number" id="phone_number" class="form-control rounded-3 shadow-sm @error('phone_number') is-invalid @enderror" 
+                           placeholder="Ex: 771234567" required value="{{ old('phone_number') }}">
+                    <div class="invalid-feedback @if(!$errors->has('phone_number')) d-none @endif">
+                        @error('phone_number')
+                            {{ $message }}
+                        @else
+                            Le numéro de téléphone doit commencer par 75, 76, 77 ou 78 et être composé de 9 chiffres.
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control rounded-3 shadow-sm @error('email') is-invalid @enderror" 
+                           placeholder="Ex: agent@example.com" required value="{{ old('email') }}">
+                    <div class="invalid-feedback @if(!$errors->has('email')) d-none @endif">
+                        @error('email')
+                            {{ $message }}
+                        @else
+                            Veuillez entrer une adresse email valide.
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="profile_photo" class="form-label">Photo de profil (optionnel)</label>
+                    <input type="file" name="profile_photo" id="profile_photo" class="form-control rounded-3 shadow-sm @error('profile_photo') is-invalid @enderror" accept="image/*">
+                    @error('profile_photo')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" name="password" id="password" class="form-control rounded-3 shadow-sm @error('password') is-invalid @enderror" 
+                           placeholder="Mot de passe" required>
+                    <div class="invalid-feedback @if(!$errors->has('password')) d-none @endif">
+                        @error('password')
+                            {{ $message }}
+                        @else
+                            Le mot de passe doit contenir au moins 6 caractères.
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <label for="password_confirmation" class="form-label">Confirmer mot de passe</label>
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control rounded-3 shadow-sm" 
+                           placeholder="Confirmer" required>
+                    <div class="invalid-feedback d-none">Les mots de passe ne correspondent pas.</div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold rounded-pill">
+                    S'inscrire
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    
+    // Objets pour suivre l'état de chaque champ
+    const fieldTouched = {};
+    
+    // Au chargement initial, supprimer toutes les classes is-invalid des champs
+    // sauf si nous sommes revenus d'une soumission avec des erreurs Laravel
+    const formFields = form.querySelectorAll('input');
+    const hasLaravelErrors = document.querySelector('.alert-danger') !== null;
+    
+    if (!hasLaravelErrors) {
+        formFields.forEach(field => {
+            if (!field.classList.contains('@error(' + field.name + ') is-invalid @enderror')) {
+                field.classList.remove('is-invalid');
+            }
+        });
     }
-
-    userTypeSelect.addEventListener("change", toggleFields);
-    toggleFields(); // Initialiser au chargement
+    
+    // Fonction pour valider un champ
+    function validateField(field) {
+        let isValid = true;
+        
+        // Si le champ n'a pas encore été touché, ne pas valider
+        if (!fieldTouched[field.id] && field.value.trim() === '') {
+            field.classList.remove('is-invalid');
+            return true;
+        }
+        
+        // Validation du prénom
+        if (field.id === 'first_name') {
+            if (field.value.trim().length < 3 && field.value.trim() !== '') {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        }
+        
+        // Validation du nom
+        if (field.id === 'last_name') {
+            if (field.value.trim() === '' && fieldTouched[field.id]) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        }
+        
+        // Validation de l'adresse
+        if (field.id === 'address') {
+            if (field.value.trim() === '' && fieldTouched[field.id]) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        }
+        
+        // Validation du téléphone
+        if (field.id === 'phone_number') {
+            const phoneRegex = /^(77|76|78|75)[0-9]{7}$/;
+            if (field.value.trim() !== '' && !phoneRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        }
+        
+        // Validation de l'email
+        if (field.id === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (field.value.trim() !== '' && !emailRegex.test(field.value)) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        }
+        
+        // Validation du mot de passe
+        if (field.id === 'password') {
+            if (field.value.trim() !== '' && field.value.trim().length < 6) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+                
+                // Vérifier aussi la confirmation du mot de passe si elle existe déjà
+                const confirmPassword = document.getElementById('password_confirmation');
+                if (confirmPassword.value.trim() !== '') {
+                    validateField(confirmPassword);
+                }
+            }
+        }
+        
+        // Validation de la confirmation du mot de passe
+        if (field.id === 'password_confirmation') {
+            const password = document.getElementById('password');
+            if (field.value.trim() !== '' && field.value !== password.value) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        }
+        
+        return isValid;
+    }
+    
+    // Surveiller les événements sur tous les champs
+    const formFields = form.querySelectorAll('input');
+    formFields.forEach(field => {
+        // Marquer le champ comme touché lorsque l'utilisateur commence à saisir
+        field.addEventListener('input', function() {
+            fieldTouched[this.id] = true;
+            validateField(this);
+        });
+        
+        // Valider lors de la perte de focus
+        field.addEventListener('blur', function() {
+            fieldTouched[this.id] = true;
+            validateField(this);
+        });
+    });
+    
+    // Validation du formulaire lors de la soumission
+    form.addEventListener('submit', function(e) {
+        let formValid = true;
+        
+        // Marquer tous les champs comme touchés
+        formFields.forEach(field => {
+            fieldTouched[field.id] = true;
+        });
+        
+        // Valider tous les champs
+        formFields.forEach(field => {
+            if (!validateField(field)) {
+                formValid = false;
+            }
+        });
+        
+        // Vérifier spécifiquement que les mots de passe correspondent
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('password_confirmation');
+        if (password.value !== confirmPassword.value && password.value.trim() !== '') {
+            password.classList.add('is-invalid');
+            confirmPassword.classList.add('is-invalid');
+            formValid = false;
+        }
+        
+        // Empêcher l'envoi du formulaire si non valide
+        if (!formValid) {
+            e.preventDefault();
+        }
+    });
 });
-
-    </script>
-</x-guest-layout>
+</script>
+</body>
+</html>

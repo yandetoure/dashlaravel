@@ -44,7 +44,7 @@
 </style>
 
         <div class="card shadow-lg p-4">
-            <h1 class="text-center mb-4">📋 Liste des Super admins</h1>
+            <h1 class="text-center">📋 Liste des Super admins</h1>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped shadow-sm rounded table-spacing">
                     <thead class="table-dark text-center">

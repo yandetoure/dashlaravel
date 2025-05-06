@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('profile_photo')->nullable();
             $table->string('day_off')->nullable();
             $table->timestamp('day_off_assigned_at')->nullable();
+            $table->integer('points')->default(0);
+            $table->float('loyalty_points')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

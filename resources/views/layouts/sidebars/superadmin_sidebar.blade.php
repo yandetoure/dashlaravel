@@ -32,6 +32,7 @@
             flex-direction: column;
             transition: transform 0.3s ease-in-out;
             z-index: 1050;
+            padding-bottom: 100px;
         }
 
         #sidebar.hidden {

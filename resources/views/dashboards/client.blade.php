@@ -11,6 +11,19 @@
     <title>Mon Espace Client - CarReserv</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        @php
+        $points = Auth::user()->points_fidelite;
+        if ($points < 100) {
+            $status = 'Client Standard';
+        } elseif ($points <= 200) {
+            $status = 'Client Fidèle';
+        } elseif ($points > 300) {
+            $status = 'Client VIP';
+        } else {
+            $status = 'Client';
+        }
+    @endphp
+
     <script>
         tailwind.config = {
             theme: {
@@ -39,43 +52,27 @@
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
         }
+        
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
     <div class="flex h-screen overflow-hidden">
         <!-- Main Content -->
         <div class="flex-1 overflow-auto">
-            <!-- Header -->
-            <header class="bg-white shadow-sm">
-                <div class="flex justify-between items-center p-4">
-                    <h2 class="text-xl font-semibold text-gray-800">Mon Tableau de bord</h2>
-                    <div class="flex items-center space-x-4">
-                        <button class="px-4 py-2 bg-primary text-white rounded-lg flex items-center">
-                            <i class="fas fa-plus mr-2"></i>
-                            <span>Nouvelle réservation</span>
-                        </button>
-                        <button class="p-2 text-gray-600 hover:text-primary">
-                            <i class="fas fa-bell"></i>
-                            <span class="absolute top-2 right-2 h-2 w-2 rounded-full bg-danger"></span>
-                        </button>
-                    </div>
-                </div>
-            </header>
-
             <!-- Dashboard Content -->
             <main class="p-6">
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-primary to-blue-400 rounded-lg shadow p-6 mb-6 text-white">
-                    <h2 class="text-2xl font-bold mb-2">Bonjour, Moussa Diallo !</h2>
+                    <h2 class="text-2xl font-bold mb-2">Bonjour, {{ Auth::user()->role === 'client' ? Auth::user()->name : Auth::user()->first_name . ' ' . Auth::user()->last_name }} !</h2>
                     <p class="mb-4">Bienvenue dans votre espace client. Gérez facilement vos réservations et vos factures.</p>
                     <div class="flex space-x-4">
-                        <div class="bg-white bg-opacity-20 p-3 rounded-lg flex items-center">
+                        <div class="px-4 py-2 bg-primary text-white rounded-lg flex bg-opacity-20 p-3 rounded-lg flex items-center">
                             <i class="fas fa-star mr-2"></i>
-                            <span>Client VIP</span>
+                                <span>{{ $status }}</span>
                         </div>
-                        <div class="bg-white bg-opacity-20 p-3 rounded-lg flex items-center">
+                        <div class="px-4 py-2 bg-primary text-white rounded-lg  bg-opacity-20 p-3 rounded-lg flex items-center">
                             <i class="fas fa-calendar-check mr-2"></i>
-                            <span>12 réservations cette année</span>
+                            <span>{{$todayReservations ??  '0' }} cette année</span>
                         </div>
                     </div>
                 </div>
@@ -87,7 +84,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Réservations aujourd'hui</p>
-                                <h3 class="text-2xl font-bold mt-1">2</h3>
+                                <h3 class="text-2xl font-bold mt-1">{{$todayReservations ?? '0' }}</h3>
                                 <p class="text-xs text-gray-500 mt-1">En cours et à venir</p>
                             </div>
                             <div class="p-3 bg-blue-100 rounded-full text-primary">
@@ -101,7 +98,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Réservations ce mois</p>
-                                <h3 class="text-2xl font-bold mt-1">5</h3>
+                                <h3 class="text-2xl font-bold mt-1">{{$monthlyReservations ?? '0' }}</h3>
                                 <p class="text-xs text-green-500 mt-1 flex items-center">
                                     <i class="fas fa-arrow-up mr-1"></i>
                                     <span>2 de plus que le mois dernier</span>
@@ -118,7 +115,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Factures impayées</p>
-                                <h3 class="text-2xl font-bold mt-1">3</h3>
+                                <h3 class="text-2xl font-bold mt-1">{{$monthlyReservations ?? '0' }}</h3>
                                 <p class="text-xs text-gray-500 mt-1">Total: 225,000 FCFA</p>
                             </div>
                             <div class="p-3 bg-red-100 rounded-full text-danger">
@@ -132,7 +129,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Points fidélité</p>
-                                <h3 class="text-2xl font-bold mt-1">1,250</h3>
+                                <h3 class="text-2xl font-bold mt-1">{{ $loyaltyPoints ?? '0' }} </h3>
                                 <p class="text-xs text-gray-500 mt-1">50 points jusqu'au prochain avantage</p>
                             </div>
                             <div class="p-3 bg-yellow-100 rounded-full text-warning">

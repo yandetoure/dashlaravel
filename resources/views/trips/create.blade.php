@@ -35,7 +35,7 @@
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-<div class="container mt-5">
+<div>
     <h2 class="text-center mb-4">Créer un Trajet</h2>
     <form action="{{ route('trips.store') }}" method="POST" class="bg-light p-4 rounded shadow-sm">
         @csrf

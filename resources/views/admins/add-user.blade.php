@@ -129,7 +129,7 @@
                         
                         <div>
                             <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Numéro de téléphone</label>
-                            <input type="text" id="phone_number" name="phone_number" placeholder="+33 X XX XX XX XX" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <input type="text" id="phone_number" name="phone_number" placeholder="+7X XXX XX XX" pattern="[0-9]{9}" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                         </div>
                     </div>
                     

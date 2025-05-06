@@ -28,7 +28,9 @@ class User extends Authenticatable
         'password',
         'profile_photo',
         'day_off', 
-        'day_off_assigned_at'
+        'day_off_assigned_at',
+        'points',
+        'loyalty_points',
     ];
 
     /**
