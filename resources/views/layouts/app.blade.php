@@ -70,7 +70,7 @@
     overflow-y: auto;
 }
 .main-content main {
-    margin-top: 100px;
+    padding-top: 100px;
 }
 
     </style>

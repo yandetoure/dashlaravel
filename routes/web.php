@@ -167,7 +167,9 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
 Route::post('/reservations/{reservation}/avis', [ReservationController::class, 'storeAvis'])->name('reservations.avis');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('reservations/calendar', [ReservationController::class, 'calendar'])->name('reservations.calendar');
+    // Route::get('reservations/calendar', [ReservationController::class, 'calendar'])->name('reservations.calendar');
+    // Route::get('/calendar', [ReservationController::class, 'showCalendar'])->name('Calendar');
+    Route::get('/reservations/calendar', [ReservationController::class, 'showCalendar'])->name('reservations.showCalendar');
 });
 
 Route::get('/reservations/agent/create', [ReservationController::class, 'agentCreateReservation'])->name('reservations.agent.create.reservation');
@@ -246,7 +248,7 @@ Route::get('/oauth2callback', function () {
         return response()->json(['error' => 'Erreur lors de l\'authentification : ' . $e->getMessage()], 400);
     }
 });
-Route::get('/calendar', [ReservationController::class, 'showCalendar']);
+// Route::get('/reservations/calendar', [ReservationController::class, 'showCalendar'])->name('reservations.showCalendar');
 
 //DashboardStts
 

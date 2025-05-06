@@ -129,6 +129,7 @@
             <ul class="nav nav-pills flex-column mb-auto">
                 <h6>Dashboard</h6>
                 <li><a href="{{ route('dashboard.superadmin') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
+                <li><a href="{{ route('reservations.showCalendar') }}" class="nav-link {{ request()->routeIs('reservations.showCalendar') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Calendier</a></li>
 
                 <h6>Réservations</h6>
                 <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>

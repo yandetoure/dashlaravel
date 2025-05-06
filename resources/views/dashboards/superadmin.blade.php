@@ -35,6 +35,9 @@
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
         }
+        body{
+            padding-top: -180px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
