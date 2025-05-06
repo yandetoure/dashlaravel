@@ -12,10 +12,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         @php
-        $points = Auth::user()->points_fidelite;
+        $points = Auth::user()->points;
         if ($points < 100) {
             $status = 'Client Standard';
-        } elseif ($points <= 200) {
+        } elseif ($points <= 101) {
             $status = 'Client Fidèle';
         } elseif ($points > 300) {
             $status = 'Client VIP';
@@ -129,7 +129,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Points fidélité</p>
-                                <h3 class="text-2xl font-bold mt-1">{{ $loyaltyPoints ?? '0' }} </h3>
+                                <h3 class="text-2xl font-bold mt-1">{{ Auth::user()->role === 'client' ? Auth::user()->name : Auth::user()->loyalty_points}} </h3>
                                 <p class="text-xs text-gray-500 mt-1">50 points jusqu'au prochain avantage</p>
                             </div>
                             <div class="p-3 bg-yellow-100 rounded-full text-warning">

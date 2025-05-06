@@ -11,8 +11,13 @@ class ClientDashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->fresh();
     
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login'); // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+        }
+
         // Réservations
         $todayReservations = Reservation::whereDate('date', now())->where('client_id', $user->id)->count();
         $monthlyReservations = Reservation::whereMonth('date', now()->month)->where('client_id', $user->id)->count();
@@ -31,9 +36,6 @@ class ClientDashboardController extends Controller
             ->whereDate('date', '>=', now())
             ->orderBy('date')
             ->first();
-    
-        // Debugging : Afficher les données
-        dd($user, $points, $loyaltyPoints, $todayReservations, $monthlyReservations, $yearlyReservations);
     
         return view('client.dashboard', compact(
             'user',

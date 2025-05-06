@@ -448,15 +448,19 @@ class ReservationController extends Controller
     
         $reservation->load(['client', 'carDriver.chauffeur']);
     
-        if ($now->diffInMinutes($heureRamassage, false) <= 120) {
-            return back()->withErrors(['status' => 'Annulation impossible moins de 2h avant le départ.']);
-        }
+        // if ($now->diffInMinutes($heureRamassage, false) <= 120) {
+        //     return back()->withErrors(['status' => 'Annulation impossible moins de 2h avant le départ.']);
+        // }
     
         // Mettre à jour le statut et l'agent qui a annulé
-        $reservation->update([
-            'status' => 'annulée',
-            'id_agent' => auth()->id(), // l'agent qui annule
-        ]);
+        try {
+            $reservation->update([
+                'status' => 'annulée',
+                'id_agent' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     
         // Retirer 5 points au client
         if ($reservation->client) {
@@ -471,7 +475,6 @@ class ReservationController extends Controller
     
         return back()->with('success', 'Réservation annulée.');
     }
-    
 
 
     public function destroy(Reservation $reservation)
