@@ -109,7 +109,7 @@
         border-radius: 8px;
         transition: background 0.3s ease-in-out;
         color:rgb(104, 6, 6) !important;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .nav-link:hover {
@@ -126,5 +126,7 @@
     color: rgb(0, 0, 0) !important;
 }
 
-    
+    h6{
+        font-size: 14px;
+    }    
 </style>

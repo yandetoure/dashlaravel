@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CardriverController;
 use App\Http\Controllers\ClientDashboardController;
 use App\Http\Controllers\DashController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+// Route pour afficher tous les utilisateurs avec filtre
 
 Route::middleware('auth:')->group(function () {
     Route::get('/admin/create-account', [AuthController::class, 'createAccountPage'])
@@ -30,11 +34,18 @@ Route::middleware('auth:')->group(function () {
     Route::get('/drivers', [AuthController::class, 'listdriver'])->name('drivers.index');
     Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
     Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
-    Route::get('/superaddmin', [AuthController::class, 'listsuperadmin'])->name('superadmins.index');
+    Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
 
     Route::Resource('cars', CarController::class); 
     Route::Resource('auth', AuthController::class); 
     Route::resource('trips', TripController::class); 
+
+    // Route::get('/users', [AuthController::class, 'listAllUsers'])->name('users.all');
+
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::post('/invoices/{id}/mark-as-paid', [InvoiceController::class, 'markAsPaid'])->name('invoices.markAsPaid');
+    Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])->name('invoices.download');
 
 });
 

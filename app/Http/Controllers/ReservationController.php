@@ -8,6 +8,7 @@ use App\Models\Trip;
 use App\Models\User;
 use App\Models\CarDriver;
 use App\Models\Maintenance;
+use App\Models\Invoice;
 use App\Models\Reservation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -189,6 +190,7 @@ class ReservationController extends Controller
          $reservation->load(['client', 'carDriver.chauffeur']);
          // Envoi des e-mails de réservation
          $this->envoyerEmailReservation($reservation, 'created');
+         
 
         return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès.');
     }
@@ -436,6 +438,14 @@ class ReservationController extends Controller
             $agent->points += 5;
             $agent->save();
         }
+
+        Invoice::create([
+            'reservation_id' => $reservation->id,
+            'amount' => $reservation->tarif,
+            'status' => 'unpaid',
+            'invoice_number' => Invoice::generateInvoiceNumber(),
+            'invoice_date' => now(),
+        ]);
 
         return back()->with('success', 'Réservation confirmée.');
     }

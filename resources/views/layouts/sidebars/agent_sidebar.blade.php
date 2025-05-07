@@ -21,11 +21,19 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <!-- Example of dynamically visible links based on user role -->
             <li><a href="{{ route('dashboard.agent') }}" class="nav-link" aria-label="Go to dashboard"><span class="material-icons">assignment</span> Tableau de bord</a></li>
-            <li><a href="{{ route('trips.index') }}" class="nav-link" aria-label="Manage trips"><span class="material-icons">directions_car</span> Trajets</a></li>
+            <li><a href="{{ route('reservations.showCalendar') }}" class="nav-link {{ request()->routeIs('reservations.showCalendar') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Calendier</a></li>
+
+            <h6>Réservations</h6> 
             <li><a href="{{ route('superadmins.index') }}" class="nav-link" aria-label="View Super Admins"><span class="material-icons">people</span> Liste des Super Admins</a></li>
+            <li><a href="{{ route('trips.index') }}" class="nav-link" aria-label="Manage trips"><span class="material-icons">directions_car</span> Trajets</a></li>
+
+            <h6>Utilisateurs</h6>
             <li><a href="{{ route('admins.index') }}" class="nav-link" aria-label="Manage Admins"><span class="material-icons">people</span> Utilisateurs</a></li>
             <li><a href="{{ route('clients.index') }}" class="nav-link" aria-label="Manage clients"><span class="material-icons">person</span> Liste des Clients</a></li>
+
+            <h6>Voitures</h6>
             <li><a href="{{ route('cars.index') }}" class="nav-link" aria-label="Manage cars"><span class="material-icons">directions_car</span> Liste des Voitures</a></li>
+            <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
         </ul>
     </div>
 </div>
@@ -65,7 +73,7 @@
         border-radius: 8px;
         transition: background 0.3s ease-in-out;
         color: rgb(104, 6, 6) !important;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .nav-link:hover {
@@ -88,4 +96,7 @@
             display: none;
         }
     }
+        h6{
+        font-size: 14px;
+        }
 </style>

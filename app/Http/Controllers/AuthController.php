@@ -308,5 +308,33 @@ public function showAdminDashboard()
     return view('dashboards.admin', compact('statistics'));
 }
 
+/**
+ * Affiche tous les utilisateurs avec possibilité de filtrer par rôle
+ * 
+ * @param Request $request
+ * @return \Illuminate\View\View
+ */
+public function listAllUsers(Request $request)
+{
+    // Récupérer le filtre de rôle s'il existe
+    $roleFilter = $request->query('role');
+    
+    // Liste de tous les rôles disponibles
+    $roles = Role::all()->pluck('name');
+    
+    // Requête de base
+    $query = User::query();
+    
+    // Appliquer le filtre de rôle si spécifié
+    if ($roleFilter && $roleFilter !== 'all') {
+        $query->role($roleFilter);
+    }
+    
+    // Récupérer les utilisateurs avec pagination
+    $users = $query->paginate(10);
+    
+    // Retourner la vue avec les utilisateurs et les rôles
+    return view('superadmins.index', compact('users', 'roles', 'roleFilter'));
+}
 
 }

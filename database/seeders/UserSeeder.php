@@ -26,5 +26,65 @@ class UserSeeder extends Seeder
     ]);
     $user1->assignRole('super-admin'); 
      
+        // Création d'utilisateurs fictifs
+        $user2 = User::create([
+            'first_name' => 'Yandeh',
+            'last_name' => 'Toure',
+            'email' => 'yandeh@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777908190',
+        ]);
+        $user2->assignRole('client'); 
+         
+            // Création d'utilisateurs fictifs
+        $user3 = User::create([
+            'first_name' => 'Hamady',
+            'last_name' => 'Dieng',
+            'email' => 'dieng@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777908107',
+        ]);
+        $user3->assignRole('chauffeur'); 
+        
+        $user4 = User::create([
+            'first_name' => 'Bousso',
+            'last_name' => 'Dip',
+            'email' => 'bousso@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777900107',
+        ]);
+        $user4->assignRole('agent'); 
+        
+        $user5 = User::create([
+            'first_name' => 'Bousso',
+            'last_name' => 'Diop',
+            'email' => 'diop@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777900134',
+        ]);
+        $user5->assignRole('agent'); 
+        
+        $user5=  User::create([
+            'first_name' => 'Hamdy',
+            'last_name' => 'Ka',
+            'email' => 'ka@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777900111',
+        ]);
+        $user5->assignRole('garagiste'); 
+
+        $user5=  User::create([
+            'name' => 'CMA',
+            'email' => 'cpro@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221338009900',
+        ]);
+        $user5->assignRole('entreprise'); 
     }   
 }
