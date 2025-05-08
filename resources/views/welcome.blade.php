@@ -266,7 +266,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Accompagnement clients</span>
+                            <span>Refferences compagnies internationales</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
