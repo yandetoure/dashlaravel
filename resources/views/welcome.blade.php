@@ -270,7 +270,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Fartenaire AIBD</span>
+                            <span>Partenaire AIBD</span>
                         </li>
                     </ul>
                 </div>
@@ -286,16 +286,17 @@
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Voyages inter-régions</span>
+                            <span>Suivi et informations de vol</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Véhicules adaptés</span>
+                            <span>Accueil et Facilitation de passage</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Trajets sur mesure</span>
+                            <span>Récupération valises / Réclamations</span>
                         </li>
+
                     </ul>
                 </div>
             </div>
