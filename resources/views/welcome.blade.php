@@ -238,7 +238,7 @@
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Sécurité</span>
+                            <span>Sécurité : Chauffeurs expérimentés, vitesse controlée</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
