@@ -159,7 +159,7 @@
             
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Service 1 -->
-                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                {{-- <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-red-600 mb-4">
                         <i class="fas fa-shuttle-van text-4xl"></i>
                     </div>
@@ -226,7 +226,7 @@
                         </li>
                     </ul>
                 </div>
-                
+                 --}}
                 <!-- Service 4 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-red-600 mb-4">
