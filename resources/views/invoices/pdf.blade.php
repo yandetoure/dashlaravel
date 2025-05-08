@@ -124,11 +124,11 @@
 
         <div class="payment-info">
             <strong>Statut:</strong> 
-                                @if($invoice->status == 'Payée')
+                                @if($invoice->status == 'payée')
                                     <span class="badge bg-success">Payée</span>
-                                @elseif($invoice->status == 'unpaid')
+                                @elseif($invoice->status == 'en_attente')
                                     <span class="badge bg-warning text-dark">En attente de paiement</span>
-                                @elseif($invoice->status == 'En retard')
+                                @elseif($invoice->status == 'offert')
                                     <span class="badge bg-danger">Offert</span>
                                 @else
                                     <span class="badge bg-secondary">{{ $invoice->status }}</span>

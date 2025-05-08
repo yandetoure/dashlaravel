@@ -81,7 +81,41 @@
                     </div>
                 </div>
             </div>
-            
+            <!-- Cartes statistiques -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total des factures</h5>
+                <h2 class="card-text mb-2">{{ number_format($stats['total_amount'], 2) }} Fcfa</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Factures payées</h5>
+                <h4 class="card-text mb-2">{{ number_format($stats['paid_amount'], 2) }} Fcfa</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">En attente</h5>
+                <h2 class="card-text mb-2">{{ number_format($stats['total_amount'] - $stats['paid_amount'], 2) }} Fcfa</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h5 class="card-title">En retard</h5>
+                <h2 class="card-text mb-2">{{ number_format($stats['unpaid_amount'], 2) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
             <!-- Filtres -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -101,20 +135,20 @@
                             <label for="status">Statut</label>
                             <select class="form-control" id="status" name="status">
                                 <option value="">Tous</option>
-                                <option value="En attente" {{ request('status') == 'En attente' ? 'selected' : '' }}>En attente</option>
-                                <option value="Payée" {{ request('status') == 'Payée' ? 'selected' : '' }}>Payée</option>
-                                <option value="En retard" {{ request('status') == 'En retard' ? 'selected' : '' }}>En retard</option>
-                                <option value="Annulée" {{ request('status') == 'Annulée' ? 'selected' : '' }}>Annulée</option>
+                                <option value="En attente" {{ request('status') == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                                <option value="Payée" {{ request('status') == 'payée' ? 'selected' : '' }}>Payée</option>
+                                {{-- <option value="En retard" {{ request('status') == 'en_attente' ? 'selected' : '' }}>En retard</option> --}}
+                                <option value="Annulée" {{ request('status') == 'offert' ? 'selected' : '' }}>Gratuit</option>
                             </select>
                         </div>
-                        <div class="col-md-2 mb-3">
+                        {{-- <div class="col-md-2 mb-3">
                             <label for="date_from">Date début</label>
                             <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="date_to">Date fin</label>
                             <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request('date_to') }}">
-                        </div>
+                        </div> --}}
                         <div class="col-md-2 mb-3 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary me-2">Filtrer</button>
                             <a href="{{ route('invoices.index') }}" class="btn btn-secondary">Réinitialiser</a>
@@ -149,12 +183,12 @@
                                         <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}</td>
                                         <td>{{ number_format((float) $invoice->amount) }} Fcfa</td>
                                         <td>
-                                             @if($invoice->status == 'Payée')
+                                             @if($invoice->status == 'payée')
                                         <span class="badge bg-success">Payée</span>
-                                        @elseif($invoice->status == 'unpaid')
-                                            <span class="badge bg-warning text-dark">En attente de paiemen</span>
                                         @elseif($invoice->status == 'en_attente')
-                                            <span class="badge bg-danger">En retard</span>
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        @elseif($invoice->status == 'en_attente')
+                                            <span class="badge bg-danger">Gratuit</span>
                                         @else
                                             <span class="badge bg-secondary">{{ $invoice->status }}</span>
                                         @endif
@@ -167,7 +201,7 @@
                                                 <a href="{{ route('invoices.download', $invoice->id) }}" class="btn btn-sm btn-secondary">
                                                     <i class="fas fa-download"></i> PDF
                                                 </a>
-                                                @if(Auth::user()->can('manage invoices') && $invoice->status != 'Payée')
+                                                @if($invoice->status != 'Payée')
                                                     <form action="{{ route('invoices.markAsPaid', $invoice->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Marquer cette facture comme payée?')">

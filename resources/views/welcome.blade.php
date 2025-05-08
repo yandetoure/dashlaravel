@@ -101,13 +101,12 @@
 
                     <form id="availability-form" class="text-gray-800">
                         <div class="mb-4">
-                            <label class="block mb-2">Type de service</label>
+                            <label class="block mb-2">Sens du trajet</label>
                             <select id="trip_id" name="trip_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                                <option value="1">Navette AIBD</option>
-                                {{-- <option value="2">Voiture avec chauffeur</option>
-                                <option value="3">Transfert privé</option>
-                                <option value="4">Location hors Dakar</option>
-                                <option value="5">Service entreprises</option> --}}
+                                <option value="1">Dakar - AIBD</option>
+                                <option value="1">AIBD - Dakar</option>
+                                <option value="2">Dakar - Saly</option>
+                                <option value="3">Saly - Dakar</option>
                             </select>
                         </div>
 
@@ -449,35 +448,91 @@
                 <div class="md:w-1/2">
                     <div class="bg-white p-8 rounded-lg shadow-xl max-w-md mx-auto">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Complétez votre réservation</h3>
-                        <form>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Nom complet</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <!-- Messages d'erreur -->
+                    @if($errors->any())
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
+                            <strong>Erreur(s) :</strong>
+                            <ul class="list-disc ml-4">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                        <form action="{{ route('reservations.storeByProspect') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @csrf
+                            <!-- 1. Nom complet -->
+                            <div>
+                                <label for="first_name" class="block text-gray-700 mb-2">Prénom</label>
+                                <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+
+                            <div>
+                                <label for="last_name"class="block text-gray-700 mb-2">Nom</label>
+                                <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Téléphone</label>
-                                <input type="tel" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+
+                            <!-- 2. Email -->
+                            <div>
+                                <label for="email" class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 mb-2">Point de départ</label>
-                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                                    <option>Hôtel Terrou-Bi</option>
-                                    <option>Radisson Blu</option>
-                                    <option>King Fahd Palace</option>
-                                    <option>Almadies</option>
-                                    <option>Plateau</option>
-                                    <option>Autre (préciser)</option>
+                            <!-- 3. Téléphone -->
+                            <div>
+                                <label for="phone_number" class="block text-gray-700 mb-2">Téléphone</label>
+                                <input type="tel" name="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                            </div>
+                            <!-- 4. Point de départ -->
+                            <div>
+                                <label for="adresse_rammassage" class="block text-gray-700 mb-2">Point de départ</label>
+                                <input type="text" name="adresse_rammassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                            </div>
+                            <!-- 5. Point d'arrivée -->
+                            <div>
+                                <label for="nb_personnes" class="block mb-2">Nombre de passagers</label>
+                                <input type="number" name="nb_personnes" id="nb_personnes" min="1" max="20" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                            </div>
+                            <div>
+                                <label for="date" class="block mb-2">Date</label>
+                                <input type="date" name="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                            </div>
+                            <!-- 7. Heure de ramassage -->
+                            <div>
+                                <label for="heure_ramassage" class="block mb-2">Heure de ramassage</label>
+                                <input type="time" name="heure_ramassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                            </div>
+                            <!-- 8. Nombre de passagers -->
+                            <div>
+                                <label  for="nb_valises" class="block mb-2">Nombre de valises</label>
+                                <input type="number" name="nb_valises" id="nb_valises" min="1" max="20" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                            </div>
+
+                            <!-- 9. Type de service -->
+                            <div>
+                                <label for="trip_id" class="block text-sm font-medium text-gray-700 mb-1">Sens du trajet <span class="text-red-500">*</span></label>
+                                <select id="trip_id" name="trip_id" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                    <option value="">-- Sélectionner un trajet --</option>
+                                    @foreach($trips as $trip)
+                                        <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 mb-2">Nombre de passagers</label>
-                                <input type="number" min="1" max="8" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+
+                            <div>
+                                <label for="tarif" class="block text-sm font-medium text-gray-700 mb-1">Tarif estimé</label>
+                                <input type="text" id="tarif" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100" readonly>
                             </div>
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Finaliser la réservation</button>
+
+                            <!-- 10. Commentaires / Instructions -->
+                            {{-- <div class="md:col-span-2">
+                                <label class="block mb-2">Commentaires / Instructions</label>
+                                <textarea name="comments" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Détails ou instructions supplémentaires..."></textarea>
+                            </div> --}}
+
+                            <!-- Bouton -->
+                            <div class="md:col-span-2">
+                                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Finaliser la réservation</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -1089,6 +1144,39 @@ $(document).ready(function(){
         });
     });
 });
+</script>
+
+<script>
+function updateTarif() {
+    var nbPersonnes = parseInt(document.getElementById('nb_personnes').value) || 0;
+    var nbValises = parseInt(document.getElementById('nb_valises').value) || 0;
+
+    var tarifBasePersonnes = 32500;
+    var tarifParPersonneSupplementaire = 5000;
+    var tarifParValiseSupplementaire = 5000;
+
+    var tarif = 0;
+
+    if (nbPersonnes <= 3) {
+        tarif = tarifBasePersonnes;
+    } else {
+        tarif = tarifBasePersonnes + (nbPersonnes - 3) * tarifParPersonneSupplementaire;
+    }
+
+    if (nbValises > nbPersonnes * 2) {
+        var valisesSupplementaires = nbValises - (nbPersonnes * 2);
+        tarif += valisesSupplementaires * tarifParValiseSupplementaire;
+    }
+
+    document.getElementById('tarif').value = tarif + ' F';
+}
+
+// Ajoute ces écouteurs
+document.getElementById('nb_personnes').addEventListener('input', updateTarif);
+document.getElementById('nb_valises').addEventListener('input', updateTarif);
+
+// Et forcer une mise à jour au chargement
+updateTarif();
 </script>
 
 </body>

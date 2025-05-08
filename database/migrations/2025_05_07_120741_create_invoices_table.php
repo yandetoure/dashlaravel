@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('reservation_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 10, 2);
-            $table->enum('status', ['payé', 'en_attente', 'offert'])->default('En_attente');
+            $table->enum('status', ['payé', 'en_attente', 'offert'])->default('en_attente');
             $table->string('invoice_number')->unique();
             $table->date('invoice_date');
             $table->timestamps();

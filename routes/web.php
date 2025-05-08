@@ -15,11 +15,22 @@ use App\Http\Controllers\ReservationController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 // use Google_Client;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Trip;
+use App\Models\User;
+
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $trips = Trip::all();
+    $chauffeurs = User::whereHas('roles', function ($query) {
+        $query->where('name', 'chauffeur');
+    })->get();
 
+    $clients = User::whereHas('roles', function ($query) {
+        $query->where('name', 'client');
+    })->get();
+
+    return view('welcome', compact('trips'));
+});
 
 // Route pour afficher tous les utilisateurs avec filtre
 
@@ -168,6 +179,8 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
     Route::delete('{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
 
     Route::post('store-agent', [ReservationController::class, 'storeByAgent'])->name('storeByAgent');
+    Route::post('new-reervation', [ReservationController::class, 'storeByProspect'])->name('storeByProspect');
+
 
     Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
 
