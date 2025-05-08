@@ -234,19 +234,19 @@
                         <i class="fas fa-plane text-4xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts aéroport</h3>
-                    <p class="text-gray-600 mb-4">Service spécialisé pour les arrivées et départs à l'aéroport AIBD.</p>
+                    <p class="text-gray-600 mb-4">Flotte exclusive de Vans.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Surveillance des vols</span>
+                            <span>Sécurité</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Assistance bagages</span>
+                            <span>Confort - cli - wifi - eau à bord</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Ponctualité garantie</span>
+                            <span>Juusqu'à 6 personnes et 12 valises</span>
                         </li>
                     </ul>
                 </div>
