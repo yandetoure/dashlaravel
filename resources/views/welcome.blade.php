@@ -90,7 +90,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="md:flex items-center justify-between">
             <div class="md:w-1/2 mb-10 md:mb-0">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes les leaders des transferts/shuttle Aéroportières</h1>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes les leaders des transferts/shuttle Aéroportuaires</h1>
                 <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et transferts privés vers l'aéroport international Blaise Diagne.</p>
                 <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
             </div>
