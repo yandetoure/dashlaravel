@@ -227,28 +227,30 @@
                     </ul>
                 </div>
                  --}}
-                <!-- Service 4 -->
+
+                                 <!-- Service 6 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-red-600 mb-4">
-                        <i class="fas fa-road text-4xl"></i>
+                        <i class="fas fa-plane text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Location hors Dakar</h3>
-                    <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts aéroport</h3>
+                    <p class="text-gray-600 mb-4">Service spécialisé pour les arrivées et départs à l'aéroport AIBD.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Voyages inter-régions</span>
+                            <span>Surveillance des vols</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Véhicules adaptés</span>
+                            <span>Assistance bagages</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Trajets sur mesure</span>
+                            <span>Ponctualité garantie</span>
                         </li>
                     </ul>
                 </div>
+
                 
                 <!-- Service 5 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
@@ -273,25 +275,26 @@
                     </ul>
                 </div>
                 
-                <!-- Service 6 -->
+
+              <!-- Service 4 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-red-600 mb-4">
-                        <i class="fas fa-plane text-4xl"></i>
+                        <i class="fas fa-road text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts aéroport</h3>
-                    <p class="text-gray-600 mb-4">Service spécialisé pour les arrivées et départs à l'aéroport AIBD.</p>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Assistance & Conciergerie</h3>
+                    <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Surveillance des vols</span>
+                            <span>Voyages inter-régions</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Assistance bagages</span>
+                            <span>Véhicules adaptés</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Ponctualité garantie</span>
+                            <span>Trajets sur mesure</span>
                         </li>
                     </ul>
                 </div>
