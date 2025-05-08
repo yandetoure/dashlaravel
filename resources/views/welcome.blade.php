@@ -233,7 +233,7 @@
                     <div class="text-red-600 mb-4">
                         <i class="fas fa-plane text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts aéroport</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts Aéroport</h3>
                     <p class="text-gray-600 mb-4">Flotte exclusive de Vans.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
@@ -266,7 +266,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>References compagnies internationales</span>
+                            <span>Références compagnies internationales</span>
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
