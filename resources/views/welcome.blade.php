@@ -552,7 +552,7 @@
                 </div>
                 <div class="md:w-1/2">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Créez votre compte client</h2>
-                    <p class="text-xl text-gray-600 mb-8">Accédez à toutes vos réservations passées et futures, consultez votre historique de trajets et notez vos chauffeurs.</p>
+                    <p class="text-xl text-gray-600 mb-8">Accédez à toutes vos réservations passées et futures, consultez votre historique de trajets et vos points de fidélité pour gagner des avantages.</p>
                     
                     <div class="space-y-6 mb-8">
                         <div class="flex items-start">
