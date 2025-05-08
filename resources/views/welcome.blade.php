@@ -246,7 +246,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                            <span>Spacieux, jusqu'à 6 personnes et 12 valises</span>
+                            <span>Spacieux : jusqu'à 6 personnes et 12 valises</span>
                         </li>
                     </ul>
                 </div>
