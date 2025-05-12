@@ -257,7 +257,7 @@
                        <div class="mb-4 flex justify-center">
                         <img src="images/else.jpg" alt="Icone Service 1" class="w-full h-auto object-contain" />
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Services entreprises</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Services aux Entreprises</h3>
                     <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
                     <ul class="text-gray-600 space-y-2">
                         <li class="flex items-start">
