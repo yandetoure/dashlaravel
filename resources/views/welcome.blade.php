@@ -90,7 +90,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="md:flex items-center justify-between">
             <div class="md:w-1/2 mb-10 md:mb-0">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes les Leaders des Transferts/Shuttle Aéroportuaires</h1>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes le Leader des Transferts/Shuttle Aéroportuaires</h1>
                 <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et Transferts privés vers l'Aéroport International Blaise Diagne(AIBD).</p>
                 <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
             </div>
@@ -255,7 +255,7 @@
                 <!-- Service 5 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
-                        <img src="images/else.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                        <img src="images/else.jpg" alt="Icone Service 1" class="w-full h-auto object-contain" />
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Services entreprises</h3>
                     <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
@@ -279,7 +279,7 @@
               <!-- Service 4 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
-                        <img src="images/else.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                        <img src="images/cons.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Assistance & Conciergerie</h3>
                     <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
