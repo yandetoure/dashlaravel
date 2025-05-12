@@ -255,7 +255,7 @@
                 <!-- Service 5 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
-                        <img src="images/logo.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                        <img src="images/else.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Services entreprises</h3>
                     <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
