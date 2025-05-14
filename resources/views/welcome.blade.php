@@ -60,7 +60,7 @@
                     <i class="fab fa-whatsapp mr-1"></i> +221 77 705 69 69 (WhatsApp)
                 </a>
             </div>
-            <div class="flex justify-between h-10">
+            <div class="flex justify-between h-14">
                 <div class="flex items-center">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </div>
@@ -97,7 +97,7 @@
 <!-- Hero Section -->
 <section id="accueil" class="hero pt-24 pb-32 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="md:flex items-center justify-between">
+        <div class="md:flex items-center justify-between mt-10">
             <div class="md:w-1/2 mb-10 md:mb-0">
                 <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes le Leader du Transfert/Shuttle Aéroportuaire</h1>
                 <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et Transferts privés vers l'Aéroport International Blaise Diagne(AIBD).</p>
