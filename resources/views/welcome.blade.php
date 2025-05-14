@@ -60,7 +60,7 @@
                     <i class="fab fa-whatsapp mr-1"></i> +221 77 705 69 69 (WhatsApp)
                 </a>
             </div>
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-10">
                 <div class="flex items-center">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </div>
