@@ -51,6 +51,15 @@
     <!-- Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Phone numbers banner -->
+            <div class="py-2 border-b flex justify-end space-x-4 text-sm text-gray-600">
+                <a href="tel:+221777056767" class="hover:text-red-600">
+                    <i class="fas fa-phone mr-1"></i> +221 77 705 67 67
+                </a>
+                <a href="tel:+221777056969" class="hover:text-red-600">
+                    <i class="fab fa-whatsapp mr-1"></i> +221 77 705 69 69 (WhatsApp)
+                </a>
+            </div>
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
@@ -140,7 +149,7 @@
             <div class="md:flex items-center justify-between">
                 <div class="md:w-2/3 mb-6 md:mb-0">
                     <h2 class="text-2xl md:text-3xl font-bold mb-4">Vous voyagez bientôt ? Réservez dès maintenant !</h2>
-                    <p class="text-lg opacity-90">Nous assurons ;a prise en charge de chez vous jusqu'à l'avion, afin de vous garantir le meilleur service possible. Nos chauffeurs professionnels vous attendront à l'heure convenue peu importe votre lieu de départ ou destination.</p>
+                    <p class="text-lg opacity-90">Nous assurons la prise en charge de chez vous jusqu'à l'avion, afin de vous garantir le meilleur service possible. Nos chauffeurs professionnels vous attendront à l'heure convenue peu importe votre lieu de départ ou destination.</p>
                 </div>
                 <div class="md:w-1/3 text-center md:text-right">
                     <a href="#reservation" class="inline-block bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300">Faire une réservation</a>
@@ -704,80 +713,7 @@
                 <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
                     <div class="bg-red-800 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Transfert AIBD</h3>
-                        <div class="mt-4">
-                            <span class="text-3xl font-bold">32 500 FCFA</span>
-                            <span class="text-red-200">/trajet</span>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <ul class="space-y-3 text-gray-600 mb-8">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Navette privé</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Disponible 24h/24</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Jusqu'à 3 passagers</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Bagages inclus (2 par personne)</span>
-                            </li>
-                        </ul>
-                        <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
-                    </div>
-                </div>
-                
-                <!-- Tarif 3 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Transfert premium</h3>
-                        <div class="mt-4">
-                            <span class="text-3xl font-bold">100 000 FCFA</span>
-                            <span class="text-red-200">/personne</span>
-                        </div>
-                    </div>
-                    <div class="p-8">
-                        <ul class="space-y-3 text-gray-600 mb-8">
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Véhicule haut de gamme</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Chauffeur professionnel</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Wifi à bord</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Conciergerie (Meet & Great)</span>
-                            </li>
-                        </ul>
-                        <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="tarifs" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Tarif 1 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Location voiture <span class="text-red-200">/hors Dakar</span>
-                        </h3>
-                        
+                        <h3 class="text-xl font-bold">Location voiture<span class="text-red-200">/hors Dakar</span></h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">80 000 FCFA</span>
                             <span class="text-red-200">/Jour</span>
@@ -795,18 +731,90 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Climatisation</span>
+                                <span>Climatisation<</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
                                 <span>Circulez partout</span>
                             </li>
                         </ul>
+                        <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
+                    </div>
+                </div>
+             
+                <!-- Tarif 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="bg-red-600 text-white py-6 px-8">
+                    <h3 class="text-xl font-bold">Location voiture <span class="text-red-200">/hors Dakar</span>
+                <div class="mt-4">
+                            <span class="text-3xl font-bold">65 000 FCFA</span>
+                            <span class="text-red-200">/trajet</span>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <ul class="space-y-3 text-gray-600 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Chauffeur professionnel</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Disponible 24h/24</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Climatisation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Tout confort compris</span>
+                            </li>
+                        </ul>
                         <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
-                
-                <!-- Tarif 2 -->
+            </div>
+        </div>
+    </section>
+
+    <section id="tarifs" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid md:grid-cols-3 gap-8">
+
+                <!-- Tarif 1 -->
+
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="bg-red-600 text-white py-6 px-8">
+                        <h3 class="text-xl font-bold">Transfert AIBD</h3>
+                        <div class="mt-4">
+                            <span class="text-3xl font-bold">32 500 FCFA</span>
+                            <span class="text-red-200">/trajet</span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <ul class="space-y-3 text-gray-600 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Navette privée</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Disponible 24h/24</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Jusqu'à 3 personnes</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Bagages inclus (2 par personne)</span>
+                            </li>
+                        </ul>
+                        <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
+                    </div>
+                </div>
+                                <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
                     <div class="bg-red-800 text-white py-6 px-8">
                         <h3 class="text-xl font-bold">Transfert AIBD VIP</h3>
@@ -841,36 +849,35 @@
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                    <h3 class="text-xl font-bold">Location voiture <span class="text-red-200">/hors Dakar</span>
-                    <div class="mt-4">
-                            <span class="text-3xl font-bold">65 000 FCFA</span>
-                            <span class="text-red-200">/trajet</span>
+                        <h3 class="text-xl font-bold">Transfert premium</h3>
+                        <div class="mt-4">
+                            <span class="text-3xl font-bold">100 000 FCFA</span>
+                            <span class="text-red-200">/personne</span>
                         </div>
                     </div>
                     <div class="p-8">
-                    <ul class="space-y-3 text-gray-600 mb-8">
+                        <ul class="space-y-3 text-gray-600 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                                <span>Véhicule haut de gamme</span>
+                            </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
                                 <span>Chauffeur professionnel</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Disponible 24h/24</span>
+                                <span>Wifi à bord</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Climatisation</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Tout confort compris</span>
+                                <span>Conciergerie (Meet & Greet)</span>
                             </li>
                         </ul>
                         <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
             </div>
-            
             <div class="mt-12 text-center">
                 <p class="text-gray-600 mb-4">* Les tarifs peuvent varier selon la distance et le nombre de passagers.</p>
                 <a href="#contact" class="text-red-600 hover:text-red-800 font-semibold">Contactez-nous pour un devis personnalisé</a>
@@ -1136,7 +1143,7 @@ $(document).ready(function(){
             success: function(response) {
                 if (response.available) {
                     $('#availability-result').html(
-                        '✅ Chauffeur disponible : ' + response.chauffeur.first_name + ' ' + response.chauffeur.last_name
+                        'Chauffeurs disponibles contactez nouss pour réserver : '
                     ).css('color', 'green');
                 } else {
                     $('#availability-result').html('❌ ' + response.message).css('color', 'red');
