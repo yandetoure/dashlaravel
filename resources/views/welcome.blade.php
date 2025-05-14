@@ -235,10 +235,10 @@
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Transfert premium</h3>
+                        <h3 class="text-xl font-bold">Transfert premium<(Meet & Greet)/h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">65 000 FCFA</span>
-                            <span class="text-red-200">/personne</span>
+                            <span class="text-red-200"></span>
                         </div>
                     </div>
                     <div class="p-8">
