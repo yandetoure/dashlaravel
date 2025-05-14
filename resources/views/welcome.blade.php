@@ -52,7 +52,7 @@
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Phone numbers banner -->
-            <div class="py-2 border-b flex justify-end space-x-4 text-sm text-gray-600">
+            <div class="py-2 border-b flex justify-end space-x-4 text-sm text-white-600">
                 <a href="tel:+221777056767" class="hover:text-red-600">
                     <i class="fas fa-phone mr-1"></i> +221 77 705 67 67
                 </a>
@@ -66,9 +66,9 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#accueil" class="text-gray-700 hover:text-red-600 transition nav-link active">Accueil</a>
+                    <a href="#tarifs" class="text-gray-700 hover:text-red-600 transition nav-link">Tarifs</a>
                     <a href="#services" class="text-gray-700 hover:text-red-600 transition nav-link">Services</a>
                     <a href="#reservation" class="text-gray-700 hover:text-red-600 transition nav-link">Réservation</a>
-                    <a href="#tarifs" class="text-gray-700 hover:text-red-600 transition nav-link">Tarifs</a>
                     <a href="#contact" class="text-gray-700 hover:text-red-600 transition nav-link">Contact</a>
                     @auth
                         <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
