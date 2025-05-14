@@ -237,7 +237,7 @@
                     <div class="bg-red-600 text-white py-6 px-8">
                         <h3 class="text-xl font-bold">Transfert premium</h3>
                         <div class="mt-4">
-                            <span class="text-3xl font-bold">100 000 FCFA</span>
+                            <span class="text-3xl font-bold">65 000 FCFA</span>
                             <span class="text-red-200">/personne</span>
                         </div>
                     </div>
