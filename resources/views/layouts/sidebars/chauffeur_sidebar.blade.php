@@ -23,12 +23,10 @@
     <div class="sidebar-links">
         <ul class="nav nav-pills flex-column mb-auto">
             <h6>Dashboard</h6>
-            <li><a href="{{ route('dashboard.superadmin') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
+            <li><a href="{{ route('dashboard.chauffeur') }}" class="nav-link {{ request()->routeIs('dashboard.superadmin') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
             <li><a href="{{ route('reservations.showCalendar') }}" class="nav-link {{ request()->routeIs('reservations.showCalendar') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Calendier</a></li>
-
             <!-- Réservations -->
-            <li><a href="{{ route('dashboard.client') }}" class="nav-link {{ request()->routeIs('dashboard.client') ? 'active' : '' }}"><span class="material-icons">assignment</span> Tableau de bord</a></li>
-            <li><a href="{{ route('reservations.client.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Mes réservations</a></li>
+            <li><a href="{{ route('reservations.chauffeur.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Mes réservations</a></li>
             <li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
             <!-- Trajets -->
             <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>

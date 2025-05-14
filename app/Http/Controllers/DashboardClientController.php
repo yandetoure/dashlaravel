@@ -13,19 +13,26 @@ class DashboardClientController extends Controller
     {
         $user = Auth::user();
 
+        // Vérifiez que l'utilisateur est connecté
         if (!$user) {
             return redirect()->route('login');
         }
 
-        // Statistiques de réservations
+        // Nombre total de réservations
         $totalReservations = Reservation::where('client_id', $user->id)->count();
+
+        // Nombre de réservations cette année
         $yearReservations = Reservation::where('client_id', $user->id)
             ->whereYear('date', date('Y'))
             ->count();
+
+        // Nombre de réservations ce mois-ci
         $monthReservations = Reservation::where('client_id', $user->id)
             ->whereMonth('date', date('m'))
             ->whereYear('date', date('Y'))
             ->count();
+
+        // Nombre de réservations aujourd'hui
         $todayReservations = Reservation::where('client_id', $user->id)
             ->whereDate('date', date('Y-m-d'))
             ->count();
@@ -76,6 +83,7 @@ class DashboardClientController extends Controller
             $chartData[] = $monthlyData[$i] ?? 0;
         }
 
+        // Passer les données à la vue
         return view('dashboard.client', compact(
             'user',
             'totalReservations',

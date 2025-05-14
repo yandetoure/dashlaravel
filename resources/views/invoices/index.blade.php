@@ -201,7 +201,7 @@
                                                 <a href="{{ route('invoices.download', $invoice->id) }}" class="btn btn-sm btn-secondary">
                                                     <i class="fas fa-download"></i> PDF
                                                 </a>
-                                                @if($invoice->status != 'Payée')
+                                                @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']) && $invoice->status != 'Payée')
                                                     <form action="{{ route('invoices.markAsPaid', $invoice->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Marquer cette facture comme payée?')">

@@ -58,15 +58,15 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($reservations as $reservation)
             <div class="reservation-card bg-white rounded-xl shadow-md p-4 relative border-l-4 
-                @if($reservation->status === 'confirmée') border-secondary 
-                @elseif($reservation->status === 'En_attente') border-yellow-400 
-                @elseif($reservation->status === 'annulée') border-red-400 
+                @if($reservation->status === 'Confirmée') border-green-500 
+                @elseif($reservation->status === 'En_attente') border-yellow-500 
+                @elseif($reservation->status === 'Annulée') border-red-600 
                 @else border-gray-300 @endif transition duration-300">
                 <div class="absolute status-badge 
-                    @if($reservation->status === 'confirmée') bg-secondary 
-                    @elseif($reservation->status === 'En_attente') bg-yellow-400 
-                    @elseif($reservation->status === 'annulée') bg-red-400 
-                    @else bg-gray-300 @endif
+                    @if($reservation->status === 'Confirmée') bg-green-600 
+                    @elseif($reservation->status === 'En_attente') bg-yellow-600 
+                    @elseif($reservation->status === 'Annulée') bg-red-600 
+                    @else bg-gray-500 @endif
                     text-white px-3 py-1 rounded-full text-xs font-semibold">
                     @if($reservation->status === 'confirmée')
                         Confirmée
@@ -125,6 +125,23 @@
                     </div>
                     @endif
                 </div>
+               {{-- <div class="mt-4 pt-2 border-t border-gray-100 flex justify-start space-x-2">
+
+                    @if($reservation->agent)
+                        <div class="flex items-center text-sm">
+                            <i class="fas fa-user-tie text-gray-400 w-5"></i>
+                            <span class="ml-2 text-gray-700">
+                                Agent: {{ $reservation->agent->first_name ?? '' }} {{ $reservation->agent->last_name ?? '' }}
+                            </span>
+                            @if($reservation->agent->phone_number)
+                                <a href="tel:{{ $reservation->agent->phone_number }}" class="ml-4 px-2 py-1 bg-primary text-white rounded text-xs hover:bg-blue-700 flex items-center">
+                                    <i class="fas fa-phone-alt mr-1"></i>Appeler
+                                </a>
+                            @endif
+                        </div>
+                    @endif
+                </div> --}}
+                
                 <div class="mt-4 pt-2 border-t border-gray-100 flex justify-end space-x-2">
                     @if($reservation->status === 'confirmée' || $reservation->status === 'En_attente')
                         <form action="{{ route('reservations.cancel', $reservation) }}" method="POST" onsubmit="return confirm('Annuler cette réservation ?')" style="display:inline;">
