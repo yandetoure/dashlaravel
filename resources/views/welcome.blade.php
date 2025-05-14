@@ -235,7 +235,7 @@
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Transfert premium<(Meet & Greet)/h3>
+                        <h3 class="text-xl font-bold">Transfert premium<(Meet & Greet)/<h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">65 000 FCFA</span>
                             <span class="text-red-200"></span>
@@ -270,13 +270,16 @@
 
     <section id="tarifs" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Extra</h2>
+            </div>
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Tarif 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Location voiture</h3>
+                        <h3 class="text-xl font-bold">Location Dakar</h3>
                         <div class="mt-4">
-                            <span class="text-3xl font-bold">60 000 FCFA</span>
+                            <span class="text-3xl font-bold">50 000 FCFA</span>
                             <span class="text-red-200">/Jour</span>
                         </div>
                     </div>
@@ -288,7 +291,7 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Plein carburant</span>
+                                <span>Hors carburant</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
@@ -320,11 +323,11 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Plein carburant</span>
+                                <span>Hors carburant</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                <span>Climatisation<</span>
+                                <span>Climatisation</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
