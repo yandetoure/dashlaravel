@@ -277,7 +277,7 @@
                 <!-- Tarif 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Location Dakar</h3>
+                        <h3 class="text-xl font-bold">Location voiture <span>Dakar</span></h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">50 000 FCFA</span>
                             <span class="text-red-200">/Jour</span>
@@ -341,7 +341,7 @@
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                    <h3 class="text-xl font-bold">Location voiture <span class="text-red-200">/hors Dakar</span>
+                    <h3 class="text-xl font-bold">Location voiture <span class="text-red-200">/ Dakar</span>
                 <div class="mt-4">
                             <span class="text-3xl font-bold">65 000 FCFA</span>
                             <span class="text-red-200">/trajet</span>
