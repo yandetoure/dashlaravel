@@ -66,6 +66,7 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#accueil" class="text-gray-700 hover:text-red-600 transition nav-link active">Accueil</a>
+                    <a href="#actualites" class="text-gray-700 hover:text-red-600 transition nav-link active">Actualités</a>
                     <a href="#tarifs" class="text-gray-700 hover:text-red-600 transition nav-link">Tarifs</a>
                     <a href="#services" class="text-gray-700 hover:text-red-600 transition nav-link">Services</a>
                     <a href="#reservation" class="text-gray-700 hover:text-red-600 transition nav-link">Réservation</a>
