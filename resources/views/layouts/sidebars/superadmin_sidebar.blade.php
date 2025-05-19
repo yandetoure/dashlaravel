@@ -140,7 +140,7 @@
 
                 <h6>Utilisateurs</h6>
                 <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un utilisateur</a></li>
-                <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Super Admins</a></li>
+                <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Listes des Utilisateurs</a></li>
                 <li><a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.index') ? 'active' : '' }}"><span class="material-icons">person</span> Clients</a></li>
 
                 {{-- <li><a href="{{ route('admins.index') }}" class="nav-link {{ request()->routeIs('admins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des admins</a></li> --}}
