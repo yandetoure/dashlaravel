@@ -25,15 +25,15 @@ class DashController extends Controller
     }
 
     // Dashboard pour le Client
-    public function clientIndex()
-    {
-        if (!auth()->user()->hasRole('client')) {
-            abort(403); // Accès interdit si l'utilisateur n'est pas un client
-        }
+    // public function clientIndex()
+    // {
+    //     if (!auth()->user()->hasRole('client')) {
+    //         abort(403); // Accès interdit si l'utilisateur n'est pas un client
+    //     }
 
-        $reservationsCount = Reservation::where('client_id', auth()->id())->count(); // Réservations du client connecté
-        return view('dashboards.client', compact('reservationsCount'));
-    }
+    //     $reservationsCount = Reservation::where('client_id', auth()->id())->count(); // Réservations du client connecté
+    //     return view('dashboards.client', compact('reservationsCount'));
+    // }
 
 
     // Dashboard pour le Chauffeur
