@@ -33,12 +33,12 @@
             <li><a href="{{ route('clients.index') }}" class="nav-link" aria-label="Manage clients"><span class="material-icons">person</span> Liste des Clients</a></li>
             <li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
 
-               <h6>Factures</h6>
-                <li><a href="{{ route('invoices.index') }}" class="nav-link {{ request()->routeIs('invoices.index') ? 'active' : '' }}"><span class="material-icons">person_add</span> Factures</a></li>
-                <h6>Voitures</h6>
-                <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
-                <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
-                <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures</a></li>
+            <h6>Factures</h6>
+            <li><a href="{{ route('invoices.index') }}" class="nav-link {{ request()->routeIs('invoices.index') ? 'active' : '' }}"><span class="material-icons">person_add</span> Factures</a></li>
+            <h6>Voitures</h6>
+            <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
+            <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
+            <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures</a></li>
             </ul>
     </div>
 </div>
@@ -55,6 +55,7 @@
         font-weight: bold;
         display: flex;
         flex-direction: column;
+        margin-bottom: 10px;
     }
 
     .sticky-header {
