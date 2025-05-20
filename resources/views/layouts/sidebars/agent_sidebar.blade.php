@@ -55,7 +55,7 @@
         font-weight: bold;
         display: flex;
         flex-direction: column;
-        padding-bottom: 10px;
+        padding-bottom: 100px;
     }
 
     .sticky-header {
