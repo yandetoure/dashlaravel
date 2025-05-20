@@ -108,27 +108,27 @@ Route::middleware('auth')->group(function () {
     Route::resource('cars', CarController::class);
 });
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
 
-    // Routes pour l'Admin
-    Route::get('/admin/dashboard', [DashController::class, 'adminIndex'])->name('dashboard.admin');
+//     // Routes pour l'Admin
+//     Route::get('/admin/dashboard', [DashController::class, 'adminIndex'])->name('dashboard.admin');
 
-    // Routes pour le Client
-    Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard.client');
+//     // Routes pour le Client
+//     Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard.client');
 
-    // Routes pour le Chauffeur
-    Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->name('dashboard.chauffeur');
+//     // Routes pour le Chauffeur
+//     Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->name('dashboard.chauffeur');
 
-    // Routes pour l'Entreprise
-    Route::get('/entreprise/dashboard', [DashController::class, 'entrepriseIndex'])->name('dashboard.entreprise');
+//     // Routes pour l'Entreprise
+//     Route::get('/entreprise/dashboard', [DashController::class, 'entrepriseIndex'])->name('dashboard.entreprise');
 
-    // Routes pour l'Agent
-    Route::get('/agent/dashboard', [DashController::class, 'agentIndex'])->name('dashboard.agent');
+//     // Routes pour l'Agent
+//     Route::get('/agent/dashboard', [DashController::class, 'agentIndex'])->name('dashboard.agent');
 
-    // Routes pour le Superadmin
-    Route::get('/superadmin/dashboard', [DashController::class, 'superadminIndex'])->name('dashboard.superadmin');
+//     // Routes pour le Superadmin
+//     Route::get('/superadmin/dashboard', [DashController::class, 'superadminIndex'])->name('dashboard.superadmin');
 
-});
+// });
 
 
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AuthController::class, 'showAdminDashboard'])->name('dashboard.admin');
