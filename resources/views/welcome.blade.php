@@ -151,15 +151,15 @@
 <section id="actualites" class="bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-3xl font-bold text-center mb-8">Actualités</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            @foreach($actus as $actu)
-            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-48 object-cover rounded-t-lg">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
-                    <p class="text-gray-600 text-sm">{{ Str::limit($actu->content, 100) }}</p>
+        <div class="flex flex-col space-y-4">
+            @foreach($actus->take(3) as $actu)
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition w-full">
+                    <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-24 object-cover rounded-t-lg">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
+                        <p class="text-gray-600 text-sm">{{ Str::limit($actu->content, 100) }}</p>
+                    </div>
                 </div>
-            </div>
             @endforeach
         </div>
     </div>

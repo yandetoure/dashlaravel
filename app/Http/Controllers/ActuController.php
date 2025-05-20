@@ -28,16 +28,23 @@ class ActuController extends Controller
             'content' => 'required|string',
             'image' => 'nullable|image|max:2048', // max 2MB
         ]);
-
-        // gestion de l'image
+    
+        // Si une image est uploadée
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/actus'); // stocke dans storage/app/public/actus
-            $validated['image'] = basename($path);
+            // Stocker dans 'storage/app/public/actus'
+            $path = $request->file('image')->store('actus', 'public');  
+            // Stocke le chemin relatif dans la BD, par ex: 'actus/filename.jpg'
+            $validated['image'] = $path;
+        } else {
+            $validated['image'] = null; // ou laisser vide si optionnel
         }
-
+    
+        // crée l'actu avec le chemin complet dans la BDD
         Actu::create($validated);
-        return redirect()->route('actus.index')->with('success', 'Actualité créée avec succès.');
+    
+        return redirect()->route('welcome')->with('success', 'Actualité créée avec succès.');
     }
+    
 
     // Affiche le formulaire pour éditer une actualité existante
     public function edit($id)
