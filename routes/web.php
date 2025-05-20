@@ -17,6 +17,8 @@ use Spatie\Permission\Middlewares\RoleMiddleware;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Trip;
 use App\Models\User;
+use App\Http\Controllers\ActuController;
+
 
 
 Route::get('/', function () {
@@ -59,6 +61,8 @@ Route::middleware('auth:')->group(function () {
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])->name('invoices.download');
 
 });
+
+Route::resource('actus', ActuController::class);
 
 Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'])->name('reservations.confirmed');
 
