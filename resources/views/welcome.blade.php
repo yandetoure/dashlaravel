@@ -145,7 +145,7 @@
 <div class="flex flex-col md:flex-row min-h-screen">
 
   <!-- Sidebar Actualités -->
-<aside class="w-full md:w-1/4 bg-gray-100 p-4 md:sticky md:top-0 md:h-screen z-40">
+<aside class="w-full md:w-1/5 bg-gray-100 p-4 md:sticky md:top-0 md:h-screen z-40">
     <h2 class="text-xl font-semibold mb-4">Actualités</h2>
  <!-- Section Actualités -->
 <section id="actualites" class="bg-gray-50 py-8">
@@ -263,7 +263,7 @@
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-6 px-8">
-                        <h3 class="text-xl font-bold">Transfert premium<(Meet & Greet)/<h3>
+                        <h3 class="text-xl font-bold">Transfert PREM/(Meet & Greet)<h3>
                         <div class="mt-4">
                             <span class="text-3xl font-bold">65 000 FCFA</span>
                             <span class="text-red-200"></span>
