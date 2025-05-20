@@ -24,17 +24,22 @@
             <li><a href="{{ route('reservations.showCalendar') }}" class="nav-link {{ request()->routeIs('reservations.showCalendar') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Calendier</a></li>
 
             <h6>Réservations</h6> 
-            <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Listes des Utilisateurs</a></li>
+            <li><a href="{{ route('superadmins.index') }}" class="nav-link" aria-label="View Super Admins"><span class="material-icons">people</span> Liste des Super Admins</a></li>
             <li><a href="{{ route('trips.index') }}" class="nav-link" aria-label="Manage trips"><span class="material-icons">directions_car</span> Trajets</a></li>
 
             <h6>Utilisateurs</h6>
-            <li><a href="{{ route('admins.index') }}" class="nav-link" aria-label="Manage Admins"><span class="material-icons">people</span> Utilisateurs</a></li>
+            <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un utilisateur</a></li>
+            <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Listes des Utilisateurs</a></li>
             <li><a href="{{ route('clients.index') }}" class="nav-link" aria-label="Manage clients"><span class="material-icons">person</span> Liste des Clients</a></li>
+            <li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
 
-            <h6>Voitures</h6>
-            <li><a href="{{ route('cars.index') }}" class="nav-link" aria-label="Manage cars"><span class="material-icons">directions_car</span> Liste des Voitures</a></li>
-            <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
-        </ul>
+               <h6>Factures</h6>
+                <li><a href="{{ route('invoices.index') }}" class="nav-link {{ request()->routeIs('invoices.index') ? 'active' : '' }}"><span class="material-icons">person_add</span> Factures</a></li>
+                <h6>Voitures</h6>
+                <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
+                <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
+                <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures</a></li>
+            </ul>
     </div>
 </div>
 
