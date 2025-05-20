@@ -18,11 +18,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Trip;
 use App\Models\User;
 use App\Http\Controllers\ActuController;
+use App\Models\Actu;
 
 
 
 Route::get('/', function () {
     $trips = Trip::all();
+    $actus = Actu::all(); // Récupère toutes les actualités
+
     $chauffeurs = User::whereHas('roles', function ($query) {
         $query->where('name', 'chauffeur');
     })->get();
@@ -31,7 +34,7 @@ Route::get('/', function () {
         $query->where('name', 'client');
     })->get();
 
-    return view('welcome', compact('trips'));
+    return view('welcome', compact('trips', 'actus'));
 });
 
 // Route pour afficher tous les utilisateurs avec filtre

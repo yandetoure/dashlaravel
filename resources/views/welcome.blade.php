@@ -147,17 +147,24 @@
   <!-- Sidebar Actualités -->
 <aside class="w-full md:w-1/4 bg-gray-100 p-4 md:sticky md:top-0 md:h-screen z-40">
     <h2 class="text-xl font-semibold mb-4">Actualités</h2>
-    <div class="space-y-4">
-      <!-- Actualité -->
-      <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-        <img src="{{ asset('images/actu.jpeg') }}" alt="Titre de l'actualité 1" class="w-full h-48 object-cover rounded-t-lg">
-        <div class="p-4">
-          <h3 class="text-lg font-semibold mb-2">Notre engagement</h3>
-          <p class="text-gray-600 text-sm">Cpro Services revient sur le marché avec des prix compétitifs.</p>
+ <!-- Section Actualités -->
+<section id="actualites" class="bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-8">Actualités</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            @foreach($actus as $actu)
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+                <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-48 object-cover rounded-t-lg">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
+                    <p class="text-gray-600 text-sm">{{ Str::limit($actu->content, 100) }}</p>
+                </div>
+            </div>
+            @endforeach
         </div>
-      </div>
-      <!-- Ajoute d’autres actualités si besoin -->
     </div>
+</section>
+
   </aside>
 
   <!-- Contenu principal -->
