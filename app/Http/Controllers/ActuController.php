@@ -42,10 +42,15 @@ class ActuController extends Controller
         // crée l'actu avec le chemin complet dans la BDD
         Actu::create($validated);
     
-        return redirect()->route('welcome')->with('success', 'Actualité créée avec succès.');
+        return redirect()->route('acutus.index')->with('success', 'Actualité créée avec succès.');
     }
     
-
+    public function show($id)
+    {
+        $actu = Actu::findOrFail($id);
+        return view('actus.show', compact('actu'));
+    }
+    
     // Affiche le formulaire pour éditer une actualité existante
     public function edit($id)
     {
