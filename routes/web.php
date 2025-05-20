@@ -41,11 +41,11 @@ Route::middleware('auth:')->group(function () {
     Route::post('/admin/create-account', [AuthController::class, 'createAccount'])
         ->name('admin.create.account');
 
-    // Route::get('/clients', [AuthController::class, 'lisclient'])->name('clients.index');
-    // Route::get('/drivers', [AuthController::class, 'listdriver'])->name('drivers.index');
-    // Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
-    // Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
-    // Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
+    Route::get('/clients', [AuthController::class, 'lisclient'])->name('clients.index');
+    Route::get('/drivers', [AuthController::class, 'listdriver'])->name('drivers.index');
+    Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
+    Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
+    Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
 
     Route::Resource('cars', CarController::class); 
     Route::Resource('auth', AuthController::class); 
