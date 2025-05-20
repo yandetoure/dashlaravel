@@ -24,20 +24,13 @@
         }
     </script>
     <style>
-        .reservation-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        .status-badge {
-            top: -10px;
-            right: -10px;
-        }
+
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold text-gray-800">Nos Actualités</h2>
-        <a href="{{ route('actus.create') }}" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg shadow-lg font-semibold transition duration-200">
+        <a href="{{ route('actus.create') }}" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center font-medium shadow-sm">
             Ajouter une actualité
         </a>
     </div>
