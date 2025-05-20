@@ -527,7 +527,7 @@
                     <h3 class="text-xl font-bold">Location voiture <span class="text-red-200">/Dakar</span>
                 <div class="mt-4">
                             <span class="text-3xl font-bold">65 000 FCFA</span>
-                            <span class="text-red-200">/trajet</span>
+                            <span class="text-red-200">/jour</span>
                     </div>
                 </div>
                 <div class="p-8">
