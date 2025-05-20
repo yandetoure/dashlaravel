@@ -24,7 +24,7 @@
             <li><a href="{{ route('reservations.showCalendar') }}" class="nav-link {{ request()->routeIs('reservations.showCalendar') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Calendier</a></li>
 
             <h6>Réservations</h6> 
-            <li><a href="{{ route('superadmins.index') }}" class="nav-link" aria-label="View Super Admins"><span class="material-icons">people</span> Liste des Super Admins</a></li>
+            <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Listes des Utilisateurs</a></li>
             <li><a href="{{ route('trips.index') }}" class="nav-link" aria-label="Manage trips"><span class="material-icons">directions_car</span> Trajets</a></li>
 
             <h6>Utilisateurs</h6>
