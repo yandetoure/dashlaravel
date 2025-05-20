@@ -142,47 +142,26 @@
     </div>
 </section>
 
-<!-- Actualités avec images, 4 par ligne -->
-<section id="actualites" class="bg-gray-50 py-8">
-    <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-8">Actualités</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Actualité 1 -->
-            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                <img src="{{ asset('images/actu.jpeg') }}" alt="Titre de l'actualité 1" class="w-full h-48 object-cover rounded-t-lg">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Notre engagement</h3>
-                    <p class="text-gray-600 text-sm">Cpro Services revient sur le marché avec des prix compétitifs.</p>
-                </div>
-            </div>
-            <!-- Actualité 2 -->
-            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                <img src="chemin/vers/image2.jpg" alt="Titre de l'actualité 2" class="w-full h-48 object-cover rounded-t-lg">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Titre de l'actualité 2</h3>
-                    <p class="text-gray-600 text-sm">Une courte description de l'actualité 2 qui invite à cliquer ou à en savoir plus.</p>
-                </div>
-            </div>
-            <!-- Actualité 3 -->
-            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                <img src="chemin/vers/image3.jpg" alt="Titre de l'actualité 3" class="w-full h-48 object-cover rounded-t-lg">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Titre de l'actualité 3</h3>
-                    <p class="text-gray-600 text-sm">Description succincte pour représenter l'actualité 3.</p>
-                </div>
-            </div>
-            <!-- Actualité 4 -->
-            <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                <img src="chemin/vers/image4.jpg" alt="Titre de l'actualité 4" class="w-full h-48 object-cover rounded-t-lg">
-                <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2">Titre de l'actualité 4</h3>
-                    <p class="text-gray-600 text-sm">Une brève description pour attirer l'attention sur cette nouvelle.</p>
-                </div>
-            </div>
-            <!-- Ajoutez autant d'actualités que nécessaire -->
+<div class="flex flex-col md:flex-row min-h-screen">
+
+  <!-- Sidebar Actualités -->
+<aside class="w-full md:w-1/4 bg-gray-100 p-4 md:sticky md:top-0 md:h-screen z-40">
+    <h2 class="text-xl font-semibold mb-4">Actualités</h2>
+    <div class="space-y-4">
+      <!-- Actualité -->
+      <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+        <img src="{{ asset('images/actu.jpeg') }}" alt="Titre de l'actualité 1" class="w-full h-48 object-cover rounded-t-lg">
+        <div class="p-4">
+          <h3 class="text-lg font-semibold mb-2">Notre engagement</h3>
+          <p class="text-gray-600 text-sm">Cpro Services revient sur le marché avec des prix compétitifs.</p>
         </div>
+      </div>
+      <!-- Ajoute d’autres actualités si besoin -->
     </div>
-</section>
+  </aside>
+
+  <!-- Contenu principal -->
+  <main class="flex-1 p-4 overflow-auto">
 
 
     <!-- Publicité Réservation -->
