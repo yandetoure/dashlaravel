@@ -41,11 +41,11 @@ Route::middleware('auth:')->group(function () {
     Route::post('/admin/create-account', [AuthController::class, 'createAccount'])
         ->name('admin.create.account');
 
-    Route::get('/clients', [AuthController::class, 'lisclient'])->name('clients.index');
-    Route::get('/drivers', [AuthController::class, 'listdriver'])->name('drivers.index');
-    Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
-    Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
-    Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
+    // Route::get('/clients', [AuthController::class, 'lisclient'])->name('clients.index');
+    // Route::get('/drivers', [AuthController::class, 'listdriver'])->name('drivers.index');
+    // Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
+    // Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
+    // Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
 
     Route::Resource('cars', CarController::class); 
     Route::Resource('auth', AuthController::class); 
@@ -74,34 +74,34 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // // Route pour l'admin
-    // Route::get('/admin/dashboard', function () {
-    //     return view('dashboards.admin');
-    // })->name('dashboard.admin');
+    Route::get('/admin/dashboard', function () {
+        return view('dashboards.admin');
+    })->name('dashboard.admin');
 
     // Route pour le client
-    // Route::get('/client/dashboard', function () {
-    //     return view('dashboards.client');
-    // })->name('dashboard.client');
+    Route::get('/client/dashboard', function () {
+        return view('dashboards.client');
+    })->name('dashboard.client');
 
     // Route pour le chauffeur
-    // Route::get('/chauffeur/dashboard', function () {
-    //     return view('dashboards.driver');
-    // })->name('dashboard.chauffeur');
+    Route::get('/chauffeur/dashboard', function () {
+        return view('dashboards.driver');
+    })->name('dashboard.chauffeur');
 
     // Route pour l'entreprise
-    // Route::get('/entreprise/dashboard', function () {
-    //     return view('dashboards.entreprise');
-    // })->name('dashboard.entreprise');
+    Route::get('/entreprise/dashboard', function () {
+        return view('dashboards.entreprise');
+    })->name('dashboard.entreprise');
 
     // Route pour l'agent
-    // Route::get('/agent/dashboard', function () {
-    //     return view('dashboards.agent');
-    // })->name('dashboard.agent');
+    Route::get('/agent/dashboard', function () {
+        return view('dashboards.agent');
+    })->name('dashboard.agent');
 
     // Route pour le super admin
-    // Route::get('/superadmin/dashboard', function () {
-    //     return view('dashboards.superadmin');
-    // })->name('dashboard.superadmin'); 
+    Route::get('/superadmin/dashboard', function () {
+        return view('dashboards.superadmin');
+    })->name('dashboard.superadmin'); 
 
 
     Route::resource('maintenances', MaintenanceController::class);

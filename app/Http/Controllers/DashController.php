@@ -66,15 +66,15 @@ class DashController extends Controller
     }
 
     // Dashboard pour l'Agent
-    // public function agentIndex()
-    // {
-    //     if (!auth()->user()->hasRole('agent')) {
-    //         abort(403); // Accès interdit si l'utilisateur n'est pas un agent
-    //     }
+    public function agentIndex()
+    {
+        if (!auth()->user()->hasRole('agent')) {
+            abort(403); // Accès interdit si l'utilisateur n'est pas un agent
+        }
 
-    //     $reservationsCount = Reservation::where('agent_id', auth()->id())->count(); // Réservations attribuées à l'agent connecté
-    //     return view('dashboards.agent', compact('reservationsCount'));
-    // }
+        $reservationsCount = Reservation::where('agent_id', auth()->id())->count(); // Réservations attribuées à l'agent connecté
+        return view('dashboards.agent', compact('reservationsCount'));
+    }
 
     // Dashboard pour le Superadmin
     public function superadminIndex()
