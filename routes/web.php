@@ -63,6 +63,8 @@ Route::middleware('auth:')->group(function () {
     Route::post('/invoices/{id}/mark-as-paid', [InvoiceController::class, 'markAsPaid'])->name('invoices.markAsPaid');
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])->name('invoices.download');
 
+    // Route de suppression d'utilisateur
+    Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('users.destroy');
 });
 
 Route::resource('actus', ActuController::class);

@@ -337,4 +337,21 @@ public function listAllUsers(Request $request)
     return view('superadmins.index', compact('users', 'roles', 'roleFilter'));
 }
 
+/**
+ * Supprimer un utilisateur par son ID.
+ */
+public function destroy($id)
+{
+    $user = User::findOrFail($id);
+
+    // Optionnel : empêcher la suppression de soi-même ou d'un super-admin
+    // if (auth()->id() === $user->id) {
+    //     return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+    // }
+
+    $user->delete();
+
+    return back()->with('success', 'Utilisateur supprimé avec succès.');
+}
+
 }
