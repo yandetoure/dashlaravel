@@ -153,7 +153,7 @@
         <div class="flex flex-col space-y-4">
             @foreach($actus->take(3) as $actu)
                 <div class="bg-white rounded-lg shadow hover:shadow-lg transition w-full">
-                    {{-- <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-24 object-cover rounded-t-lg"> --}}
+                    <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-24 object-cover rounded-t-lg">
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
                         <p class="text-gray-600 text-sm">{{ Str::limit($actu->content, 100) }}</p>
