@@ -146,15 +146,14 @@
 
   <!-- Sidebar Actualités -->
 <aside class="w-full md:w-1/5 bg-gray-100 p-4 md:sticky md:top-0 md:h-screen z-40">
-    <h2 class="text-xl font-semibold mb-4">Actualités</h2>
+    <h6 class="text-xl font-semibold mb-4">Actualités</h6>
  <!-- Section Actualités -->
 <section id="actualites" class="bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-8">Actualités</h2>
         <div class="flex flex-col space-y-4">
             @foreach($actus->take(3) as $actu)
                 <div class="bg-white rounded-lg shadow hover:shadow-lg transition w-full">
-                    <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-24 object-cover rounded-t-lg">
+                    {{-- <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-24 object-cover rounded-t-lg"> --}}
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
                         <p class="text-gray-600 text-sm">{{ Str::limit($actu->content, 100) }}</p>
