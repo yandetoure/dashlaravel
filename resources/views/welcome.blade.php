@@ -152,7 +152,10 @@
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col space-y-4">
             @foreach($actus->take(3) as $actu)
-                <div class="bg-white rounded-lg shadow hover:shadow-lg transition w-full">
+                <div class="block bg-white rounded-lg shadow hover:shadow-lg transition w-full cursor-pointer actu-popup-trigger"
+                     data-title="{{ $actu->title }}"
+                     data-image="{{ asset('storage/' . $actu->image) }}"
+                     data-content="{{ e(Str::limit($actu->content, 500)) }}">
                     <img src="{{ asset('storage/' . $actu->image) }}" alt="{{ $actu->title }}" class="w-full h-24 object-cover rounded-t-lg">
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
@@ -163,6 +166,18 @@
         </div>
     </div>
 </section>
+
+{{-- Modal Popup pour Actualité --}}
+<div id="actu-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full relative">
+        <button id="close-actu-modal" class="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-2xl">&times;</button>
+        <img id="actu-modal-image" src="" alt="" class="w-full h-48 object-cover rounded-t-lg">
+        <div class="p-6">
+            <h3 id="actu-modal-title" class="text-2xl font-bold mb-4"></h3>
+            <p id="actu-modal-content" class="text-gray-700"></p>
+        </div>
+    </div>
+</div>
 
   </aside>
 
@@ -1155,73 +1170,25 @@
                 });
             });
         });
-    </script>
 
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function(){
-    $('#availability-form').on('submit', function(e){
-        e.preventDefault();
-
-        $.ajax({
-            url: '/reservations/check-availability',
-            method: 'POST',
-            data: {
-                trip_id: $('#trip_id').val(),
-                date: $('#date').val(),
-                heure_ramassage: $('#heure_ramassage').val(),
-                _token: '{{ csrf_token() }}' // important pour sécuriser la requête
-            },
-            success: function(response) {
-                if (response.available) {
-                    $('#availability-result').html(
-                        'Chauffeurs disponibles contactez nouss pour réserver : '
-                    ).css('color', 'green');
-                } else {
-                    $('#availability-result').html('❌ ' + response.message).css('color', 'red');
-                }
-            },
-            error: function(xhr) {
-                $('#availability-result').html('Erreur lors de la vérification.').css('color', 'red');
+        // Popup Actualité
+        document.querySelectorAll('.actu-popup-trigger').forEach(function(el) {
+            el.addEventListener('click', function() {
+                document.getElementById('actu-modal-title').textContent = this.dataset.title;
+                document.getElementById('actu-modal-image').src = this.dataset.image;
+                document.getElementById('actu-modal-image').alt = this.dataset.title;
+                document.getElementById('actu-modal-content').textContent = this.dataset.content;
+                document.getElementById('actu-modal').classList.remove('hidden');
+            });
+        });
+        document.getElementById('close-actu-modal').addEventListener('click', function() {
+            document.getElementById('actu-modal').classList.add('hidden');
+        });
+        document.getElementById('actu-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
             }
         });
-    });
-});
-</script>
-
-<script>
-function updateTarif() {
-    var nbPersonnes = parseInt(document.getElementById('nb_personnes').value) || 0;
-    var nbValises = parseInt(document.getElementById('nb_valises').value) || 0;
-
-    var tarifBasePersonnes = 32500;
-    var tarifParPersonneSupplementaire = 5000;
-    var tarifParValiseSupplementaire = 5000;
-
-    var tarif = 0;
-
-    if (nbPersonnes <= 3) {
-        tarif = tarifBasePersonnes;
-    } else {
-        tarif = tarifBasePersonnes + (nbPersonnes - 3) * tarifParPersonneSupplementaire;
-    }
-
-    if (nbValises > nbPersonnes * 2) {
-        var valisesSupplementaires = nbValises - (nbPersonnes * 2);
-        tarif += valisesSupplementaires * tarifParValiseSupplementaire;
-    }
-
-    document.getElementById('tarif').value = tarif + ' F';
-}
-
-// Ajoute ces écouteurs
-document.getElementById('nb_personnes').addEventListener('input', updateTarif);
-document.getElementById('nb_valises').addEventListener('input', updateTarif);
-
-// Et forcer une mise à jour au chargement
-updateTarif();
-</script>
-
+    </script>
 </body>
 </html>
