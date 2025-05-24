@@ -1108,87 +1108,21 @@
         </div>
     </footer>
 
-    <script>
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open
-                mobileMenu.classList.add('hidden');
-            });
-        });
-        
-        // Highlight active nav link on scroll
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                
-                if (pageYOffset >= (sectionTop - 100)) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-        
-        // Rating stars interaction
-        const stars = document.querySelectorAll('.rating-stars button');
-        stars.forEach((star, index) => {
-            star.addEventListener('click', () => {
-                stars.forEach((s, i) => {
-                    if (i <= index) {
-                        s.classList.remove('text-gray-300');
-                        s.classList.add('text-yellow-400');
-                    } else {
-                        s.classList.remove('text-yellow-400');
-                        s.classList.add('text-gray-300');
-                    }
-                });
-            });
-        });
+    <!-- Actualités fixes en bas de page -->
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-4 py-2 space-y-2 md:space-y-0 md:space-x-8">
+            <div class="flex-1 flex flex-col md:flex-row items-center md:space-x-4">
+                <span class="font-bold text-red-600 mr-2">Flyradar :</span>
+                <span class="text-gray-700">Consultez les vols en temps réel sur Flyradar.</span>
+                <a href="https://www.flightradar24.com/" target="_blank" class="ml-2 text-blue-600 hover:underline">Voir Flyradar</a>
+            </div>
+            <div class="flex-1 flex flex-col md:flex-row items-center md:space-x-4">
+                <span class="font-bold text-red-600 mr-2">Trafic :</span>
+                <span class="text-gray-700">Consultez l'état du trafic routier en direct.</span>
+                <a href="https://www.google.com/maps/@14.6928,-17.4467,12z/data=!5m1!1e1" target="_blank" class="ml-2 text-blue-600 hover:underline">Voir Trafic</a>
+            </div>
+        </div>
+    </div>
 
-        // Popup Actualité
-        document.querySelectorAll('.actu-popup-trigger').forEach(function(el) {
-            el.addEventListener('click', function() {
-                document.getElementById('actu-modal-title').textContent = this.dataset.title;
-                document.getElementById('actu-modal-image').src = this.dataset.image;
-                document.getElementById('actu-modal-image').alt = this.dataset.title;
-                document.getElementById('actu-modal-content').textContent = this.dataset.content;
-                document.getElementById('actu-modal').classList.remove('hidden');
-            });
-        });
-        document.getElementById('close-actu-modal').addEventListener('click', function() {
-            document.getElementById('actu-modal').classList.add('hidden');
-        });
-        document.getElementById('actu-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.add('hidden');
-            }
-        });
-    </script>
 </body>
 </html>
