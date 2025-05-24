@@ -1124,5 +1124,91 @@
         </div>
     </div>
 
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Highlight active nav link on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+        
+        // Rating stars interaction
+        const stars = document.querySelectorAll('.rating-stars button');
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.remove('text-gray-300');
+                        s.classList.add('text-yellow-400');
+                    } else {
+                        s.classList.remove('text-yellow-400');
+                        s.classList.add('text-gray-300');
+                    }
+                });
+            });
+        });
+
+        // Popup Actualité
+        document.querySelectorAll('.actu-popup-trigger').forEach(function(el) {
+            el.addEventListener('click', function() {
+                document.getElementById('actu-modal-title').textContent = this.dataset.title;
+                document.getElementById('actu-modal-image').src = this.dataset.image;
+                document.getElementById('actu-modal-image').alt = this.dataset.title;
+                document.getElementById('actu-modal-content').textContent = this.dataset.content;
+                document.getElementById('actu-modal').classList.remove('hidden');
+            });
+        });
+        document.getElementById('close-actu-modal').addEventListener('click', function() {
+            document.getElementById('actu-modal').classList.add('hidden');
+        });
+        document.getElementById('actu-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
+
 </body>
 </html>
