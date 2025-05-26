@@ -122,6 +122,51 @@
                 margin-left: 0;
             }
         }
+
+        /* Styles pour le modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            margin: auto;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="font-sans">
@@ -226,39 +271,66 @@
                     <!-- Liste des actualités scrollable -->
                     <div class="overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
                         @foreach($actus->take(5) as $actu)
-                            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100">
-                                @if($actu->image)
-                                    <div class="relative h-32">
-                                        <img src="{{ asset('storage/' . $actu->image) }}" 
-                                             alt="{{ $actu->title }}" 
-                                             class="w-full h-full object-cover">
-                                        <div class="absolute top-2 right-2">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                {{ $actu->category }}
-                                            </span>
+                            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100 cursor-pointer actu-card" 
+                                 data-actu-id="{{ $actu->id }}"
+                                 data-actu-title="{{ $actu->title }}"
+                                 data-actu-content="{{ $actu->content }}"
+                                 data-actu-category="{{ $actu->category }}"
+                                 data-actu-date="{{ $actu->created_at->format('d/m/Y') }}"
+                                 data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
+                                 data-actu-link="{{ $actu->external_link }}">
+                                    @if($actu->image)
+                                        <div class="relative h-32">
+                                            <img src="{{ asset('storage/' . $actu->image) }}" 
+                                                 alt="{{ $actu->title }}" 
+                                                 class="w-full h-full object-cover">
+                                            <div class="absolute top-2 right-2">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    {{ $actu->category }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <div class="p-3">
+                                        <h4 class="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{{ $actu->title }}</h4>
+                                        <p class="text-gray-500 text-xs mb-2 line-clamp-2">{{ Str::limit($actu->content, 80) }}</p>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-xs text-gray-400">{{ $actu->created_at->format('d/m/Y') }}</span>
                                         </div>
                                     </div>
-                                @endif
-                                <div class="p-3">
-                                    <h4 class="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{{ $actu->title }}</h4>
-                                    <p class="text-gray-500 text-xs mb-2 line-clamp-2">{{ Str::limit($actu->content, 80) }}</p>
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-400">{{ $actu->created_at->format('d/m/Y') }}</span>
-                                        @if($actu->external_link)
-                                            <a href="{{ $actu->external_link }}" 
-                                               target="_blank"
-                                               class="text-blue-600 hover:text-blue-800 text-xs flex items-center">
-                                                En savoir plus
-                                                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                                </svg>
-                                            </a>
-                                        @endif
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Modal pour les détails de l'actualité -->
+                        <div id="actuModal" class="modal">
+                            <div class="modal-content max-h-[90vh] overflow-y-auto">
+                                <div class="relative">
+                                    <img id="modalImage" src="" alt="" class="modal-image hidden">
+                                    <button class="absolute top-4 right-4 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75" onclick="closeModal()">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <span id="modalCategory" class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"></span>
+                                        <span id="modalDate" class="text-sm text-gray-500"></span>
+                                    </div>
+                                    <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
+                                    <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
+                                    <div id="modalLinkContainer" class="hidden mt-6 pt-6 border-t">
+                                        <a id="modalLink" href="#" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
+                                            <span>En savoir plus</span>
+                                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                            </svg>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
                 </div>
             </div>
         </div>
@@ -1252,6 +1324,67 @@
                     link.classList.add('active');
                 }
             });
+        });
+
+        // Gestion du modal des actualités
+        const modal = document.getElementById('actuModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalDate = document.getElementById('modalDate');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalLink = document.getElementById('modalLink');
+        const modalLinkContainer = document.getElementById('modalLinkContainer');
+
+        // Ajouter les écouteurs d'événements pour les cartes d'actualités
+        document.querySelectorAll('.actu-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const data = card.dataset;
+                
+                // Mise à jour du contenu du modal
+                if (data.actuImage) {
+                    modalImage.src = data.actuImage;
+                    modalImage.classList.remove('hidden');
+                } else {
+                    modalImage.classList.add('hidden');
+                }
+                
+                modalCategory.textContent = data.actuCategory;
+                modalDate.textContent = data.actuDate;
+                modalTitle.textContent = data.actuTitle;
+                modalContent.innerHTML = data.actuContent.replace(/\n/g, '<br>');
+                
+                if (data.actuLink) {
+                    modalLink.href = data.actuLink;
+                    modalLinkContainer.classList.remove('hidden');
+                } else {
+                    modalLinkContainer.classList.add('hidden');
+                }
+                
+                // Afficher le modal
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+            });
+        });
+
+        // Fonction pour fermer le modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Fermer le modal en cliquant sur l'arrière-plan
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Fermer le modal avec la touche Echap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
         });
     </script>
 </body>
