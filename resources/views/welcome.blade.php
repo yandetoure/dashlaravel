@@ -211,19 +211,20 @@
     </section>
 
     <!-- Main Content with Sidebar -->
-    <div class="relative">
-        <!-- Sidebar Actualités -->
-        <div class="relative">
-            <div id="sidebar" class="w-80 bg-white shadow-lg overflow-hidden border-r border-gray-200">
-                <div class="flex flex-col">
+    <div class="flex">
+        <!-- Sidebar Container -->
+        <div class="w-80 relative">
+            <!-- Sidebar Content -->
+            <div id="sidebar" class="w-80">
+                <div class="bg-white shadow-lg border-r border-gray-200">
                     <!-- En-tête de la sidebar -->
-                    <div class="p-4 border-b border-gray-200 bg-gray-50">
+                    <div class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
                         <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
                         <p class="text-sm text-gray-500">Restez informé de nos actualités</p>
                     </div>
 
                     <!-- Liste des actualités scrollable -->
-                    <div class="overflow-y-auto p-4 space-y-4" style="scrollbar-width: thin; max-height: calc(100vh - 100px);">
+                    <div class="overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
                         @foreach($actus->take(5) as $actu)
                             <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100">
                                 @if($actu->image)
@@ -263,7 +264,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="ml-80">
+        <div class="flex-1">
             <!-- Tarifs Section -->
 
             <section id="tarifs" class="py-20 bg-gray-50">
@@ -1184,23 +1185,30 @@
         
         // Gestion du scroll de la sidebar
         function updateSidebarPosition() {
+            const sidebarRect = sidebar.getBoundingClientRect();
             const heroSection = document.querySelector('.hero');
             const heroBottom = heroSection.getBoundingClientRect().bottom;
-            const sidebarRect = sidebar.getBoundingClientRect();
-            const headerHeight = 0; // Ajustez si vous avez un header fixe
             
+            // Si on est dans la zone de la bannière, on retire la position fixe
             if (heroBottom > 0) {
-                // Si on est près de la bannière, position relative
                 sidebar.style.position = 'relative';
                 sidebar.style.top = 'auto';
                 sidebar.style.left = 'auto';
                 sidebar.style.width = 'auto';
-            } else if (sidebarRect.top <= headerHeight) {
-                // Si la sidebar touche le haut, position fixe
+                return;
+            }
+            
+            // Sinon, on applique la logique de fixation normale
+            if (sidebarRect.top <= 0) {
                 sidebar.style.position = 'fixed';
-                sidebar.style.top = `${headerHeight}px`;
+                sidebar.style.top = '0';
                 sidebar.style.left = '0';
                 sidebar.style.width = '20rem';
+            } else {
+                sidebar.style.position = 'relative';
+                sidebar.style.top = 'auto';
+                sidebar.style.left = 'auto';
+                sidebar.style.width = 'auto';
             }
         }
         
