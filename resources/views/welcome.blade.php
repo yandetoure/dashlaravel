@@ -173,7 +173,7 @@
     <!-- Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Phone numbers banner -->
+                    <!-- Phone numbers banner -->
             <div class="py-2 border-b flex justify-end space-x-4 text-sm text-white-600">
                 <a href="tel:+221777056767" class="hover:text-red-600">
                     <i class="fas fa-phone mr-1"></i> +221 77 705 67 67
@@ -208,52 +208,52 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+<!-- Hero Section -->
     <section id="accueil" class="hero w-full pt-24 pb-32 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center justify-between mt-10">
-                <div class="md:w-1/2 mb-10 md:mb-0">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes le Leader du Transfert/Shuttle Aéroportuaire</h1>
-                    <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et Transferts privés vers l'Aéroport International Blaise Diagne(AIBD).</p>
-                    <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex items-center justify-between mt-10">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes le Leader du Transfert/Shuttle Aéroportuaire</h1>
+                <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et Transferts privés vers l'Aéroport International Blaise Diagne(AIBD).</p>
+                <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
+            </div>
 
-                <div class="md:w-1/2">
-                    <div class="booking-form p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Réserver votre trajet</h3>
+            <div class="md:w-1/2">
+                <div class="booking-form p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Réserver votre trajet</h3>
 
-                        <form id="availability-form" class="text-gray-800">
-                            <div class="mb-4">
-                                <label class="block mb-2">Sens du trajet</label>
-                                <select id="trip_id" name="trip_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                                    <option value="1">Dakar - AIBD</option>
-                                    <option value="1">AIBD - Dakar</option>
-                                    <option value="2">AIBD - Saly</option>
-                                    <option value="3">Saly - AIBD</option>
-                                </select>
-                            </div>
+                    <form id="availability-form" class="text-gray-800">
+                        <div class="mb-4">
+                            <label class="block mb-2">Sens du trajet</label>
+                            <select id="trip_id" name="trip_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                                <option value="1">Dakar - AIBD</option>
+                                <option value="1">AIBD - Dakar</option>
+                                <option value="2">AIBD - Saly</option>
+                                <option value="3">Saly - AIBD</option>
+                            </select>
+                        </div>
 
-                            <div class="mb-4">
-                                <label class="block mb-2">Date</label>
-                                <input type="date" id="date" name="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                            </div>
+                        <div class="mb-4">
+                            <label class="block mb-2">Date</label>
+                            <input type="date" id="date" name="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                        </div>
 
-                            <div class="mb-4">
-                                <label class="block mb-2">Heure</label>
-                                <input type="time" id="heure_ramassage" name="heure_ramassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                            </div>
+                        <div class="mb-4">
+                            <label class="block mb-2">Heure</label>
+                            <input type="time" id="heure_ramassage" name="heure_ramassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                        </div>
 
-                            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-                                Vérifier disponibilité
-                            </button>
-                        </form>
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                            Vérifier disponibilité
+                        </button>
+                    </form>
 
-                        <div id="availability-result" class="mt-4 text-center font-semibold"></div>
-                    </div>
+                    <div id="availability-result" class="mt-4 text-center font-semibold"></div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Main Content with Sidebar -->
     <div class="flex">
@@ -290,16 +290,16 @@
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                     {{ $actu->category }}
                                                 </span>
-                                            </div>
-                                        </div>
+                    </div>
+                </div>
                                     @endif
                                     <div class="p-3">
                                         <h4 class="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{{ $actu->title }}</h4>
                                         <p class="text-gray-500 text-xs mb-2 line-clamp-2">{{ Str::limit($actu->content, 80) }}</p>
                                         <div class="flex items-center justify-between">
                                             <span class="text-xs text-gray-400">{{ $actu->created_at->format('d/m/Y') }}</span>
-                                        </div>
-                                    </div>
+        </div>
+    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -315,11 +315,11 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="p-6">
+        <div class="p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <span id="modalCategory" class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"></span>
                                         <span id="modalDate" class="text-sm text-gray-500"></span>
-                                    </div>
+        </div>
                                     <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
                                     <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
                                     <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
@@ -329,284 +329,287 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                             </svg>
                                         </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    </div>
+</div>
+                </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <!-- Main Content -->
         <div class="flex-1">
-            <!-- Tarifs Section -->
+        <!-- Tarifs Section -->
 
-            <section id="tarifs" class="py-20 bg-gray-50">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Tarifs</h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Des prix transparents et compétitifs pour tous nos services</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8">
-
-                    <!-- Tarif 1 -->
-
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="bg-red-600 text-white py-6 px-8">
-                            <h3 class="text-xl font-bold">Transfert AIBD VIP</h3>
-                            <div class="mt-4">
-                                <span class="text-3xl font-bold">45 500 FCFA</span>
-                                <span class="text-red-200">/trajet</span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <ul class="space-y-3 text-gray-600 mb-8">
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Navette privée</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Disponible 24h/24</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Wifi à bord</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Bagages inclus (2 par personne)</span>
-                                </li>
-                            </ul>
-                            <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
-                        </div>
-                    </div>
-                                        <!-- Tarif 2 -->
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
-                        <div class="bg-red-800 text-white py-6 px-8">
-                            <h3 class="text-xl font-bold">Transfert AIBDP</h3>
-                            <div class="mt-4">
-                                <span class="text-3xl font-bold">32 500 FCFA</span>
-                                <span class="text-red-200">/trajet</span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <ul class="space-y-3 text-gray-600 mb-8">
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Navette privée</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Disponible 24h/24</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Jusqu'à 3 personnes</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Tout confort inclus</span>
-                                </li>
-                            </ul>
-                            <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Tarif 3 -->
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                        <div class="bg-red-600 text-white py-6 px-8">
-                            <h3 class="text-xl font-bold">Transfert PREM/(Meet & Greet)<h3>
-                            <div class="mt-4">
-                                <span class="text-3xl font-bold">65 000 FCFA</span>
-                                <span class="text-red-200"></span>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <ul class="space-y-3 text-gray-600 mb-8">
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Véhicule haut de gamme</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Chauffeur professionnel</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Wifi à bord</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
-                                    <span>Conciergerie (Meet & Greet)</span>
-                                </li>
-                            </ul>
-                            <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
-                        </div>
-                    </div>
-                </div>
-
+    <section id="tarifs" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Tarifs</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Des prix transparents et compétitifs pour tous nos services</p>
             </div>
-        </section>
+            <div class="grid md:grid-cols-3 gap-8">
 
+                <!-- Tarif 1 -->
 
-        <!-- Services Section -->
-        <section id="services" class="py-20 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Services</h2>
-                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous offrons des solutions de transport adaptées à tous vos besoins vers l'aéroport AIBD et au-delà</p>
-                </div>
-                
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Service 1 -->
-                    {{-- <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                        <div class="text-red-600 mb-4">
-                            <i class="fas fa-shuttle-van text-4xl"></i>
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-red-600 text-white py-8 px-6">
+                            <h3 class="text-2xl font-bold mb-2">Transfert AIBD VIP</h3>
+                            <div class="mt-2">
+                                <span class="text-4xl font-bold">45 500</span>
+                                <span class="text-xl ml-1">FCFA</span>
+                                <span class="text-base text-red-200">/trajet</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Location mini-bus</h3>
-                        <p class="text-gray-600 mb-4">Service économique de navette partagée avec des départs réguliers depuis différents points de Dakar.</p>
-                        <ul class="text-gray-600 space-y-2">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Départs toutes les heures</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Prix abordable</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Confort assuré</span>
-                            </li>
-                        </ul>
                     </div>
-                    
-                    <!-- Service 2 -->
-                    <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                        <div class="text-red-600 mb-4">
-                            <i class="fas fa-car text-4xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Voiture avec chauffeur</h3>
-                        <p class="text-gray-600 mb-4">Service privé avec chauffeur professionnel pour un trajet personnalisé selon vos horaires.</p>
-                        <ul class="text-gray-600 space-y-2">
+                        <div class="p-6">
+                            <ul class="space-y-4 text-base text-gray-600 mb-8">
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Navette privée</span>
+                            </li>
+                            <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                                 <span>Disponible 24h/24</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Chauffeur expérimenté</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Wifi à bord</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Flexibilité totale</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Bagages inclus (2 par personne)</span>
                             </li>
                         </ul>
+                            <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 text-lg font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
-                    
-                    <!-- Service 3 -->
-                    <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                        <div class="text-red-600 mb-4">
-                            <i class="fas fa-bus text-4xl"></i>
+                </div>
+                                <!-- Tarif 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
+                        <div class="bg-red-800 text-white py-8 px-6">
+                            <h3 class="text-2xl font-bold mb-2">Transfert AIBDP</h3>
+                            <div class="mt-2">
+                                <span class="text-4xl font-bold">32 500</span>
+                                <span class="text-xl ml-1">FCFA</span>
+                                <span class="text-base text-red-200">/trajet</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts privés</h3>
-                        <p class="text-gray-600 mb-4">Service haut de gamme avec véhicule premium pour un transfert en toute élégance.</p>
-                        <ul class="text-gray-600 space-y-2">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Véhicules de luxe</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Service personnalisé</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Accueil avec panneau</span>
-                            </li>
-                        </ul>
                     </div>
-                     --}}
-
-                                     <!-- Service 6 -->
-                    <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                           <div class="mb-4 flex justify-center">
-                            <img src="images/serv4.jpeg" alt="Icone Service 1" class="w-full h-auto object-contain" />
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts Aéroport</h3>
-                        <p class="text-gray-600 mb-4">Flotte exclusive de Vans.</p>
-                        <ul class="text-gray-600 space-y-2">
+                        <div class="p-6">
+                            <ul class="space-y-4 text-base text-gray-600 mb-8">
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Sécurité : Chauffeurs expérimentés, vitesse controlée</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Navette privée</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Confort : clim / wifi / eau à bord</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Disponible 24h/24</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Espace : jusqu'à 6 personnes et 12 valises</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Jusqu'à 3 personnes</span>
+                            </li>
+                            <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Tout confort inclus</span>
                             </li>
                         </ul>
+                            <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white text-lg font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
-
-                    
-                    <!-- Service 5 -->
-                    <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                           <div class="mb-4 flex justify-center">
-                            <img src="images/ent.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                </div>
+                
+                <!-- Tarif 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div class="bg-red-600 text-white py-8 px-6">
+                            <h3 class="text-2xl font-bold mb-2">Transfert PREM/(Meet & Greet)</h3>
+                            <div class="mt-2">
+                                <span class="text-4xl font-bold">65 000</span>
+                                <span class="text-xl ml-1">FCFA</span>
+                                <span class="text-base text-red-200">/trajet</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Services aux Entreprises</h3>
-                        <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
-                        <ul class="text-gray-600 space-y-2">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Transferts d'employés</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Références compagnies internationales</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Partenaire AIBD</span>
-                            </li>
-                        </ul>
                     </div>
-                    
-
-                  <!-- Service 4 -->
-                    <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
-                           <div class="mb-4 flex justify-center">
-                            <img src="images/meet.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">Assistance & Conciergerie</h3>
-                        <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
-                        <ul class="text-gray-600 space-y-2">
+                        <div class="p-6">
+                            <ul class="space-y-4 text-base text-gray-600 mb-8">
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Suivi et informations de vol</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Véhicule haut de gamme</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Accueil et Facilitation de passage</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Chauffeur professionnel</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                                <span>Récupération valises / Réclamations</span>
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Wifi à bord</span>
                             </li>
-
+                            <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span>Conciergerie (Meet & Greet)</span>
+                            </li>
                         </ul>
+                            <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 text-lg font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section id="tarifs" class="py-20 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div class="text-center mb-16">
+        </div>
+    </section>
+
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Services</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous offrons des solutions de transport adaptées à tous vos besoins vers l'aéroport AIBD et au-delà</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                {{-- <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                    <div class="text-red-600 mb-4">
+                        <i class="fas fa-shuttle-van text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Location mini-bus</h3>
+                    <p class="text-gray-600 mb-4">Service économique de navette partagée avec des départs réguliers depuis différents points de Dakar.</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Départs toutes les heures</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Prix abordable</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Confort assuré</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                    <div class="text-red-600 mb-4">
+                        <i class="fas fa-car text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Voiture avec chauffeur</h3>
+                    <p class="text-gray-600 mb-4">Service privé avec chauffeur professionnel pour un trajet personnalisé selon vos horaires.</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Disponible 24h/24</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Chauffeur expérimenté</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Flexibilité totale</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                    <div class="text-red-600 mb-4">
+                        <i class="fas fa-bus text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts privés</h3>
+                    <p class="text-gray-600 mb-4">Service haut de gamme avec véhicule premium pour un transfert en toute élégance.</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Véhicules de luxe</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Service personnalisé</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Accueil avec panneau</span>
+                        </li>
+                    </ul>
+                </div>
+                 --}}
+
+                                 <!-- Service 6 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                       <div class="mb-4 flex justify-center">
+                        <img src="images/serv4.jpeg" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts Aéroport</h3>
+                    <p class="text-gray-600 mb-4">Flotte exclusive de Vans.</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Sécurité : Chauffeurs expérimentés, vitesse controlée</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Confort : clim / wifi / eau à bord</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Espace : jusqu'à 6 personnes et 12 valises</span>
+                        </li>
+                    </ul>
+                </div>
+
+                
+                <!-- Service 5 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                       <div class="mb-4 flex justify-center">
+                        <img src="images/ent.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Services aux Entreprises</h3>
+                    <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Transferts d'employés</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Références compagnies internationales</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Partenaire AIBD</span>
+                        </li>
+                    </ul>
+                </div>
+                
+
+              <!-- Service 4 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
+                       <div class="mb-4 flex justify-center">
+                        <img src="images/meet.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Assistance & Conciergerie</h3>
+                    <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
+                    <ul class="text-gray-600 space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Suivi et informations de vol</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Accueil et Facilitation de passage</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span>Récupération valises / Réclamations</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tarifs" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Services annexes</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
@@ -1348,7 +1351,7 @@
                 if (data.actuImage) {
                     modalImage.src = data.actuImage;
                     modalImage.classList.remove('hidden');
-                } else {
+                    } else {
                     modalImage.classList.add('hidden');
                 }
                 
@@ -1368,8 +1371,8 @@
                 // Afficher le modal
                 modal.classList.add('active');
                 document.body.classList.add('modal-open');
+                });
             });
-        });
 
         // Fonction pour fermer le modal
         function closeModal() {
@@ -1390,6 +1393,294 @@
                 closeModal();
             }
         });
+    </script>
+
+    <!-- Chat Box -->
+    <div id="chat-container" class="fixed bottom-4 right-4 z-50">
+        <!-- Chat Button -->
+        <button id="chat-button" class="bg-red-600 text-white rounded-full p-4 shadow-lg hover:bg-red-700 transition-all duration-300 flex items-center">
+            <i class="fas fa-comments text-2xl"></i>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chat-window" class="hidden fixed bottom-20 right-4 w-96 bg-white rounded-lg shadow-xl">
+            <!-- Chat Header -->
+            <div class="bg-red-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-white text-red-600 flex items-center justify-center font-bold text-xl mr-3">
+                        A
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Anta</h3>
+                        <p class="text-sm text-red-100">Assistant virtuel</p>
+                    </div>
+                </div>
+                <button id="close-chat" class="text-white hover:text-red-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="p-4 h-96 overflow-y-auto">
+                <!-- Messages will be added here -->
+                <div class="flex mb-4">
+                    <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-sm mr-2">
+                        A
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
+                        <p>Bonjour ! Je suis Astou, votre assistante virtuelle. Comment puis-je vous aider aujourd'hui ?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="border-t p-4">
+                <form id="chat-form" class="flex items-center">
+                    <input type="text" id="chat-input" 
+                           class="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" 
+                           placeholder="Tapez votre message...">
+                    <button type="submit" 
+                            class="bg-red-600 text-white px-6 py-2 rounded-r-lg hover:bg-red-700 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chat functionality
+        const chatButton = document.getElementById('chat-button');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChat = document.getElementById('close-chat');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        // Predefined responses with keywords and detailed responses
+        const responses = {
+            'greeting': {
+                keywords: ['bonjour', 'bonsoir', 'salut', 'hey', 'hello', 'hi', 'coucou'],
+                response: `Bonjour ! Je suis ravie de vous accueillir. Comment puis-je vous aider aujourd'hui ? 
+Je peux vous renseigner sur :
+- Nos services de transport
+- Les réservations et tarifs
+- Les horaires et disponibilités
+- Les services VIP et conciergerie`
+            },
+            'reservation': {
+                keywords: ['réserver', 'reservation', 'reserver', 'réservation', 'comment faire', 'comment réserver', 'je veux reserver', 'je souhaite reserver'],
+                response: `Je peux vous aider à réserver votre transfert ! Voici les différentes options :
+
+1. 📱 Réservation en ligne :
+   - Remplissez notre formulaire en ligne sur cette page
+   - Choisissez votre trajet et vos horaires
+   - Recevez une confirmation immédiate
+
+2. ☎️ Par téléphone :
+   - Appelez-nous au +221 77 705 67 67
+   - Disponible 24h/24 et 7j/7
+
+3. 💬 Via WhatsApp :
+   - Contactez-nous au +221 77 705 69 69
+   - Service rapide et personnalisé
+
+Avez-vous une préférence ? Je peux vous guider pour chaque option.`
+            },
+            'tarifs': {
+                keywords: ['tarif', 'prix', 'coût', 'cout', 'combien', 'cher', 'montant'],
+                response: `Voici nos différentes formules de transport :
+
+🌟 Transfert AIBD VIP (45 500 FCFA)
+- Navette privée haut de gamme
+- Wifi et confort premium
+- Bagages inclus (2 par personne)
+
+✨ Transfert AIBDP (32 500 FCFA)
+- Service privé confortable
+- Jusqu'à 3 personnes
+- Disponible 24h/24
+
+👑 Transfert PREM/Meet & Greet (65 000 FCFA)
+- Service conciergerie complet
+- Accueil personnalisé
+- Véhicule haut de gamme
+
+Souhaitez-vous plus de détails sur l'une de ces formules ?`
+            },
+            'horaires': {
+                keywords: ['horaire', 'heure', 'ouvert', 'disponible', 'quand', 'jour', 'planning'],
+                response: `Nos services sont organisés pour votre confort :
+
+🕒 Service de transfert :
+- Disponible 24h/24 et 7j/7
+- Réservation possible à toute heure
+- Adaptable à vos horaires de vol
+
+🏢 Bureau d'accueil :
+- Ouvert du lundi au samedi
+- De 8h à 18h
+- Service client disponible
+
+Avez-vous besoin d'un transfert à un horaire particulier ?`
+            },
+            'contact': {
+                keywords: ['contact', 'téléphone', 'appeler', 'joindre', 'email', 'mail', 'whatsapp'],
+                response: `Vous pouvez nous joindre facilement :
+
+📞 Téléphone : +221 77 705 67 67
+📱 WhatsApp : +221 77 705 69 69
+📧 Email : 221cproservices@gmail.com
+
+Notre équipe est disponible pour :
+- Réservations
+- Informations
+- Devis personnalisés
+- Service client
+
+Comment préférez-vous nous contacter ?`
+            },
+            'services': {
+                keywords: ['service', 'prestation', 'propose', 'offre', 'disponible'],
+                response: `Découvrez notre gamme complète de services :
+
+🚗 Transport aéroport
+- Transferts privés
+- Service VIP
+- Navettes sur mesure
+
+🌟 Services Premium
+- Conciergerie
+- Meet & Greet
+- Assistance bagages
+
+🏢 Services Entreprises
+- Transport professionnel
+- Contrats corporate
+- Solutions sur mesure
+
+Quel type de service vous intéresse ?`
+            },
+            'location': {
+                keywords: ['location', 'voiture', 'véhicule', 'louer'],
+                response: `Nos services de location comprennent :
+
+🚘 Location avec chauffeur
+- À partir de 50 000 FCFA/jour dans Dakar
+- À partir de 80 000 FCFA/jour hors Dakar
+- Chauffeur professionnel inclus
+
+✨ Avantages inclus :
+- Climatisation
+- Carburant en sus
+- Assurance complète
+
+Souhaitez-vous connaître nos disponibilités ?`
+            },
+            'paiement': {
+                keywords: ['payer', 'paiement', 'règlement', 'payement', 'espèce', 'carte'],
+                response: `Nous acceptons plusieurs modes de paiement :
+
+💳 Options de paiement :
+- Espèces
+- Carte bancaire
+- Virement bancaire
+- Wave
+- Orange Money
+
+🔒 Paiement sécurisé garanti
+Préférez-vous un mode de paiement particulier ?`
+            }
+        };
+
+        // Toggle chat window
+        chatButton.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+            chatButton.classList.toggle('rotate-180');
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+            chatButton.classList.remove('rotate-180');
+        });
+
+        // Handle chat form submission
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            chatInput.value = '';
+
+            // Get and add bot response
+            setTimeout(() => {
+                const response = getBotResponse(message.toLowerCase());
+                addMessage(response, 'bot');
+            }, 500);
+        });
+
+        function addMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex mb-4 ' + (sender === 'user' ? 'justify-end' : '');
+
+            if (sender === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-sm mr-2">
+                        A
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
+                        <p class="whitespace-pre-line">${message}</p>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="bg-red-600 text-white rounded-lg p-3 max-w-[80%]">
+                        <p>${message}</p>
+                    </div>
+                `;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            // Check for greetings first
+            if (responses.greeting.keywords.some(keyword => message.includes(keyword))) {
+                return responses.greeting.response;
+            }
+
+            // Check all other response categories
+            for (const category in responses) {
+                if (category === 'greeting') continue; // Skip greeting as we already checked it
+                if (responses[category].keywords.some(keyword => message.includes(keyword))) {
+                    return responses[category].response;
+                }
+            }
+
+            // If no specific match is found, look for partial matches
+            const words = message.split(' ');
+            for (const word of words) {
+                for (const category in responses) {
+                    if (responses[category].keywords.some(keyword => keyword.includes(word) || word.includes(keyword))) {
+                        return responses[category].response;
+                    }
+                }
+            }
+
+            // Default response with conversation starters
+            return `Je peux vous aider sur plusieurs sujets. Choisissez ce qui vous intéresse :
+
+🚗 Transport et réservations
+💰 Tarifs et paiements
+🕒 Horaires et disponibilités
+✨ Services VIP et conciergerie
+📞 Contact et assistance
+
+N'hésitez pas à me poser une question précise !`;
+        }
     </script>
 </body>
 </html>

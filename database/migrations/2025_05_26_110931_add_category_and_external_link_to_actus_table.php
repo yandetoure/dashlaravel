@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('actus', function (Blueprint $table) {
             $table->string('external_link')->nullable()->after('content');
-            $table->enum('category', ['Actualités', 'Infos', 'Cultures', 'Rendez-vous'])->default('Actualités')->after('external_link');
+            $table->enum('category', ['Actualités', 'Infos', 'Cultures', 'Rendez-vous', ''])->default('Actualités')->after('external_link');
         });
     }
 
