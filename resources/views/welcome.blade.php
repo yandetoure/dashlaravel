@@ -152,7 +152,7 @@
     <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col space-y-4">
             @foreach($actus->take(3) as $actu)
-                <div class="block bg-white rounded-lg shadow hover:shadow-lg transition w-full cursor-pointer actu-popup-trigger"
+                <div class="block bg-white rounded-lg shadow hover:shadow-lg transition w-full cursor-pointer actu-popup-trigger relative"
                      data-title="{{ $actu->title }}"
                      data-image="{{ asset('storage/' . $actu->image) }}"
                      data-content="{{ e(Str::limit($actu->content, 500)) }}">
@@ -160,6 +160,24 @@
                     <div class="p-4">
                         <h3 class="text-lg font-semibold mb-2">{{ $actu->title }}</h3>
                         <p class="text-gray-600 text-sm">{{ Str::limit($actu->content, 100) }}</p>
+                        
+                        @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('agent')))
+                            <div class="absolute top-2 right-2 flex space-x-2">
+                                <a href="{{ route('actus.edit', $actu->id) }}" 
+                                   class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('actus.destroy', $actu->id) }}" method="POST" class="inline" 
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette actualité ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach

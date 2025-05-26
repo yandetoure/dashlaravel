@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Actu; // Assure-toi que le modèle existe
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ActuController extends Controller
 {
@@ -17,45 +19,86 @@ class ActuController extends Controller
     // Affiche le formulaire pour créer une nouvelle actualité
     public function create()
     {
-        return view('actus.create');
+        $categories = ['Actualités', 'Infos', 'Cultures', 'Rendez-vous'];
+        $actus = Actu::latest()->take(3)->get();
+        return view('actus.create', compact('categories', 'actus'));
     }
 
     // Enregistre la nouvelle actualité en base
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'image' => 'nullable|image|max:2048', // max 2MB
-        ]);
-    
-        // Si une image est uploadée
-        if ($request->hasFile('image')) {
-            // Stocker dans 'storage/app/public/actus'
-            $path = $request->file('image')->store('actus', 'public');  
-            // Stocke le chemin relatif dans la BD, par ex: 'actus/filename.jpg'
-            $validated['image'] = $path;
-        } else {
-            $validated['image'] = null; // ou laisser vide si optionnel
+        try {
+            // Validation détaillée
+            $validated = $request->validate([
+                'title' => 'required|string|min:3|max:255',
+                'content' => 'required|string|min:10',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'category' => 'required|in:Actualités,Infos,Cultures,Rendez-vous',
+                'external_link' => 'nullable|url|max:255'
+            ], [
+                'title.required' => 'Le titre est obligatoire',
+                'title.min' => 'Le titre doit contenir au moins 3 caractères',
+                'content.required' => 'Le contenu est obligatoire',
+                'content.min' => 'Le contenu doit contenir au moins 10 caractères',
+                'image.image' => 'Le fichier doit être une image',
+                'image.mimes' => 'L\'image doit être de type : jpeg, png, jpg, gif',
+                'image.max' => 'L\'image ne doit pas dépasser 2Mo',
+                'category.required' => 'La catégorie est obligatoire',
+                'category.in' => 'La catégorie sélectionnée n\'est pas valide',
+                'external_link.url' => 'Le lien externe doit être une URL valide'
+            ]);
+
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('actus', 'public');
+                $validated['image'] = $path;
+            }
+
+            $actu = Actu::create($validated);
+
+            Log::info('Actualité créée avec succès:', $actu->toArray());
+            return redirect()->route('actus.index')
+                           ->with('success', 'Actualité créée avec succès');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Erreur de validation:', [
+                'errors' => $e->errors(),
+                'input' => $request->all()
+            ]);
+            return redirect()->back()
+                           ->withErrors($e->errors())
+                           ->withInput();
+
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de la création de l\'actualité:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()
+                           ->withErrors(['error' => 'Une erreur est survenue lors de la création de l\'actualité'])
+                           ->withInput();
         }
-    
-        // crée l'actu avec le chemin complet dans la BDD
-        Actu::create($validated);
-    
-        return redirect()->route('acutus.index')->with('success', 'Actualité créée avec succès.');
     }
     
     public function show($id)
     {
         $actu = Actu::findOrFail($id);
-        return view('actus.show', compact('actu'));
+        $actus = Actu::where('id', '!=', $id)
+                     ->latest()
+                     ->take(3)
+                     ->get();
+        return view('actus.show', compact('actu', 'actus'));
     }
     
     // Affiche le formulaire pour éditer une actualité existante
     public function edit($id)
     {
         $actu = Actu::findOrFail($id);
-        return view('actus.edit', compact('actu'));
+        $categories = ['Actualités', 'Infos', 'Cultures', 'Rendez-vous'];
+        $actus = Actu::where('id', '!=', $id)
+                     ->latest()
+                     ->take(3)
+                     ->get();
+        return view('actus.edit', compact('actu', 'categories', 'actus'));
     }
 
     // Met à jour une actualité existante
@@ -64,34 +107,47 @@ class ActuController extends Controller
         $actu = Actu::findOrFail($id);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'title' => 'required|string|min:3|max:255',
+            'content' => 'required|string|min:10',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category' => 'required|in:Actualités,Infos,Cultures,Rendez-vous',
+            'external_link' => 'nullable|url|max:255'
+        ], [
+            'title.required' => 'Le titre est obligatoire',
+            'title.min' => 'Le titre doit contenir au moins 3 caractères',
+            'content.required' => 'Le contenu est obligatoire',
+            'content.min' => 'Le contenu doit contenir au moins 10 caractères',
+            'image.image' => 'Le fichier doit être une image',
+            'image.mimes' => 'L\'image doit être de type : jpeg, png, jpg, gif',
+            'image.max' => 'L\'image ne doit pas dépasser 2Mo',
+            'category.required' => 'La catégorie est obligatoire',
+            'category.in' => 'La catégorie sélectionnée n\'est pas valide',
+            'external_link.url' => 'Le lien externe doit être une URL valide'
         ]);
 
-        // gestion de la nouvelle image
         if ($request->hasFile('image')) {
             // Supprimer ancienne image si nécessaire
-            if ($actu->image && \Storage::exists('public/actus/' . $actu->image)) {
-                \Storage::delete('public/actus/' . $actu->image);
+            if ($actu->image && Storage::disk('public')->exists($actu->image)) {
+                Storage::disk('public')->delete($actu->image);
             }
-            $path = $request->file('image')->store('public/actus');
-            $validated['image'] = basename($path);
+            $path = $request->file('image')->store('actus', 'public');
+            $validated['image'] = $path;
         }
 
         $actu->update($validated);
-        return redirect()->route('actus.index')->with('success', 'Actualité mise à jour.');
+        return redirect()->route('actus.show', $actu->id)
+                        ->with('success', 'Actualité mise à jour avec succès');
     }
 
     // Supprime une actualité
     public function destroy($id)
     {
         $actu = Actu::findOrFail($id);
-        // Supprimer l’image si existante
-        if ($actu->image && \Storage::exists('public/actus/' . $actu->image)) {
-            \Storage::delete('public/actus/' . $actu->image);
+        if ($actu->image && Storage::disk('public')->exists($actu->image)) {
+            Storage::disk('public')->delete($actu->image);
         }
         $actu->delete();
-        return redirect()->route('actus.index')->with('success', 'Actualité supprimée.');
+        return redirect()->route('actus.index')
+                        ->with('success', 'Actualité supprimée avec succès');
     }
 }
