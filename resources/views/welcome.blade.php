@@ -264,7 +264,17 @@
                 <div class="bg-white shadow-lg border-r border-gray-200">
                     <!-- En-tête de la sidebar -->
                     <div class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
-                        <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
+                            @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('agent')))
+                                <a href="{{ route('actus.create') }}" class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Ajouter
+                                </a>
+                            @endif
+                        </div>
                         <p class="text-sm text-gray-500">Restez informé de nos actualités</p>
                     </div>
 
@@ -1354,7 +1364,8 @@
                 modalTitle.textContent = data.actuTitle;
                 modalContent.innerHTML = data.actuContent.replace(/\n/g, '<br>');
                 
-                if (data.actuLink) {
+                // Gestion du lien externe
+                if (data.actuLink && data.actuLink !== "null" && data.actuLink !== "") {
                     modalLink.href = data.actuLink;
                     modalLinkContainer.classList.remove('hidden');
                 } else {

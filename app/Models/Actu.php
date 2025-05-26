@@ -14,5 +14,7 @@ class Actu extends Model
         'title',
         'content',
         'image',
+        'category',
+        'external_link'
     ];
 }
