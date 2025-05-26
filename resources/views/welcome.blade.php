@@ -266,14 +266,6 @@
                     <div class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
-                            @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('agent')))
-                                <a href="{{ route('actus.create') }}" class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                    Ajouter
-                                </a>
-                            @endif
                         </div>
                         <p class="text-sm text-gray-500">Restez informé de nos actualités</p>
                     </div>
@@ -330,11 +322,11 @@
                                     </div>
                                     <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
                                     <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
-                                    <div id="modalLinkContainer" class="hidden mt-6 pt-6 border-t">
-                                        <a id="modalLink" href="#" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
+                                    <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
+                                        <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
                                             <span>En savoir plus</span>
                                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                             </svg>
                                         </a>
                                     </div>
@@ -1260,6 +1252,7 @@
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const sidebar = document.getElementById('sidebar');
+        const sidebarContainer = sidebar.parentElement;
         
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
@@ -1335,7 +1328,7 @@
                 }
             });
         });
-
+        
         // Gestion du modal des actualités
         const modal = document.getElementById('actuModal');
         const modalImage = document.getElementById('modalImage');
@@ -1365,11 +1358,13 @@
                 modalContent.innerHTML = data.actuContent.replace(/\n/g, '<br>');
                 
                 // Gestion du lien externe
-                if (data.actuLink && data.actuLink !== "null" && data.actuLink !== "") {
-                    modalLink.href = data.actuLink;
+                if (data.actuLink && data.actuLink !== "null" && data.actuLink.trim() !== "") {
                     modalLinkContainer.classList.remove('hidden');
+                    modalLink.href = data.actuLink;
+                    console.log("Lien externe:", data.actuLink); // Pour le débogage
                 } else {
                     modalLinkContainer.classList.add('hidden');
+                    console.log("Pas de lien externe"); // Pour le débogage
                 }
                 
                 // Afficher le modal

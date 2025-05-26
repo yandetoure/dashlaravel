@@ -58,8 +58,8 @@
     <!-- Filtres et recherche -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-            <div class="flex-1 min-w-0">
-                <div class="relative rounded-lg shadow-sm">
+            <div class="flex items-center justify-between w-full">
+                <div class="flex-1 min-w-0 relative rounded-lg shadow-sm">
                     <input type="text" 
                            id="search" 
                            class="form-input block w-full pl-10 sm:text-sm border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" 
@@ -70,6 +70,14 @@
                         </svg>
                     </div>
                 </div>
+                @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('agent')))
+                    <a href="{{ route('actus.create') }}" class="ml-4 inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Ajouter une actualité
+                    </a>
+                @endif
             </div>
             <div class="flex gap-4">
                 <select class="form-select rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
