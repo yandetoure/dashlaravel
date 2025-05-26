@@ -1411,7 +1411,7 @@
                         A
                     </div>
                     <div>
-                        <h3 class="font-bold">Anta</h3>
+                        <h3 class="font-bold">Astou</h3>
                         <p class="text-sm text-red-100">Assistant virtuel</p>
                     </div>
                 </div>
