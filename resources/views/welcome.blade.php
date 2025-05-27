@@ -324,7 +324,7 @@
                                     <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
                                     <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
                                         <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200" onclick="window.open(this.getAttribute('data-href'), '_blank')">
-                                            <span>Cliquez ici</span>
+                                            <span>En savoir plus</span>
                                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                             </svg>
@@ -1398,52 +1398,69 @@
     <!-- Chat Box -->
     <div id="chat-container" class="fixed bottom-4 right-4 z-50">
         <!-- Chat Button -->
-        <button id="chat-button" class="bg-red-600 text-white rounded-full p-4 shadow-lg hover:bg-red-700 transition-all duration-300 flex items-center">
-            <i class="fas fa-comments text-2xl"></i>
+        <button id="chat-button" class="bg-red-600 text-white rounded-full p-3 shadow-lg hover:bg-red-700 transition-all duration-300 flex items-center justify-center w-14 h-14">
+            <i class="fas fa-headset text-lg"></i>
         </button>
 
         <!-- Chat Window -->
-        <div id="chat-window" class="hidden fixed bottom-20 right-4 w-96 bg-white rounded-lg shadow-xl">
+        <div id="chat-window" class="hidden fixed bottom-20 right-4 w-80 bg-white rounded-lg shadow-xl border border-gray-200 max-h-96">
             <!-- Chat Header -->
-            <div class="bg-red-600 text-white p-4 rounded-t-lg flex justify-between items-center">
+            <div class="bg-red-600 text-white p-3 rounded-t-lg flex justify-between items-center">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 rounded-full bg-white text-red-600 flex items-center justify-center font-bold text-xl mr-3">
-                        A
+                    <div class="w-8 h-8 rounded-full bg-white text-red-600 flex items-center justify-center mr-2">
+                        <i class="fas fa-headset text-sm"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold">Astou</h3>
-                        <p class="text-sm text-red-100">Assistant virtuel</p>
+                        <h3 class="font-bold text-sm">Nina</h3>
+                        <p class="text-xs text-red-100">Assistant virtuel</p>
                     </div>
                 </div>
-                <button id="close-chat" class="text-white hover:text-red-200">
+                <button id="close-chat" class="text-white hover:text-red-200 text-sm">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
             <!-- Chat Messages -->
-            <div id="chat-messages" class="p-4 h-96 overflow-y-auto">
-                <!-- Messages will be added here -->
-                <div class="flex mb-4">
-                    <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-sm mr-2">
-                        A
-                    </div>
-                    <div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
-                        <p>Bonjour ! Je suis Astou, votre assistante virtuelle. Comment puis-je vous aider aujourd'hui ?</p>
-                    </div>
-                </div>
+            <div id="chat-messages" class="p-3 h-32 overflow-y-auto bg-gray-50">
+                <!-- Initial message will be added here -->
             </div>
 
-            <!-- Chat Input -->
-            <div class="border-t p-4">
+            <!-- Quick Questions -->
+            <div id="quick-questions" class="border-t border-gray-200 p-3 max-h-48 overflow-y-auto">
+                <p class="text-xs text-gray-600 mb-2 font-medium">Choisissez une question :</p>
+                <div class="space-y-1" id="questions-container">
+                    <!-- Questions initiales -->
+                    <button class="quick-question-btn bg-gray-100 hover:bg-red-50 text-gray-700 p-2 rounded-md text-xs text-left transition-colors w-full flex items-center" data-category="reservation">
+                        <i class="fas fa-car text-red-500 mr-2 text-xs"></i>
+                        Comment réserver un transport ?
+                    </button>
+                    <button class="quick-question-btn bg-gray-100 hover:bg-red-50 text-gray-700 p-2 rounded-md text-xs text-left transition-colors w-full flex items-center" data-category="info">
+                        <i class="fas fa-info-circle text-red-500 mr-2 text-xs"></i>
+                        Informations générales
+                    </button>
+                </div>
+                
+                <!-- Bouton pour saisir une question personnalisée -->
+                <button id="custom-question-btn" class="mt-2 w-full bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-md text-xs text-center transition-colors flex items-center justify-center">
+                    <i class="fas fa-edit mr-2 text-xs"></i>
+                    Poser ma propre question
+                </button>
+            </div>
+
+            <!-- Zone de saisie personnalisée (cachée par défaut) -->
+            <div id="custom-input-section" class="border-t p-3 hidden">
                 <form id="chat-form" class="flex items-center">
                     <input type="text" id="chat-input" 
-                           class="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" 
-                           placeholder="Tapez votre message...">
+                           class="flex-1 border rounded-l-md px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-red-500" 
+                           placeholder="Tapez votre question...">
                     <button type="submit" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-r-lg hover:bg-red-700 transition-colors">
+                            class="bg-red-600 text-white px-3 py-1 rounded-r-md hover:bg-red-700 transition-colors text-xs">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </form>
+                <button id="back-to-questions" class="mt-2 text-xs text-gray-500 hover:text-gray-700">
+                    ← Retour aux questions
+                </button>
             </div>
         </div>
     </div>
@@ -1453,23 +1470,45 @@
         const chatButton = document.getElementById('chat-button');
         const chatWindow = document.getElementById('chat-window');
         const closeChat = document.getElementById('close-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const questionsContainer = document.getElementById('questions-container');
+        const customQuestionBtn = document.getElementById('custom-question-btn');
+        const customInputSection = document.getElementById('custom-input-section');
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
-        const chatMessages = document.getElementById('chat-messages');
+        const backToQuestionsBtn = document.getElementById('back-to-questions');
+
+        // Questions contextuelles par catégorie
+        const contextualQuestions = {
+            'reservation': [
+                { text: 'Quels sont vos tarifs ?', icon: 'fas fa-money-bill-wave', category: 'tarifs' },
+                { text: 'Horaires et disponibilités', icon: 'fas fa-clock', category: 'horaires' },
+                { text: 'Comment vous contacter ?', icon: 'fas fa-phone', category: 'contact' }
+            ],
+            'info': [
+                { text: 'Quels services proposez-vous ?', icon: 'fas fa-concierge-bell', category: 'services' },
+                { text: 'Zones de service couvertes', icon: 'fas fa-map-marker-alt', category: 'zones' },
+                { text: 'Mesures de sécurité', icon: 'fas fa-shield-alt', category: 'securite' }
+            ],
+            'tarifs': [
+                { text: 'Modes de paiement acceptés', icon: 'fas fa-credit-card', category: 'paiement' },
+                { text: 'Comment réserver ?', icon: 'fas fa-car', category: 'reservation' }
+            ],
+            'services': [
+                { text: 'Nos tarifs', icon: 'fas fa-money-bill-wave', category: 'tarifs' },
+                { text: 'Comment réserver ?', icon: 'fas fa-car', category: 'reservation' }
+            ]
+        };
 
         // Predefined responses with keywords and detailed responses
         const responses = {
             'greeting': {
                 keywords: ['bonjour', 'bonsoir', 'salut', 'hey', 'hello', 'hi', 'coucou'],
-                response: `Bonjour ! Je suis ravie de vous accueillir. Comment puis-je vous aider aujourd'hui ? 
-Je peux vous renseigner sur :
-- Nos services de transport
-- Les réservations et tarifs
-- Les horaires et disponibilités
-- Les services VIP et conciergerie`
+                response: `Bonjour ! Je suis Nina, votre assistante virtuelle. 
+Choisissez une question ci-dessous pour obtenir des informations détaillées !`
             },
             'reservation': {
-                keywords: ['réserver', 'reservation', 'reserver', 'réservation', 'comment faire', 'comment réserver', 'je veux reserver', 'je souhaite reserver'],
+                keywords: ['réserver', 'reservation', 'comment réserver', 'transport'],
                 response: `Je peux vous aider à réserver votre transfert ! Voici les différentes options :
 
 1. 📱 Réservation en ligne :
@@ -1483,12 +1522,22 @@ Je peux vous renseigner sur :
 
 3. 💬 Via WhatsApp :
    - Contactez-nous au +221 77 705 69 69
-   - Service rapide et personnalisé
+   - Service rapide et personnalisé`
+            },
+            'info': {
+                keywords: ['informations', 'générales', 'info'],
+                response: `Voici les informations essentielles sur nos services :
 
-Avez-vous une préférence ? Je peux vous guider pour chaque option.`
+🚗 Nous sommes spécialisés dans le transport vers l'aéroport AIBD
+✈️ Service disponible 24h/24 et 7j/7
+🏆 Leader du transfert aéroportuaire au Sénégal
+👨‍✈️ Chauffeurs professionnels et expérimentés
+🛡️ Véhicules entretenus et assurés
+
+Que souhaitez-vous savoir de plus spécifique ?`
             },
             'tarifs': {
-                keywords: ['tarif', 'prix', 'coût', 'cout', 'combien', 'cher', 'montant'],
+                keywords: ['tarifs', 'voir les tarifs', 'prix', 'coût'],
                 response: `Voici nos différentes formules de transport :
 
 🌟 Transfert AIBD VIP (45 500 FCFA)
@@ -1504,12 +1553,10 @@ Avez-vous une préférence ? Je peux vous guider pour chaque option.`
 👑 Transfert PREM/Meet & Greet (65 000 FCFA)
 - Service conciergerie complet
 - Accueil personnalisé
-- Véhicule haut de gamme
-
-Souhaitez-vous plus de détails sur l'une de ces formules ?`
+- Véhicule haut de gamme`
             },
             'horaires': {
-                keywords: ['horaire', 'heure', 'ouvert', 'disponible', 'quand', 'jour', 'planning'],
+                keywords: ['horaires', 'disponibilités', 'heures'],
                 response: `Nos services sont organisés pour votre confort :
 
 🕒 Service de transfert :
@@ -1520,82 +1567,178 @@ Souhaitez-vous plus de détails sur l'une de ces formules ?`
 🏢 Bureau d'accueil :
 - Ouvert du lundi au samedi
 - De 8h à 18h
-- Service client disponible
+- Service client disponible`
+            },
+            'services': {
+                keywords: ['services', 'services proposés', 'proposez-vous'],
+                response: `Découvrez notre gamme complète de services :
 
-Avez-vous besoin d'un transfert à un horaire particulier ?`
+🚗 Transport aéroport
+- Transferts privés vers AIBD
+- Service VIP avec conciergerie
+- Navettes sur mesure
+
+🌟 Services Premium
+- Meet & Greet à l'aéroport
+- Assistance bagages
+- Suivi de vol en temps réel
+
+🏢 Services Entreprises
+- Transport professionnel
+- Contrats corporate
+- Solutions sur mesure`
             },
             'contact': {
-                keywords: ['contact', 'téléphone', 'appeler', 'joindre', 'email', 'mail', 'whatsapp'],
+                keywords: ['contact', 'nous contacter', 'joindre'],
                 response: `Vous pouvez nous joindre facilement :
 
 📞 Téléphone : +221 77 705 67 67
 📱 WhatsApp : +221 77 705 69 69
 📧 Email : 221cproservices@gmail.com
 
+📍 Adresse : Sacré-Cœur, Dakar, Sénégal
+
 Notre équipe est disponible pour :
 - Réservations
 - Informations
 - Devis personnalisés
-- Service client
-
-Comment préférez-vous nous contacter ?`
-            },
-            'services': {
-                keywords: ['service', 'prestation', 'propose', 'offre', 'disponible'],
-                response: `Découvrez notre gamme complète de services :
-
-🚗 Transport aéroport
-- Transferts privés
-- Service VIP
-- Navettes sur mesure
-
-🌟 Services Premium
-- Conciergerie
-- Meet & Greet
-- Assistance bagages
-
-🏢 Services Entreprises
-- Transport professionnel
-- Contrats corporate
-- Solutions sur mesure
-
-Quel type de service vous intéresse ?`
-            },
-            'location': {
-                keywords: ['location', 'voiture', 'véhicule', 'louer'],
-                response: `Nos services de location comprennent :
-
-🚘 Location avec chauffeur
-- À partir de 50 000 FCFA/jour dans Dakar
-- À partir de 80 000 FCFA/jour hors Dakar
-- Chauffeur professionnel inclus
-
-✨ Avantages inclus :
-- Climatisation
-- Carburant en sus
-- Assurance complète
-
-Souhaitez-vous connaître nos disponibilités ?`
+- Service client`
             },
             'paiement': {
-                keywords: ['payer', 'paiement', 'règlement', 'payement', 'espèce', 'carte'],
+                keywords: ['paiement', 'modes de paiement', 'acceptés'],
                 response: `Nous acceptons plusieurs modes de paiement :
 
 💳 Options de paiement :
-- Espèces
+- Espèces (FCFA)
 - Carte bancaire
 - Virement bancaire
 - Wave
 - Orange Money
 
 🔒 Paiement sécurisé garanti
-Préférez-vous un mode de paiement particulier ?`
+💰 Possibilité de payer à bord ou à l'avance`
+            },
+            'zones': {
+                keywords: ['zones', 'service couvertes', 'destinations'],
+                response: `Nos zones de service incluent :
+
+🏙️ Dakar et banlieue :
+- Tous les quartiers de Dakar
+- Pikine, Guédiawaye
+- Rufisque, Bargny
+
+🏖️ Destinations touristiques :
+- Saly Portudal
+- Mbour, Somone
+- Joal-Fadiouth
+
+✈️ Aéroport AIBD :
+- Transferts aller-retour
+- Service 24h/24
+- Suivi des vols`
+            },
+            'securite': {
+                keywords: ['sécurité', 'mesures', 'sûreté'],
+                response: `Votre sécurité est notre priorité :
+
+🚗 Véhicules :
+- Entretien régulier et contrôles techniques
+- Assurance tous risques
+- Équipements de sécurité à bord
+
+👨‍✈️ Chauffeurs :
+- Formation professionnelle
+- Vérification des antécédents
+- Conduite défensive
+
+🛡️ Protocoles :
+- Respect du code de la route
+- Vitesse contrôlée
+- Suivi GPS en temps réel`
             }
         };
+
+        // Add initial message when chat opens
+        function addInitialMessage() {
+            chatMessages.innerHTML = '';
+            addMessage(responses.greeting.response, 'bot');
+            showInitialQuestions();
+        }
+
+        // Afficher les questions initiales
+        function showInitialQuestions() {
+            questionsContainer.innerHTML = `
+                <button class="quick-question-btn bg-gray-100 hover:bg-red-50 text-gray-700 p-2 rounded-md text-xs text-left transition-colors w-full flex items-center" data-category="reservation">
+                    <i class="fas fa-car text-red-500 mr-2 text-xs"></i>
+                    Comment réserver un transport ?
+                </button>
+                <button class="quick-question-btn bg-gray-100 hover:bg-red-50 text-gray-700 p-2 rounded-md text-xs text-left transition-colors w-full flex items-center" data-category="info">
+                    <i class="fas fa-info-circle text-red-500 mr-2 text-xs"></i>
+                    Informations générales
+                </button>
+            `;
+            attachQuestionListeners();
+        }
+
+        // Afficher les questions contextuelles
+        function showContextualQuestions(category) {
+            const questions = contextualQuestions[category] || [];
+            let questionsHtml = '';
+            
+            questions.forEach(question => {
+                questionsHtml += `
+                    <button class="quick-question-btn bg-gray-100 hover:bg-red-50 text-gray-700 p-2 rounded-md text-xs text-left transition-colors w-full flex items-center" data-category="${question.category}">
+                        <i class="${question.icon} text-red-500 mr-2 text-xs"></i>
+                        ${question.text}
+                    </button>
+                `;
+            });
+
+            // Ajouter un bouton pour revenir aux questions principales
+            questionsHtml += `
+                <button id="back-to-main" class="mt-2 w-full bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-md text-xs text-center transition-colors">
+                    ← Questions principales
+                </button>
+            `;
+
+            questionsContainer.innerHTML = questionsHtml;
+            attachQuestionListeners();
+            
+            // Attacher l'événement pour revenir aux questions principales
+            document.getElementById('back-to-main')?.addEventListener('click', showInitialQuestions);
+        }
+
+        // Attacher les événements aux boutons de questions
+        function attachQuestionListeners() {
+            document.querySelectorAll('.quick-question-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const questionText = button.textContent.trim();
+                    const category = button.getAttribute('data-category');
+                    
+                    addMessage(questionText, 'user');
+                    
+                    // Trouver la réponse correspondante
+                    let response = responses[category]?.response || responses.greeting.response;
+                    
+                    setTimeout(() => {
+                        addMessage(response, 'bot');
+                        // Afficher les questions contextuelles après la réponse
+                        if (contextualQuestions[category]) {
+                            showContextualQuestions(category);
+                        }
+                    }, 500);
+                });
+            });
+        }
 
         // Toggle chat window
         chatButton.addEventListener('click', () => {
             chatWindow.classList.toggle('hidden');
+            if (!chatWindow.classList.contains('hidden')) {
+                addInitialMessage();
+                customInputSection.classList.add('hidden');
+                document.getElementById('quick-questions').classList.remove('hidden');
+            }
             chatButton.classList.toggle('rotate-180');
         });
 
@@ -1604,40 +1747,71 @@ Préférez-vous un mode de paiement particulier ?`
             chatButton.classList.remove('rotate-180');
         });
 
-        // Handle chat form submission
+        // Gestion du bouton pour saisir une question personnalisée
+        customQuestionBtn.addEventListener('click', () => {
+            document.getElementById('quick-questions').classList.add('hidden');
+            customInputSection.classList.remove('hidden');
+            chatInput.focus();
+        });
+
+        // Retour aux questions prédéfinies
+        backToQuestionsBtn.addEventListener('click', () => {
+            customInputSection.classList.add('hidden');
+            document.getElementById('quick-questions').classList.remove('hidden');
+            chatInput.value = '';
+        });
+
+        // Gestion du formulaire de saisie personnalisée
         chatForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const message = chatInput.value.trim();
             if (!message) return;
 
-            // Add user message
             addMessage(message, 'user');
             chatInput.value = '';
 
-            // Get and add bot response
             setTimeout(() => {
                 const response = getBotResponse(message.toLowerCase());
                 addMessage(response, 'bot');
             }, 500);
         });
 
+        // Fonction pour obtenir une réponse basée sur les mots-clés
+        function getBotResponse(message) {
+            for (const category in responses) {
+                if (responses[category].keywords && responses[category].keywords.some(keyword => message.includes(keyword))) {
+                    return responses[category].response;
+                }
+            }
+            return `Je comprends votre question, mais je n'ai pas d'information spécifique à ce sujet. 
+            
+Voici ce que je peux vous aider :
+- Réservations de transport
+- Informations sur nos tarifs
+- Horaires et disponibilités
+- Nos services
+- Coordonnées de contact
+
+N'hésitez pas à choisir une question dans la liste ou à reformuler votre demande !`;
+        }
+
         function addMessage(message, sender) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'flex mb-4 ' + (sender === 'user' ? 'justify-end' : '');
+            messageDiv.className = 'flex mb-3 ' + (sender === 'user' ? 'justify-end' : '');
 
             if (sender === 'bot') {
                 messageDiv.innerHTML = `
-                    <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-sm mr-2">
-                        A
+                    <div class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center mr-2 flex-shrink-0 mt-1">
+                        <i class="fas fa-headset text-xs"></i>
                     </div>
-                    <div class="bg-gray-100 rounded-lg p-3 max-w-[80%]">
-                        <p class="whitespace-pre-line">${message}</p>
+                    <div class="bg-white rounded-lg p-2 max-w-[85%] shadow-sm border">
+                        <p class="text-xs leading-relaxed whitespace-pre-line">${message}</p>
                     </div>
                 `;
             } else {
                 messageDiv.innerHTML = `
-                    <div class="bg-red-600 text-white rounded-lg p-3 max-w-[80%]">
-                        <p>${message}</p>
+                    <div class="bg-red-600 text-white rounded-lg p-2 max-w-[85%]">
+                        <p class="text-xs">${message}</p>
                     </div>
                 `;
             }
@@ -1646,41 +1820,8 @@ Préférez-vous un mode de paiement particulier ?`
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function getBotResponse(message) {
-            // Check for greetings first
-            if (responses.greeting.keywords.some(keyword => message.includes(keyword))) {
-                return responses.greeting.response;
-            }
-
-            // Check all other response categories
-            for (const category in responses) {
-                if (category === 'greeting') continue; // Skip greeting as we already checked it
-                if (responses[category].keywords.some(keyword => message.includes(keyword))) {
-                    return responses[category].response;
-                }
-            }
-
-            // If no specific match is found, look for partial matches
-            const words = message.split(' ');
-            for (const word of words) {
-                for (const category in responses) {
-                    if (responses[category].keywords.some(keyword => keyword.includes(word) || word.includes(keyword))) {
-                        return responses[category].response;
-                    }
-                }
-            }
-
-            // Default response with conversation starters
-            return `Je peux vous aider sur plusieurs sujets. Choisissez ce qui vous intéresse :
-
-🚗 Transport et réservations
-💰 Tarifs et paiements
-🕒 Horaires et disponibilités
-✨ Services VIP et conciergerie
-📞 Contact et assistance
-
-N'hésitez pas à me poser une question précise !`;
-        }
+        // Initialiser les événements des questions au chargement
+        attachQuestionListeners();
     </script>
 </body>
 </html>
