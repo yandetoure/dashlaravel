@@ -82,65 +82,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    // // Route pour l'admin
-    Route::get('/admin/dashboard', function () {
-        return view('dashboards.admin');
-    })->name('dashboard.admin');
-
-    // Route pour le client
-    Route::get('/client/dashboard', function () {
-        return view('dashboards.client');
-    })->name('dashboard.client');
-
-    // Route pour le chauffeur
-    Route::get('/chauffeur/dashboard', function () {
-        return view('dashboards.driver');
-    })->name('dashboard.chauffeur');
-
-    // Route pour l'entreprise
-    Route::get('/entreprise/dashboard', function () {
-        return view('dashboards.entreprise');
-    })->name('dashboard.entreprise');
-
-    // Route pour l'agent
-    Route::get('/agent/dashboard', function () {
-        return view('dashboards.agent');
-    })->name('dashboard.agent');
-
-    // Route pour le super admin
-    Route::get('/superadmin/dashboard', function () {
-        return view('dashboards.superadmin');
-    })->name('dashboard.superadmin'); 
-
+    // Routes pour les dashboards avec contrôleur
+    Route::get('/admin/dashboard', [DashController::class, 'adminIndex'])->name('dashboard.admin');
+    Route::get('/client/dashboard', [DashController::class, 'clientIndex'])->name('dashboard.client');
+    Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->name('dashboard.chauffeur');
+    Route::get('/entreprise/dashboard', [DashController::class, 'entrepriseIndex'])->name('dashboard.entreprise');
+    Route::get('/agent/dashboard', [DashController::class, 'agentIndex'])->name('dashboard.agent');
+    Route::get('/superadmin/dashboard', [DashController::class, 'superadminIndex'])->name('dashboard.superadmin');
 
     Route::resource('maintenances', MaintenanceController::class);
     Route::resource('cars', CarController::class);
 });
-
-// Route::middleware('auth')->group(function () {
-
-//     // Routes pour l'Admin
-//     Route::get('/admin/dashboard', [DashController::class, 'adminIndex'])->name('dashboard.admin');
-
-//     // Routes pour le Client
-//     Route::get('/client/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard.client');
-
-//     // Routes pour le Chauffeur
-//     Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->name('dashboard.chauffeur');
-
-//     // Routes pour l'Entreprise
-//     Route::get('/entreprise/dashboard', [DashController::class, 'entrepriseIndex'])->name('dashboard.entreprise');
-
-//     // Routes pour l'Agent
-//     Route::get('/agent/dashboard', [DashController::class, 'agentIndex'])->name('dashboard.agent');
-
-//     // Routes pour le Superadmin
-//     Route::get('/superadmin/dashboard', [DashController::class, 'superadminIndex'])->name('dashboard.superadmin');
-
-// });
-
-
-Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AuthController::class, 'showAdminDashboard'])->name('dashboard.admin');
 
 Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');
 
