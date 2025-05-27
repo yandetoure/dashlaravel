@@ -29,7 +29,7 @@ class ActuController extends Controller
     {
         try {
             // Validation détaillée
-            $validated = $request->validate([
+        $validated = $request->validate([
                 'title' => 'required|string|min:3|max:255',
                 'content' => 'required|string|min:10',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -48,9 +48,9 @@ class ActuController extends Controller
                 'external_link.url' => 'Le lien externe doit être une URL valide'
             ]);
 
-            if ($request->hasFile('image')) {
-                $path = $request->file('image')->store('actus', 'public');
-                $validated['image'] = $path;
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('actus', 'public');  
+            $validated['image'] = $path;
             }
 
             $actu = Actu::create($validated);

@@ -140,7 +140,7 @@
     <h3 class="text-xl font-semibold mb-4">Aperçu en temps réel</h3>
     <div class="bg-white rounded-lg overflow-hidden shadow-sm">
       <div id="previewImageContainer" class="relative">
-        <img src="" alt="" id="previewImage" class="w-full h-48 object-cover hidden">
+      <img src="" alt="" id="previewImage" class="w-full h-48 object-cover hidden">
         <div id="previewCategory" class="absolute top-2 right-2 bg-blue-500 text-white px-3 py-1 rounded-full text-sm"></div>
       </div>
       <div class="p-4">

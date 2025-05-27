@@ -78,7 +78,7 @@
                         Ajouter une actualité
                     </a>
                 @endif
-            </div>
+                </div>
             <div class="flex gap-4">
                 <select class="form-select rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Toutes les catégories</option>
@@ -162,7 +162,7 @@
                         </div>
                     </div>
                 </article>
-            @endforeach
+        @endforeach
         </div>
 
         <!-- Pagination si nécessaire -->

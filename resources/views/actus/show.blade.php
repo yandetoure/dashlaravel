@@ -42,7 +42,7 @@
         <div class="max-w-4xl mx-auto">
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                 <!-- Image -->
-                @if ($actu->image)
+    @if ($actu->image)
                     <div class="relative h-96">
                         <img src="{{ asset('storage/' . $actu->image) }}" 
                              alt="{{ $actu->title }}" 
@@ -53,7 +53,7 @@
                             </span>
                         </div>
                     </div>
-                @endif
+    @endif
 
                 <!-- Contenu -->
                 <div class="p-8">
@@ -66,8 +66,8 @@
 
                     <!-- Contenu principal -->
                     <div class="prose max-w-none mb-8">
-                        {!! nl2br(e($actu->content)) !!}
-                    </div>
+        {!! nl2br(e($actu->content)) !!}
+    </div>
 
                     <!-- Lien externe si présent -->
                     @if($actu->external_link)
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
     </main>
 </div>
 @endsection

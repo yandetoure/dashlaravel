@@ -208,7 +208,7 @@ class DashController extends Controller
     }
 
     // Dashboard pour le Chauffeur
-    public function chauffeurIndex()
+        public function chauffeurIndex()
     {
         if (!auth()->user()->hasRole('chauffeur')) {
             abort(403);

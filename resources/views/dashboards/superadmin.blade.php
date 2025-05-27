@@ -36,7 +36,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-<!-- Header -->
+            <!-- Header -->
 <div class="gradient-bg text-white p-6 mb-8">
     <div class="max-w-7xl mx-auto">
         <div class="flex items-center justify-between">
@@ -48,9 +48,9 @@
                 <div class="text-red-100 text-sm">{{ Carbon\Carbon::now()->format('d/m/Y') }}</div>
                 <div class="text-white font-semibold">{{ Carbon\Carbon::now()->format('H:i') }}</div>
             </div>
-        </div>
-    </div>
-</div>
+                        </div>
+                    </div>
+                </div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Statistiques principales -->
@@ -58,66 +58,66 @@
         <!-- Total Réservations -->
         <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
             <div class="flex items-center justify-between">
-                <div>
+                            <div>
                     <p class="text-sm font-medium text-gray-500">Total Réservations</p>
                     <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ number_format($stats['total_reservations']) }}</h3>
                     <p class="text-xs text-green-600 mt-1">
-                        <i class="fas fa-arrow-up mr-1"></i>
+                                    <i class="fas fa-arrow-up mr-1"></i>
                         +{{ $stats['confirmed_reservations'] }} confirmées
-                    </p>
-                </div>
+                                </p>
+                            </div>
                 <div class="p-3 bg-blue-100 rounded-full">
                     <i class="fas fa-calendar-check text-2xl text-blue-600"></i>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
         <!-- Total Revenus -->
         <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
             <div class="flex items-center justify-between">
-                <div>
+                            <div>
                     <p class="text-sm font-medium text-gray-500">Revenus Totaux</p>
                     <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ number_format($stats['total_revenue']) }}</h3>
                     <p class="text-xs text-gray-500 mt-1">FCFA</p>
-                </div>
+                            </div>
                 <div class="p-3 bg-green-100 rounded-full">
                     <i class="fas fa-money-bill-wave text-2xl text-green-600"></i>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
         <!-- Total Utilisateurs -->
         <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
             <div class="flex items-center justify-between">
-                <div>
+                            <div>
                     <p class="text-sm font-medium text-gray-500">Total Utilisateurs</p>
                     <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ number_format($stats['total_users']) }}</h3>
                     <p class="text-xs text-blue-600 mt-1">
                         {{ $stats['total_clients'] }} clients, {{ $stats['total_drivers'] }} chauffeurs
-                    </p>
-                </div>
+                                </p>
+                            </div>
                 <div class="p-3 bg-purple-100 rounded-full">
                     <i class="fas fa-users text-2xl text-purple-600"></i>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
         <!-- Total Véhicules -->
         <div class="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
             <div class="flex items-center justify-between">
-                <div>
+                            <div>
                     <p class="text-sm font-medium text-gray-500">Flotte Véhicules</p>
                     <h3 class="text-3xl font-bold text-gray-900 mt-1">{{ number_format($stats['total_cars']) }}</h3>
                     <p class="text-xs text-orange-600 mt-1">
                         {{ count($cars_in_maintenance) }} en maintenance
-                    </p>
-                </div>
+                                </p>
+                            </div>
                 <div class="p-3 bg-orange-100 rounded-full">
                     <i class="fas fa-car text-2xl text-orange-600"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Statistiques détaillées -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -129,25 +129,25 @@
                     <div class="flex items-center">
                         <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
                         <span class="text-sm text-gray-600">En attente</span>
-                    </div>
+                            </div>
                     <span class="font-semibold">{{ $stats['pending_reservations'] }}</span>
-                </div>
+                            </div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                         <span class="text-sm text-gray-600">Confirmées</span>
-                    </div>
+                        </div>
                     <span class="font-semibold">{{ $stats['confirmed_reservations'] }}</span>
-                </div>
+                            </div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
                         <span class="text-sm text-gray-600">Annulées</span>
                     </div>
                     <span class="font-semibold">{{ $stats['cancelled_reservations'] }}</span>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
         <!-- Utilisateurs par rôle -->
         <div class="bg-white rounded-lg shadow-md p-6">
@@ -164,13 +164,13 @@
                 <div class="flex items-center justify-between">
                     <span class="text-sm text-gray-600">Agents</span>
                     <span class="font-semibold text-purple-600">{{ $stats['total_agents'] }}</span>
-                </div>
+                            </div>
                 <div class="flex items-center justify-between">
                     <span class="text-sm text-gray-600">Admins</span>
                     <span class="font-semibold text-red-600">{{ $stats['total_admins'] }}</span>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
         <!-- Actions rapides -->
         <div class="bg-white rounded-lg shadow-md p-6">
@@ -188,9 +188,9 @@
                 <a href="{{ route('invoices.index') }}" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-2 px-4 rounded-lg transition-colors duration-200">
                     <i class="fas fa-file-invoice mr-2"></i>Voir Factures
                 </a>
-            </div>
-        </div>
-    </div>
+                        </div>
+                    </div>
+                </div>
 
     <!-- Graphiques et données -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -198,15 +198,15 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Revenus Mensuels</h3>
-                <div class="flex space-x-2">
+                            <div class="flex space-x-2">
                     <button class="px-3 py-1 text-xs bg-primary text-white rounded">2024</button>
                     <button class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded">2023</button>
-                </div>
-            </div>
+                            </div>
+                        </div>
             <div class="h-64">
-                <canvas id="revenueChart"></canvas>
-            </div>
-        </div>
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
 
         <!-- Graphique des réservations -->
         <div class="bg-white rounded-lg shadow-md p-6">
@@ -215,13 +215,13 @@
                 <div class="flex space-x-2">
                     <button class="px-3 py-1 text-xs bg-primary text-white rounded">2024</button>
                     <button class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded">2023</button>
-                </div>
-            </div>
+                        </div>
+                            </div>
             <div class="h-64">
                 <canvas id="reservationsChart"></canvas>
-            </div>
-        </div>
-    </div>
+                        </div>
+                    </div>
+                </div>
 
     <!-- Tableaux de données -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -230,8 +230,8 @@
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Réservations Récentes</h3>
                 <a href="{{ route('reservations.index') }}" class="text-primary hover:text-red-700 text-sm font-medium">Voir tout</a>
-            </div>
-            <div class="overflow-x-auto">
+                    </div>
+                    <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
                         <tr class="border-b border-gray-200">
@@ -239,22 +239,22 @@
                             <th class="text-left py-2 text-xs font-medium text-gray-500 uppercase">Trajet</th>
                             <th class="text-left py-2 text-xs font-medium text-gray-500 uppercase">Date</th>
                             <th class="text-left py-2 text-xs font-medium text-gray-500 uppercase">Statut</th>
-                        </tr>
-                    </thead>
+                                </tr>
+                            </thead>
                     <tbody>
                         @foreach($recent_reservations as $reservation)
                         <tr class="border-b border-gray-100">
                             <td class="py-3 text-sm">
                                 <div class="font-medium text-gray-900">{{ $reservation->first_name }} {{ $reservation->last_name }}</div>
                                 <div class="text-gray-500 text-xs">{{ $reservation->email }}</div>
-                            </td>
+                                    </td>
                             <td class="py-3 text-sm text-gray-600">
                                 @if($reservation->trip)
                                     {{ $reservation->trip->departure }} → {{ $reservation->trip->destination }}
                                 @else
                                     N/A
                                 @endif
-                            </td>
+                                    </td>
                             <td class="py-3 text-sm text-gray-600">{{ Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</td>
                             <td class="py-3">
                                 @if($reservation->status === 'Confirmée')
@@ -264,12 +264,12 @@
                                 @else
                                     <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">Annulée</span>
                                 @endif
-                            </td>
-                        </tr>
+                                    </td>
+                                </tr>
                         @endforeach
-                    </tbody>
-                </table>
-            </div>
+                            </tbody>
+                        </table>
+                    </div>
         </div>
 
         <!-- Top chauffeurs -->
@@ -328,23 +328,23 @@
     @endif
 </div>
 
-<script>
+    <script>
 // Données pour les graphiques
 const monthlyRevenue = @json($monthly_revenue);
 const monthlyReservations = @json($monthly_reservations);
 
 // Configuration des graphiques
 const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
     plugins: {
         legend: {
             display: false
         }
     },
-    scales: {
-        y: {
-            beginAtZero: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
             grid: {
                 color: '#f3f4f6'
             }
@@ -375,7 +375,7 @@ new Chart(revenueCtx, {
     },
     options: {
         ...chartOptions,
-        plugins: {
+                plugins: {
             ...chartOptions.plugins,
             tooltip: {
                 callbacks: {
@@ -383,10 +383,10 @@ new Chart(revenueCtx, {
                         return 'Revenus: ' + new Intl.NumberFormat('fr-FR').format(context.parsed.y) + ' FCFA';
                     }
                 }
+                    }
+                }
             }
-        }
-    }
-});
+        });
 
 // Graphique des réservations
 const reservationsCtx = document.getElementById('reservationsChart').getContext('2d');
@@ -410,6 +410,6 @@ new Chart(reservationsCtx, {
 setInterval(() => {
     location.reload();
 }, 300000);
-</script>
+    </script>
 
 @endsection
