@@ -2,393 +2,330 @@
 @extends('layouts.app')
 
 @section('content')
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Réservation Voitures</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3B82F6',
-                        secondary: '#10B981',
-                        danger: '#EF4444',
-                        warning: '#F59E0B',
-                        dark: '#1F2937',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-        .progress-ring__circle {
-            transition: stroke-dashoffset 0.35s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-        body{
-            padding-top: -180px;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 font-sans">
-    <div class="flex h-screen overflow-hidden">
-
-        <!-- Main Content -->
-        <div class="flex-1 overflow-auto">
+<div class="min-h-screen bg-gray-50">
             <!-- Header -->
-            <header class="bg-white shadow-sm">
-                <div class="flex justify-between items-center p-4">
-                    <h2 class="text-xl font-semibold text-gray-800">Tableau de bord</h2>
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Tableau de bord Agent</h1>
+                    <p class="text-gray-600">Bienvenue, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                </div>
                     <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <input type="text" placeholder="Rechercher..." class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">Points</div>
+                        <div class="text-lg font-semibold text-blue-600">{{ $stats['points'] ?? 0 }}</div>
                         </div>
-                        <button class="p-2 text-gray-600 hover:text-primary">
-                            <i class="fas fa-bell"></i>
-                        </button>
-                        <button class="p-2 text-gray-600 hover:text-primary">
-                            <i class="fas fa-envelope"></i>
-                        </button>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">Statut</div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            Agent
+                        </span>
                     </div>
                 </div>
-            </header>
+            </div>
+                            </div>
+                            </div>
 
-            <!-- Dashboard Content -->
-            <main class="p-6">
-                <!-- Stats Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <!-- Réservations du jour -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Réservations du jour</p>
-                                <h3 class="text-2xl font-bold mt-1">24</h3>
-                                <p class="text-xs text-green-500 mt-1 flex items-center">
-                                    <i class="fas fa-arrow-up mr-1"></i>
-                                    <span>12% vs hier</span>
-                                </p>
-                            </div>
-                            <div class="p-3 bg-blue-100 rounded-full text-primary">
-                                <i class="fas fa-calendar-day text-xl"></i>
-                            </div>
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Réservations Traitées -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-tasks text-blue-600"></i>
                         </div>
                     </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Réservations Traitées</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_reservations_handled'] }}</p>
+                    </div>
+                            </div>
+                            </div>
 
-                    <!-- Réservations en attente -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Réservations en attente</p>
-                                <h3 class="text-2xl font-bold mt-1">8</h3>
-                                <p class="text-xs text-red-500 mt-1 flex items-center">
-                                    <i class="fas fa-arrow-down mr-1"></i>
-                                    <span>2 en moins</span>
-                                </p>
-                            </div>
-                            <div class="p-3 bg-yellow-100 rounded-full text-warning">
-                                <i class="fas fa-clock text-xl"></i>
-                            </div>
+            <!-- En Attente -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-yellow-600"></i>
                         </div>
                     </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">En Attente</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ $stats['pending_reservations'] }}</p>
+                    </div>
+                            </div>
+                            </div>
 
-                    <!-- Revenu du mois -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Revenu du mois</p>
-                                <h3 class="text-2xl font-bold mt-1">1,450,000 FCFA</h3>
-                                <p class="text-xs text-green-500 mt-1 flex items-center">
-                                    <i class="fas fa-arrow-up mr-1"></i>
-                                    <span>15% vs mois dernier</span>
-                                </p>
-                            </div>
-                            <div class="p-3 bg-green-100 rounded-full text-secondary">
-                                <i class="fas fa-money-bill-wave text-xl"></i>
-                            </div>
+            <!-- Confirmées Aujourd'hui -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600"></i>
                         </div>
                     </div>
-
-                    <!-- Clients (avec augmentation) -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Clients</p>
-                                <h3 class="text-2xl font-bold mt-1">156</h3>
-                                <p class="text-xs text-green-500 mt-1 flex items-center">
-                                    <i class="fas fa-arrow-up mr-1"></i>
-                                    <span>28% vs mois dernier</span>
-                                </p>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Confirmées Aujourd'hui</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ $stats['confirmed_today'] }}</p>
+                    </div>
                             </div>
-                            <div class="p-3 bg-purple-100 rounded-full text-purple-500">
-                                <i class="fas fa-user-plus text-xl"></i>
+                            </div>
+
+            <!-- Total Clients -->
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-purple-600"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Clients</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_clients'] }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Second Row Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <!-- Voitures disponibles -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
+        <!-- Two Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Réservations en Attente -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">Réservations en Attente</h3>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            {{ $pending_reservations->count() }} en attente
+                        </span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    @if($pending_reservations->count() > 0)
+                        <div class="space-y-4 max-h-96 overflow-y-auto">
+                            @foreach($pending_reservations as $reservation)
+                                <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                                                    <span class="text-xs font-medium text-yellow-800">
+                                                        {{ substr($reservation->client->first_name, 0, 1) }}{{ substr($reservation->client->last_name, 0, 1) }}
+                                                    </span>
+                                                </div>
+                                            </div>
                             <div>
-                                <p class="text-sm font-medium text-gray-500">Voitures disponibles</p>
-                                <h3 class="text-2xl font-bold mt-1">18</h3>
-                                <p class="text-xs text-gray-500 mt-1">Sur 32 total</p>
+                                                <p class="text-sm font-medium text-gray-900">
+                                                    {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                                                </p>
+                                                <p class="text-xs text-gray-500">
+                                                    {{ $reservation->trip->departure }} → {{ $reservation->trip->destination }}
+                                                </p>
+                                                <p class="text-xs text-gray-500">
+                                                    {{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }} à {{ $reservation->heure_ramassage }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors">
+                                            Confirmer
+                                        </button>
+                                        <button class="px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition-colors">
+                                            Voir
+                                        </button>
                             </div>
-                            <div class="p-3 bg-blue-100 rounded-full text-primary">
-                                <i class="fas fa-car text-xl"></i>
                             </div>
+                            @endforeach
                         </div>
                         <div class="mt-4">
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-primary h-2 rounded-full" style="width: 56%"></div>
+                            <a href="{{ route('reservations.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Voir toutes les réservations →
+                            </a>
                             </div>
+                    @else
+                        <div class="text-center py-8">
+                            <i class="fas fa-check-circle text-green-400 text-3xl mb-4"></i>
+                            <p class="text-gray-500">Aucune réservation en attente</p>
+                            <p class="text-sm text-gray-400">Excellent travail !</p>
+                        </div>
+                    @endif
                         </div>
                     </div>
 
-                    <!-- Voitures en déplacement -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">En déplacement</p>
-                                <h3 class="text-2xl font-bold mt-1">10</h3>
-                                <p class="text-xs text-gray-500 mt-1">Actuellement</p>
+            <!-- Actions Rapides -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Actions Rapides</h3>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 gap-4">
+                        <a href="{{ route('reservations.index') }}" class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200">
+                                    <i class="fas fa-list text-blue-600"></i>
+                                </div>
                             </div>
-                            <div class="p-3 bg-orange-100 rounded-full text-orange-500">
-                                <i class="fas fa-road text-xl"></i>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">Gérer les Réservations</p>
+                                <p class="text-xs text-gray-500">Voir et traiter les demandes</p>
                             </div>
+                        </a>
+
+                        <a href="{{ route('actus.index') }}" class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors group">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200">
+                                    <i class="fas fa-newspaper text-green-600"></i>
                         </div>
                     </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">Actualités</p>
+                                <p class="text-xs text-gray-500">Gérer les actualités</p>
+                            </div>
+                        </a>
 
-                    <!-- Voitures en maintenance -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">En maintenance</p>
-                                <h3 class="text-2xl font-bold mt-1">4</h3>
-                                <p class="text-xs text-gray-500 mt-1">En cours</p>
+                        <a href="{{ route('clients.index') }}" class="flex items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors group">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200">
+                                    <i class="fas fa-users text-purple-600"></i>
+                                </div>
                             </div>
-                            <div class="p-3 bg-red-100 rounded-full text-danger">
-                                <i class="fas fa-tools text-xl"></i>
-                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">Clients</p>
+                                <p class="text-xs text-gray-500">Gérer les clients</p>
                         </div>
-                    </div>
+                        </a>
 
-                    <!-- Agents -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Agents</p>
-                                <h3 class="text-2xl font-bold mt-1">12</h3>
-                                <p class="text-xs text-gray-500 mt-1">Actifs</p>
+                        <a href="{{ route('reservations.showCalendar') }}" class="flex items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors group">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200">
+                                    <i class="fas fa-calendar text-orange-600"></i>
+                    </div>
                             </div>
-                            <div class="p-3 bg-green-100 rounded-full text-secondary">
-                                <i class="fas fa-user-tie text-xl"></i>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-900">Calendrier</p>
+                                <p class="text-xs text-gray-500">Voir le planning</p>
+                            </div>
+                        </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Charts and Recent Reservations -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Revenue Chart -->
-                    <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">Revenus mensuels</h3>
-                            <div class="flex space-x-2">
-                                <button class="px-3 py-1 text-xs bg-primary text-white rounded">Mois</button>
-                                <button class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded">Année</button>
+        <!-- Two Column Layout - Bottom -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Réservations Récemment Traitées -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Récemment Traitées</h3>
+                </div>
+                <div class="p-6">
+                    @if($recent_handled->count() > 0)
+                        <div class="space-y-4">
+                            @foreach($recent_handled as $reservation)
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="flex-shrink-0">
+                                                @if($reservation->status === 'Confirmée')
+                                                    <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                                                @elseif($reservation->status === 'En_attente')
+                                                    <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                                                @else
+                                                    <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">
+                                                    {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                                                </p>
+                                                <p class="text-xs text-gray-500">
+                                                    {{ $reservation->trip->departure }} → {{ $reservation->trip->destination }}
+                                                </p>
+                                                <p class="text-xs text-gray-500">
+                                                    Traité le {{ $reservation->updated_at->format('d/m/Y à H:i') }}
+                                                </p>
+                                            </div>
                             </div>
                         </div>
-                        <div class="chart-container">
-                            <canvas id="revenueChart"></canvas>
+                                    <div class="text-right">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            @if($reservation->status === 'Confirmée') bg-green-100 text-green-800
+                                            @elseif($reservation->status === 'En_attente') bg-yellow-100 text-yellow-800
+                                            @else bg-red-100 text-red-800 @endif">
+                                            {{ $reservation->status }}
+                                        </span>
+                        </div>
+                    </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <i class="fas fa-history text-gray-400 text-3xl mb-4"></i>
+                            <p class="text-gray-500">Aucune réservation traitée récemment</p>
+                            </div>
+                    @endif
                         </div>
                     </div>
 
-                    <!-- Vehicle Status -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-lg font-semibold mb-4">Statut des véhicules</h3>
-                        <div class="flex justify-center">
-                            <svg width="200" height="200" viewBox="0 0 200 200" class="mx-auto">
-                                <!-- Background circle -->
-                                <circle cx="100" cy="100" r="80" stroke="#E5E7EB" stroke-width="16" fill="none" />
-                                <!-- Available -->
-                                <circle class="progress-ring__circle" cx="100" cy="100" r="80" stroke="#3B82F6" stroke-width="16" stroke-dasharray="502.4" stroke-dashoffset="251.2" fill="none" />
-                                <!-- On trip -->
-                                <circle class="progress-ring__circle" cx="100" cy="100" r="80" stroke="#F59E0B" stroke-width="16" stroke-dasharray="502.4" stroke-dashoffset="351.68" fill="none" />
-                                <!-- Maintenance -->
-                                <circle class="progress-ring__circle" cx="100" cy="100" r="80" stroke="#EF4444" stroke-width="16" stroke-dasharray="502.4" stroke-dashoffset="452.16" fill="none" />
-                            </svg>
-                        </div>
-                        <div class="mt-4 space-y-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-primary mr-2"></div>
-                                <span class="text-sm">Disponibles (56%)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-warning mr-2"></div>
-                                <span class="text-sm">En déplacement (31%)</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-danger mr-2"></div>
-                                <span class="text-sm">Maintenance (13%)</span>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Chauffeurs Disponibles -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Chauffeurs Disponibles</h3>
                 </div>
-
-                <!-- Recent Reservations -->
-                <div class="bg-white rounded-lg shadow overflow-hidden">
-                    <div class="p-6 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold">Réservations récentes</h3>
+                <div class="p-6">
+                    @if($available_drivers->count() > 0)
+                        <div class="space-y-4">
+                            @foreach($available_drivers as $driver)
+                                <div class="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                                <span class="text-xs font-medium text-green-800">
+                                                    {{ substr($driver->first_name, 0, 1) }}{{ substr($driver->last_name, 0, 1) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">
+                                                {{ $driver->first_name }} {{ $driver->last_name }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                {{ $driver->phone ?? 'Téléphone non renseigné' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <div class="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
+                                            Disponible
+                                        </span>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Véhicule</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#RES001</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Moussa Diallo</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Toyota Corolla</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15 Juin 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Confirmée</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">75,000 FCFA</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-primary hover:text-blue-900 mr-3">Voir</a>
-                                        <a href="#" class="text-danger hover:text-red-900">Annuler</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#RES002</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Aminata Ndiaye</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hyundai Tucson</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15 Juin 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">En attente</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">85,000 FCFA</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-primary hover:text-blue-900 mr-3">Voir</a>
-                                        <a href="#" class="text-danger hover:text-red-900">Annuler</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#RES003</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Papa Diop</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mercedes Classe C</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">14 Juin 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">En cours</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">120,000 FCFA</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-primary hover:text-blue-900 mr-3">Voir</a>
-                                        <a href="#" class="text-danger hover:text-red-900">Annuler</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#RES004</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Fatou Bâ</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Kia Picanto</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">14 Juin 2023</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Terminée</span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">60,000 FCFA</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-primary hover:text-blue-900 mr-3">Voir</a>
-                                        <a href="#" class="text-danger hover:text-red-900">Annuler</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
-                    <div class="bg-gray-50 px-6 py-3 flex items-center justify-between border-t border-gray-200">
-                        <div class="text-sm text-gray-500">
-                            Affichage <span class="font-medium">1</span> à <span class="font-medium">4</span> sur <span class="font-medium">24</span> résultats
+                            @endforeach
                         </div>
-                        <div class="flex space-x-2">
-                            <button class="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded">Précédent</button>
-                            <button class="px-3 py-1 text-sm bg-primary text-white rounded">Suivant</button>
+                        <div class="mt-4">
+                            <a href="{{ route('drivers.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Voir tous les chauffeurs →
+                            </a>
                         </div>
+                    @else
+                        <div class="text-center py-8">
+                            <i class="fas fa-user-slash text-gray-400 text-3xl mb-4"></i>
+                            <p class="text-gray-500">Aucun chauffeur disponible</p>
+                            <p class="text-sm text-gray-400">Tous les chauffeurs sont occupés</p>
                     </div>
+                    @endif
                 </div>
-            </main>
+            </div>
         </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-                datasets: [{
-                    label: 'Revenus (FCFA)',
-                    data: [850000, 920000, 1050000, 1150000, 1250000, 1450000, 0, 0, 0, 0, 0, 0],
-                    backgroundColor: '#3B82F6',
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value / 1000 + 'k';
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-
-        // Vehicle Status Pie Chart (using SVG)
-        document.addEventListener('DOMContentLoaded', function() {
-            const availableCircle = document.querySelector('circle:nth-child(2)');
-            const onTripCircle = document.querySelector('circle:nth-child(3)');
-            const maintenanceCircle = document.querySelector('circle:nth-child(4)');
-            
-            // Set the correct dash offset based on percentage
-            availableCircle.style.strokeDashoffset = '251.2'; // 56% of 502.4 (2πr)
-            onTripCircle.style.strokeDashoffset = '351.68';   // 31% of 502.4
-            maintenanceCircle.style.strokeDashoffset = '452.16'; // 13% of 502.4
-        });
-    </script>
-</body>
-</html>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 @endsection

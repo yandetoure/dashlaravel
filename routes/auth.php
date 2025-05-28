@@ -46,11 +46,6 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboards.admin');
     })->name('dashboard.admin');
 
-    // Route pour le client
-    Route::get('/client/dashboard', function () {
-        return view('dashboards.client');
-    })->name('dashboard.client');
-
     // Route par défaut
     Route::get('/dashboard', function () {
         return view('dashboard');

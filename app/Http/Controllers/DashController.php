@@ -182,6 +182,16 @@ class DashController extends Controller
             ->orderBy('heure_ramassage')
             ->first();
 
+        // Prochaines réservations (toutes les réservations futures confirmées)
+        $upcoming_reservations = Reservation::with(['trip', 'carDriver.chauffeur'])
+            ->where('client_id', $user->id)
+            ->where('date', '>=', Carbon::today())
+            ->where('status', 'Confirmée')
+            ->orderBy('date')
+            ->orderBy('heure_ramassage')
+            ->limit(6)
+            ->get();
+
         // Factures impayées
         $unpaid_invoices = Invoice::with('reservation')
             ->whereHas('reservation', function($q) use ($user) {
@@ -202,6 +212,7 @@ class DashController extends Controller
             'loyalty_status',
             'recent_reservations',
             'next_reservation',
+            'upcoming_reservations',
             'unpaid_invoices',
             'monthly_reservations'
         ));

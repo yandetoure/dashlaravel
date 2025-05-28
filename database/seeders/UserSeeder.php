@@ -25,5 +25,35 @@ class UserSeeder extends Seeder
             'phone_number' => '+221777908197',
         ]);
         $user1->assignRole('super-admin'); 
+
+        $user2 = User::create([
+            'first_name' => 'New',
+            'last_name' => 'Agent',
+            'email' => 'agent@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777956197',
+        ]);
+        $user2->assignRole('agent'); 
+
+        $user2 = User::create([
+            'first_name' => 'Client',
+            'last_name' => 'Agent',
+            'email' => 'client@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221771908197',
+        ]);
+        $user2->assignRole('client'); 
+
+        $user2 = User::create([
+            'first_name' => 'New',
+            'last_name' => 'Chauffeur',
+            'email' => 'driver@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777955197',
+        ]);
+        $user2->assignRole('chauffeur'); 
     }   
 }
