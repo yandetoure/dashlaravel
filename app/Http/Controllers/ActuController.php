@@ -110,7 +110,7 @@ class ActuController extends Controller
             'title' => 'required|string|min:3|max:255',
             'content' => 'required|string|min:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category' => 'required|in:Actualités,Infos,Cultures,Rendez-vous',
+            'category' => 'required|in:Actualités,Infos ,Cultures,Rendez-vous',
             'external_link' => 'nullable|url|max:255'
         ], [
             'title.required' => 'Le titre est obligatoire',
