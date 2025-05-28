@@ -19,7 +19,7 @@ class ActuController extends Controller
     // Affiche le formulaire pour créer une nouvelle actualité
     public function create()
     {
-        $categories = ['Actualités', 'Infos', 'Cultures', 'Rendez-vous'];
+        $categories = ['Actualités', 'Infos utiles', 'Cultures', 'Rendez-vous'];
         $actus = Actu::latest()->take(3)->get();
         return view('actus.create', compact('categories', 'actus'));
     }
@@ -33,7 +33,7 @@ class ActuController extends Controller
                 'title' => 'required|string|min:3|max:255',
                 'content' => 'required|string|min:10',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'category' => 'required|in:Actualités,Infos,Cultures,Rendez-vous',
+                'category' => 'required|in:Actualités,Infos utiles,Cultures,Rendez-vous',
                 'external_link' => 'nullable|url|max:255'
             ], [
                 'title.required' => 'Le titre est obligatoire',
@@ -93,7 +93,7 @@ class ActuController extends Controller
     public function edit($id)
     {
         $actu = Actu::findOrFail($id);
-        $categories = ['Actualités', 'Infos', 'Cultures', 'Rendez-vous'];
+        $categories = ['Actualités', 'Infos utiles', 'Cultures', 'Rendez-vous'];
         $actus = Actu::where('id', '!=', $id)
                      ->latest()
                      ->take(3)
@@ -110,7 +110,7 @@ class ActuController extends Controller
             'title' => 'required|string|min:3|max:255',
             'content' => 'required|string|min:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category' => 'required|in:Actualités,Infos ,Cultures,Rendez-vous',
+            'category' => 'required|in:Actualités,Infos utiles,Cultures,Rendez-vous',
             'external_link' => 'nullable|url|max:255'
         ], [
             'title.required' => 'Le titre est obligatoire',

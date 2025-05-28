@@ -83,7 +83,7 @@
                 <select class="form-select rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Toutes les catégories</option>
                     <option value="Actualités">Actualités</option>
-                    <option value="Infos">Infos</option>
+                    <option value="Infos utiles">Infos utiles</option>
                     <option value="Cultures">Cultures</option>
                     <option value="Rendez-vous">Rendez-vous</option>
                 </select>
