@@ -21,14 +21,14 @@
                             </div>
                             <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
                                 0 points fidélité
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
                 <div class="text-right">
                     <div class="text-red-100 text-sm">{{ Carbon\Carbon::now()->format('d/m/Y') }}</div>
                     <div class="text-white font-semibold">{{ Carbon\Carbon::now()->format('H:i') }}</div>
-                </div>
+                            </div>
                             </div>
                         </div>
                     </div>

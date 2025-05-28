@@ -383,7 +383,7 @@
                     </div>
                 </div>
                                 <!-- Tarif 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
                         <div class="bg-red-800 text-white py-8 px-6">
                             <h3 class="text-2xl font-bold mb-2">Transfert AIBDP</h3>
                             <div class="mt-2">
@@ -646,7 +646,7 @@
                 </div>
                 
                 <!-- Tarif 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-800 text-white py-6 px-8">
                         <h3 class="text-xl font-bold">Location voiture<span class="text-red-200">/hors Dakar</span></h3>
                         <div class="mt-4">
