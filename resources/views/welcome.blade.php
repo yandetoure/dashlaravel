@@ -167,40 +167,173 @@
         body.modal-open {
             overflow: hidden;
         }
+
+        /* Animations pour le chatbox */
+        @keyframes bounce-attention {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        .bounce-attention {
+            animation: bounce-attention 2s infinite;
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Style pour la bulle d'invitation */
+        #invitation-bubble {
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        #invitation-bubble.show {
+            transform: scale(1);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        /* Animations pour la bulle d'invitation */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Gradient animé pour la bulle */
+        @keyframes gradient-shift {
+            0%, 100% {
+                background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            }
+            50% {
+                background: linear-gradient(135deg, #fef2f2 0%, #fef7f7 100%);
+            }
+        }
+
+        #invitation-bubble:hover {
+            animation: gradient-shift 2s ease-in-out infinite;
+        }
+
+        /* Animation de pulsation personnalisée */
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Styles pour la navbar transparente */
+        .navbar-transparent {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .navbar-scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Styles pour les liens de navigation sur fond transparent */
+        .nav-transparent .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-transparent .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .nav-transparent .phone-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-transparent .phone-links a:hover {
+            color: #ffffff;
+        }
+
+        .nav-transparent .mobile-menu-btn {
+            color: rgba(255, 255, 255, 0.9);
+        }
     </style>
 </head>
 <body class="font-sans">
     <!-- Navigation -->
-    <nav class="fixed w-full bg-white shadow-md z-50">
+    <nav id="navbar" class="fixed w-full navbar-transparent z-50 nav-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <!-- Phone numbers banner -->
-            <div class="py-2 border-b flex justify-end space-x-4 text-sm text-white-600">
-                <a href="tel:+221777056767" class="hover:text-red-600">
+            <!-- Phone numbers banner -->
+            <div class="py-2 border-b border-white/10 flex justify-end space-x-4 text-sm phone-links">
+                <a href="tel:+221777056767" class="hover:text-white transition-colors">
                     <i class="fas fa-phone mr-1"></i> +221 77 705 67 67
                 </a>
-                <a href="tel:+221777056969" class="hover:text-red-600">
+                <a href="tel:+221777056969" class="hover:text-white transition-colors">
                     <i class="fab fa-whatsapp mr-1"></i> +221 77 705 69 69 (WhatsApp)
                 </a>
             </div>
             <div class="flex justify-between h-14">
                 <div class="flex items-center">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#accueil" class="text-gray-700 hover:text-red-600 transition nav-link active">Accueil</a>
-                    <a href="#actualites" class="text-gray-700 hover:text-red-600 transition nav-link active">Actualités</a>
-                    <a href="#tarifs" class="text-gray-700 hover:text-red-600 transition nav-link">Tarifs</a>
-                    <a href="#services" class="text-gray-700 hover:text-red-600 transition nav-link">Services</a>
-                    <a href="#reservation" class="text-gray-700 hover:text-red-600 transition nav-link">Réservation</a>
-                    <a href="#contact" class="text-gray-700 hover:text-red-600 transition nav-link">Contact</a>
+                    <a href="#accueil" class="nav-link hover:text-white transition">Accueil</a>
+                    <a href="#actualites" class="nav-link hover:text-white transition">Actualités</a>
+                    <a href="#tarifs" class="nav-link hover:text-white transition">Tarifs</a>
+                    <a href="#services" class="nav-link hover:text-white transition">Services</a>
+                    <a href="#reservation" class="nav-link hover:text-white transition">Réservation</a>
+                    <a href="#contact" class="nav-link hover:text-white transition">Contact</a>
                     @auth
-                        <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
+                        <a href="{{ route('profile.edit') }}" class="nav-link hover:text-white transition">Mon compte</a>
                     @else
-                        <a href="#compte" class="text-gray-700 hover:text-red-600 transition nav-link">Mon compte</a>
+                        <a href="#compte" class="nav-link hover:text-white transition">Mon compte</a>
                     @endauth
                 </div>
                 <div class="md:hidden flex items-center">
-                    <button id="menu-btn" class="text-gray-700">
+                    <button id="menu-btn" class="mobile-menu-btn">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
@@ -1261,6 +1394,70 @@
             mobileMenu.classList.toggle('hidden');
         });
         
+        // Navbar transparent effect on scroll
+        const navbar = document.getElementById('navbar');
+        
+        function updateNavbarOnScroll() {
+            if (window.scrollY > 50) {
+                navbar.classList.remove('navbar-transparent', 'nav-transparent');
+                navbar.classList.add('navbar-scrolled');
+                
+                // Changer les couleurs des liens pour le mode scrollé
+                const navLinks = navbar.querySelectorAll('.nav-link');
+                const phoneLinks = navbar.querySelectorAll('.phone-links a');
+                const menuBtn = navbar.querySelector('.mobile-menu-btn');
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('text-white');
+                    link.classList.add('text-gray-700');
+                    link.style.textShadow = 'none';
+                });
+                
+                phoneLinks.forEach(link => {
+                    link.classList.remove('text-white');
+                    link.classList.add('text-gray-600');
+                    link.style.textShadow = 'none';
+                });
+                
+                if (menuBtn) {
+                    menuBtn.classList.remove('text-white');
+                    menuBtn.classList.add('text-gray-700');
+                }
+                
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+                navbar.classList.add('navbar-transparent', 'nav-transparent');
+                
+                // Remettre les couleurs transparentes
+                const navLinks = navbar.querySelectorAll('.nav-link');
+                const phoneLinks = navbar.querySelectorAll('.phone-links a');
+                const menuBtn = navbar.querySelector('.mobile-menu-btn');
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('text-gray-700');
+                    link.classList.add('text-white');
+                    link.style.textShadow = '0 1px 3px rgba(0, 0, 0, 0.3)';
+                });
+                
+                phoneLinks.forEach(link => {
+                    link.classList.remove('text-gray-600');
+                    link.classList.add('text-white');
+                    link.style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.3)';
+                });
+                
+                if (menuBtn) {
+                    menuBtn.classList.remove('text-gray-700');
+                    menuBtn.classList.add('text-white');
+                }
+            }
+        }
+        
+        // Appliquer l'effet au scroll
+        window.addEventListener('scroll', updateNavbarOnScroll);
+        
+        // Appliquer l'état initial
+        updateNavbarOnScroll();
+        
         // Gestion du scroll de la sidebar
         function updateSidebarPosition() {
             const sidebarRect = sidebar.getBoundingClientRect();
@@ -1397,9 +1594,42 @@
 
     <!-- Chat Box -->
     <div id="chat-container" class="fixed bottom-4 right-4 z-50">
+        <!-- Message d'invitation (affiché temporairement) -->
+        <div id="invitation-bubble" class="absolute bottom-20 right-0 bg-gradient-to-r from-white to-gray-50 rounded-xl shadow-2xl p-6 w-80 transform scale-0 transition-all duration-500 border border-gray-100 backdrop-blur-sm">
+            <!-- Header avec avatar et statut -->
+            <div class="flex items-center justify-center mb-4">
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-red-100 shadow-lg mb-2">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex items-center">
+                        <h4 class="text-base font-bold text-gray-800 mr-2">Nina</h4>
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
+                            En ligne
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Message principal -->
+            <div class="text-center">
+                <p class="text-lg font-medium text-gray-800 mb-2">Salut ! 👋</p>
+                <p class="text-sm text-gray-600 mb-4">Besoin d'aide pour votre transport vers l'aéroport ? Je suis là pour vous accompagner !</p>
+                <div class="flex items-center justify-center text-sm text-red-600 font-medium cursor-pointer hover:text-red-700 transition-colors">
+                    <i class="fas fa-comment-dots mr-2"></i>
+                    Cliquez pour discuter
+                    <i class="fas fa-arrow-right ml-2 animate-bounce"></i>
+                </div>
+            </div>
+            
+            <!-- Petite flèche pointant vers le bouton -->
+            <div class="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-4 h-4 bg-gradient-to-r from-white to-gray-50 border-r border-b border-gray-100 shadow-md"></div>
+        </div>
+
         <!-- Chat Button -->
-        <button id="chat-button" class="bg-red-600 text-white rounded-full p-3 shadow-lg hover:bg-red-700 transition-all duration-300 flex items-center justify-center w-14 h-14">
-            <i class="fas fa-headset text-lg"></i>
+        <button id="chat-button" class="bg-red-600 text-white rounded-full p-1 shadow-lg hover:bg-red-700 transition-all duration-300 flex items-center justify-center w-14 h-14 animate-pulse">
+            <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-12 h-12 rounded-full object-cover border-2 border-white">
         </button>
 
         <!-- Chat Window -->
@@ -1407,8 +1637,8 @@
             <!-- Chat Header -->
             <div class="bg-red-600 text-white p-3 rounded-t-lg flex justify-between items-center">
                 <div class="flex items-center">
-                    <div class="w-8 h-8 rounded-full bg-white text-red-600 flex items-center justify-center mr-2">
-                        <i class="fas fa-headset text-sm"></i>
+                    <div class="w-8 h-8 rounded-full overflow-hidden mr-2 border border-white">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h3 class="font-bold text-sm">Nina</h3>
@@ -1477,6 +1707,7 @@
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const backToQuestionsBtn = document.getElementById('back-to-questions');
+        const invitationBubble = document.getElementById('invitation-bubble');
 
         // Questions contextuelles par catégorie
         const contextualQuestions = {
@@ -1738,6 +1969,10 @@ Notre équipe est disponible pour :
                 addInitialMessage();
                 customInputSection.classList.add('hidden');
                 document.getElementById('quick-questions').classList.remove('hidden');
+                
+                // Cacher la bulle d'invitation et arrêter les animations
+                invitationBubble.classList.remove('show', 'float-animation');
+                chatButton.classList.remove('pulse-glow', 'bounce-attention', 'animate-pulse');
             }
             chatButton.classList.toggle('rotate-180');
         });
@@ -1745,6 +1980,15 @@ Notre équipe est disponible pour :
         closeChat.addEventListener('click', () => {
             chatWindow.classList.add('hidden');
             chatButton.classList.remove('rotate-180');
+            // Remettre l'animation de pulsation normale
+            chatButton.classList.add('animate-pulse');
+        });
+
+        // Permettre de cliquer sur la bulle d'invitation pour ouvrir le chat
+        invitationBubble.addEventListener('click', () => {
+            if (chatWindow.classList.contains('hidden')) {
+                chatButton.click(); // Simule un clic sur le bouton de chat
+            }
         });
 
         // Gestion du bouton pour saisir une question personnalisée
@@ -1801,8 +2045,8 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
 
             if (sender === 'bot') {
                 messageDiv.innerHTML = `
-                    <div class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center mr-2 flex-shrink-0 mt-1">
-                        <i class="fas fa-headset text-xs"></i>
+                    <div class="w-6 h-6 rounded-full overflow-hidden mr-2 flex-shrink-0 mt-1 border border-gray-200">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-full h-full object-cover">
                     </div>
                     <div class="bg-white rounded-lg p-2 max-w-[85%] shadow-sm border">
                         <p class="text-xs leading-relaxed whitespace-pre-line">${message}</p>
@@ -1822,6 +2066,49 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
 
         // Initialiser les événements des questions au chargement
         attachQuestionListeners();
+
+        // Animation d'invitation automatique au chargement de la page
+        function showWelcomeInvitation() {
+            // Attendre 2 secondes après le chargement de la page
+            setTimeout(() => {
+                // Afficher la bulle d'invitation avec animation de flottement
+                invitationBubble.classList.add('show', 'float-animation');
+                
+                // Ajouter l'animation de pulsation avec lueur
+                chatButton.classList.remove('animate-pulse');
+                chatButton.classList.add('pulse-glow');
+                
+                // Après 5 secondes, faire une animation d'attention supplémentaire
+                setTimeout(() => {
+                    chatButton.classList.add('bounce-attention');
+                    
+                    // Retirer l'animation après 4 secondes
+                    setTimeout(() => {
+                        chatButton.classList.remove('bounce-attention');
+                    }, 4000);
+                }, 5000);
+                
+                // Cacher la bulle après 10 secondes si l'utilisateur n'a pas cliqué
+                setTimeout(() => {
+                    if (chatWindow.classList.contains('hidden')) {
+                        invitationBubble.classList.remove('show', 'float-animation');
+                        chatButton.classList.remove('pulse-glow');
+                        chatButton.classList.add('animate-pulse');
+                    }
+                }, 10000);
+                
+            }, 2000);
+        }
+
+        // Déclencher l'invitation dès que la page est chargée
+        document.addEventListener('DOMContentLoaded', showWelcomeInvitation);
+
+        // Si la page est déjà chargée, déclencher immédiatement
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', showWelcomeInvitation);
+        } else {
+            showWelcomeInvitation();
+        }
     </script>
 </body>
 </html>
