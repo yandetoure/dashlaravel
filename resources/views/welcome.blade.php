@@ -353,13 +353,25 @@
     <nav id="navbar" class="fixed w-full navbar-transparent z-50 nav-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Phone numbers banner -->
-            <div class="py-2 border-b border-white/10 flex justify-end space-x-4 text-sm phone-links">
-                <a href="tel:+221777056767" class="hover:text-white transition-colors">
-                    <i class="fas fa-phone mr-1"></i> +221 77 705 67 67
-                </a>
-                <a href="tel:+221777056969" class="hover:text-white transition-colors">
-                    <i class="fab fa-whatsapp mr-1"></i> +221 77 705 69 69 (WhatsApp)
-                </a>
+            <div class="py-2 border-b border-white/10 flex justify-between items-center text-sm phone-links">
+                <div class="hidden md:flex space-x-4">
+                    <a href="tel:+221777056767" class="hover:text-white transition-colors">
+                        <i class="fas fa-phone mr-1"></i> +221 77 705 67 67
+                    </a>
+                    <a href="tel:+221777056969" class="hover:text-white transition-colors">
+                        <i class="fab fa-whatsapp mr-1"></i> +221 77 705 69 69 (WhatsApp)
+                    </a>
+                </div>
+                <!-- Numéros pour mobile -->
+                <div class="flex md:hidden space-x-2 text-xs">
+                    <a href="tel:+221777056767" class="hover:text-white transition-colors">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    <a href="tel:+221777056969" class="hover:text-white transition-colors">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+                <div class="hidden md:block"></div>
             </div>
             <div class="flex justify-between h-14">
                 <div class="flex items-center">
@@ -379,9 +391,62 @@
                     @endauth
                 </div>
                 <div class="md:hidden flex items-center">
-                    <button id="menu-btn" class="mobile-menu-btn">
+                    <button id="menu-btn" class="mobile-menu-btn text-white focus:outline-none">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu mobile -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200">
+            <div class="px-4 py-4 space-y-3">
+                <!-- Numéros de téléphone en haut -->
+                <div class="border-b border-gray-200 pb-3 mb-3">
+                    <div class="text-center space-y-2">
+                        <a href="tel:+221777056767" class="flex items-center justify-center text-gray-700 hover:text-red-600 transition-colors text-sm">
+                            <i class="fas fa-phone mr-2 text-red-600"></i> +221 77 705 67 67
+                        </a>
+                        <a href="tel:+221777056969" class="flex items-center justify-center text-gray-700 hover:text-red-600 transition-colors text-sm">
+                            <i class="fab fa-whatsapp mr-2 text-green-600"></i> +221 77 705 69 69 (WhatsApp)
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Liens de navigation -->
+                <a href="#accueil" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-home mr-3"></i>Accueil
+                </a>
+                <a href="#actualites" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-newspaper mr-3"></i>Actualités
+                </a>
+                <a href="#tarifs" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-tags mr-3"></i>Tarifs
+                </a>
+                <a href="#services" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-concierge-bell mr-3"></i>Services
+                </a>
+                <a href="#reservation" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-calendar-check mr-3"></i>Réservation
+                </a>
+                <a href="#contact" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-envelope mr-3"></i>Contact
+                </a>
+                @auth
+                    <a href="{{ route('profile.edit') }}" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                        <i class="fas fa-user mr-3"></i>Mon compte
+                    </a>
+                @else
+                    <a href="#compte" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                        <i class="fas fa-user mr-3"></i>Mon compte
+                    </a>
+                @endauth
+                
+                <!-- Bouton de réservation rapide -->
+                <div class="pt-3 border-t border-gray-200">
+                    <a href="#reservation" class="block bg-red-600 hover:bg-red-700 text-white text-center py-3 px-4 rounded-lg transition-colors font-semibold">
+                        <i class="fas fa-car mr-2"></i>Réserver maintenant
+                    </a>
                 </div>
             </div>
         </div>
@@ -442,7 +507,7 @@
             <div id="sidebar" class="w-80">
                 <div class="bg-white shadow-lg border-r border-gray-200">
                     <!-- En-tête de la sidebar -->
-                    <div class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
+                    <div id="actualites" class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
                             <!-- Bouton toggle pour mobile -->
@@ -570,7 +635,7 @@
                                 <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                         <div class="bg-red-800 text-white py-6 px-6">
-                            <h3 class="text-lg font-bold mb-2">Transfert AIBDP</h3>
+                            <h3 class="text-lg font-bold mb-2">Transfert AIBD</h3>
                             <div class="mt-2">
                                 <span class="text-2xl font-bold">32 500</span>
                                 <span class="text-base ml-1">FCFA</span>
@@ -605,7 +670,7 @@
                         <div class="bg-red-600 text-white py-6 px-6">
                             <h3 class="text-lg font-bold mb-2">Transfert PREM/(Meet & Greet)</h3>
                             <div class="mt-2">
-                                <span class="text-2xl font-bold">5 000</span>
+                                <span class="text-2xl font-bold">65 000</span>
                                 <span class="text-base ml-1">FCFA</span>
                                 <span class="text-sm text-red-200">/trajet</span>
                         </div>
@@ -1143,7 +1208,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="md:flex items-center">
                 <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Application mobile" class="rounded-lg shadow-xl">
+                    <img src="images/register.png" alt="Application mobile" class="rounded-lg shadow-xl">
                 </div>
                 <div class="md:w-1/2">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Créez votre compte client</h2>
@@ -1438,6 +1503,36 @@
         
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+            
+            // Changer l'icône du menu burger
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+
+        // Fermer le menu mobile quand on clique sur un lien
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                const icon = menuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Fermer le menu mobile quand on clique à l'extérieur
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+                const icon = menuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
         
         // Navbar transparent effect on scroll
@@ -1542,12 +1637,22 @@
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
                 
                 // Close mobile menu if open
                 mobileMenu.classList.add('hidden');
+                const icon = menuBtn.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             });
         });
         

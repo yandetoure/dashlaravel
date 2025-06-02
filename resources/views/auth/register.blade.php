@@ -110,7 +110,7 @@
                 <div class="mb-3 col-md-6">
                     <label for="phone_number" class="form-label">Téléphone</label>
                     <input type="text" name="phone_number" id="phone_number" class="form-control rounded-3 shadow-sm @error('phone_number') is-invalid @enderror" 
-                           placeholder="Ex: 771234567" required value="{{ old('phone_number') }}">
+                           placeholder="Ex: 77XXXXXXX" required value="{{ old('phone_number') }}">
                     <div class="invalid-feedback @if(!$errors->has('phone_number')) d-none @endif">
                         @error('phone_number')
                             {{ $message }}
