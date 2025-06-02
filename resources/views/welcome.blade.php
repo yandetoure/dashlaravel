@@ -182,11 +182,11 @@
             
             #sidebar.fixed-sidebar {
                 position: fixed;
-                top: 0;
+                top: 80px;
                 left: 0;
                 width: 320px;
-                height: 100vh;
-                z-index: 40;
+                height: calc(100vh - 80px);
+                z-index: 30;
             }
             
             .main-content {
@@ -529,14 +529,6 @@
                                 <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="en">
                                     <span class="flag-icon mr-3">🇬🇧</span>
                                     <span>English</span>
-                                </button>
-                                <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="es">
-                                    <span class="flag-icon mr-3">🇪🇸</span>
-                                    <span>Español</span>
-                                </button>
-                                <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="it">
-                                    <span class="flag-icon mr-3">🇮🇹</span>
-                                    <span>Italiano</span>
                                 </button>
                             </div>
                         </div>
@@ -1779,27 +1771,34 @@
         
         // Gestion du scroll de la sidebar
         function updateSidebarPosition() {
-            const isDesktop = window.innerWidth > 768;
+            const sidebarRect = sidebar.getBoundingClientRect();
+            const heroSection = document.querySelector('.hero');
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            const mainContent = document.querySelector('.main-content');
             
-            if (!isDesktop) {
-                // Sur mobile, toujours relative
-                sidebar.classList.remove('fixed-sidebar');
-                document.querySelector('.main-content').classList.remove('with-fixed-sidebar');
+            // Si on est dans la zone de la bannière, on retire la position fixe
+            if (heroBottom > 0) {
+                sidebar.style.position = 'relative';
+                sidebar.style.top = 'auto';
+                sidebar.style.left = 'auto';
+                sidebar.style.width = 'auto';
+                mainContent.style.marginLeft = '0';
                 return;
             }
             
-            const heroSection = document.querySelector('.hero');
-            const heroBottom = heroSection.getBoundingClientRect().bottom;
-            const navbarHeight = document.getElementById('navbar').offsetHeight;
-            
-            // Si le hero est encore visible, sidebar normale
-            if (heroBottom > navbarHeight) {
-                sidebar.classList.remove('fixed-sidebar');
-                document.querySelector('.main-content').classList.remove('with-fixed-sidebar');
+            // Sinon, on applique la logique de fixation normale
+            if (sidebarRect.top <= 0) {
+                sidebar.style.position = 'fixed';
+                sidebar.style.top = '0';
+                sidebar.style.left = '0';
+                sidebar.style.width = '20rem';
+                mainContent.style.marginLeft = '20rem';
             } else {
-                // Si on a scrollé au-delà du hero, fixer la sidebar
-                sidebar.classList.add('fixed-sidebar');
-                document.querySelector('.main-content').classList.add('with-fixed-sidebar');
+                sidebar.style.position = 'relative';
+                sidebar.style.top = 'auto';
+                sidebar.style.left = 'auto';
+                sidebar.style.width = 'auto';
+                mainContent.style.marginLeft = '0';
             }
         }
         
@@ -2165,7 +2164,7 @@
             
             <!-- Message principal -->
             <div class="text-center">
-                <p class="text-lg font-medium text-gray-800 mb-2">Salut ! 👋</p>
+                <p class="text-lg font-medium text-gray-800 mb-2">Bonjour ! 👋</p>
                 <p class="text-sm text-gray-600 mb-4">Besoin d'aide pour votre transport vers l'aéroport ? Je suis là pour vous accompagner !</p>
                 <div class="flex items-center justify-center text-sm text-red-600 font-medium cursor-pointer hover:text-red-700 transition-colors">
                     <i class="fas fa-comment-dots mr-2"></i>
@@ -2695,9 +2694,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
             // Gestion du sélecteur de langue
             const languages = {
                 'fr': { code: 'FR', flag: '🇫🇷', name: 'Français' },
-                'en': { code: 'EN', flag: '🇬🇧', name: 'English' },
-                'es': { code: 'ES', flag: '🇪🇸', name: 'Español' },
-                'it': { code: 'IT', flag: '🇮🇹', name: 'Italiano' }
+                'en': { code: 'EN', flag: '🇬🇧', name: 'English' }
             };
             
             // Charger la langue sauvegardée
@@ -2736,63 +2733,460 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                 }
             }
             
-            // Fonction de traduction basique (à développer selon vos besoins)
-            function translatePage(lang) {
-                // Exemple basique - vous pouvez implémenter une solution plus sophistiquée
-                const translations = {
-                    'en': {
-                        'Accueil': 'Home',
-                        'Actualités': 'News',
-                        'Tarifs': 'Rates',
-                        'Services': 'Services',
-                        'Réservation': 'Booking',
-                        'Contact': 'Contact',
-                        'Mon compte': 'My Account'
-                    },
-                    'es': {
-                        'Accueil': 'Inicio',
-                        'Actualités': 'Noticias',
-                        'Tarifs': 'Tarifas',
-                        'Services': 'Servicios',
-                        'Réservation': 'Reserva',
-                        'Contact': 'Contacto',
-                        'Mon compte': 'Mi Cuenta'
-                    },
-                    'it': {
-                        'Accueil': 'Home',
-                        'Actualités': 'Notizie',
-                        'Tarifs': 'Tariffe',
-                        'Services': 'Servizi',
-                        'Réservation': 'Prenotazione',
-                        'Contact': 'Contatto',
-                        'Mon compte': 'Il Mio Account'
-                    }
-                };
-                
+            // Dictionnaire de traductions étendu
+            const fullTranslations = {
+                'en': {
+                    // Navigation
+                    'Accueil': 'Home',
+                    'Actualités': 'News',
+                    'Tarifs': 'Rates',
+                    'Services': 'Services',
+                    'Réservation': 'Booking',
+                    'Contact': 'Contact',
+                    'Mon compte': 'My Account',
+                    
+                    // Hero Section
+                    'Nous sommes le Leader du Transfert/Shuttle Aéroportuaire': 'We are the Leader in Airport Transfer/Shuttle',
+                    'Service de navette, location de voiture avec chauffeur et Transferts privés vers l\'Aéroport International Blaise Diagne(AIBD).': 'Shuttle service, car rental with driver and private transfers to Blaise Diagne International Airport (AIBD).',
+                    'Réserver maintenant': 'Book now',
+                    'Réserver votre trajet': 'Book your trip',
+                    'Sens du trajet': 'Trip direction',
+                    'Date': 'Date',
+                    'Heure': 'Time',
+                    'Vérifier disponibilité': 'Check availability',
+                    'Dakar - AIBD': 'Dakar - AIBD',
+                    'AIBD - Dakar': 'AIBD - Dakar',
+                    'AIBD - Saly': 'AIBD - Saly',
+                    'Saly - AIBD': 'Saly - AIBD',
+                    
+                    // Actualités
+                    'Dernières actualités': 'Latest news',
+                    'Restez informé de nos actualités': 'Stay informed of our news',
+                    'Voir moins': 'See less',
+                    'Voir plus': 'See more',
+                    'En savoir plus': 'Learn more',
+                    
+                    // Tarifs
+                    'Nos Tarifs': 'Our Rates',
+                    'Des prix transparents et compétitifs pour tous nos services': 'Transparent and competitive prices for all our services',
+                    'Transfert AIBD VIP': 'AIBD VIP Transfer',
+                    'Transfert AIBDP': 'AIBDP Transfer',
+                    'Transfert PREM/(Meet & Greet)': 'PREM Transfer/(Meet & Greet)',
+                    'trajet': 'trip',
+                    'Navette privée': 'Private shuttle',
+                    'Disponible 24h/24': 'Available 24/7',
+                    'Wifi à bord': 'Wifi on board',
+                    'Bagages inclus (2 par personne)': 'Luggage included (2 per person)',
+                    'Jusqu\'à 3 personnes': 'Up to 3 people',
+                    'Tout confort inclus': 'All comfort included',
+                    'Véhicule haut de gamme': 'High-end vehicle',
+                    'Chauffeur professionnel': 'Professional driver',
+                    'Conciergerie (Meet & Greet)': 'Concierge (Meet & Greet)',
+                    'Réserver': 'Book',
+                    
+                    // Services
+                    'Nos Services': 'Our Services',
+                    'Nous offrons des solutions de transport adaptées à tous vos besoins vers l\'aéroport AIBD et au-delà': 'We offer transport solutions adapted to all your needs to AIBD airport and beyond',
+                    'Transferts Aéroport': 'Airport Transfers',
+                    'Flotte exclusive de Vans.': 'Exclusive fleet of Vans.',
+                    'Sécurité : Chauffeurs expérimentés, vitesse controlée': 'Safety: Experienced drivers, controlled speed',
+                    'Confort : clim / wifi / eau à bord': 'Comfort: A/C / wifi / water on board',
+                    'Espace : jusqu\'à 6 personnes et 12 valises': 'Space: up to 6 people and 12 suitcases',
+                    'Services aux Entreprises': 'Corporate Services',
+                    'Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.': 'Professional transport solutions for your company\'s mobility needs.',
+                    'Transferts d\'employés': 'Employee transfers',
+                    'Références compagnies internationales': 'International company references',
+                    'Partenaire AIBD': 'AIBD Partner',
+                    'Assistance & Conciergerie': 'Assistance & Concierge',
+                    'Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.': 'Rental service with driver for long distance trips outside Dakar.',
+                    'Suivi et informations de vol': 'Flight tracking and information',
+                    'Accueil et Facilitation de passage': 'Welcome and facilitation of passage',
+                    'Récupération valises / Réclamations': 'Baggage recovery / Claims',
+                    
+                    // Services annexes
+                    'Services annexes': 'Additional Services',
+                    'Location voiture': 'Car rental',
+                    '/Dakar': '/Dakar',
+                    '/hors Dakar': '/outside Dakar',
+                    'Jour': 'Day',
+                    'jour': 'day',
+                    'Hors carburant': 'Excluding fuel',
+                    'Climatisation': 'Air conditioning',
+                    'Circulez partout à Dakar': 'Drive anywhere in Dakar',
+                    'Circulez partout': 'Drive anywhere',
+                    'Tout confort compris': 'All comfort included',
+                    'Les tarifs peuvent varier selon la distance et le nombre de passagers.': 'Rates may vary according to distance and number of passengers.',
+                    'Contactez-nous pour un devis personnalisé': 'Contact us for a personalized quote',
+                    
+                    // Section Entreprises
+                    'Solutions de transport pour entreprises': 'Corporate transport solutions',
+                    'Confiez-nous les déplacements professionnels de vos collaborateurs et bénéficiez d\'un service sur mesure, fiable et sécurisé.': 'Entrust us with your employees\' business travel and benefit from a tailor-made, reliable and secure service.',
+                    'Gestion simplifiée': 'Simplified management',
+                    'Une seule interface pour gérer tous les trajets de vos employés avec facturation centralisée.': 'A single interface to manage all your employees\' trips with centralized billing.',
+                    'Chauffeurs sélectionnés': 'Selected drivers',
+                    'Nos chauffeurs professionnels sont formés aux standards les plus exigeants.': 'Our professional drivers are trained to the most demanding standards.',
+                    'Parc véhicules diversifié': 'Diversified vehicle fleet',
+                    'Des berlines aux minibus, nous avons le véhicule adapté à chaque besoin.': 'From sedans to minibuses, we have the right vehicle for every need.',
+                    'Demander un devis': 'Request a quote',
+                    'Avantages pour les entreprises': 'Corporate benefits',
+                    'Tarifs préférentiels': 'Preferential rates',
+                    'Des réductions volume pour les clients professionnels.': 'Volume discounts for professional clients.',
+                    'Facturation mensuelle': 'Monthly billing',
+                    'Simplifiez votre gestion administrative.': 'Simplify your administrative management.',
+                    'Service dédié': 'Dedicated service',
+                    'Un interlocuteur unique pour vos réservations.': 'A single contact for your bookings.',
+                    'Reporting complet': 'Complete reporting',
+                    'Analysez et optimisez vos dépenses de transport.': 'Analyze and optimize your transport expenses.',
+                    
+                    // CTA Banner
+                    'Vous voyagez bientôt ? Réservez dès maintenant !': 'Traveling soon? Book now!',
+                    'Évitez les mauvaises surprises et garantissez votre transport vers l\'aéroport AIBD en réservant à l\'avance. Nos chauffeurs professionnels vous attendront à l\'heure convenue, peu importe votre destination de départ.': 'Avoid unpleasant surprises and guarantee your transport to AIBD airport by booking in advance. Our professional drivers will be waiting for you at the agreed time, regardless of your departure destination.',
+                    'Faire une réservation': 'Make a booking',
+                    
+                    // Réservation Section
+                    'Réservez votre transport en quelques clics': 'Book your transport in a few clicks',
+                    'Notre plateforme simple et intuitive vous permet de réserver votre transport vers l\'aéroport AIBD en moins de 2 minutes.': 'Our simple and intuitive platform allows you to book your transport to AIBD airport in less than 2 minutes.',
+                    'Réservation instantanée': 'Instant booking',
+                    'Confirmation immédiate de votre réservation par email et SMS.': 'Immediate confirmation of your booking by email and SMS.',
+                    'Paiement sécurisé': 'Secure payment',
+                    'Payez en ligne de manière sécurisée ou en espèces au chauffeur.': 'Pay online securely or in cash to the driver.',
+                    'Suivi en temps réel': 'Real-time tracking',
+                    'Suivez votre chauffeur en temps réel grâce à notre application mobile.': 'Track your driver in real time with our mobile app.',
+                    'Complétez votre réservation': 'Complete your booking',
+                    'Prénom': 'First name',
+                    'Nom': 'Last name',
+                    'Email': 'Email',
+                    'Téléphone': 'Phone',
+                    'Point de départ': 'Departure point',
+                    'Nombre de passagers': 'Number of passengers',
+                    'Heure de ramassage': 'Pickup time',
+                    'Nombre de valises': 'Number of suitcases',
+                    'Sens du trajet': 'Trip direction',
+                    '-- Sélectionner un trajet --': '-- Select a trip --',
+                    'Tarif estimé': 'Estimated rate',
+                    'Finaliser la réservation': 'Complete booking',
+                    'Réservation confirmée !': 'Booking confirmed!',
+                    'Vous recevrez une confirmation par email et SMS dans quelques minutes.': 'You will receive a confirmation by email and SMS within a few minutes.',
+                    
+                    // Section Compte
+                    'Créez votre compte client': 'Create your customer account',
+                    'Accédez à toutes vos réservations passées et futures, consultez votre historique de trajets et vos points de fidélité pour gagner des avantages.': 'Access all your past and future bookings, view your trip history and loyalty points to earn benefits.',
+                    'Gestion des réservations': 'Booking management',
+                    'Consultez, modifiez ou annulez facilement vos réservations.': 'Easily view, modify or cancel your bookings.',
+                    'Historique complet': 'Complete history',
+                    'Retrouvez tous vos trajets passés avec les détails et factures.': 'Find all your past trips with details and invoices.',
+                    'Notation des chauffeurs': 'Driver rating',
+                    'Évaluez votre expérience pour nous aider à améliorer nos services.': 'Rate your experience to help us improve our services.',
+                    'Créer un compte': 'Create an account',
+                    'Se connecter': 'Sign in',
+                    
+                    // Section Rating
+                    'Comment s\'est passé votre trajet ?': 'How was your trip?',
+                    'Votre avis compte ! Notez votre chauffeur et partagez votre expérience pour nous aider à améliorer continuellement nos services.': 'Your opinion matters! Rate your driver and share your experience to help us continuously improve our services.',
+                    'moyenne': 'average',
+                    'Noter un chauffeur': 'Rate a driver',
+                    'Numéro de réservation': 'Booking number',
+                    'Ex: DKR123456': 'Ex: DKR123456',
+                    'Note (1 à 5 étoiles)': 'Rating (1 to 5 stars)',
+                    'Commentaire (optionnel)': 'Comment (optional)',
+                    'Décrivez votre expérience...': 'Describe your experience...',
+                    'Envoyer l\'évaluation': 'Send evaluation',
+                    
+                    // Contact Section
+                    'Contactez-nous': 'Contact us',
+                    'Nous sommes disponibles 24h/24 pour répondre à vos questions et prendre vos réservations': 'We are available 24/7 to answer your questions and take your bookings',
+                    'Nos coordonnées': 'Our contact details',
+                    'Adresse': 'Address',
+                    'Sacré cœur, Dakar, Sénégal': 'Sacré cœur, Dakar, Senegal',
+                    'Horaires': 'Hours',
+                    
+                    // Contact
+                    'Contactez-nous': 'Contact us',
+                    'Adresse': 'Address',
+                    'Téléphone': 'Phone',
+                    // Messages et formulaires
+                    'Veuillez remplir tous les champs.': 'Please fill in all fields.',
+                    'Vérification en cours...': 'Checking...',
+                    'Erreur lors de la vérification. Veuillez réessayer.': 'Error during verification. Please try again.',
+                    'Réservation en cours...': 'Booking in progress...',
+                    'Une erreur est survenue. Veuillez réessayer.': 'An error occurred. Please try again.',
+                    
+                    // Chatbox
+                    'Bonjour ! 👋': 'Hi there! 👋',
+                    'Besoin d\'aide pour votre transport vers l\'aéroport ? Je suis là pour vous accompagner !': 'Need help with your airport transport? I\'m here to assist you!',
+                    'Cliquez pour discuter': 'Click to chat',
+                    'Assistant virtuel': 'Virtual assistant',
+                    'Choisissez une question :': 'Choose a question:',
+                    'Comment réserver un transport ?': 'How to book transport?',
+                    'Informations générales': 'General information',
+                    'Poser ma propre question': 'Ask my own question',
+                    'Tapez votre question...': 'Type your question...',
+                    'Retour aux questions': '← Back to questions',
+                    'Questions principales': 'Main questions',
+                    'Quels sont vos tarifs ?': 'What are your rates?',
+                    'Horaires et disponibilités': 'Hours and availability',
+                    'Comment vous contacter ?': 'How to contact you?',
+                    'Quels services proposez-vous ?': 'What services do you offer?',
+                    'Zones de service couvertes': 'Service areas covered',
+                    'Mesures de sécurité': 'Safety measures',
+                    'Modes de paiement acceptés': 'Accepted payment methods'
+                },
+                'es': {
+                    // Navigation
+                    'Accueil': 'Inicio',
+                    'Actualités': 'Noticias',
+                    'Tarifs': 'Tarifas',
+                    'Services': 'Servicios',
+                    'Réservation': 'Reserva',
+                    'Contact': 'Contacto',
+                    'Mon compte': 'Mi Cuenta',
+                    
+                    // Contenido
+                    'Nous sommes le Leader du Transfert/Shuttle Aéroportuaire': 'Somos el Líder en Traslados/Shuttle Aeroportuario',
+                    'Réserver maintenant': 'Reservar ahora',
+                    'Nos Tarifs': 'Nuestras Tarifas',
+                    'Nos Services': 'Nuestros Servicios',
+                    'Contactez-nous': 'Contáctanos'
+                },
+                'it': {
+                    // Navigation
+                    'Accueil': 'Home',
+                    'Actualités': 'Notizie',
+                    'Tarifs': 'Tariffe',
+                    'Services': 'Servizi',
+                    'Réservation': 'Prenotazione',
+                    'Contact': 'Contatto',
+                    'Mon compte': 'Il Mio Account',
+                    
+                    // Contenido
+                    'Nous sommes le Leader du Transfert/Shuttle Aéroportuaire': 'Siamo il Leader nei Trasferimenti/Shuttle Aeroportuali',
+                    'Réserver maintenant': 'Prenota ora',
+                    'Nos Tarifs': 'Le Nostre Tariffe',
+                    'Nos Services': 'I Nostri Servizi',
+                    'Contactez-nous': 'Contattaci'
+                }
+            };
+            
+            // Fonction améliorée de traduction complète
+            function translateFullPage(lang) {
                 if (lang === 'fr') {
-                    // Remettre le français par défaut
                     location.reload();
                     return;
                 }
                 
-                const langTranslations = translations[lang];
-                if (langTranslations) {
-                    // Traduire les éléments de navigation
-                    document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
-                        const text = link.textContent.trim();
-                        if (langTranslations[text]) {
-                            const icon = link.querySelector('i');
-                            if (icon) {
-                                link.innerHTML = icon.outerHTML + langTranslations[text];
-                            } else {
-                                link.textContent = langTranslations[text];
+                const translations = fullTranslations[lang];
+                if (!translations) return;
+                
+                // Fonction pour traduire récursivement tous les nœuds texte
+                function walkAndTranslate(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const text = node.textContent.trim();
+                        if (text && translations[text]) {
+                            node.textContent = translations[text];
+                        }
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        // Éviter de traduire certains éléments
+                        if (node.classList.contains('no-translate') || 
+                            node.id === 'current-language' ||
+                            node.tagName === 'SCRIPT' ||
+                            node.tagName === 'STYLE') {
+                            return;
+                        }
+                        
+                        // Traduire les attributs
+                        if (node.hasAttribute('placeholder')) {
+                            const placeholder = node.getAttribute('placeholder');
+                            if (translations[placeholder]) {
+                                node.setAttribute('placeholder', translations[placeholder]);
                             }
                         }
-                    });
-                    
-                    // Ajouter d'autres traductions selon vos besoins
-                    console.log(`Page traduite en ${languages[lang].name}`);
+                        
+                        // Continuer avec les enfants
+                        for (let child of node.childNodes) {
+                            walkAndTranslate(child);
+                        }
+                    }
                 }
+                
+                // Démarrer la traduction depuis le body
+                walkAndTranslate(document.body);
+                
+                // Traitement spécial pour les liens de navigation avec icônes
+                document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                    const originalText = link.getAttribute('data-original-text') || link.textContent.trim();
+                    if (!link.hasAttribute('data-original-text')) {
+                        link.setAttribute('data-original-text', originalText);
+                    }
+                    
+                    if (translations[originalText]) {
+                        const icon = link.querySelector('i');
+                        if (icon) {
+                            link.innerHTML = icon.outerHTML + translations[originalText];
+                        } else {
+                            link.textContent = translations[originalText];
+                        }
+                    }
+                });
+                
+                console.log(`Page entièrement traduite en ${languages[lang].name}`);
+            }
+            
+            // Remplacer l'ancienne fonction par la nouvelle
+            function translatePage(lang) {
+                translateFullPage(lang);
+                updateChatboxLanguage(lang);
+            }
+            
+            // Fonction pour mettre à jour la langue du chatbox
+            function updateChatboxLanguage(lang) {
+                const translations = fullTranslations[lang];
+                if (!translations) return;
+                
+                // Mettre à jour les textes du chatbox
+                const invitationBubble = document.querySelector('#invitation-bubble p:first-of-type');
+                if (invitationBubble && translations['Bonjour ! 👋']) {
+                    invitationBubble.textContent = translations['Bonjour ! 👋'];
+                }
+                
+                const invitationText = document.querySelector('#invitation-bubble p:nth-of-type(2)');
+                if (invitationText && translations['Besoin d\'aide pour votre transport vers l\'aéroport ? Je suis là pour vous accompagner !']) {
+                    invitationText.textContent = translations['Besoin d\'aide pour votre transport vers l\'aéroport ? Je suis là pour vous accompagner !'];
+                }
+                
+                const clickText = document.querySelector('#invitation-bubble .text-red-600');
+                if (clickText && translations['Cliquez pour discuter']) {
+                    clickText.innerHTML = `<i class="fas fa-comment-dots mr-2"></i>${translations['Cliquez pour discuter']}<i class="fas fa-arrow-right ml-2 animate-bounce"></i>`;
+                }
+                
+                // Mettre à jour le greeting message
+                responses.greeting.response = lang === 'en' ? 
+                    `Hello! I'm Mami, your virtual assistant.\nChoose a question below to get detailed information!` :
+                    `Bonjour ! Je suis Mami, votre assistante virtuelle.\nChoisissez une question ci-dessous pour obtenir des informations détaillées !`;
+                
+                // Mettre à jour les réponses du chatbot selon la langue
+                if (lang === 'en') {
+                    updateChatResponsesToEnglish();
+                } else {
+                    updateChatResponsesToFrench();
+                }
+            }
+            
+            // Fonction pour mettre à jour les réponses en anglais
+            function updateChatResponsesToEnglish() {
+                responses.reservation.response = `I can help you book your transfer! Here are the different options:
+
+1. 📱 Online booking:
+   - Fill out our online form on this page
+   - Choose your trip and schedule
+   - Get immediate confirmation
+
+2. ☎️ By phone:
+   - Call us at +221 77 705 67 67
+   - Available 24/7
+
+3. 💬 Via WhatsApp:
+   - Contact us at +221 77 705 69 69
+   - Fast and personalized service`;
+
+                responses.info.response = `Here's essential information about our services:
+
+🚗 We specialize in transport to AIBD airport
+✈️ Service available 24/7
+🏆 Leader in airport transfers in Senegal
+👨‍✈️ Professional and experienced drivers
+🛡️ Maintained and insured vehicles
+
+What would you like to know more specifically?`;
+
+                responses.tarifs.response = `Here are our different transport packages:
+
+🌟 AIBD VIP Transfer (45,000 FCFA)
+- Premium private shuttle
+- Wifi and premium comfort
+- Luggage included (2 per person)
+
+✨ AIBD Transfer (32,500 FCFA)
+- Comfortable private service
+- Up to 3 people
+- Available 24/7
+
+👑 PREM/Meet & Greet Transfer (65,000 FCFA)
+- Complete concierge service
+- Personalized welcome
+- High-end vehicle`;
+
+                responses.contact.response = `You can easily reach us:
+
+📞 Phone: +221 77 705 67 67
+📱 WhatsApp: +221 77 705 69 69
+📧 Email: 221cproservices@gmail.com
+
+📍 Address: Sacré-Cœur, Dakar, Senegal
+
+Our team is available for:
+- Bookings
+- Information
+- Personalized quotes
+- Customer service`;
+            }
+            
+            // Fonction pour mettre à jour les réponses en français
+            function updateChatResponsesToFrench() {
+                responses.reservation.response = `Je peux vous aider à réserver votre transfert ! Voici les différentes options :
+
+1. 📱 Réservation en ligne :
+   - Remplissez notre formulaire en ligne sur cette page
+   - Choisissez votre trajet et vos horaires
+   - Recevez une confirmation immédiate
+
+2. ☎️ Par téléphone :
+   - Appelez-nous au +221 77 705 67 67
+   - Disponible 24h/24 et 7j/7
+
+3. 💬 Via WhatsApp :
+   - Contactez-nous au +221 77 705 69 69
+   - Service rapide et personnalisé`;
+
+                responses.info.response = `Voici les informations essentielles sur nos services :
+
+🚗 Nous sommes spécialisés dans le transport vers l'aéroport AIBD
+✈️ Service disponible 24h/24 et 7j/7
+🏆 Leader du transfert aéroportuaire au Sénégal
+👨‍✈️ Chauffeurs professionnels et expérimentés
+🛡️ Véhicules entretenus et assurés
+
+Que souhaitez-vous savoir de plus spécifique ?`;
+
+                responses.tarifs.response = `Voici nos différentes formules de transport :
+
+🌟 Transfert AIBD VIP (45 000 FCFA)
+- Navette privée haut de gamme
+- Wifi et confort premium
+- Bagages inclus (2 par personne)
+
+✨ Transfert AIBD (32 500 FCFA)
+- Service privé confortable
+- Jusqu'à 3 personnes
+- Disponible 24h/24
+
+👑 Transfert PREM/Meet & Greet (65 000 FCFA)
+- Service conciergerie complet
+- Accueil personnalisé
+- Véhicule haut de gamme`;
+
+                responses.contact.response = `Vous pouvez nous joindre facilement :
+
+📞 Téléphone : +221 77 705 67 67
+📱 WhatsApp : +221 77 705 69 69
+📧 Email : 221cproservices@gmail.com
+
+📍 Adresse : Sacré-Cœur, Dakar, Sénégal
+
+Notre équipe est disponible pour :
+- Réservations
+- Informations
+- Devis personnalisés
+- Service client`;
             }
         });
     </script>
