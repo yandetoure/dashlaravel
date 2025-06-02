@@ -165,11 +165,122 @@
             }
         }
 
-        /* Masquer le bouton toggle sur desktop */
+        /* Desktop/Tablette : sidebar fixe après le hero */
         @media (min-width: 769px) {
             #toggle-news-btn {
                 display: none;
             }
+            
+            .sidebar-container {
+                position: relative;
+                z-index: 10;
+            }
+            
+            #sidebar {
+                transition: all 0.3s ease;
+            }
+            
+            #sidebar.fixed-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 320px;
+                height: 100vh;
+                z-index: 40;
+            }
+            
+            .main-content {
+                transition: margin-left 0.3s ease;
+            }
+            
+            .main-content.with-fixed-sidebar {
+                margin-left: 320px;
+            }
+        }
+
+        /* Variables CSS pour le mode sombre */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --border-color: #374151;
+            --card-bg: #1f2937;
+            --nav-bg: rgba(17, 24, 39, 0.95);
+        }
+
+        /* Application des variables CSS */
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .bg-gray-50 {
+            background-color: var(--bg-secondary) !important;
+        }
+
+        .bg-white {
+            background-color: var(--card-bg) !important;
+        }
+
+        .text-gray-800 {
+            color: var(--text-primary) !important;
+        }
+
+        .text-gray-600 {
+            color: var(--text-secondary) !important;
+        }
+
+        .border-gray-200 {
+            border-color: var(--border-color) !important;
+        }
+
+        .navbar-scrolled {
+            background: var(--nav-bg) !important;
+        }
+
+        /* Styles pour les boutons de contrôle */
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        .navbar-scrolled .control-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        .navbar-scrolled .control-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
         }
 
         /* Styles pour le modal */
@@ -400,6 +511,41 @@
                     @else
                         <a href="#compte" class="nav-link hover:text-white transition">Mon compte</a>
                     @endauth
+                    
+                    <!-- Boutons de contrôle -->
+                    <div class="control-buttons">
+                        <!-- Sélecteur de langue -->
+                        <div class="relative">
+                            <button id="language-btn" class="control-btn flex items-center">
+                                <i class="fas fa-globe mr-2"></i>
+                                <span id="current-language">FR</span>
+                                <i class="fas fa-chevron-down ml-1"></i>
+                            </button>
+                            <div id="language-dropdown" class="hidden absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg py-2 min-w-[150px] z-50">
+                                <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="fr">
+                                    <span class="flag-icon mr-3">🇫🇷</span>
+                                    <span>Français</span>
+                                </button>
+                                <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="en">
+                                    <span class="flag-icon mr-3">🇬🇧</span>
+                                    <span>English</span>
+                                </button>
+                                <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="es">
+                                    <span class="flag-icon mr-3">🇪🇸</span>
+                                    <span>Español</span>
+                                </button>
+                                <button class="language-option flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang="it">
+                                    <span class="flag-icon mr-3">🇮🇹</span>
+                                    <span>Italiano</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Bouton mode sombre -->
+                        <button id="theme-toggle" class="control-btn">
+                            <i id="theme-icon" class="fas fa-moon"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="menu-btn" class="mobile-menu-btn text-white focus:outline-none">
@@ -1633,30 +1779,27 @@
         
         // Gestion du scroll de la sidebar
         function updateSidebarPosition() {
-            const sidebarRect = sidebar.getBoundingClientRect();
-            const heroSection = document.querySelector('.hero');
-            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            const isDesktop = window.innerWidth > 768;
             
-            // Si on est dans la zone de la bannière, on retire la position fixe
-            if (heroBottom > 0) {
-                sidebar.style.position = 'relative';
-                sidebar.style.top = 'auto';
-                sidebar.style.left = 'auto';
-                sidebar.style.width = 'auto';
+            if (!isDesktop) {
+                // Sur mobile, toujours relative
+                sidebar.classList.remove('fixed-sidebar');
+                document.querySelector('.main-content').classList.remove('with-fixed-sidebar');
                 return;
             }
             
-            // Sinon, on applique la logique de fixation normale
-            if (sidebarRect.top <= 0) {
-                sidebar.style.position = 'fixed';
-                sidebar.style.top = '0';
-                sidebar.style.left = '0';
-                sidebar.style.width = '20rem';
+            const heroSection = document.querySelector('.hero');
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            const navbarHeight = document.getElementById('navbar').offsetHeight;
+            
+            // Si le hero est encore visible, sidebar normale
+            if (heroBottom > navbarHeight) {
+                sidebar.classList.remove('fixed-sidebar');
+                document.querySelector('.main-content').classList.remove('with-fixed-sidebar');
             } else {
-                sidebar.style.position = 'relative';
-                sidebar.style.top = 'auto';
-                sidebar.style.left = 'auto';
-                sidebar.style.width = 'auto';
+                // Si on a scrollé au-delà du hero, fixer la sidebar
+                sidebar.classList.add('fixed-sidebar');
+                document.querySelector('.main-content').classList.add('with-fixed-sidebar');
             }
         }
         
@@ -2517,6 +2660,141 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
         } else {
             showWelcomeInvitation();
         }
+
+        // Gestion du mode sombre
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const languageBtn = document.getElementById('language-btn');
+            const languageDropdown = document.getElementById('language-dropdown');
+            const currentLanguage = document.getElementById('current-language');
+            
+            // Charger le thème sauvegardé
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // Toggle du thème
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.className = 'fas fa-sun';
+                } else {
+                    themeIcon.className = 'fas fa-moon';
+                }
+            }
+            
+            // Gestion du sélecteur de langue
+            const languages = {
+                'fr': { code: 'FR', flag: '🇫🇷', name: 'Français' },
+                'en': { code: 'EN', flag: '🇬🇧', name: 'English' },
+                'es': { code: 'ES', flag: '🇪🇸', name: 'Español' },
+                'it': { code: 'IT', flag: '🇮🇹', name: 'Italiano' }
+            };
+            
+            // Charger la langue sauvegardée
+            const savedLanguage = localStorage.getItem('language') || 'fr';
+            updateLanguageDisplay(savedLanguage);
+            
+            // Toggle du dropdown de langue
+            languageBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('hidden');
+            });
+            
+            // Fermer le dropdown en cliquant à l'extérieur
+            document.addEventListener('click', () => {
+                languageDropdown.classList.add('hidden');
+            });
+            
+            // Sélection de langue
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const selectedLang = option.getAttribute('data-lang');
+                    localStorage.setItem('language', selectedLang);
+                    updateLanguageDisplay(selectedLang);
+                    languageDropdown.classList.add('hidden');
+                    
+                    // Ici vous pouvez ajouter la logique de traduction
+                    translatePage(selectedLang);
+                });
+            });
+            
+            function updateLanguageDisplay(lang) {
+                const langData = languages[lang];
+                if (langData) {
+                    currentLanguage.textContent = langData.code;
+                }
+            }
+            
+            // Fonction de traduction basique (à développer selon vos besoins)
+            function translatePage(lang) {
+                // Exemple basique - vous pouvez implémenter une solution plus sophistiquée
+                const translations = {
+                    'en': {
+                        'Accueil': 'Home',
+                        'Actualités': 'News',
+                        'Tarifs': 'Rates',
+                        'Services': 'Services',
+                        'Réservation': 'Booking',
+                        'Contact': 'Contact',
+                        'Mon compte': 'My Account'
+                    },
+                    'es': {
+                        'Accueil': 'Inicio',
+                        'Actualités': 'Noticias',
+                        'Tarifs': 'Tarifas',
+                        'Services': 'Servicios',
+                        'Réservation': 'Reserva',
+                        'Contact': 'Contacto',
+                        'Mon compte': 'Mi Cuenta'
+                    },
+                    'it': {
+                        'Accueil': 'Home',
+                        'Actualités': 'Notizie',
+                        'Tarifs': 'Tariffe',
+                        'Services': 'Servizi',
+                        'Réservation': 'Prenotazione',
+                        'Contact': 'Contatto',
+                        'Mon compte': 'Il Mio Account'
+                    }
+                };
+                
+                if (lang === 'fr') {
+                    // Remettre le français par défaut
+                    location.reload();
+                    return;
+                }
+                
+                const langTranslations = translations[lang];
+                if (langTranslations) {
+                    // Traduire les éléments de navigation
+                    document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+                        const text = link.textContent.trim();
+                        if (langTranslations[text]) {
+                            const icon = link.querySelector('i');
+                            if (icon) {
+                                link.innerHTML = icon.outerHTML + langTranslations[text];
+                            } else {
+                                link.textContent = langTranslations[text];
+                            }
+                        }
+                    });
+                    
+                    // Ajouter d'autres traductions selon vos besoins
+                    console.log(`Page traduite en ${languages[lang].name}`);
+                }
+            }
+        });
     </script>
 </body>
 </html>
