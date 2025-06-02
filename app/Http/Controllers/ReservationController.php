@@ -326,7 +326,7 @@ class ReservationController extends Controller
         // Envoi des e-mails de réservation
         $this->envoyerEmailReservation($reservation, 'created');
 
-        return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès par l’agent.');
+        return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès par l\'agent.');
     }
 
 
@@ -409,7 +409,7 @@ class ReservationController extends Controller
         // Met à jour le statut et l'ID de l'agent
         $reservation->update([
             'status' => 'confirmée',
-            'id_agent' => auth()->id(),  // Enregistre l’agent connecté
+            'id_agent' => auth()->id(),  // Enregistre l'agent connecté
         ]);
 
         // Envoyer les e-mails lors de la confirmation
@@ -510,19 +510,82 @@ class ReservationController extends Controller
      // Méthode pour enregistrer un email lors de la création ou modification de la réservation
      private function envoyerEmailReservation(Reservation $reservation, $status = 'created')
      {
-         // Envoyer des emails au client, chauffeur et à l'entreprise
-         Mail::to($reservation->client->email)->send(new ReservationCreatedclient($reservation));
-         Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCreated($reservation));
+         // Email à l'entreprise (toujours envoyé)
+         try {
+             Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCreated($reservation));
+         } catch (\Exception $e) {
+             \Log::error('Erreur envoi email entreprise: ' . $e->getMessage());
+         }
+
+         // Email au client (si ce n'est pas un prospect)
+         if ($reservation->client_id && $reservation->client) {
+             try {
+                 Mail::to($reservation->client->email)->send(new ReservationCreatedclient($reservation));
+             } catch (\Exception $e) {
+                 \Log::error('Erreur envoi email client: ' . $e->getMessage());
+             }
+         } elseif ($reservation->email) {
+             // Si c'est un prospect, utiliser l'email de la réservation
+             try {
+                 Mail::to($reservation->email)->send(new ReservationCreatedclient($reservation));
+             } catch (\Exception $e) {
+                 \Log::error('Erreur envoi email prospect: ' . $e->getMessage());
+             }
+         }
  
          if ($status === 'confirmée') {
-             Mail::to($reservation->chauffeur->email)->send(new ReservationConfirmedDriver($reservation));
-             Mail::to($reservation->client->email)->send(new ReservationConfirmedclient($reservation));
-             Mail::to('tourendeyeyande@gmail.com')->send(new ReservationConfirmed($reservation));
+             // Email au chauffeur
+             if ($reservation->carDriver && $reservation->carDriver->chauffeur) {
+                 try {
+                     Mail::to($reservation->carDriver->chauffeur->email)->send(new ReservationConfirmedDriver($reservation));
+                 } catch (\Exception $e) {
+                     \Log::error('Erreur envoi email chauffeur: ' . $e->getMessage());
+                 }
+             }
+             
+             // Email au client ou prospect
+             $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
+             if ($clientEmail) {
+                 try {
+                     Mail::to($clientEmail)->send(new ReservationConfirmedclient($reservation));
+                 } catch (\Exception $e) {
+                     \Log::error('Erreur envoi email confirmation client: ' . $e->getMessage());
+                 }
+             }
+             
+             // Email à l'entreprise
+             try {
+                 Mail::to('tourendeyeyande@gmail.com')->send(new ReservationConfirmed($reservation));
+             } catch (\Exception $e) {
+                 \Log::error('Erreur envoi email confirmation entreprise: ' . $e->getMessage());
+             }
 
          } elseif ($status === 'annulée') {
-             Mail::to($reservation->chauffeur->email)->send(new ReservationCanceledDriver($reservation));
-             Mail::to($reservation->client->email)->send(new ReservationCanceledclient($reservation));
-             Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCanceled($reservation));
+             // Email au chauffeur
+             if ($reservation->carDriver && $reservation->carDriver->chauffeur) {
+                 try {
+                     Mail::to($reservation->carDriver->chauffeur->email)->send(new ReservationCanceledDriver($reservation));
+                 } catch (\Exception $e) {
+                     \Log::error('Erreur envoi email chauffeur annulation: ' . $e->getMessage());
+                 }
+             }
+             
+             // Email au client ou prospect
+             $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
+             if ($clientEmail) {
+                 try {
+                     Mail::to($clientEmail)->send(new ReservationCanceledclient($reservation));
+                 } catch (\Exception $e) {
+                     \Log::error('Erreur envoi email annulation client: ' . $e->getMessage());
+                 }
+             }
+             
+             // Email à l'entreprise
+             try {
+                 Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCanceled($reservation));
+             } catch (\Exception $e) {
+                 \Log::error('Erreur envoi email annulation entreprise: ' . $e->getMessage());
+             }
          }
      }
  
@@ -813,7 +876,7 @@ public function agentStoreReservation(Request $request)
     $reservation->load(['client', 'carDriver.chauffeur']);
     $this->envoyerEmailReservation($reservation, 'created');
 
-    return redirect()->route('reservations.index')->with('success', 'Réservation créée par l’agent avec succès.');
+    return redirect()->route("reservations.index")->with("success", "Réservation créée par l'agent avec succès.");
 }
 
 
@@ -871,6 +934,7 @@ public function checkAvailability(Request $request)
     $heureRamassage = $request->heure_ramassage;
 
     $chauffeurs = User::role('chauffeur')->get();
+    $disponible = false;
 
     foreach ($chauffeurs as $chauffeur) {
         // Vérification jour de repos
@@ -892,39 +956,41 @@ public function checkAvailability(Request $request)
             continue;
         }
 
-        // ⚡️ NOUVEAU : vérifier TOUTES les réservations du chauffeur
+        // Vérifier les réservations du chauffeur
         $reservations = Reservation::where('cardriver_id', $carDriver->id)
             ->where('status', 'Confirmée')
-            ->where('date', $date) // on peut même vérifier toutes dates proches si besoin
+            ->where('date', $date)
             ->get();
 
-        $disponible = true;
+        $chauffeurDisponible = true;
 
         foreach ($reservations as $reservation) {
             $reservationDateTime = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
             $requestDateTime = Carbon::parse("{$date} {$heureRamassage}");
 
             if ($reservationDateTime->diffInHours($requestDateTime) < 3) {
-                $disponible = false;
-                break; // Ce chauffeur a un conflit de réservation
+                $chauffeurDisponible = false;
+                break;
             }
         }
 
-        if ($disponible) {
-            // Chauffeur trouvé disponible
-            return response()->json([
-                'available' => true,
-                'chauffeur' => $chauffeur->only(['id', 'first_name', 'last_name']),
-                'car' => $carDriver->car->only(['id', 'immatriculation', 'model']),
-            ]);
+        if ($chauffeurDisponible) {
+            $disponible = true;
+            break;
         }
     }
 
-    // Aucun chauffeur disponible
-    return response()->json([
-        'available' => false,
-        'message' => 'Aucun chauffeur disponible pour cette date et heure.',
-    ]);
+    if ($disponible) {
+        return response()->json([
+            'available' => true,
+            'message' => '✅ Parfait ! Nous avons de la disponibilité pour cette date et heure. Pour confirmer votre réservation, veuillez nous contacter au +221 77 705 67 67 ou via WhatsApp au +221 77 705 69 69.'
+        ]);
+    } else {
+        return response()->json([
+            'available' => false,
+            'message' => '❌ Désolé, aucun chauffeur n\'est disponible pour cette date et heure. Veuillez contacter notre service client au +221 77 705 67 67 pour trouver un créneau alternatif.'
+        ]);
+    }
 }
 
 // public function showCalendar()
@@ -1034,28 +1100,16 @@ public function showCalendar()
     {
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
-            'client_id' => 'nullable|exists:users,id',
-            'first_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users,email'],
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'phone' => ['required', 'regex:/^[0-9]{9}$/'],
             'date' => 'required|date',
             'heure_ramassage' => 'required',
             'adresse_rammassage' => 'required|string|max:255',
-            // 'heure_vol' => 'required',
-            // 'numero_vol' => 'required',
-            // 'nb_personnes' => 'required|integer|min:1',
+            'nb_personnes' => 'required|integer|min:1',
             'nb_valises' => 'required|integer|min:0',
-            // 'nb_adresses' => 'required|integer|min:0',
-            'phone_number' => ['nullable', 'regex:/^[0-9]{9}$/', 'unique:users,phone_number'],
         ]);
-
-        // Vérification qu'au moins un choix de client est fait
-        if (!$request->client_id && (!$request->last_name || !$request->first_name)) {
-            return back()->withErrors(['last_name' => 'Veuillez sélectionner un client existant ou entrer un nom et un prénom.']);
-        }
-
-        // $user = Auth::user();        
-        // $idAgent = $user->id;
 
         // Recherche d'un chauffeur disponible
         $chauffeur = $this->findAvailableDriver($request->date, $request->heure_ramassage);
@@ -1076,14 +1130,6 @@ public function showCalendar()
         if (!$carDriver) {
             return back()->withErrors(['chauffeur_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
         }
-
-        // // Récupérer le trajet choisi
-        // $trip = Trip::find($request->trip_id);
-
-        // // Vérifier que le chauffeur est bien à la ville de départ du trajet
-        // if ($carDriver->current_location !== $trip->departure) {
-        //     return back()->withErrors(['chauffeur_id' => 'Le chauffeur n\'est pas à la ville de départ pour effectuer cette réservation.']);
-        // }
 
         // Vérifier la disponibilité du chauffeur (pas de réservation avant 3 heures)
         $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
@@ -1116,56 +1162,49 @@ public function showCalendar()
         }
 
         // Calcul du tarif
-        $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, $request->nb_adresses);
+        $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, 0);
 
-        if ($request->client_id) {
-            // Client existant sélectionné
-            $client = User::find($request->client_id);
-        } else {
-            // Création d'un nouveau client
-            $client = User::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'password' => Hash::make(Str::random(12)),
-                'phone_number' => $request->phone_number,
-            ]);
-        
-            $client->assignRole('client');
-        
-            Mail::to($client->email)->send(new AccountCreatedMail($client, $client->password));
-        }        
-
-        // Création de la réservation
+        // Création de la réservation PROSPECT (sans client_id)
         $reservation = Reservation::create([
             'trip_id' => $request->trip_id,
-            'client_id' => $client->id,
+            'client_id' => null, // PAS DE CLIENT - C'EST UN PROSPECT
             'chauffeur_id' => $chauffeur->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            // 'id_agent' => $idAgent,
             'adresse_rammassage' => $request->adresse_rammassage,
             'date' => $request->date,
             'heure_ramassage' => $request->heure_ramassage,
-            // 'heure_vol' => $request->heure_vol,
-            // 'numero_vol' => $request->numero_vol,
             'nb_personnes' => $request->nb_personnes,
             'nb_valises' => $request->nb_valises,
-            // 'nb_adresses' => $request->nb_adresses,
             'tarif' => $tarif,
-            'status' => 'En_attente',
-            'phone_number' => $request->phone_number,
+            'status' => 'En_attente', // EN ATTENTE DE CONFIRMATION PAR UN AGENT
+            'phone_number' => $request->phone,
             'cardriver_id' => $carDriver->id,
         ]);
 
-        // Assurez-vous que la réservation est chargée avec les relations nécessaires
-        $reservation->load(['client', 'carDriver.chauffeur']);
-        // Envoi des e-mails de réservation
-        $this->envoyerEmailReservation($reservation, 'created');
+        // Envoi des e-mails de notification pour prospects
+        $this->envoyerEmailProspect($reservation);
 
-        return redirect()->route('welcome')->with('success', 'Réservation ajoutée avec succès par l’agent.');
+        return redirect()->route('welcome')->with('success', 'Votre demande de réservation a été enregistrée avec succès. Vous recevrez une confirmation par email une fois qu\'un agent aura validé votre demande.');
     }
 
+    // Nouvelle méthode pour envoyer des emails pour les prospects
+    private function envoyerEmailProspect(Reservation $reservation)
+    {
+        // Email à l'entreprise pour notification d'une nouvelle demande prospect
+        try {
+            Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCreated($reservation));
+        } catch (\Exception $e) {
+            \Log::error('Erreur envoi email entreprise prospect: ' . $e->getMessage());
+        }
+
+        // Email de confirmation au prospect
+        try {
+            Mail::to($reservation->email)->send(new ReservationCreatedclient($reservation));
+        } catch (\Exception $e) {
+            \Log::error('Erreur envoi email prospect: ' . $e->getMessage());
+        }
+    }
 
 }

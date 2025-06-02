@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dakar Transport - Services vers AIBD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -120,6 +121,51 @@
             }
             .ml-80 {
                 margin-left: 0;
+            }
+            
+            /* Responsive pour les actualités sur mobile */
+            #sidebar {
+                position: relative !important;
+                width: 100% !important;
+                margin-left: 0 !important;
+            }
+            
+            .sidebar-container {
+                width: 100% !important;
+                position: relative !important;
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+            }
+            
+            /* Style pour le bouton toggle des actualités */
+            #toggle-news-btn {
+                display: block;
+            }
+            
+            .news-content.collapsed {
+                max-height: 200px;
+                overflow: hidden;
+                position: relative;
+            }
+            
+            .news-content.collapsed::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 50px;
+                background: linear-gradient(transparent, white);
+                pointer-events: none;
+            }
+        }
+
+        /* Masquer le bouton toggle sur desktop */
+        @media (min-width: 769px) {
+            #toggle-news-btn {
+                display: none;
             }
         }
 
@@ -391,7 +437,7 @@
     <!-- Main Content with Sidebar -->
     <div class="flex">
         <!-- Sidebar Container -->
-        <div class="w-80 relative">
+        <div class="w-80 relative sidebar-container">
             <!-- Sidebar Content -->
             <div id="sidebar" class="w-80">
                 <div class="bg-white shadow-lg border-r border-gray-200">
@@ -399,12 +445,17 @@
                     <div class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
+                            <!-- Bouton toggle pour mobile -->
+                            <button id="toggle-news-btn" class="hidden md:hidden bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition-colors">
+                                <span id="toggle-text">Voir moins</span>
+                                <i id="toggle-icon" class="fas fa-chevron-up ml-1"></i>
+                            </button>
                         </div>
                         <p class="text-sm text-gray-500">Restez informé de nos actualités</p>
                     </div>
 
                     <!-- Liste des actualités scrollable -->
-                    <div class="overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
+                    <div id="news-content" class="news-content overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
                         @foreach($actus->take(5) as $actu)
                             <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100 cursor-pointer actu-card" 
                                  data-actu-id="{{ $actu->id }}"
@@ -423,16 +474,16 @@
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                                     {{ $actu->category }}
                                                 </span>
-                    </div>
-                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                     <div class="p-3">
                                         <h4 class="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{{ $actu->title }}</h4>
                                         <p class="text-gray-500 text-xs mb-2 line-clamp-2">{{ Str::limit($actu->content, 80) }}</p>
                                         <div class="flex items-center justify-between">
                                             <span class="text-xs text-gray-400">{{ $actu->created_at->format('d/m/Y') }}</span>
-        </div>
-    </div>
+                                        </div>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -448,11 +499,11 @@
                                         </svg>
                                     </button>
                                 </div>
-        <div class="p-6">
+                                <div class="p-6">
                                     <div class="flex items-center justify-between mb-4">
                                         <span id="modalCategory" class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"></span>
                                         <span id="modalDate" class="text-sm text-gray-500"></span>
-        </div>
+                                    </div>
                                     <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
                                     <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
                                     <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
@@ -462,16 +513,17 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                             </svg>
                                         </a>
-    </div>
-</div>
-                </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
 
         <!-- Main Content -->
-        <div class="flex-1">
+        <div class="flex-1 main-content">
         <!-- Tarifs Section -->
 
     <section id="tarifs" class="py-20 bg-gray-50">
@@ -488,7 +540,7 @@
                         <div class="bg-red-600 text-white py-6 px-6">
                             <h3 class="text-lg font-bold mb-2">Transfert AIBD VIP</h3>
                             <div class="mt-2">
-                                <span class="text-2xl font-bold">45 500</span>
+                                <span class="text-2xl font-bold">45 000</span>
                                 <span class="text-base ml-1">FCFA</span>
                                 <span class="text-sm text-red-200">/trajet</span>
                         </div>
@@ -553,7 +605,7 @@
                         <div class="bg-red-600 text-white py-6 px-6">
                             <h3 class="text-lg font-bold mb-2">Transfert PREM/(Meet & Greet)</h3>
                             <div class="mt-2">
-                                <span class="text-2xl font-bold">65 000</span>
+                                <span class="text-2xl font-bold">5 000</span>
                                 <span class="text-base ml-1">FCFA</span>
                                 <span class="text-sm text-red-200">/trajet</span>
                         </div>
@@ -749,7 +801,7 @@
                 <!-- Tarif 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-5 px-6">
-                        <h3 class="text-base font-bold">Location voiture<span class="text-red-200">/hors Dakar</span></h3>
+                        <h3 class="text-base font-bold">Location voiture<span class="text-red-200">/Dakar</span></h3>
                         <div class="mt-3">
                             <span class="text-xl font-bold">50 000 FCFA</span>
                             <span class="text-red-200 text-sm">/Jour</span>
@@ -1031,7 +1083,7 @@
                             </div>
                             <!-- 3. Téléphone -->
                             <div>
-                                <label for="phone_number" class="block text-gray-700 mb-2">Téléphone</label>
+                                <label for="phone" class="block text-gray-700 mb-2">Téléphone</label>
                                 <input type="tel" name="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
                             </div>
                             <!-- 4. Point de départ -->
@@ -1061,8 +1113,8 @@
 
                             <!-- 9. Type de service -->
                             <div>
-                                <label for="trip_id" class="block text-sm font-medium text-gray-700 mb-1">Sens du trajet <span class="text-red-500">*</span></label>
-                                <select id="trip_id" name="trip_id" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                <label for="trip_id_reservation" class="block text-sm font-medium text-gray-700 mb-1">Sens du trajet <span class="text-red-500">*</span></label>
+                                <select id="trip_id_reservation" name="trip_id" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                                     <option value="">-- Sélectionner un trajet --</option>
                                     @foreach($trips as $trip)
                                         <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
@@ -1071,15 +1123,9 @@
                             </div>
 
                             <div>
-                                <label for="tarif" class="block text-sm font-medium text-gray-700 mb-1">Tarif estimé</label>
-                                <input type="text" id="tarif" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100" readonly>
+                                <label for="tarif_reservation" class="block text-sm font-medium text-gray-700 mb-1">Tarif estimé</label>
+                                <input type="text" id="tarif_reservation" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100" readonly>
                             </div>
-
-                            <!-- 10. Commentaires / Instructions -->
-                            {{-- <div class="md:col-span-2">
-                                <label class="block mb-2">Commentaires / Instructions</label>
-                                <textarea name="comments" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Détails ou instructions supplémentaires..."></textarea>
-                            </div> --}}
 
                             <!-- Bouton -->
                             <div class="md:col-span-2">
@@ -1590,20 +1636,174 @@
                 closeModal();
             }
         });
+
+        // NOUVEAU : Gestion du formulaire de vérification de disponibilité (section hero)
+        document.getElementById('availability-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const resultDiv = document.getElementById('availability-result');
+            
+            // Vérifier que tous les champs sont remplis
+            if (!formData.get('trip_id') || !formData.get('date') || !formData.get('heure_ramassage')) {
+                resultDiv.innerHTML = '<div class="text-red-600">Veuillez remplir tous les champs.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="text-blue-600">Vérification en cours...</div>';
+            
+            fetch('{{ route("reservations.checkAvailability") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.available) {
+                    resultDiv.innerHTML = `<div class="text-green-600">${data.message}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="text-red-600">${data.message}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                resultDiv.innerHTML = '<div class="text-red-600">Erreur lors de la vérification. Veuillez réessayer.</div>';
+            });
+        });
+
+        // NOUVEAU : Calcul automatique des tarifs pour le formulaire de réservation
+        function calculateTariff() {
+            const nbPersonnes = parseInt(document.getElementById('nb_personnes').value) || 0;
+            const nbValises = parseInt(document.getElementById('nb_valises').value) || 0;
+            const tarifField = document.getElementById('tarif_reservation');
+            
+            if (nbPersonnes === 0) {
+                tarifField.value = '';
+                return;
+            }
+            
+            // Tarif de base pour 1 à 3 personnes
+            let tarif = 32500;
+            
+            // Supplément pour personnes supplémentaires (au-delà de 3)
+            if (nbPersonnes > 3) {
+                tarif += (nbPersonnes - 3) * 5000;
+            }
+            
+            // Valises incluses : 2 par personne
+            const valisesIncluses = nbPersonnes * 2;
+            if (nbValises > valisesIncluses) {
+                tarif += (nbValises - valisesIncluses) * 5000;
+            }
+            
+            // Afficher le tarif formaté
+            tarifField.value = tarif.toLocaleString('fr-FR') + ' FCFA';
+        }
+
+        // Écouter les changements pour calculer automatiquement le tarif
+        document.getElementById('nb_personnes').addEventListener('input', calculateTariff);
+        document.getElementById('nb_valises').addEventListener('input', calculateTariff);
+
+        // Ajouter le meta CSRF token si pas déjà présent
+        if (!document.querySelector('meta[name="csrf-token"]')) {
+            const meta = document.createElement('meta');
+            meta.name = 'csrf-token';
+            meta.content = '{{ csrf_token() }}';
+            document.head.appendChild(meta);
+        }
+
+        // Si la page est déjà chargée, déclencher immédiatement
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', showWelcomeInvitation);
+        } else {
+            showWelcomeInvitation();
+        }
+
+        // Fonction pour fermer la bulle d'invitation
+        function closeInvitation() {
+            invitationBubble.classList.remove('show', 'float-animation');
+            chatButton.classList.remove('pulse-glow', 'bounce-attention');
+            chatButton.classList.add('animate-pulse');
+        }
+
+        // Gestion du toggle des actualités sur mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggle-news-btn');
+            const newsContent = document.getElementById('news-content');
+            const toggleText = document.getElementById('toggle-text');
+            const toggleIcon = document.getElementById('toggle-icon');
+            let isCollapsed = false;
+
+            // Vérifier si on est sur mobile et initialiser l'état
+            function checkMobile() {
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    toggleBtn.classList.remove('hidden');
+                    toggleBtn.classList.add('block');
+                    // Démarrer avec les actualités réduites sur mobile
+                    if (!isCollapsed) {
+                        newsContent.classList.add('collapsed');
+                        toggleText.textContent = 'Voir plus';
+                        toggleIcon.classList.remove('fa-chevron-up');
+                        toggleIcon.classList.add('fa-chevron-down');
+                        isCollapsed = true;
+                    }
+                } else {
+                    toggleBtn.classList.add('hidden');
+                    toggleBtn.classList.remove('block');
+                    newsContent.classList.remove('collapsed');
+                    isCollapsed = false;
+                }
+            }
+
+            // Vérifier au chargement
+            checkMobile();
+
+            // Vérifier au redimensionnement
+            window.addEventListener('resize', checkMobile);
+
+            // Gestion du clic sur le bouton toggle
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    if (isCollapsed) {
+                        newsContent.classList.remove('collapsed');
+                        toggleText.textContent = 'Voir moins';
+                        toggleIcon.classList.remove('fa-chevron-down');
+                        toggleIcon.classList.add('fa-chevron-up');
+                        isCollapsed = false;
+                    } else {
+                        newsContent.classList.add('collapsed');
+                        toggleText.textContent = 'Voir plus';
+                        toggleIcon.classList.remove('fa-chevron-up');
+                        toggleIcon.classList.add('fa-chevron-down');
+                        isCollapsed = true;
+                    }
+                });
+            }
+        });
     </script>
 
     <!-- Chat Box -->
     <div id="chat-container" class="fixed bottom-4 right-4 z-50">
         <!-- Message d'invitation (affiché temporairement) -->
         <div id="invitation-bubble" class="absolute bottom-20 right-0 bg-gradient-to-r from-white to-gray-50 rounded-xl shadow-2xl p-6 w-80 transform scale-0 transition-all duration-500 border border-gray-100 backdrop-blur-sm">
+            <!-- Bouton de fermeture -->
+            <button id="close-invitation" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors" onclick="closeInvitation()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            
             <!-- Header avec avatar et statut -->
             <div class="flex items-center justify-center mb-4">
                 <div class="flex flex-col items-center">
                     <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-red-100 shadow-lg mb-2">
-                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Mami" class="w-full h-full object-cover">
                     </div>
                     <div class="flex items-center">
-                        <h4 class="text-base font-bold text-gray-800 mr-2">Nina</h4>
+                        <h4 class="text-base font-bold text-gray-800 mr-2">Mima</h4>
                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             <span class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
                             En ligne
@@ -1629,7 +1829,7 @@
 
         <!-- Chat Button -->
         <button id="chat-button" class="bg-red-600 text-white rounded-full p-1 shadow-lg hover:bg-red-700 transition-all duration-300 flex items-center justify-center w-14 h-14 animate-pulse">
-            <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-12 h-12 rounded-full object-cover border-2 border-white">
+            <img src="{{ asset('images/avatar.png') }}" alt="Assistant Mami" class="w-12 h-12 rounded-full object-cover border-2 border-white">
         </button>
 
         <!-- Chat Window -->
@@ -1638,10 +1838,10 @@
             <div class="bg-red-600 text-white p-3 rounded-t-lg flex justify-between items-center">
                 <div class="flex items-center">
                     <div class="w-8 h-8 rounded-full overflow-hidden mr-2 border border-white">
-                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Mami" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm">Nina</h3>
+                        <h3 class="font-bold text-sm">Mami</h3>
                         <p class="text-xs text-red-100">Assistant virtuel</p>
                     </div>
                 </div>
@@ -1735,7 +1935,7 @@
         const responses = {
             'greeting': {
                 keywords: ['bonjour', 'bonsoir', 'salut', 'hey', 'hello', 'hi', 'coucou'],
-                response: `Bonjour ! Je suis Nina, votre assistante virtuelle. 
+                response: `Bonjour ! Je suis Mami, votre assistante virtuelle. 
 Choisissez une question ci-dessous pour obtenir des informations détaillées !`
             },
             'reservation': {
@@ -1771,7 +1971,7 @@ Que souhaitez-vous savoir de plus spécifique ?`
                 keywords: ['tarifs', 'voir les tarifs', 'prix', 'coût'],
                 response: `Voici nos différentes formules de transport :
 
-🌟 Transfert AIBD VIP (45 500 FCFA)
+🌟 Transfert AIBD VIP (45 000 FCFA)
 - Navette privée haut de gamme
 - Wifi et confort premium
 - Bagages inclus (2 par personne)
@@ -2046,7 +2246,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
             if (sender === 'bot') {
                 messageDiv.innerHTML = `
                     <div class="w-6 h-6 rounded-full overflow-hidden mr-2 flex-shrink-0 mt-1 border border-gray-200">
-                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Nina" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Assistant Mami" class="w-full h-full object-cover">
                     </div>
                     <div class="bg-white rounded-lg p-2 max-w-[85%] shadow-sm border">
                         <p class="text-xs leading-relaxed whitespace-pre-line">${message}</p>
