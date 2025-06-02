@@ -25,6 +25,9 @@
         .active {
             color: #ef4444;
             font-weight: 600;
+            background-color: rgba(239, 68, 68, 0.1);
+            padding: 8px 16px;
+            border-radius: 6px;
         }
         
         .booking-form {
@@ -331,7 +334,15 @@
         }
 
         .nav-transparent .nav-link:hover {
-            color: #ffffff;
+            color: #ef4444 !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            text-shadow: none;
+        }
+
+        .nav-transparent .nav-link.active {
+            color: #ef4444 !important;
+            background-color: rgba(255, 255, 255, 0.2);
+            text-shadow: none;
         }
 
         .nav-transparent .phone-links a {
@@ -1117,6 +1128,24 @@
                 <div class="md:w-1/2">
                     <div class="bg-white p-8 rounded-lg shadow-xl max-w-md mx-auto">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Complétez votre réservation</h3>
+                        
+                        <!-- Messages de succès -->
+                        <div id="success-message" class="hidden bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded" role="alert">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-green-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium">
+                                        Réservation confirmée ! 🎉
+                                    </p>
+                                    <p class="text-sm mt-1">
+                                        Vous recevrez une confirmation par email et SMS dans quelques minutes.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Messages d'erreur -->
                     @if($errors->any())
                         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
@@ -1128,7 +1157,7 @@
                             </ul>
                         </div>
                     @endif
-                        <form action="{{ route('reservations.storeByProspect') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <form id="reservation-form" action="{{ route('reservations.storeByProspect') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @csrf
                             <!-- 1. Nom complet -->
                             <div>
@@ -1194,7 +1223,10 @@
 
                             <!-- Bouton -->
                             <div class="md:col-span-2">
-                                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Finaliser la réservation</button>
+                                <button type="submit" id="submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
+                                    <span class="submit-text">Finaliser la réservation</span>
+                                    <i class="fas fa-spinner fa-spin hidden submit-spinner ml-2"></i>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -1887,6 +1919,77 @@
                     }
                 });
             }
+        });
+
+        // Gestion du formulaire de réservation avec AJAX
+        document.getElementById('reservation-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = submitBtn.querySelector('.submit-text');
+            const submitSpinner = submitBtn.querySelector('.submit-spinner');
+            const successMessage = document.getElementById('success-message');
+            
+            // Désactiver le bouton et afficher le spinner
+            submitBtn.disabled = true;
+            submitText.textContent = 'Réservation en cours...';
+            submitSpinner.classList.remove('hidden');
+            
+            // Cacher les messages précédents
+            successMessage.classList.add('hidden');
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+            
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Afficher le message de succès
+                    successMessage.classList.remove('hidden');
+                    
+                    // Réinitialiser le formulaire
+                    form.reset();
+                    document.getElementById('tarif_reservation').value = '';
+                    
+                    // Faire défiler vers le message de succès
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                } else {
+                    // Afficher les erreurs
+                    if (data.errors) {
+                        for (const [field, messages] of Object.entries(data.errors)) {
+                            const input = form.querySelector(`[name="${field}"]`);
+                            if (input) {
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'error-message text-red-600 text-sm mt-1';
+                                errorDiv.textContent = messages[0];
+                                input.parentNode.appendChild(errorDiv);
+                            }
+                        }
+                    } else {
+                        alert(data.message || 'Une erreur est survenue. Veuillez réessayer.');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue. Veuillez réessayer.');
+            })
+            .finally(() => {
+                // Réactiver le bouton
+                submitBtn.disabled = false;
+                submitText.textContent = 'Finaliser la réservation';
+                submitSpinner.classList.add('hidden');
+            });
         });
     </script>
 
