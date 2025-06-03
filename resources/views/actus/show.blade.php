@@ -49,7 +49,7 @@
                              class="w-full h-full object-cover">
                         <div class="absolute top-4 right-4">
                             <span class="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                                {{ $actu->category }}
+                                {{ $actu->category === 'Infos utiles' ? 'infos utiles' : $actu->category }}
                             </span>
                         </div>
                     </div>

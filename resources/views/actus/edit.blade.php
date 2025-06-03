@@ -200,7 +200,7 @@
                                 <div class="absolute top-2 right-2">
                                     <span id="previewCategory" 
                                           class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500 text-white">
-                                        {{ $actu->category }}
+                                        {{ $actu->category === 'Infos utiles' ? 'infos utiles' : $actu->category }}
                                     </span>
                                 </div>
                             </div>
@@ -260,7 +260,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mise à jour de la catégorie
     categoryInput.addEventListener('change', function() {
-        previewCategory.textContent = this.value;
+        const categoryText = this.value === 'Infos utiles' ? 'infos utiles' : this.value;
+        previewCategory.textContent = categoryText;
     });
 
     // Mise à jour du lien externe

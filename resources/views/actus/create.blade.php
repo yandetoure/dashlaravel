@@ -175,7 +175,8 @@ contentInput.addEventListener('input', () => {
 });
 
 categoryInput.addEventListener('change', () => {
-  previewCategory.textContent = categoryInput.value;
+  const categoryText = categoryInput.value === 'Infos utiles' ? 'infos utiles' : categoryInput.value;
+  previewCategory.textContent = categoryText;
   previewCategory.classList.toggle('hidden', !categoryInput.value);
 });
 
