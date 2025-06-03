@@ -686,7 +686,7 @@
                                                  class="w-full h-full object-cover">
                                             <div class="absolute top-2 right-2">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    {{ $actu->category }}
+                                                    {{ $actu->category === 'infos' ? 'infos utiles' : $actu->category }}
                                                 </span>
                                             </div>
                                         </div>
@@ -1873,7 +1873,7 @@
                     modalImage.classList.add('hidden');
                 }
                 
-                modalCategory.textContent = data.actuCategory;
+                modalCategory.textContent = data.actuCategory === 'infos' ? 'infos utiles' : data.actuCategory;
                 modalDate.textContent = data.actuDate;
                 modalTitle.textContent = data.actuTitle;
                 modalContent.innerHTML = data.actuContent.replace(/\n/g, '<br>');
