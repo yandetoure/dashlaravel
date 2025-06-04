@@ -648,24 +648,28 @@
     </div>
 </section>
 
-   
     <!-- Main Content with Sidebar -->
-    <div class="flex">
+    <div class="flex" style="margin-top: 0;">
         <!-- Sidebar Container -->
-        <div class="w-80 relative">
+        <div class="w-80 relative sidebar-container">
             <!-- Sidebar Content -->
             <div id="sidebar" class="w-80">
                 <div class="bg-white shadow-lg border-r border-gray-200">
                     <!-- En-tête de la sidebar -->
-                    <div class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
+                    <div id="actualites" class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
                         <div class="flex justify-between items-center mb-2">
                             <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
+                            <!-- Bouton toggle pour mobile -->
+                            <button id="toggle-news-btn" class="hidden md:hidden bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition-colors">
+                                <span id="toggle-text">Voir moins</span>
+                                <i id="toggle-icon" class="fas fa-chevron-up ml-1"></i>
+                            </button>
                         </div>
                         <p class="text-sm text-gray-500">Restez informé de nos actualités</p>
                     </div>
 
                     <!-- Liste des actualités scrollable -->
-                    <div class="overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
+                    <div id="news-content" class="news-content overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
                         @foreach($actus->take(5) as $actu)
                             <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100 cursor-pointer actu-card" 
                                  data-actu-id="{{ $actu->id }}"
@@ -718,7 +722,7 @@
                                     <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
                                     <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
                                         <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200" onclick="window.open(this.getAttribute('data-href'), '_blank')">
-                                            <span>Cliquez ici</span>
+                                            <span>En savoir plus</span>
                                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                             </svg>
@@ -730,14 +734,13 @@
                     </div>
                 </div>
             </div>
+        </div>
 
         <!-- Main Content -->
-        <div class="flex-1">
+        <div class="flex-1 main-content" style="margin-left: 320px;">
         <!-- Tarifs Section -->
 
-        <!-- Tarifs Section -->
-
-    <section id="tarifs" class="py-20 bg-gray-50">
+    <section id="tarifs" class="bg-gray-50 pt-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="text-center mb-16">
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Tarifs</h2>
@@ -1766,7 +1769,7 @@
         // Appliquer l'état initial
         updateNavbarOnScroll();
         
-        // Gestion du scroll de la sidebar
+      // Gestion du scroll de la sidebar
         function updateSidebarPosition() {
             const sidebarRect = sidebar.getBoundingClientRect();
             const heroSection = document.querySelector('.hero');
