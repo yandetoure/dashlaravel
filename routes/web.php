@@ -18,13 +18,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Trip;
 use App\Models\User;
 use App\Http\Controllers\ActuController;
+use App\Http\Controllers\CategoryController;
 use App\Models\Actu;
 
 
 
 Route::get('/', function () {
     $trips = Trip::all();
-    $actus = Actu::all(); // Récupère toutes les actualités
+    $actus = Actu::with('category')->orderBy('created_at', 'desc')->get(); // Récupère toutes les actualités avec catégories, triées par date
 
     $chauffeurs = User::whereHas('roles', function ($query) {
         $query->where('name', 'chauffeur');
@@ -240,5 +241,11 @@ Route::get('/oauth2callback', function () {
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('client.dashboard');
 // });
+
+// Routes pour la gestion des catégories
+Route::middleware('auth')->group(function () {
+    Route::resource('categories', CategoryController::class);
+    Route::get('/api/categories/active', [CategoryController::class, 'getActive'])->name('categories.active');
+});
 
 require __DIR__.'/auth.php';

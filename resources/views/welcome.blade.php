@@ -675,7 +675,8 @@
                                  data-actu-id="{{ $actu->id }}"
                                  data-actu-title="{{ $actu->title }}"
                                  data-actu-content="{{ $actu->content }}"
-                                 data-actu-category="{{ $actu->category }}"
+                                 data-actu-category="{{ $actu->category?->name ?? 'Non classé' }}"
+                                 data-actu-category-color="{{ $actu->category?->color ?? '#3B82F6' }}"
                                  data-actu-date="{{ $actu->created_at->format('d/m/Y') }}"
                                  data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
                                  data-actu-link="{{ $actu->external_link }}">
@@ -685,8 +686,9 @@
                                                  alt="{{ $actu->title }}" 
                                                  class="w-full h-full object-cover">
                                             <div class="absolute top-2 right-2">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    {{ $actu->category }}
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
+                                                      style="background-color: {{ $actu->category?->color ?? '#3B82F6' }}">
+                                                    {{ $actu->category?->name ?? 'Non classé' }}
                                                 </span>
                                             </div>
                                         </div>

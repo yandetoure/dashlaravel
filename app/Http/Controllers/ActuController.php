@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Actu; // Assure-toi que le modèle existe
+use App\Models\Actu;
+use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
@@ -12,15 +13,15 @@ class ActuController extends Controller
     // Affiche la liste de toutes les actualités
     public function index()
     {
-        $actus = Actu::all(); // Récupère toutes les actualités
+        $actus = Actu::with('category')->latest()->get();
         return view('actus.index', compact('actus'));
     }
 
     // Affiche le formulaire pour créer une nouvelle actualité
     public function create()
     {
-        $categories = ['Actualités', 'Infos utiles', 'Cultures', 'Rendez-vous'];
-        $actus = Actu::latest()->take(3)->get();
+        $categories = Category::active()->get();
+        $actus = Actu::with('category')->latest()->take(3)->get();
         return view('actus.create', compact('categories', 'actus'));
     }
 
@@ -33,7 +34,7 @@ class ActuController extends Controller
                 'title' => 'required|string|min:3|max:255',
                 'content' => 'required|string|min:10',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'category' => 'required|in:Actualités,Infos utiles,Cultures,Rendez-vous',
+                'category_id' => 'required|exists:categories,id',
                 'external_link' => 'nullable|url|max:255'
             ], [
                 'title.required' => 'Le titre est obligatoire',
@@ -43,8 +44,8 @@ class ActuController extends Controller
                 'image.image' => 'Le fichier doit être une image',
                 'image.mimes' => 'L\'image doit être de type : jpeg, png, jpg, gif',
                 'image.max' => 'L\'image ne doit pas dépasser 2Mo',
-                'category.required' => 'La catégorie est obligatoire',
-                'category.in' => 'La catégorie sélectionnée n\'est pas valide',
+                'category_id.required' => 'La catégorie est obligatoire',
+                'category_id.exists' => 'La catégorie sélectionnée n\'est pas valide',
                 'external_link.url' => 'Le lien externe doit être une URL valide'
             ]);
 
@@ -81,8 +82,9 @@ class ActuController extends Controller
     
     public function show($id)
     {
-        $actu = Actu::findOrFail($id);
-        $actus = Actu::where('id', '!=', $id)
+        $actu = Actu::with('category')->findOrFail($id);
+        $actus = Actu::with('category')
+                     ->where('id', '!=', $id)
                      ->latest()
                      ->take(3)
                      ->get();
@@ -92,9 +94,10 @@ class ActuController extends Controller
     // Affiche le formulaire pour éditer une actualité existante
     public function edit($id)
     {
-        $actu = Actu::findOrFail($id);
-        $categories = ['Actualités', 'Infos utiles', 'Cultures', 'Rendez-vous'];
-        $actus = Actu::where('id', '!=', $id)
+        $actu = Actu::with('category')->findOrFail($id);
+        $categories = Category::active()->get();
+        $actus = Actu::with('category')
+                     ->where('id', '!=', $id)
                      ->latest()
                      ->take(3)
                      ->get();
@@ -110,7 +113,7 @@ class ActuController extends Controller
             'title' => 'required|string|min:3|max:255',
             'content' => 'required|string|min:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category' => 'required|in:Actualités,Infos utiles,Cultures,Rendez-vous',
+            'category_id' => 'required|exists:categories,id',
             'external_link' => 'nullable|url|max:255'
         ], [
             'title.required' => 'Le titre est obligatoire',
@@ -120,8 +123,8 @@ class ActuController extends Controller
             'image.image' => 'Le fichier doit être une image',
             'image.mimes' => 'L\'image doit être de type : jpeg, png, jpg, gif',
             'image.max' => 'L\'image ne doit pas dépasser 2Mo',
-            'category.required' => 'La catégorie est obligatoire',
-            'category.in' => 'La catégorie sélectionnée n\'est pas valide',
+            'category_id.required' => 'La catégorie est obligatoire',
+            'category_id.exists' => 'La catégorie sélectionnée n\'est pas valide',
             'external_link.url' => 'Le lien externe doit être une URL valide'
         ]);
 
@@ -143,10 +146,14 @@ class ActuController extends Controller
     public function destroy($id)
     {
         $actu = Actu::findOrFail($id);
+        
+        // Supprimer l'image si elle existe
         if ($actu->image && Storage::disk('public')->exists($actu->image)) {
             Storage::disk('public')->delete($actu->image);
         }
+        
         $actu->delete();
+        
         return redirect()->route('actus.index')
                         ->with('success', 'Actualité supprimée avec succès');
     }

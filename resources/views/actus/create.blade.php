@@ -76,17 +76,18 @@
 
       <!-- Catégorie -->
       <div>
-        <label class="block mb-2 font-medium" for="category">Catégorie</label>
-        <select id="category" name="category" 
-                class="w-full border @error('category') border-red-500 @enderror border-gray-300 rounded px-3 py-2" required>
+        <label class="block mb-2 font-medium" for="category_id">Catégorie</label>
+        <select id="category_id" name="category_id" 
+                class="w-full border @error('category_id') border-red-500 @enderror border-gray-300 rounded px-3 py-2" required>
             <option value="">Sélectionnez une catégorie</option>
             @foreach($categories as $category)
-                <option value="{{ $category }}" {{ old('category') == $category ? 'selected' : '' }}>
-                    {{ $category }}
+                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}
+                        data-color="{{ $category->color }}">
+                    {{ $category->name }}
                 </option>
             @endforeach
         </select>
-        @error('category')
+        @error('category_id')
             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
         @enderror
       </div>
@@ -156,7 +157,7 @@
 // Prévisualisation en temps réel
 const titleInput = document.getElementById('title');
 const contentInput = document.getElementById('content');
-const categoryInput = document.getElementById('category');
+const categoryInput = document.getElementById('category_id');
 const externalLinkInput = document.getElementById('external_link');
 const imageInput = document.getElementById('image');
 
@@ -175,8 +176,10 @@ contentInput.addEventListener('input', () => {
 });
 
 categoryInput.addEventListener('change', () => {
-  previewCategory.textContent = categoryInput.value;
-  previewCategory.classList.toggle('hidden', !categoryInput.value);
+  const selectedOption = categoryInput.options[categoryInput.selectedIndex];
+  previewCategory.textContent = selectedOption.text;
+  previewCategory.classList.toggle('hidden', !selectedOption.value);
+  previewCategory.style.backgroundColor = selectedOption.getAttribute('data-color');
 });
 
 externalLinkInput.addEventListener('input', () => {

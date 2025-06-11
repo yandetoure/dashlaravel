@@ -48,8 +48,9 @@
                              alt="{{ $actu->title }}" 
                              class="w-full h-full object-cover">
                         <div class="absolute top-4 right-4">
-                            <span class="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                                {{ $actu->category }}
+                            <span class="text-white px-4 py-2 rounded-full text-sm font-semibold"
+                                  style="background-color: {{ $actu->category?->color ?? '#3B82F6' }}">
+                                {{ $actu->category?->name ?? 'Non classé' }}
                             </span>
                         </div>
                     </div>

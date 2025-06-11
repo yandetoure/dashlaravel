@@ -102,16 +102,18 @@
 
                         <!-- Catégorie -->
                         <div class="mb-6">
-                            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">
                                 Catégorie <span class="text-red-500">*</span>
                             </label>
-                            <select id="category" 
-                                    name="category"
+                            <select id="category_id" 
+                                    name="category_id"
                                     class="form-select w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                                     required>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category }}" {{ old('category', $actu->category) == $category ? 'selected' : '' }}>
-                                        {{ $category }}
+                                    <option value="{{ $category->id }}" 
+                                            {{ old('category_id', $actu->category_id) == $category->id ? 'selected' : '' }}
+                                            data-color="{{ $category->color }}">
+                                        {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -199,8 +201,9 @@
                                      class="w-full h-48 object-cover">
                                 <div class="absolute top-2 right-2">
                                     <span id="previewCategory" 
-                                          class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500 text-white">
-                                        {{ $actu->category }}
+                                          class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white"
+                                          style="background-color: {{ $actu->category?->color ?? '#3B82F6' }}">
+                                        {{ $actu->category?->name ?? 'Non classé' }}
                                     </span>
                                 </div>
                             </div>
@@ -237,7 +240,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('title');
     const contentInput = document.getElementById('content');
-    const categoryInput = document.getElementById('category');
+    const categoryInput = document.getElementById('category_id');
     const externalLinkInput = document.getElementById('external_link');
     const imageInput = document.getElementById('image');
 
@@ -260,7 +263,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mise à jour de la catégorie
     categoryInput.addEventListener('change', function() {
-        previewCategory.textContent = this.value;
+        const selectedOption = this.options[this.selectedIndex];
+        previewCategory.textContent = selectedOption.text;
+        previewCategory.style.backgroundColor = selectedOption.getAttribute('data-color');
     });
 
     // Mise à jour du lien externe

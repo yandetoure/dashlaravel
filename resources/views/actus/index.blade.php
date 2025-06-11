@@ -82,10 +82,12 @@
             <div class="flex gap-4">
                 <select class="form-select rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Toutes les catégories</option>
-                    <option value="Actualités">Actualités</option>
-                    <option value="Infos utiles">Infos utiles</option>
-                    <option value="Cultures">Cultures</option>
-                    <option value="Rendez-vous">Rendez-vous</option>
+                    @php
+                        $categories = \App\Models\Category::active()->get();
+                    @endphp
+                    @foreach($categories as $category)
+                        <option value="{{ $category->name }}">{{ $category->name }}</option>
+                    @endforeach
                 </select>
                 <select class="form-select rounded-lg border-gray-300 focus:ring-blue-500 focus:border-blue-500">
                     <option value="recent">Plus récent</option>
@@ -104,8 +106,9 @@
                                  alt="{{ $actu->title }}" 
                                  class="w-full h-full object-cover">
                             <div class="absolute top-2 right-2">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-500 text-white">
-                                    {{ $actu->category }}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white"
+                                      style="background-color: {{ $actu->category?->color ?? '#3B82F6' }}">
+                                    {{ $actu->category?->name ?? 'Non classé' }}
                                 </span>
                             </div>
                         </div>
