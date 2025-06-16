@@ -2219,10 +2219,19 @@
                 </div>
                 
                 <!-- Bouton pour saisir une question personnalisée -->
-                <button id="custom-question-btn" class="mt-2 w-full bg-red-100 hover:bg-red-200 text-red-700 p-2 rounded-md text-xs text-center transition-colors flex items-center justify-center">
+                <button id="custom-question-btn" class="mt-2 w-full bg-red-100 hover:bg-red-400 text-red-700 p-2 rounded-md text-xs text-center transition-colors flex items-center justify-center">
                     <i class="fas fa-edit mr-2 text-xs"></i>
                     Poser ma propre question
                 </button>
+
+                <button id="custom-question-btn" class="mt-2 w-full bg-green-500 hover:bg-green-400 text-red-700 p-2 rounded-md text-xs text-center transition-colors flex items-center justify-center">
+                    <a href="https://wa.me/221787056767" class="whatsapp-float" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        Discuter sur whatsapp
+                    </a>
+                </button>
+
+
             </div>
 
             <!-- Zone de saisie personnalisée (cachée par défaut) -->
