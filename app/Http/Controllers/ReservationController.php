@@ -12,6 +12,7 @@ use App\Models\Invoice;
 use App\Models\Reservation;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Mail\AccountCreatedMail;
 use App\Mail\ReservationCanceled;
 use App\Mail\ReservationCanceledclient;
@@ -1098,12 +1099,20 @@ public function showCalendar()
 
     public function storeByProspect(Request $request)
     {
+        // Nettoyer le numéro de téléphone (enlever +221, espaces, etc.)
+        $phone = preg_replace('/[^0-9]/', '', $request->phone);
+        // Si le numéro commence par 221, le retirer
+        if (strlen($phone) === 12 && substr($phone, 0, 3) === '221') {
+            $phone = substr($phone, 3);
+        }
+        $request->merge(['phone' => $phone]);
+
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255'],
-            'phone' => ['required', 'regex:/^[0-9]{9}$/'],
+            'phone' => ['required', 'regex:/^(77|76|70|78)[0-9]{7}$/'],
             'date' => 'required|date',
             'heure_ramassage' => 'required',
             'adresse_rammassage' => 'required|string|max:255',
@@ -1111,82 +1120,44 @@ public function showCalendar()
             'nb_valises' => 'required|integer|min:0',
         ]);
 
-        // Recherche d'un chauffeur disponible
-        $chauffeur = $this->findAvailableDriver($request->date, $request->heure_ramassage);
+        try {
+            // Calcul du tarif
+            $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, 0);
 
-        if (!$chauffeur) {
-            return back()->withErrors(['chauffeur_id' => 'Aucun chauffeur disponible pour ce créneau.']);
+            // Création de la réservation PROSPECT (sans client_id ni chauffeur_id)
+            $reservation = Reservation::create([
+                'trip_id' => $request->trip_id,
+                'client_id' => null, // PAS DE CLIENT - C'EST UN PROSPECT
+                'chauffeur_id' => null, // PAS DE CHAUFFEUR ASSIGNÉ ENCORE
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'adresse_rammassage' => $request->adresse_rammassage,
+                'date' => $request->date,
+                'heure_ramassage' => $request->heure_ramassage,
+                'nb_personnes' => $request->nb_personnes,
+                'nb_valises' => $request->nb_valises,
+                'tarif' => $tarif,
+                'status' => 'En_attente', // EN ATTENTE DE CONFIRMATION PAR UN AGENT
+                'phone_number' => $phone, // Utiliser le numéro nettoyé
+                'cardriver_id' => null, // PAS DE CHAUFFEUR ASSIGNÉ ENCORE
+            ]);
+
+            // Envoi des e-mails de notification pour prospects
+            $this->envoyerEmailProspect($reservation);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Votre demande de réservation a été enregistrée avec succès. Vous recevrez une confirmation par email une fois qu\'un agent aura validé votre demande.'
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la création de la réservation: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.'
+            ], 500);
         }
-
-        // Vérification de la voiture du chauffeur
-        $car = $chauffeur->car_drivers()->with('car')->first()?->car;
-
-        if (!$car) {
-            return back()->withErrors(['date' => "Le chauffeur n'a pas de voiture assignée."]);
-        }
-
-        // Récupérer la relation CarDriver
-        $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->first();
-        if (!$carDriver) {
-            return back()->withErrors(['chauffeur_id' => 'Ce chauffeur n\'a pas de voiture assignée.']);
-        }
-
-        // Vérifier la disponibilité du chauffeur (pas de réservation avant 3 heures)
-        $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
-            ->where('status', 'Confirmée')
-            ->orderByDesc('date')
-            ->orderByDesc('heure_ramassage')
-            ->first();
-
-        if ($lastReservation) {
-            $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
-            $requestDateTime = Carbon::parse("{$request->date} {$request->heure_ramassage}");
-
-            if ($lastReservationDateTime->diffInHours($requestDateTime) < 3) {
-                return back()->withErrors(['date' => 'Le chauffeur ne peut pas être réservé moins de 3 heures après sa dernière réservation.']);
-            }
-        }
-
-        // Vérification du jour de repos du chauffeur
-        if ($chauffeur->day_off === Carbon::parse($request->date)->format('l')) {
-            return back()->withErrors(['date' => "Le chauffeur est en repos ce jour-là ({$chauffeur->day_off})."]);
-        }
-
-        // Vérification des maintenances
-        $maintenance = Maintenance::where('car_id', $car->id)
-            ->where('jour', $request->date)
-            ->first();
-
-        if ($maintenance) {
-            return back()->withErrors(['date' => "La voiture du chauffeur est en maintenance ce jour-là."]);
-        }
-
-        // Calcul du tarif
-        $tarif = $this->calculerTarif($request->nb_personnes, $request->nb_valises, 0);
-
-        // Création de la réservation PROSPECT (sans client_id)
-        $reservation = Reservation::create([
-            'trip_id' => $request->trip_id,
-            'client_id' => null, // PAS DE CLIENT - C'EST UN PROSPECT
-            'chauffeur_id' => $chauffeur->id,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'adresse_rammassage' => $request->adresse_rammassage,
-            'date' => $request->date,
-            'heure_ramassage' => $request->heure_ramassage,
-            'nb_personnes' => $request->nb_personnes,
-            'nb_valises' => $request->nb_valises,
-            'tarif' => $tarif,
-            'status' => 'En_attente', // EN ATTENTE DE CONFIRMATION PAR UN AGENT
-            'phone_number' => $request->phone,
-            'cardriver_id' => $carDriver->id,
-        ]);
-
-        // Envoi des e-mails de notification pour prospects
-        $this->envoyerEmailProspect($reservation);
-
-        return redirect()->route('welcome')->with('success', 'Votre demande de réservation a été enregistrée avec succès. Vous recevrez une confirmation par email une fois qu\'un agent aura validé votre demande.');
     }
 
     // Nouvelle méthode pour envoyer des emails pour les prospects

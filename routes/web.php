@@ -118,6 +118,8 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::post('/reservations/check-availability', [ReservationController::class, 'checkAvailability'])->name('reservations.checkAvailability');
 
+// Route pour les réservations des prospects (accessible sans authentification)
+Route::post('/reservations/new-reservation', [ReservationController::class, 'storeByProspect'])->name('reservations.storeByProspect');
 
 Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(function () {
     // Affichage de toutes les réservations
@@ -141,13 +143,10 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
     Route::delete('{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
 
     Route::post('store-agent', [ReservationController::class, 'storeByAgent'])->name('storeByAgent');
-    Route::post('new-reervation', [ReservationController::class, 'storeByProspect'])->name('storeByProspect');
-
 
     Route::put('/{id}', [ReservationController::class, 'update'])->name('reservations.update');
 
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
-
 });
 
 Route::post('/reservations/{reservation}/avis', [ReservationController::class, 'storeAvis'])->name('reservations.avis');
