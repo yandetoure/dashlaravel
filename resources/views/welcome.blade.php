@@ -10,6 +10,7 @@
     <title>Dakar Transport - Services vers AIBD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1556388158-158ea5ccacbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
@@ -2094,16 +2095,25 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Afficher le message de succès
-                    successMessage.classList.remove('hidden');
-                    
+                    // Afficher le popup SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Réservation confirmée !',
+                        html: `<b>Merci ${data.reservation.first_name} ${data.reservation.last_name} !</b><br>
+                            Votre réservation pour le ${data.reservation.date} à ${data.reservation.heure_ramassage} est enregistrée.<br><br>
+                            <span>Vous recevrez un email de confirmation.</span><br><br>
+                            <b>Besoin d'aide ?</b> <br>
+                            <a href='tel:+221777056767' class='text-red-600'>Contactez le service client</a><br>
+                            <a href='/register' class='text-blue-600'>Créer un compte client</a>`,
+                        showConfirmButton: false,
+                        timer: 8000,
+                        timerProgressBar: true
+                    });
                     // Réinitialiser le formulaire
                     form.reset();
                     document.getElementById('tarif_reservation').value = '';
-                    
-                    // Faire défiler vers le message de succès
-                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
+                    // Faire défiler vers le message de succès (optionnel)
+                    // successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else {
                     // Afficher les erreurs
                     if (data.errors) {

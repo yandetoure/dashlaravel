@@ -30,6 +30,7 @@ use App\Mail\ReservationConfirmedDriver;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
+use App\Mail\ReservationCreatedProspect;
 
 
 
@@ -513,7 +514,7 @@ class ReservationController extends Controller
      {
          // Email à l'entreprise (toujours envoyé)
          try {
-             Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCreated($reservation));
+             Mail::to('cproservices221@gmail.com')->send(new ReservationCreated($reservation));
          } catch (\Exception $e) {
              \Log::error('Erreur envoi email entreprise: ' . $e->getMessage());
          }
@@ -556,7 +557,7 @@ class ReservationController extends Controller
              
              // Email à l'entreprise
              try {
-                 Mail::to('tourendeyeyande@gmail.com')->send(new ReservationConfirmed($reservation));
+                 Mail::to('cproservices221@gmail.com')->send(new ReservationConfirmed($reservation));
              } catch (\Exception $e) {
                  \Log::error('Erreur envoi email confirmation entreprise: ' . $e->getMessage());
              }
@@ -583,7 +584,7 @@ class ReservationController extends Controller
              
              // Email à l'entreprise
              try {
-                 Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCanceled($reservation));
+                 Mail::to('cproservices221@gmail.com')->send(new ReservationCanceled($reservation));
              } catch (\Exception $e) {
                  \Log::error('Erreur envoi email annulation entreprise: ' . $e->getMessage());
              }
@@ -1150,7 +1151,6 @@ public function showCalendar()
                 'success' => true,
                 'message' => 'Votre demande de réservation a été enregistrée avec succès. Vous recevrez une confirmation par email une fois qu\'un agent aura validé votre demande.'
             ]);
-
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la création de la réservation: ' . $e->getMessage());
             return response()->json([
@@ -1165,14 +1165,14 @@ public function showCalendar()
     {
         // Email à l'entreprise pour notification d'une nouvelle demande prospect
         try {
-            Mail::to('tourendeyeyande@gmail.com')->send(new ReservationCreated($reservation));
+            Mail::to('cproservices221@gmail.com')->send(new ReservationCreated($reservation));
         } catch (\Exception $e) {
             \Log::error('Erreur envoi email entreprise prospect: ' . $e->getMessage());
         }
 
         // Email de confirmation au prospect
         try {
-            Mail::to($reservation->email)->send(new ReservationCreatedclient($reservation));
+            Mail::to($reservation->email)->send(new ReservationCreatedProspect($reservation));
         } catch (\Exception $e) {
             \Log::error('Erreur envoi email prospect: ' . $e->getMessage());
         }
