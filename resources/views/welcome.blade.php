@@ -864,33 +864,42 @@
             <h2 class="text-2xl font-bold text-red-600 mb-4">Informations & Suppléments</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">Des frais additionnels peuvent s'appliquer selon vos besoins spécifiques&nbsp;: personnes supplémentaires, accompagnants, bagages ou arrêts additionnels.</p>
         </div>
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Card 1 -->
-            <div class="bg-gray-50 rounded-lg shadow-md p-8 flex flex-col items-center">
-                <div class="text-red-600 mb-4">
-                    <i class="fas fa-users text-3xl"></i>
+        <div class="grid md:grid-cols-4 gap-8">
+            <!-- Card 1 : Personne supplémentaire -->
+            <div class="relative rounded-lg shadow-md overflow-hidden h-64 flex items-end">
+                <img src="https://img.freepik.com/photos-gratuite/plein-coup-femme-marchant-bagages_23-2149338586.jpg?ga=GA1.1.1328141631.1747048938&semt=ais_hybrid&w=740" alt="Personne supplémentaire" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+                <div class="absolute inset-0 bg-black opacity-60"></div>
+                <div class="relative z-10 p-6 w-full text-center">
+                    <h3 class="text-lg font-bold text-white mb-2">Personne supplémentaire</h3>
+                    <p class="text-white text-center">À partir de la 4<sup>e</sup> personne&nbsp;: <span class="font-bold text-yellow-300">5&nbsp;000 FCFA</span> / personne</p>
                 </div>
-                <h3 class="text-lg font-bold text-gray-800 mb-2">Personne supplémentaire</h3>
-                <p class="text-gray-600 text-center">À partir de la 4<sup>e</sup> personne&nbsp;: <span class="font-bold text-red-600">5&nbsp;000 FCFA</span> / personne</p>
             </div>
-            <!-- Card 2 -->
-            <div class="bg-gray-50 rounded-lg shadow-md p-8 flex flex-col items-center">
-                <div class="text-red-600 mb-4">
-                    <i class="fas fa-user-friends text-3xl"></i>
+            <!-- Card 2 : Accompagnant -->
+            <div class="relative rounded-lg shadow-md overflow-hidden h-64 flex items-end">
+                <img src="https://img.freepik.com/photos-gratuite/groupe-cinq-joyeuses-voyageuses-afro-americaines-assises-dans-coffre-ouvert-voiture_627829-13439.jpg?ga=GA1.1.1328141631.1747048938&semt=ais_hybrid&w=740" alt="Accompagnant" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+                <div class="absolute inset-0 bg-black opacity-60"></div>
+                <div class="relative z-10 p-6 w-full text-center">
+                    <h3 class="text-lg font-bold text-white mb-2">Accompagnant</h3>
+                    <p class="text-white text-center">Chaque accompagnement&nbsp;: <span class="font-bold text-yellow-300">15&nbsp;000 FCFA</span></p>
                 </div>
-                <h3 class="text-lg font-bold text-gray-800 mb-2">Accompagnant</h3>
-                <p class="text-gray-600 text-center">Service d'accompagnement&nbsp;: <span class="font-bold text-red-600">15&nbsp;000 FCFA</span></p>
             </div>
-            <!-- Card 3 -->
-            <div class="bg-gray-50 rounded-lg shadow-md p-8 flex flex-col items-center">
-                <div class="text-red-600 mb-4">
-                    <i class="fas fa-suitcase-rolling text-3xl"></i>
+            <!-- Card 3 : Dépôt ou récupération supplémentaire -->
+            <div class="relative rounded-lg shadow-md overflow-hidden h-64 flex items-end">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAf2-kV97YkMybhLXOXtVtvJNuLP3kQCaxew&s" alt="Dépôt ou récupération supplémentaire" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+                <div class="absolute inset-0 bg-black opacity-60"></div>
+                <div class="relative z-10 p-6 w-full text-center">
+                    <h3 class="text-lg font-bold text-white mb-2">Dépôt ou récupération supplémentaire</h3>
+                    <p class="text-white text-center">Par arrêt supplémentaire&nbsp;: <span class="font-bold text-yellow-300">5&nbsp;000 FCFA</span></p>
                 </div>
-                <h3 class="text-lg font-bold text-gray-800 mb-2">Suppléments divers</h3>
-                <ul class="text-gray-600 text-left space-y-2 mt-2">
-                    <li><span class="font-semibold">Dépôt ou récupération supplémentaire</span>&nbsp;: <span class="font-bold text-red-600">5&nbsp;000 FCFA</span></li>
-                    <li><span class="font-semibold">Valise supplémentaire</span>&nbsp;: <span class="font-bold text-red-600">5&nbsp;000 FCFA</span></li>
-                </ul>
+            </div>
+            <!-- Card 4 : Valise supplémentaire -->
+            <div class="relative rounded-lg shadow-md overflow-hidden h-64 flex items-end">
+                <img src="https://img.freepik.com/photos-gratuite/valet-vue-laterale-tenant-bagages_23-2149901447.jpg?ga=GA1.1.1328141631.1747048938&semt=ais_hybrid&w=740" alt="Valise supplémentaire" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+                <div class="absolute inset-0 bg-black opacity-50"></div>
+                <div class="relative z-10 p-6 w-full text-center">
+                    <h3 class="text-lg font-bold text-white mb-2">Valise supplémentaire</h3>
+                    <p class="text-white text-center">Par valise au-delà du quota&nbsp;: <span class="font-bold text-yellow-300">5&nbsp;000 FCFA</span></p>
+                </div>
             </div>
         </div>
     </div>
