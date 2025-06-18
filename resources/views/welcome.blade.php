@@ -856,6 +856,46 @@
     </section>
 
 
+
+<!-- Suppléments & Informations importantes -->
+<section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Informations & Suppléments</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Des frais additionnels peuvent s'appliquer selon vos besoins spécifiques&nbsp;: personnes supplémentaires, accompagnants, bagages ou arrêts additionnels.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-gray-50 rounded-lg shadow-md p-8 flex flex-col items-center">
+                <div class="text-red-600 mb-4">
+                    <i class="fas fa-users text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Personne supplémentaire</h3>
+                <p class="text-gray-600 text-center">À partir de la 4<sup>e</sup> personne&nbsp;: <span class="font-bold text-red-600">5&nbsp;000 FCFA</span> / personne</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="bg-gray-50 rounded-lg shadow-md p-8 flex flex-col items-center">
+                <div class="text-red-600 mb-4">
+                    <i class="fas fa-user-friends text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Accompagnant</h3>
+                <p class="text-gray-600 text-center">Service d'accompagnement&nbsp;: <span class="font-bold text-red-600">15&nbsp;000 FCFA</span></p>
+            </div>
+            <!-- Card 3 -->
+            <div class="bg-gray-50 rounded-lg shadow-md p-8 flex flex-col items-center">
+                <div class="text-red-600 mb-4">
+                    <i class="fas fa-suitcase-rolling text-3xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Suppléments divers</h3>
+                <ul class="text-gray-600 text-left space-y-2 mt-2">
+                    <li><span class="font-semibold">Dépôt ou récupération supplémentaire</span>&nbsp;: <span class="font-bold text-red-600">5&nbsp;000 FCFA</span></li>
+                    <li><span class="font-semibold">Valise supplémentaire</span>&nbsp;: <span class="font-bold text-red-600">5&nbsp;000 FCFA</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
     <!-- Services Section -->
     <section id="services" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1009,6 +1049,7 @@
             </div>
         </div>
     </section>
+    
 
     <section id="tarifs" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
