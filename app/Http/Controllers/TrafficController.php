@@ -49,9 +49,39 @@ class TrafficController extends Controller
 
             // Zones importantes au Sénégal
             $zones = [
+                // Dakar Centre et quartiers
                 'Dakar Centre' => ['origin' => '14.7167,-17.4677', 'destination' => '14.7500,-17.4500'],
                 'Dakar Plateau' => ['origin' => '14.7500,-17.4500', 'destination' => '14.7200,-17.4600'],
-                'Route de Thiès' => ['origin' => '14.7833,-16.9333', 'destination' => '14.7167,-17.4677']
+                'Dakar Almadies' => ['origin' => '14.7200,-17.4600', 'destination' => '14.7167,-17.4677'],
+                'Dakar Ouakam' => ['origin' => '14.7400,-17.4700', 'destination' => '14.7167,-17.4677'],
+                'Dakar Yoff' => ['origin' => '14.7500,-17.4800', 'destination' => '14.7167,-17.4677'],
+                'Dakar Mermoz' => ['origin' => '14.7300,-17.4500', 'destination' => '14.7167,-17.4677'],
+                'Dakar Fann' => ['origin' => '14.7200,-17.4400', 'destination' => '14.7167,-17.4677'],
+                'Dakar Gueule Tapée' => ['origin' => '14.7100,-17.4600', 'destination' => '14.7167,-17.4677'],
+                'Dakar Médina' => ['origin' => '14.7000,-17.4500', 'destination' => '14.7167,-17.4677'],
+                'Dakar Grand Dakar' => ['origin' => '14.7300,-17.4700', 'destination' => '14.7167,-17.4677'],
+
+                // Aéroport et zones périphériques
+                'Aéroport AIBD' => ['origin' => '14.7400,-17.4900', 'destination' => '14.7167,-17.4677'],
+                'Diamniadio' => ['origin' => '14.6900,-17.4100', 'destination' => '14.7167,-17.4677'],
+                'Thiès' => ['origin' => '14.7833,-16.9333', 'destination' => '14.7167,-17.4677'],
+                'Rufisque' => ['origin' => '14.7167,-17.2667', 'destination' => '14.7167,-17.4677'],
+                'Bargny' => ['origin' => '14.7100,-17.3100', 'destination' => '14.7167,-17.4677'],
+                'Sangalkam' => ['origin' => '14.7900,-17.2100', 'destination' => '14.7167,-17.4677'],
+                'Pikine' => ['origin' => '14.7600,-17.3900', 'destination' => '14.7167,-17.4677'],
+                'Guédiawaye' => ['origin' => '14.7900,-17.4100', 'destination' => '14.7167,-17.4677'],
+
+                // Routes principales
+                'Route AIBD-Dakar' => ['origin' => '14.7350,-17.4700', 'destination' => '14.7167,-17.4677'],
+                'Route Dakar-Thiès' => ['origin' => '14.7750,-17.1750', 'destination' => '14.7167,-17.4677'],
+                'Route Dakar-Rufisque' => ['origin' => '14.7150,-17.3700', 'destination' => '14.7167,-17.4677'],
+                'Route Dakar-Diamniadio' => ['origin' => '14.6950,-17.4400', 'destination' => '14.7167,-17.4677'],
+                'Autoroute Dakar-AIBD' => ['origin' => '14.7350,-17.4700', 'destination' => '14.7167,-17.4677'],
+                'Route de la Corniche' => ['origin' => '14.7500,-17.4700', 'destination' => '14.7167,-17.4677'],
+                'Route de l\'Aéroport' => ['origin' => '14.7350,-17.4800', 'destination' => '14.7167,-17.4677'],
+                'Route de Ouakam' => ['origin' => '14.7400,-17.4700', 'destination' => '14.7167,-17.4677'],
+                'Route de Yoff' => ['origin' => '14.7500,-17.4800', 'destination' => '14.7167,-17.4677'],
+                'Route de Mermoz' => ['origin' => '14.7300,-17.4500', 'destination' => '14.7167,-17.4677']
             ];
 
             $totalIncidents = 0;

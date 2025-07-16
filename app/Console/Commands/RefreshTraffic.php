@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\TrafficIncident;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use App\Models\TrafficIncident;
 
 class RefreshTraffic extends Command
 {
@@ -50,6 +50,7 @@ class RefreshTraffic extends Command
 
         // Zones de trafic importantes au Sénégal
         $senegalZones = [
+            // Dakar Centre
             'Dakar Centre' => [
                 'bounds' => '14.7000,-17.5000|14.7500,-17.4000',
                 'center' => '14.7167,-17.4677'
@@ -62,13 +63,121 @@ class RefreshTraffic extends Command
                 'bounds' => '14.7100,-17.4700|14.7300,-17.4500',
                 'center' => '14.7200,-17.4600'
             ],
-            'Route de Thiès' => [
-                'bounds' => '14.7800,-17.0000|14.7900,-16.9000',
+            'Dakar Ouakam' => [
+                'bounds' => '14.7300,-17.4800|14.7500,-17.4600',
+                'center' => '14.7400,-17.4700'
+            ],
+            'Dakar Yoff' => [
+                'bounds' => '14.7400,-17.4900|14.7600,-17.4700',
+                'center' => '14.7500,-17.4800'
+            ],
+            'Dakar Mermoz' => [
+                'bounds' => '14.7200,-17.4600|14.7400,-17.4400',
+                'center' => '14.7300,-17.4500'
+            ],
+            'Dakar Fann' => [
+                'bounds' => '14.7100,-17.4500|14.7300,-17.4300',
+                'center' => '14.7200,-17.4400'
+            ],
+            'Dakar Gueule Tapée' => [
+                'bounds' => '14.7000,-17.4700|14.7200,-17.4500',
+                'center' => '14.7100,-17.4600'
+            ],
+            'Dakar Médina' => [
+                'bounds' => '14.6900,-17.4600|14.7100,-17.4400',
+                'center' => '14.7000,-17.4500'
+            ],
+            'Dakar Grand Dakar' => [
+                'bounds' => '14.7200,-17.4800|14.7400,-17.4600',
+                'center' => '14.7300,-17.4700'
+            ],
+
+            // Aéroport et zones périphériques
+            'Aéroport AIBD' => [
+                'bounds' => '14.7300,-17.5000|14.7500,-17.4800',
+                'center' => '14.7400,-17.4900'
+            ],
+            'Diamniadio' => [
+                'bounds' => '14.6800,-17.4200|14.7000,-17.4000',
+                'center' => '14.6900,-17.4100'
+            ],
+            'Thiès' => [
+                'bounds' => '14.7800,-17.0000|14.8000,-16.9000',
                 'center' => '14.7833,-16.9333'
             ],
-            'Route de Rufisque' => [
-                'bounds' => '14.7100,-17.2800|14.7200,-17.2600',
+            'Rufisque' => [
+                'bounds' => '14.7100,-17.2800|14.7300,-17.2600',
                 'center' => '14.7167,-17.2667'
+            ],
+            'Bargny' => [
+                'bounds' => '14.7000,-17.3200|14.7200,-17.3000',
+                'center' => '14.7100,-17.3100'
+            ],
+            'Sangalkam' => [
+                'bounds' => '14.7800,-17.2200|14.8000,-17.2000',
+                'center' => '14.7900,-17.2100'
+            ],
+            'Pikine' => [
+                'bounds' => '14.7500,-17.4000|14.7700,-17.3800',
+                'center' => '14.7600,-17.3900'
+            ],
+            'Guédiawaye' => [
+                'bounds' => '14.7800,-17.4200|14.8000,-17.4000',
+                'center' => '14.7900,-17.4100'
+            ],
+            'Saint-Louis' => [
+                'bounds' => '16.0300,-16.5100|16.0500,-16.4900',
+                'center' => '16.0333,-16.5000'
+            ],
+            'Kaolack' => [
+                'bounds' => '14.1400,-16.0900|14.1600,-16.0700',
+                'center' => '14.1500,-16.0833'
+            ],
+            'Ziguinchor' => [
+                'bounds' => '12.5800,-16.2900|12.6000,-16.2700',
+                'center' => '12.5833,-16.2833'
+            ],
+
+            // Routes principales
+            'Route AIBD-Dakar' => [
+                'bounds' => '14.7200,-17.4900|14.7500,-17.4500',
+                'center' => '14.7350,-17.4700'
+            ],
+            'Route Dakar-Thiès' => [
+                'bounds' => '14.7500,-17.4500|14.8000,-16.9000',
+                'center' => '14.7750,-17.1750'
+            ],
+            'Route Dakar-Rufisque' => [
+                'bounds' => '14.7100,-17.4700|14.7200,-17.2700',
+                'center' => '14.7150,-17.3700'
+            ],
+            'Route Dakar-Diamniadio' => [
+                'bounds' => '14.6900,-17.4700|14.7000,-17.4100',
+                'center' => '14.6950,-17.4400'
+            ],
+            'Autoroute Dakar-AIBD' => [
+                'bounds' => '14.7200,-17.4900|14.7500,-17.4500',
+                'center' => '14.7350,-17.4700'
+            ],
+            'Route de la Corniche' => [
+                'bounds' => '14.7400,-17.4900|14.7600,-17.4500',
+                'center' => '14.7500,-17.4700'
+            ],
+            'Route de l\'Aéroport' => [
+                'bounds' => '14.7200,-17.4900|14.7500,-17.4700',
+                'center' => '14.7350,-17.4800'
+            ],
+            'Route de Ouakam' => [
+                'bounds' => '14.7300,-17.4800|14.7500,-17.4600',
+                'center' => '14.7400,-17.4700'
+            ],
+            'Route de Yoff' => [
+                'bounds' => '14.7400,-17.4900|14.7600,-17.4700',
+                'center' => '14.7500,-17.4800'
+            ],
+            'Route de Mermoz' => [
+                'bounds' => '14.7200,-17.4600|14.7400,-17.4400',
+                'center' => '14.7300,-17.4500'
             ]
         ];
 
@@ -155,14 +264,45 @@ class RefreshTraffic extends Command
     private function getDestinationForZone($zoneName)
     {
         $destinations = [
+            // Dakar Centre et quartiers
             'Dakar Centre' => '14.7500,-17.4500', // Plateau
             'Dakar Plateau' => '14.7200,-17.4600', // Almadies
             'Dakar Almadies' => '14.7167,-17.4677', // Centre
-            'Route de Thiès' => '14.7167,-17.4677', // Dakar
-            'Route de Rufisque' => '14.7167,-17.4677' // Dakar
+            'Dakar Ouakam' => '14.7167,-17.4677', // Centre
+            'Dakar Yoff' => '14.7167,-17.4677', // Centre
+            'Dakar Mermoz' => '14.7167,-17.4677', // Centre
+            'Dakar Fann' => '14.7167,-17.4677', // Centre
+            'Dakar Gueule Tapée' => '14.7167,-17.4677', // Centre
+            'Dakar Médina' => '14.7167,-17.4677', // Centre
+            'Dakar Grand Dakar' => '14.7167,-17.4677', // Centre
+
+            // Aéroport et zones périphériques
+            'Aéroport AIBD' => '14.7167,-17.4677', // Dakar Centre
+            'Diamniadio' => '14.7167,-17.4677', // Dakar Centre
+            'Thiès' => '14.7167,-17.4677', // Dakar
+            'Rufisque' => '14.7167,-17.4677', // Dakar
+            'Bargny' => '14.7167,-17.4677', // Dakar
+            'Sangalkam' => '14.7167,-17.4677', // Dakar
+            'Pikine' => '14.7167,-17.4677', // Dakar
+            'Guédiawaye' => '14.7167,-17.4677', // Dakar
+            'Saint-Louis' => '14.7167,-17.4677', // Dakar
+            'Kaolack' => '14.7167,-17.4677', // Dakar
+            'Ziguinchor' => '14.7167,-17.4677', // Dakar
+
+            // Routes principales
+            'Route AIBD-Dakar' => '14.7167,-17.4677', // Dakar Centre
+            'Route Dakar-Thiès' => '14.7167,-17.4677', // Dakar
+            'Route Dakar-Rufisque' => '14.7167,-17.4677', // Dakar
+            'Route Dakar-Diamniadio' => '14.7167,-17.4677', // Dakar
+            'Autoroute Dakar-AIBD' => '14.7167,-17.4677', // Dakar Centre
+            'Route de la Corniche' => '14.7167,-17.4677', // Dakar Centre
+            'Route de l\'Aéroport' => '14.7167,-17.4677', // Dakar Centre
+            'Route de Ouakam' => '14.7167,-17.4677', // Dakar Centre
+            'Route de Yoff' => '14.7167,-17.4677', // Dakar Centre
+            'Route de Mermoz' => '14.7167,-17.4677', // Dakar Centre
         ];
 
-        return $destinations[$zoneName] ?? '14.7167,-17.4677';
+        return $destinations[$zoneName] ?? '14.7167,-17.4677'; // Dakar Centre par défaut
     }
 
     /**
