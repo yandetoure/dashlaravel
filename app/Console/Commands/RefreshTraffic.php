@@ -214,7 +214,9 @@ class RefreshTraffic extends Command
                             $successfulZones++;
                             $this->line("✅ {$zoneName}: " . count($incidents) . " incidents de trafic détectés");
                         } else {
-                            $this->line("ℹ️ {$zoneName}: Trafic fluide, aucun incident détecté");
+                            // Créer un incident de "trafic fluide" pour informer l'utilisateur
+                            $this->createFluidTrafficIncident($data, $zoneName);
+                            $this->line("✅ {$zoneName}: Circulation fluide - Aucun problème détecté");
                         }
                     } else {
                         $this->warn("⚠️ {$zoneName}: " . ($data['status'] ?? 'Erreur inconnue'));
@@ -517,6 +519,68 @@ class RefreshTraffic extends Command
 
         $this->info('✅ ' . count($demoIncidents) . ' incidents de démonstration créés');
         $this->displaySummary();
+    }
+
+    /**
+     * Créer un incident de trafic fluide pour informer l'utilisateur
+     */
+    private function createFluidTrafficIncident($data, $zoneName)
+    {
+        // Extraire les informations de trafic de la réponse Google Maps
+        $route = $data['routes'][0] ?? null;
+        if (!$route) return;
+
+        $leg = $route['legs'][0] ?? null;
+        if (!$leg) return;
+
+        $duration = $leg['duration_in_traffic']['value'] ?? $leg['duration']['value'] ?? 0;
+        $durationNormal = $leg['duration']['value'] ?? $duration;
+        $congestionRatio = $durationNormal > 0 ? $duration / $durationNormal : 1;
+
+        // Calculer le pourcentage de retard
+        $delayPercent = round(($congestionRatio - 1) * 100);
+
+        // Déterminer l'état du trafic
+        if ($congestionRatio <= 1.05) {
+            $status = "fluide";
+            $emoji = "🟢";
+            $description = "Circulation excellente - Trafic fluide";
+        } elseif ($congestionRatio <= 1.1) {
+            $status = "normal";
+            $emoji = "🟡";
+            $description = "Circulation normale - Légers ralentissements";
+        } else {
+            $status = "lent";
+            $emoji = "🟠";
+            $description = "Circulation lente - Ralentissements modérés";
+        }
+
+        // Créer l'incident de trafic fluide
+        $incidentData = [
+            'incident_id' => "fluid_{$zoneName}_" . time(),
+            'type' => 'normal',
+            'severity' => 'info',
+            'description' => "{$emoji} {$description} - {$zoneName} - Délai: +{$delayPercent}%",
+            'latitude' => $leg['start_location']['lat'] ?? 0,
+            'longitude' => $leg['start_location']['lng'] ?? 0,
+            'road_name' => $zoneName,
+            'direction' => null,
+            'start_time' => null,
+            'end_time' => null,
+            'is_active' => true
+        ];
+
+        // Vérifier si un incident fluide existe déjà pour cette zone
+        $existingIncident = TrafficIncident::where('incident_id', 'like', "fluid_{$zoneName}_%")->first();
+
+        if ($existingIncident) {
+            $existingIncident->update($incidentData);
+        } else {
+            TrafficIncident::create($incidentData);
+        }
+
+        // Vider le cache
+        Cache::forget('traffic_incidents');
     }
 
     /**
