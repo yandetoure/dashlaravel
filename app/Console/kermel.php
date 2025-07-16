@@ -1,4 +1,4 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 namespace App\Console;
 
@@ -10,6 +10,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('days:assign')->weekly()->mondays()->at('08:00');
+
+        // Rafraîchir les données de trafic toutes les 5 minutes
+        $schedule->command('traffic:refresh')->everyFiveMinutes();
     }
 
     protected function commands()

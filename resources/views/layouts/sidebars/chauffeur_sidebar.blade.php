@@ -139,6 +139,11 @@
             <li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
             <!-- Trajets -->
             <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
+
+            <!-- Trafic -->
+            <h6>Trafic</h6>
+            <li><a href="{{ route('traffic.index') }}" class="nav-link {{ request()->routeIs('traffic.index') ? 'active' : '' }}"><span class="material-icons">traffic</span> Alertes Trafic</a></li>
+
             <!-- Chauffeurs -->
             <li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
         </ul>

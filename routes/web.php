@@ -1,25 +1,26 @@
 <?php declare(strict_types=1);
 
+use App\Models\Actu;
+use App\Models\Trip;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\ActuController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CardriverController;
-use App\Http\Controllers\ClientDashboardController;
-use App\Http\Controllers\DashController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProfileController;
+// use Google_Client;
+use App\Http\Controllers\TrafficController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CardriverController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
-// use Google_Client;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Trip;
-use App\Models\User;
-use App\Http\Controllers\ActuController;
-use App\Http\Controllers\CategoryController;
-use App\Models\Actu;
+use App\Http\Controllers\ClientDashboardController;
 
 
 
@@ -53,9 +54,9 @@ Route::middleware('auth:')->group(function () {
     Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
     Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
 
-    Route::Resource('cars', CarController::class); 
-    Route::Resource('auth', AuthController::class); 
-    Route::resource('trips', TripController::class); 
+    Route::Resource('cars', CarController::class);
+    Route::Resource('auth', AuthController::class);
+    Route::resource('trips', TripController::class);
 
     // Route::get('/users', [AuthController::class, 'listAllUsers'])->name('users.all');
 
@@ -127,18 +128,18 @@ Route::prefix('reservations')->name('reservations.')->middleware('auth')->group(
 
     // Formulaire pour créer une réservation
     Route::get('create', [ReservationController::class, 'create'])->name('create');
-    
+
     Route::get('client-create', [ReservationController::class, 'clientcreate'])->name('clientcreate');
 
     // Enregistrement d'une nouvelle réservation
     Route::post('store', [ReservationController::class, 'store'])->name('store');
-    
+
     // Confirmation d'une réservation
     Route::post('{reservation}/confirm', [ReservationController::class, 'confirm'])->name('confirm');
-    
+
     // Annulation d'une réservation
     Route::post('{reservation}/cancel', [ReservationController::class, 'cancel'])->name('cancel');
-    
+
     // Suppression d'une réservation
     Route::delete('{reservation}', [ReservationController::class, 'destroy'])->name('destroy');
 
@@ -175,13 +176,18 @@ Route::middleware(['auth'])->group(function () {
     // Routes réservées aux Admin et Super Admin
     Route::get('/admin/reservations', [ReservationController::class, 'adminReservations'])->name('admin.reservations')->middleware('role:admin');
     Route::get('/superadmin/reservations', [ReservationController::class, 'superAdminReservations'])->name('superadmin.reservations')->middleware('role:superadmin');
-    
+
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/mes-reservations-client', [ReservationController::class, 'mesReservationsClient'])->name('reservations.client.mes');
     Route::get('/mes-reservations-chauffeur', [ReservationController::class, 'mesReservationsChauffeur'])->name('reservations.chauffeur.mes');
 });
+
+// Routes pour le système de trafic
+Route::get('/traffic', [TrafficController::class, 'index'])->name('traffic.index');
+Route::get('/traffic/fetch', [TrafficController::class, 'fetchIncidents'])->name('traffic.fetch');
+Route::get('/traffic/api', [TrafficController::class, 'api'])->name('traffic.api');
 
 Route::get('/google-auth', function () {
     $client = new Google_Client();

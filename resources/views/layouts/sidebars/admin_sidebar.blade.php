@@ -1,6 +1,6 @@
 <?php declare(strict_types=1); ?>
 
- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+ <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <div id="sidebar" class="sidebar">
     <!-- Header fixe -->
@@ -33,6 +33,9 @@
                 <h6>Réservations</h6>
                 <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
                 <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
+
+                <h6>Trafic</h6>
+                <li><a href="{{ route('traffic.index') }}" class="nav-link {{ request()->routeIs('traffic.index') ? 'active' : '' }}"><span class="material-icons">traffic</span> Alertes Trafic</a></li>
 
                 <h6>Utilisateurs</h6>
                 <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Super Admins</a></li>
@@ -94,13 +97,13 @@
     }
 
     .nav-link:hover {
-    background-color:rgba(19, 19, 19, 0.23) !important;    
+    background-color:rgba(19, 19, 19, 0.23) !important;
 }
 
     .material-icons {
         font-size: 20px !important;
         color:rgb(104, 6, 6);
-        margin-right: 5px !important;  
+        margin-right: 5px !important;
     }
     .nav-link.active {
     background-color: #d6d6d6 !important;

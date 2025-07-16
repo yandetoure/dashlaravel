@@ -139,6 +139,9 @@
                 <li><a href="{{ route('reservations.client.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
                 <li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
 
+                <h6>Trafic</h6>
+                <li><a href="{{ route('traffic.index') }}" class="nav-link {{ request()->routeIs('traffic.index') ? 'active' : '' }}"><span class="material-icons">traffic</span> Alertes Trafic</a></li>
+
                 {{-- <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li> --}}
 
                 <h6>Utilisateurs</h6>
