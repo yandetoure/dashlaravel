@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use App\Models\TrafficIncident;
 
 class RefreshTraffic extends Command
@@ -14,84 +15,264 @@ class RefreshTraffic extends Command
      *
      * @var string
      */
-    protected $signature = 'traffic:refresh';
+    protected $signature = 'traffic:refresh {--demo : Créer des incidents de démonstration}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rafraîchir les données de trafic depuis l\'API TomTom';
+    protected $description = 'Rafraîchir les données de trafic depuis l\'API Google Maps';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('🔄 Récupération des incidents de trafic...');
+        $this->info('🔄 Récupération des incidents de trafic depuis Google Maps...');
 
-        try {
-            // Tester avec un point à Paris (fonctionne avec TomTom)
-            $point = '48.8566,2.3522'; // Paris
-            $url = "https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json";
-            $this->info('URL utilisée : ' . $url);
+        // Si l'option demo est activée, créer des incidents de démonstration
+        if ($this->option('demo')) {
+            $this->createDemoIncidents();
+            return;
+        }
 
-            $response = \Illuminate\Support\Facades\Http::get($url, [
-                'key' => env('TOMTOM_API_KEY'),
-                'point' => $point,
-                'unit' => 'KMPH'
-            ]);
+        $apiKey = env('GOOGLE_MAPS_API_KEY');
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $incidents = $data['flowSegmentData'] ?? [];
+        if (!$apiKey) {
+            $this->error('❌ Clé API Google Maps manquante dans le fichier .env');
+            $this->error('Ajoutez GOOGLE_MAPS_API_KEY=votre_cle_api dans votre fichier .env');
+            $this->error('Obtenez votre clé sur: https://console.cloud.google.com/');
+            return;
+        }
 
-                $this->processIncidents($incidents);
+        $this->info('🔑 Clé API Google Maps configurée');
 
-                $this->info('✅ ' . count($incidents) . ' incidents récupérés avec succès');
+        // Zones de trafic importantes au Sénégal
+        $senegalZones = [
+            'Dakar Centre' => [
+                'bounds' => '14.7000,-17.5000|14.7500,-17.4000',
+                'center' => '14.7167,-17.4677'
+            ],
+            'Dakar Plateau' => [
+                'bounds' => '14.7400,-17.4600|14.7600,-17.4400',
+                'center' => '14.7500,-17.4500'
+            ],
+            'Dakar Almadies' => [
+                'bounds' => '14.7100,-17.4700|14.7300,-17.4500',
+                'center' => '14.7200,-17.4600'
+            ],
+            'Route de Thiès' => [
+                'bounds' => '14.7800,-17.0000|14.7900,-16.9000',
+                'center' => '14.7833,-16.9333'
+            ],
+            'Route de Rufisque' => [
+                'bounds' => '14.7100,-17.2800|14.7200,-17.2600',
+                'center' => '14.7167,-17.2667'
+            ]
+        ];
 
-                // Afficher un résumé
-                $this->displaySummary();
+        $totalIncidents = 0;
+        $successfulZones = 0;
 
-            } else {
-                $this->error('❌ Erreur lors de la récupération des données');
-                $this->error('Code: ' . $response->status());
-                $this->error('Réponse TomTom: ' . $response->body());
+        foreach ($senegalZones as $zoneName => $zoneData) {
+            $this->line("📍 Analyse de {$zoneName}...");
+
+            try {
+                // Utiliser Google Maps Directions API pour obtenir des données de trafic
+                $url = "https://maps.googleapis.com/maps/api/directions/json";
+
+                $response = Http::timeout(30)->get($url, [
+                    'origin' => $zoneData['center'],
+                    'destination' => $this->getDestinationForZone($zoneName),
+                    'key' => $apiKey,
+                    'departure_time' => 'now',
+                    'traffic_model' => 'best_guess',
+                    'alternatives' => 'true'
+                ]);
+
+                $this->line("📡 Réponse pour {$zoneName}: " . $response->status());
+
+                if ($response->successful()) {
+                    $data = $response->json();
+
+                    if ($data['status'] === 'OK' && !empty($data['routes'])) {
+                        $incidents = $this->extractTrafficDataFromGoogleResponse($data, $zoneName);
+
+                        if (!empty($incidents)) {
+                            $this->processIncidents($incidents, $zoneName);
+                            $totalIncidents += count($incidents);
+                            $successfulZones++;
+                            $this->line("✅ {$zoneName}: " . count($incidents) . " incidents de trafic détectés");
+                        } else {
+                            $this->line("ℹ️ {$zoneName}: Trafic fluide, aucun incident détecté");
+                        }
+                    } else {
+                        $this->warn("⚠️ {$zoneName}: " . ($data['status'] ?? 'Erreur inconnue'));
+                        Log::warning("Google Maps API Error for {$zoneName}", [
+                            'status' => $data['status'] ?? 'unknown',
+                            'error_message' => $data['error_message'] ?? 'none'
+                        ]);
+                    }
+                } else {
+                    $this->warn("⚠️ {$zoneName}: Erreur HTTP " . $response->status());
+                    Log::warning("Google Maps HTTP Error for {$zoneName}", [
+                        'status' => $response->status(),
+                        'response' => $response->body()
+                    ]);
+                }
+
+            } catch (\Exception $e) {
+                $this->error("❌ {$zoneName}: " . $e->getMessage());
+                Log::error("Google Maps API Exception for {$zoneName}", [
+                    'error' => $e->getMessage()
+                ]);
             }
 
-        } catch (\Exception $e) {
-            $this->error('❌ Erreur: ' . $e->getMessage());
+            // Pause entre les requêtes pour éviter le rate limiting
+            sleep(2);
+        }
+
+        if ($totalIncidents > 0) {
+            $this->info("✅ Récupération terminée: {$totalIncidents} incidents depuis {$successfulZones} zones");
+            $this->displaySummary();
+        } else {
+            $this->warn("⚠️ Aucun incident récupéré depuis Google Maps");
+            $this->line("Causes possibles:");
+            $this->line("  - Trafic fluide dans les zones analysées");
+            $this->line("  - Problème de clé API Google Maps");
+            $this->line("  - Problème de connectivité réseau");
+
+            if ($this->confirm('Voulez-vous créer des incidents de démonstration en attendant ?')) {
+                $this->createDemoIncidents();
+            }
+        }
+    }
+
+    /**
+     * Obtenir une destination appropriée pour chaque zone
+     */
+    private function getDestinationForZone($zoneName)
+    {
+        $destinations = [
+            'Dakar Centre' => '14.7500,-17.4500', // Plateau
+            'Dakar Plateau' => '14.7200,-17.4600', // Almadies
+            'Dakar Almadies' => '14.7167,-17.4677', // Centre
+            'Route de Thiès' => '14.7167,-17.4677', // Dakar
+            'Route de Rufisque' => '14.7167,-17.4677' // Dakar
+        ];
+
+        return $destinations[$zoneName] ?? '14.7167,-17.4677';
+    }
+
+    /**
+     * Extraire les données de trafic de la réponse Google Maps
+     */
+    private function extractTrafficDataFromGoogleResponse($data, $zoneName)
+    {
+        $incidents = [];
+
+        foreach ($data['routes'] as $routeIndex => $route) {
+            $legs = $route['legs'] ?? [];
+
+            foreach ($legs as $leg) {
+                $duration = $leg['duration_in_traffic']['value'] ?? $leg['duration']['value'] ?? 0;
+                $durationWithoutTraffic = $leg['duration']['value'] ?? $duration;
+
+                // Calculer le niveau de congestion
+                $congestionRatio = $durationWithoutTraffic > 0 ? $duration / $durationWithoutTraffic : 1;
+
+                if ($congestionRatio > 1.1) { // Seuil de 10% de retard
+                    $steps = $leg['steps'] ?? [];
+
+                    foreach ($steps as $stepIndex => $step) {
+                        $stepDuration = $step['duration_in_traffic']['value'] ?? $step['duration']['value'] ?? 0;
+                        $stepDurationNormal = $step['duration']['value'] ?? $stepDuration;
+                        $stepCongestionRatio = $stepDurationNormal > 0 ? $stepDuration / $stepDurationNormal : 1;
+
+                        if ($stepCongestionRatio > 1.05) { // Seuil de 5% de retard par segment
+                            $incidents[] = [
+                                'incident_id' => "google_{$zoneName}_{$routeIndex}_{$stepIndex}",
+                                'type' => $this->determineIncidentType($stepCongestionRatio),
+                                'severity' => $this->determineSeverity($stepCongestionRatio),
+                                'description' => $this->generateDescription($stepCongestionRatio, $step),
+                                'latitude' => $step['start_location']['lat'] ?? 0,
+                                'longitude' => $step['start_location']['lng'] ?? 0,
+                                'road_name' => $step['html_instructions'] ?? 'Route principale',
+                                'congestion_ratio' => $stepCongestionRatio,
+                                'zone' => $zoneName
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $incidents;
+    }
+
+    /**
+     * Déterminer le type d'incident basé sur le ratio de congestion
+     */
+    private function determineIncidentType($ratio)
+    {
+        if ($ratio > 1.5) {
+            return 'congestion';
+        } elseif ($ratio > 1.2) {
+            return 'slow_traffic';
+        } else {
+            return 'normal';
+        }
+    }
+
+    /**
+     * Déterminer la gravité basée sur le ratio de congestion
+     */
+    private function determineSeverity($ratio)
+    {
+        if ($ratio > 1.5) {
+            return 'critical';
+        } elseif ($ratio > 1.2) {
+            return 'major';
+        } else {
+            return 'minor';
+        }
+    }
+
+    /**
+     * Générer une description pertinente
+     */
+    private function generateDescription($ratio, $step)
+    {
+        $delay = round(($ratio - 1) * 100);
+        $instruction = strip_tags($step['html_instructions'] ?? '');
+
+        if ($ratio > 1.5) {
+            return "🚗 Embouteillage majeur - Délai: +{$delay}% - {$instruction}";
+        } elseif ($ratio > 1.2) {
+            return "🚦 Ralentissement - Délai: +{$delay}% - {$instruction}";
+        } else {
+            return "⚡ Trafic fluide - Légers ralentissements - {$instruction}";
         }
     }
 
     /**
      * Traiter et sauvegarder les incidents
      */
-    private function processIncidents($incidents)
+    private function processIncidents($incidents, $location)
     {
         $newIncidents = 0;
         $updatedIncidents = 0;
 
         foreach ($incidents as $incident) {
-            // Pour Traffic Flow, on crée des incidents basés sur le niveau de congestion
-            $congestionLevel = $incident['currentFlow'] ?? 0;
-            $freeFlow = $incident['freeFlow'] ?? 1;
-
-            // Calculer la gravité basée sur le ratio de congestion
-            $ratio = $congestionLevel > 0 ? $freeFlow / $congestionLevel : 1;
-            $severity = $ratio < 0.5 ? 'critical' : ($ratio < 0.8 ? 'major' : 'minor');
-
-            // Générer des descriptions plus pertinentes pour les chauffeurs
-            $description = $this->generateDriverDescription($ratio, $incident);
-
             $incidentData = [
-                'incident_id' => 'flow_' . ($incident['coordinates']['coordinate'][0] ?? uniqid()),
-                'type' => $this->determineIncidentType($ratio),
-                'severity' => $severity,
-                'description' => $description,
-                'latitude' => $incident['coordinates']['coordinate'][1] ?? 0,
-                'longitude' => $incident['coordinates']['coordinate'][0] ?? 0,
-                'road_name' => $this->getRoadName($incident),
+                'incident_id' => $incident['incident_id'],
+                'type' => $incident['type'],
+                'severity' => $incident['severity'],
+                'description' => $incident['description'],
+                'latitude' => $incident['latitude'],
+                'longitude' => $incident['longitude'],
+                'road_name' => $incident['road_name'],
                 'direction' => null,
                 'start_time' => null,
                 'end_time' => null,
@@ -124,74 +305,78 @@ class RefreshTraffic extends Command
     }
 
     /**
-     * Générer une description pertinente pour les chauffeurs
+     * Créer des incidents de démonstration
      */
-    private function generateDriverDescription($ratio, $incident)
+    private function createDemoIncidents()
     {
-        $congestionLevel = $incident['currentFlow'] ?? 0;
-        $freeFlow = $incident['freeFlow'] ?? 1;
+        $this->info('🎭 Création d\'incidents de démonstration...');
 
-        if ($ratio < 0.5) {
-            // Trafic très dense
-            $delay = round(($freeFlow - $congestionLevel) / $freeFlow * 100);
-            return "🚗 Embouteillage majeur - Délai estimé: +{$delay}% - Évitez cette zone";
-        } elseif ($ratio < 0.8) {
-            // Trafic dense
-            $delay = round(($freeFlow - $congestionLevel) / $freeFlow * 100);
-            return "🚦 Ralentissement - Délai: +{$delay}% - Privilégiez les voies de gauche";
-        } else {
-            // Trafic fluide avec légers ralentissements
-            return "⚡ Trafic fluide - Légers ralentissements - Circulation normale";
-        }
-    }
+        // Supprimer les anciens incidents de démo
+        TrafficIncident::where('incident_id', 'like', 'demo-%')->delete();
 
-    /**
-     * Déterminer le type d'incident basé sur le niveau de congestion
-     */
-    private function determineIncidentType($ratio)
-    {
-        if ($ratio < 0.5) {
-            return 'congestion';
-        } elseif ($ratio < 0.8) {
-            return 'slow_traffic';
-        } else {
-            return 'normal';
-        }
-    }
-
-    /**
-     * Obtenir un nom de route plus descriptif
-     */
-    private function getRoadName($incident)
-    {
-        $frc = $incident['frc'] ?? '';
-
-        // Mapper les codes FRC vers des noms de routes
-        $roadNames = [
-            'FRC0' => 'Autoroute principale',
-            'FRC1' => 'Route nationale',
-            'FRC2' => 'Route départementale',
-            'FRC3' => 'Route locale',
-            'FRC4' => 'Rue urbaine',
-            'FRC5' => 'Chemin local'
+        // Créer des incidents de démonstration
+        $demoIncidents = [
+            [
+                'incident_id' => 'demo-1',
+                'type' => 'congestion',
+                'severity' => 'critical',
+                'description' => '🚗 Embouteillage majeur - Délai estimé: +75% - Évitez cette zone',
+                'latitude' => 14.7167,
+                'longitude' => -17.4677,
+                'road_name' => 'Autoroute Dakar-Thiès',
+                'is_active' => true
+            ],
+            [
+                'incident_id' => 'demo-2',
+                'type' => 'construction',
+                'severity' => 'major',
+                'description' => '🚧 Travaux en cours - Voie réduite - Privilégiez l\'itinéraire alternatif',
+                'latitude' => 14.7500,
+                'longitude' => -17.4500,
+                'road_name' => 'Route de la Corniche',
+                'is_active' => true
+            ],
+            [
+                'incident_id' => 'demo-3',
+                'type' => 'slow_traffic',
+                'severity' => 'minor',
+                'description' => '🐌 Ralentissement - Délai: +25% - Privilégiez les voies de gauche',
+                'latitude' => 14.6900,
+                'longitude' => -17.4440,
+                'road_name' => 'Centre-ville Dakar',
+                'is_active' => true
+            ],
+            [
+                'incident_id' => 'demo-4',
+                'type' => 'accident',
+                'severity' => 'critical',
+                'description' => '🚨 Accident signalé - Route bloquée - Délai: +90% - Itinéraire alternatif conseillé',
+                'latitude' => 14.7200,
+                'longitude' => -17.4600,
+                'road_name' => 'Route de l\'Aéroport',
+                'is_active' => true
+            ],
+            [
+                'incident_id' => 'demo-5',
+                'type' => 'weather',
+                'severity' => 'major',
+                'description' => '🌧️ Pluie intense - Visibilité réduite - Ralentissez et allumez vos phares',
+                'latitude' => 14.6800,
+                'longitude' => -17.4300,
+                'road_name' => 'Route de Rufisque',
+                'is_active' => true
+            ]
         ];
 
-        return $roadNames[$frc] ?? 'Route principale';
-    }
+        foreach ($demoIncidents as $incident) {
+            TrafficIncident::create($incident);
+        }
 
-    /**
-     * Mapper les types d'incidents TomTom vers nos types
-     */
-    private function mapIncidentType($tomtomType)
-    {
-        return match($tomtomType) {
-            'ACCIDENT' => 'accident',
-            'CONSTRUCTION' => 'construction',
-            'CONGESTION' => 'congestion',
-            'WEATHER' => 'weather',
-            'ROAD_CLOSED' => 'road_closed',
-            default => 'other'
-        };
+        // Vider le cache
+        Cache::forget('traffic_incidents');
+
+        $this->info('✅ ' . count($demoIncidents) . ' incidents de démonstration créés');
+        $this->displaySummary();
     }
 
     /**
