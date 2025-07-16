@@ -136,6 +136,9 @@
                 <h6>Actualités</h6>
                 <li><a href="{{ route('actus.index') }}" class="nav-link {{ request()->routeIs('actus.index') ? 'active' : '' }}"><span class="material-icons">article</span> Actualités</a></li>
                 <li><a href="{{ route('categories.index') }}" class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}"><span class="material-icons">category</span> Catégories</a></li>
+                <h6>Trafic</h6>
+                <li><a href="{{ route('traffic.index') }}" class="nav-link {{ request()->routeIs('traffic.index') ? 'active' : '' }}"><span class="material-icons">traffic</span> Alertes Trafic</a></li>
+
                 <h6>Réservations</h6>
                 <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
                 <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
