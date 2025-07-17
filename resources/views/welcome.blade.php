@@ -17,12 +17,12 @@
             background-size: cover;
             background-position: center;
         }
-        
+
         .service-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
+
         .active {
             color: #ef4444;
             font-weight: 600;
@@ -30,21 +30,21 @@
             padding: 8px 16px;
             border-radius: 6px;
         }
-        
+
         .booking-form {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        
+
         .cta-banner {
             background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
         }
-        
+
         .rating-stars {
             color: #f59e0b;
         }
-        
+
         .entreprise-banner {
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
             background-size: cover;
@@ -55,17 +55,17 @@
         .overflow-x-auto::-webkit-scrollbar {
             height: 6px;
         }
-        
+
         .overflow-x-auto::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 3px;
         }
-        
+
         .overflow-x-auto::-webkit-scrollbar-thumb {
             background: #cbd5e0;
             border-radius: 3px;
         }
-        
+
         .overflow-x-auto::-webkit-scrollbar-thumb:hover {
             background: #a0aec0;
         }
@@ -98,16 +98,16 @@
         .overflow-y-auto::-webkit-scrollbar {
             width: 4px;
         }
-        
+
         .overflow-y-auto::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
-        
+
         .overflow-y-auto::-webkit-scrollbar-thumb {
             background: #cbd5e0;
             border-radius: 2px;
         }
-        
+
         .overflow-y-auto::-webkit-scrollbar-thumb:hover {
             background: #a0aec0;
         }
@@ -126,34 +126,34 @@
             .ml-80 {
                 margin-left: 0;
             }
-            
+
             /* Responsive pour les actualités sur mobile */
             #sidebar {
                 position: relative !important;
                 width: 100% !important;
                 margin-left: 0 !important;
             }
-            
+
             .sidebar-container {
                 width: 100% !important;
                 position: relative !important;
             }
-            
+
             .main-content {
                 margin-left: 0 !important;
             }
-            
+
             /* Style pour le bouton toggle des actualités */
             #toggle-news-btn {
                 display: block;
             }
-            
+
             .news-content.collapsed {
                 max-height: 200px;
                 overflow: hidden;
                 position: relative;
             }
-            
+
             .news-content.collapsed::after {
                 content: '';
                 position: absolute;
@@ -171,16 +171,16 @@
             #toggle-news-btn {
                 display: none;
             }
-            
+
             .sidebar-container {
                 position: relative;
                 z-index: 10;
             }
-            
+
             #sidebar {
                 transition: all 0.3s ease;
             }
-            
+
             #sidebar.fixed-sidebar {
                 position: fixed;
                 top: 80px;
@@ -189,11 +189,11 @@
                 height: calc(100vh - 80px);
                 z-index: 30;
             }
-            
+
             .main-content {
                 transition: margin-left 0.3s ease;
             }
-            
+
             .main-content.with-fixed-sidebar {
                 margin-left: 320px;
             }
@@ -421,7 +421,7 @@
                 transform: scale(1.05);
             }
         }
-        
+
 
         /* Styles pour la navbar transparente */
         .navbar-transparent {
@@ -513,7 +513,7 @@
                     @else
                         <a href="#compte" class="nav-link hover:text-white transition">Mon compte</a>
                     @endauth
-                    
+
                     <!-- Boutons de contrôle -->
                     <div class="control-buttons">
                         <!-- Sélecteur de langue -->
@@ -534,7 +534,7 @@
                                 </button>
                             </div>
                         </div>
-                        
+
                         <!-- Bouton mode sombre -->
                         <button id="theme-toggle" class="control-btn">
                             <i id="theme-icon" class="fas fa-moon"></i>
@@ -548,7 +548,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Menu mobile -->
         <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-gray-200">
             <div class="px-4 py-4 space-y-3">
@@ -563,7 +563,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Liens de navigation -->
                 <a href="#accueil" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
                     <i class="fas fa-home mr-3"></i>Accueil
@@ -592,7 +592,7 @@
                         <i class="fas fa-user mr-3"></i>Mon compte
                     </a>
                 @endauth
-                
+
                 <!-- Bouton de réservation rapide -->
                 <div class="pt-3 border-t border-gray-200">
                     <a href="#reservation" class="block bg-red-600 hover:bg-red-700 text-white text-center py-3 px-4 rounded-lg transition-colors font-semibold">
@@ -658,22 +658,12 @@
             <div id="sidebar" class="w-80">
                 <div class="bg-white shadow-lg border-r border-gray-200">
                     <!-- En-tête de la sidebar -->
-                    <div id="actualites" class="p-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-semibold text-gray-800">Dernières actualités</h3>
-                            <!-- Bouton toggle pour mobile -->
-                            <button id="toggle-news-btn" class="hidden md:hidden bg-red-600 text-white px-3 py-1 rounded-md text-sm hover:bg-red-700 transition-colors">
-                                <span id="toggle-text">Voir moins</span>
-                                <i id="toggle-icon" class="fas fa-chevron-up ml-1"></i>
-                            </button>
-                        </div>
-                        <p class="text-sm text-gray-500">Restez informé de nos actualités</p>
-                    </div>
+                  
 
                     <!-- Liste des actualités scrollable -->
                     <div id="news-content" class="news-content overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
                         @foreach($actus->take(5) as $actu)
-                            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100 cursor-pointer actu-card" 
+                            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100 cursor-pointer actu-card"
                                  data-actu-id="{{ $actu->id }}"
                                  data-actu-title="{{ $actu->title }}"
                                  data-actu-content="{{ $actu->content }}"
@@ -684,8 +674,8 @@
                                  data-actu-link="{{ $actu->external_link }}">
                                     @if($actu->image)
                                         <div class="relative h-32">
-                                            <img src="{{ asset('storage/' . $actu->image) }}" 
-                                                 alt="{{ $actu->title }}" 
+                                            <img src="{{ asset('storage/' . $actu->image) }}"
+                                                 alt="{{ $actu->title }}"
                                                  class="w-full h-full object-cover">
                                             <div class="absolute top-2 right-2">
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
@@ -817,7 +807,7 @@
                             <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
-                
+
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                         <div class="bg-red-600 text-white py-6 px-6">
@@ -912,7 +902,7 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Services</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous offrons des solutions de transport adaptées à tous vos besoins vers l'aéroport AIBD et au-delà</p>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Service 1 -->
                 {{-- <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
@@ -936,7 +926,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!-- Service 2 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-red-600 mb-4">
@@ -959,7 +949,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!-- Service 3 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-red-600 mb-4">
@@ -1007,7 +997,7 @@
                     </ul>
                 </div>
 
-                
+
                 <!-- Service 5 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
@@ -1030,7 +1020,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
 
               <!-- Service 4 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
@@ -1058,7 +1048,7 @@
             </div>
         </div>
     </section>
-    
+
 
     <section id="tarifs" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1097,7 +1087,7 @@
                         <a href="#reservation" class="block text-center bg-gray-100 hover:bg-red-600 hover:text-white text-red-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
-                
+
                 <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-800 text-white py-5 px-6">
@@ -1129,7 +1119,7 @@
                         <a href="#reservation" class="block text-center bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
-             
+
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-red-600 text-white py-5 px-6">
@@ -1178,7 +1168,7 @@
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <h2 class="text-3xl md:text-4xl font-bold mb-6">Solutions de transport pour entreprises</h2>
                     <p class="text-xl mb-8">Confiez-nous les déplacements professionnels de vos collaborateurs et bénéficiez d'un service sur mesure, fiable et sécurisé.</p>
-                    
+
                     <div class="space-y-6 mb-8">
                         <div class="flex items-start">
                             <div class="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
@@ -1189,7 +1179,7 @@
                                 <p class="opacity-90">Une seule interface pour gérer tous les trajets de vos employés avec facturation centralisée.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
@@ -1199,7 +1189,7 @@
                                 <p class="opacity-90">Nos chauffeurs professionnels sont formés aux standards les plus exigeants.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
@@ -1210,10 +1200,10 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <a href="#contact" class="inline-block bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300">Demander un devis</a>
                 </div>
-                
+
                 <div class="md:w-1/2">
                     <div class="bg-white bg-opacity-90 p-8 rounded-lg text-gray-800 max-w-md ml-auto">
                         <h3 class="text-2xl font-bold mb-6">Avantages pour les entreprises</h3>
@@ -1283,7 +1273,7 @@
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Réservez votre transport en quelques clics</h2>
                     <p class="text-xl text-gray-600 mb-8">Notre plateforme simple et intuitive vous permet de réserver votre transport vers l'aéroport AIBD en moins de 2 minutes.</p>
-                    
+
                     <div class="space-y-6">
                         <div class="flex items-start">
                             <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
@@ -1294,7 +1284,7 @@
                                 <p class="text-gray-600">Confirmation immédiate de votre réservation par email et SMS.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
@@ -1304,7 +1294,7 @@
                                 <p class="text-gray-600">Payez en ligne de manière sécurisée ou en espèces au chauffeur.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
@@ -1316,11 +1306,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="md:w-1/2">
                     <div class="bg-white p-8 rounded-lg shadow-xl max-w-md mx-auto">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Complétez votre réservation</h3>
-                        
+
                         <!-- Messages de succès -->
                         <div id="success-message" class="hidden bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded" role="alert">
                             <div class="flex">
@@ -1337,7 +1327,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Messages d'erreur -->
                     @if($errors->any())
                         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
@@ -1437,7 +1427,7 @@
                 <div class="md:w-1/2">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Créez votre compte client</h2>
                     <p class="text-xl text-gray-600 mb-8">Accédez à toutes vos réservations passées et futures, consultez votre historique de trajets et vos points de fidélité pour gagner des avantages.</p>
-                    
+
                     <div class="space-y-6 mb-8">
                         <div class="flex items-start">
                             <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
@@ -1448,7 +1438,7 @@
                                 <p class="text-gray-600">Consultez, modifiez ou annulez facilement vos réservations.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-history"></i>
@@ -1458,7 +1448,7 @@
                                 <p class="text-gray-600">Retrouvez tous vos trajets passés avec les détails et factures.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-star"></i>
@@ -1469,7 +1459,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                         <a href="/register" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 text-center">
                             Créer un compte
@@ -1550,12 +1540,12 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Contactez-nous</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous sommes disponibles 24h/24 pour répondre à vos questions et prendre vos réservations</p>
             </div>
-            
+
             <div class="md:flex">
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <div class="bg-white p-8 rounded-lg shadow-md h-full">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Nos coordonnées</h3>
-                        
+
                         <div class="space-y-6">
                             <div class="flex items-start">
                                 <div class="text-red-600 mr-4 mt-1">
@@ -1566,7 +1556,7 @@
                                     <p class="text-gray-600">Sacré cœur, Dakar, Sénégal</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="text-red-600 mr-4 mt-1">
                                     <i class="fas fa-phone-alt text-xl"></i>
@@ -1577,7 +1567,7 @@
                                     <p class="text-gray-600">+221 77 705 69 69 (WhatsApp)</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="text-red-600 mr-4 mt-1">
                                     <i class="fas fa-envelope text-xl"></i>
@@ -1588,7 +1578,7 @@
                                     <p class="text-gray-600">reservation@dakartransport.sn</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="text-red-600 mr-4 mt-1">
                                     <i class="fas fa-clock text-xl"></i>
@@ -1600,7 +1590,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mt-8">
                             <h4 class="font-bold text-gray-800 mb-4">Suivez-nous</h4>
                             <div class="flex space-x-4">
@@ -1617,7 +1607,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="md:w-1/2">
                     <div class="bg-white p-8 rounded-lg shadow-md h-full">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Envoyez-nous un message</h3>
@@ -1664,7 +1654,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                     <p class="mt-4 text-gray-400 max-w-xs">Service de transport professionnel vers l'aéroport international Blaise Diagne de Dakar.</p>
                 </div>
-                
+
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
@@ -1677,7 +1667,7 @@
                             <li><a href="#compte" class="text-gray-400 hover:text-white transition">Mon compte</a></li>
                         </ul>
                     </div>
-                    
+
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Services</h4>
                         <ul class="space-y-2">
@@ -1689,7 +1679,7 @@
                             <li><a href="#" class="text-gray-400 hover:text-white transition">Services entreprises</a></li>
                         </ul>
                     </div>
-                    
+
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Légal</h4>
                         <ul class="space-y-2">
@@ -1700,7 +1690,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400 mb-4 md:mb-0">© 2023 CPRO-VLC. Tous droits réservés.</p>
                 <div class="flex space-x-6">
@@ -1724,10 +1714,10 @@
         const mobileMenu = document.getElementById('mobile-menu');
         const sidebar = document.getElementById('sidebar');
         const sidebarContainer = sidebar.parentElement;
-        
+
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
-            
+
             // Changer l'icône du menu burger
             const icon = menuBtn.querySelector('i');
             if (mobileMenu.classList.contains('hidden')) {
@@ -1758,77 +1748,77 @@
                 icon.classList.add('fa-bars');
             }
         });
-        
+
         // Navbar transparent effect on scroll
         const navbar = document.getElementById('navbar');
-        
+
         function updateNavbarOnScroll() {
             if (window.scrollY > 50) {
                 navbar.classList.remove('navbar-transparent', 'nav-transparent');
                 navbar.classList.add('navbar-scrolled');
-                
+
                 // Changer les couleurs des liens pour le mode scrollé
                 const navLinks = navbar.querySelectorAll('.nav-link');
                 const phoneLinks = navbar.querySelectorAll('.phone-links a');
                 const menuBtn = navbar.querySelector('.mobile-menu-btn');
-                
+
                 navLinks.forEach(link => {
                     link.classList.remove('text-white');
                     link.classList.add('text-gray-700');
                     link.style.textShadow = 'none';
                 });
-                
+
                 phoneLinks.forEach(link => {
                     link.classList.remove('text-white');
                     link.classList.add('text-gray-600');
                     link.style.textShadow = 'none';
                 });
-                
+
                 if (menuBtn) {
                     menuBtn.classList.remove('text-white');
                     menuBtn.classList.add('text-gray-700');
                 }
-                
+
             } else {
                 navbar.classList.remove('navbar-scrolled');
                 navbar.classList.add('navbar-transparent', 'nav-transparent');
-                
+
                 // Remettre les couleurs transparentes
                 const navLinks = navbar.querySelectorAll('.nav-link');
                 const phoneLinks = navbar.querySelectorAll('.phone-links a');
                 const menuBtn = navbar.querySelector('.mobile-menu-btn');
-                
+
                 navLinks.forEach(link => {
                     link.classList.remove('text-gray-700');
                     link.classList.add('text-white');
                     link.style.textShadow = '0 1px 3px rgba(0, 0, 0, 0.3)';
                 });
-                
+
                 phoneLinks.forEach(link => {
                     link.classList.remove('text-gray-600');
                     link.classList.add('text-white');
                     link.style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.3)';
                 });
-                
+
                 if (menuBtn) {
                     menuBtn.classList.remove('text-gray-700');
                     menuBtn.classList.add('text-white');
                 }
             }
         }
-        
+
         // Appliquer l'effet au scroll
         window.addEventListener('scroll', updateNavbarOnScroll);
-        
+
         // Appliquer l'état initial
         updateNavbarOnScroll();
-        
+
       // Gestion du scroll de la sidebar
         function updateSidebarPosition() {
             const sidebarRect = sidebar.getBoundingClientRect();
             const heroSection = document.querySelector('.hero');
             const heroBottom = heroSection.getBoundingClientRect().bottom;
-            
+
             // Si on est dans la zone de la bannière, on retire la position fixe
             if (heroBottom > 0) {
                 sidebar.style.position = 'relative';
@@ -1837,7 +1827,7 @@
                 sidebar.style.width = 'auto';
                 return;
             }
-            
+
             // Sinon, on applique la logique de fixation normale
             if (sidebarRect.top <= 0) {
                 sidebar.style.position = 'fixed';
@@ -1851,25 +1841,25 @@
                 sidebar.style.width = 'auto';
             }
         }
-        
+
         // Écouteurs d'événements
         window.addEventListener('scroll', updateSidebarPosition);
         window.addEventListener('resize', updateSidebarPosition);
-        
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
-                
+
                 if (targetElement) {
                     targetElement.scrollIntoView({
                         behavior: 'smooth'
                     });
                 }
-                
+
                 // Close mobile menu if open
                 mobileMenu.classList.add('hidden');
                 const icon = menuBtn.querySelector('i');
@@ -1879,23 +1869,23 @@
                 }
             });
         });
-        
+
         // Highlight active nav link on scroll
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
-        
+
         window.addEventListener('scroll', () => {
             let current = '';
-            
+
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                
+
                 if (pageYOffset >= (sectionTop - 100)) {
                     current = section.getAttribute('id');
                 }
             });
-            
+
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === `#${current}`) {
@@ -1903,7 +1893,7 @@
                 }
             });
         });
-        
+
         // Gestion du modal des actualités
         const modal = document.getElementById('actuModal');
         const modalImage = document.getElementById('modalImage');
@@ -1918,7 +1908,7 @@
         document.querySelectorAll('.actu-card').forEach(card => {
             card.addEventListener('click', () => {
                 const data = card.dataset;
-                
+
                 // Mise à jour du contenu du modal
                 if (data.actuImage) {
                     modalImage.src = data.actuImage;
@@ -1926,12 +1916,12 @@
                     } else {
                     modalImage.classList.add('hidden');
                 }
-                
+
                 modalCategory.textContent = data.actuCategory;
                 modalDate.textContent = data.actuDate;
                 modalTitle.textContent = data.actuTitle;
                 modalContent.innerHTML = data.actuContent.replace(/\n/g, '<br>');
-                
+
                 // Gestion du lien externe
                 if (data.actuLink && data.actuLink !== "null" && data.actuLink.trim() !== "") {
                     modalLinkContainer.classList.remove('hidden');
@@ -1939,7 +1929,7 @@
                 } else {
                     modalLinkContainer.classList.add('hidden');
                 }
-                
+
                 // Afficher le modal
                 modal.classList.add('active');
                 document.body.classList.add('modal-open');
@@ -1969,18 +1959,18 @@
         // NOUVEAU : Gestion du formulaire de vérification de disponibilité (section hero)
         document.getElementById('availability-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const resultDiv = document.getElementById('availability-result');
-            
+
             // Vérifier que tous les champs sont remplis
             if (!formData.get('trip_id') || !formData.get('date') || !formData.get('heure_ramassage')) {
                 resultDiv.innerHTML = '<div class="text-red-600">Veuillez remplir tous les champs.</div>';
                 return;
             }
-            
+
             resultDiv.innerHTML = '<div class="text-blue-600">Vérification en cours...</div>';
-            
+
             fetch('{{ route("reservations.checkAvailability") }}', {
                 method: 'POST',
                 body: formData,
@@ -2007,26 +1997,26 @@
             const nbPersonnes = parseInt(document.getElementById('nb_personnes').value) || 0;
             const nbValises = parseInt(document.getElementById('nb_valises').value) || 0;
             const tarifField = document.getElementById('tarif_reservation');
-            
+
             if (nbPersonnes === 0) {
                 tarifField.value = '';
                 return;
             }
-            
+
             // Tarif de base pour 1 à 3 personnes
             let tarif = 32500;
-            
+
             // Supplément pour personnes supplémentaires (au-delà de 3)
             if (nbPersonnes > 3) {
                 tarif += (nbPersonnes - 3) * 5000;
             }
-            
+
             // Valises incluses : 2 par personne
             const valisesIncluses = nbPersonnes * 2;
             if (nbValises > valisesIncluses) {
                 tarif += (nbValises - valisesIncluses) * 5000;
             }
-            
+
             // Afficher le tarif formaté
             tarifField.value = tarif.toLocaleString('fr-FR') + ' FCFA';
         }
@@ -2116,24 +2106,24 @@
         // Gestion du formulaire de réservation avec AJAX
         document.getElementById('reservation-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const form = this;
             const submitBtn = document.getElementById('submit-btn');
             const submitText = submitBtn.querySelector('.submit-text');
             const submitSpinner = submitBtn.querySelector('.submit-spinner');
             const successMessage = document.getElementById('success-message');
-            
+
             // Désactiver le bouton et afficher le spinner
             submitBtn.disabled = true;
             submitText.textContent = 'Réservation en cours...';
             submitSpinner.classList.remove('hidden');
-            
+
             // Cacher les messages précédents
             successMessage.classList.add('hidden');
             document.querySelectorAll('.error-message').forEach(el => el.remove());
-            
+
             const formData = new FormData(form);
-            
+
             fetch(form.action, {
                 method: 'POST',
                 body: formData,
@@ -2204,7 +2194,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
-            
+
             <!-- Header avec avatar et statut -->
             <div class="flex items-center justify-center mb-4">
                 <div class="flex flex-col items-center">
@@ -2220,7 +2210,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Message principal -->
             <div class="text-center">
                 <p class="text-lg font-medium text-gray-800 mb-2">Bonjour ! 👋</p>
@@ -2231,7 +2221,7 @@
                     <i class="fas fa-arrow-right ml-2 animate-bounce"></i>
                 </div>
             </div>
-            
+
             <!-- Petite flèche pointant vers le bouton -->
             <div class="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-4 h-4 bg-gradient-to-r from-white to-gray-50 border-r border-b border-gray-100 shadow-md"></div>
         </div>
@@ -2278,7 +2268,7 @@
                         Informations générales
                     </button>
                 </div>
-                
+
                 <!-- Bouton pour saisir une question personnalisée -->
                 <button id="custom-question-btn" class="mt-2 w-full bg-red-100 hover:bg-red-400 text-red-700 p-2 rounded-md text-xs text-center transition-colors flex items-center justify-center">
                     <i class="fas fa-edit mr-2 text-xs"></i>
@@ -2298,10 +2288,10 @@
             <!-- Zone de saisie personnalisée (cachée par défaut) -->
             <div id="custom-input-section" class="border-t p-3 hidden">
                 <form id="chat-form" class="flex items-center">
-                    <input type="text" id="chat-input" 
-                           class="flex-1 border rounded-l-md px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-red-500" 
+                    <input type="text" id="chat-input"
+                           class="flex-1 border rounded-l-md px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-red-500"
                            placeholder="Tapez votre question...">
-                    <button type="submit" 
+                    <button type="submit"
                             class="bg-red-600 text-white px-3 py-1 rounded-r-md hover:bg-red-700 transition-colors text-xs">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -2353,7 +2343,7 @@
         const responses = {
             'greeting': {
                 keywords: ['bonjour', 'bonsoir', 'salut', 'hey', 'hello', 'hi', 'coucou'],
-                response: `Bonjour ! Je suis Mami, votre assistante virtuelle. 
+                response: `Bonjour ! Je suis Mami, votre assistante virtuelle.
 Choisissez une question ci-dessous pour obtenir des informations détaillées !`
             },
             'reservation': {
@@ -2533,7 +2523,7 @@ Notre équipe est disponible pour :
         function showContextualQuestions(category) {
             const questions = contextualQuestions[category] || [];
             let questionsHtml = '';
-            
+
             questions.forEach(question => {
                 questionsHtml += `
                     <button class="quick-question-btn bg-gray-100 hover:bg-red-50 text-gray-700 p-2 rounded-md text-xs text-left transition-colors w-full flex items-center" data-category="${question.category}">
@@ -2552,7 +2542,7 @@ Notre équipe est disponible pour :
 
             questionsContainer.innerHTML = questionsHtml;
             attachQuestionListeners();
-            
+
             // Attacher l'événement pour revenir aux questions principales
             document.getElementById('back-to-main')?.addEventListener('click', showInitialQuestions);
         }
@@ -2563,12 +2553,12 @@ Notre équipe est disponible pour :
                 button.addEventListener('click', () => {
                     const questionText = button.textContent.trim();
                     const category = button.getAttribute('data-category');
-                    
+
                     addMessage(questionText, 'user');
-                    
+
                     // Trouver la réponse correspondante
                     let response = responses[category]?.response || responses.greeting.response;
-                    
+
                     setTimeout(() => {
                         addMessage(response, 'bot');
                         // Afficher les questions contextuelles après la réponse
@@ -2587,7 +2577,7 @@ Notre équipe est disponible pour :
                 addInitialMessage();
                 customInputSection.classList.add('hidden');
                 document.getElementById('quick-questions').classList.remove('hidden');
-                
+
                 // Cacher la bulle d'invitation et arrêter les animations
                 invitationBubble.classList.remove('show', 'float-animation');
                 chatButton.classList.remove('pulse-glow', 'bounce-attention', 'animate-pulse');
@@ -2645,8 +2635,8 @@ Notre équipe est disponible pour :
                     return responses[category].response;
                 }
             }
-            return `Je comprends votre question, mais je n'ai pas d'information spécifique à ce sujet. 
-            
+            return `Je comprends votre question, mais je n'ai pas d'information spécifique à ce sujet.
+
 Voici ce que je peux vous aider :
 - Réservations de transport
 - Informations sur nos tarifs
@@ -2691,21 +2681,21 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
             setTimeout(() => {
                 // Afficher la bulle d'invitation avec animation de flottement
                 invitationBubble.classList.add('show', 'float-animation');
-                
+
                 // Ajouter l'animation de pulsation avec lueur
                 chatButton.classList.remove('animate-pulse');
                 chatButton.classList.add('pulse-glow');
-                
+
                 // Après 5 secondes, faire une animation d'attention supplémentaire
                 setTimeout(() => {
                     chatButton.classList.add('bounce-attention');
-                    
+
                     // Retirer l'animation après 4 secondes
                     setTimeout(() => {
                         chatButton.classList.remove('bounce-attention');
                     }, 4000);
                 }, 5000);
-                
+
                 // Cacher la bulle après 10 secondes si l'utilisateur n'a pas cliqué
                 setTimeout(() => {
                     if (chatWindow.classList.contains('hidden')) {
@@ -2714,7 +2704,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                         chatButton.classList.add('animate-pulse');
                     }
                 }, 10000);
-                
+
             }, 2000);
         }
 
@@ -2735,22 +2725,22 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
             const languageBtn = document.getElementById('language-btn');
             const languageDropdown = document.getElementById('language-dropdown');
             const currentLanguage = document.getElementById('current-language');
-            
+
             // Charger le thème sauvegardé
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
-            
+
             // Toggle du thème
             themeToggle.addEventListener('click', () => {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
+
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
                 updateThemeIcon(newTheme);
             });
-            
+
             function updateThemeIcon(theme) {
                 if (theme === 'dark') {
                     themeIcon.className = 'fas fa-sun';
@@ -2758,28 +2748,28 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     themeIcon.className = 'fas fa-moon';
                 }
             }
-            
+
             // Gestion du sélecteur de langue
             const languages = {
                 'fr': { code: 'FR', flag: '🇫🇷', name: 'Français' },
                 'en': { code: 'EN', flag: '🇬🇧', name: 'English' }
             };
-            
+
             // Charger la langue sauvegardée
             const savedLanguage = localStorage.getItem('language') || 'fr';
             updateLanguageDisplay(savedLanguage);
-            
+
             // Toggle du dropdown de langue
             languageBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 languageDropdown.classList.toggle('hidden');
             });
-            
+
             // Fermer le dropdown en cliquant à l'extérieur
             document.addEventListener('click', () => {
                 languageDropdown.classList.add('hidden');
             });
-            
+
             // Sélection de langue
             document.querySelectorAll('.language-option').forEach(option => {
                 option.addEventListener('click', (e) => {
@@ -2788,19 +2778,19 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     localStorage.setItem('language', selectedLang);
                     updateLanguageDisplay(selectedLang);
                     languageDropdown.classList.add('hidden');
-                    
+
                     // Ici vous pouvez ajouter la logique de traduction
                     translatePage(selectedLang);
                 });
             });
-            
+
             function updateLanguageDisplay(lang) {
                 const langData = languages[lang];
                 if (langData) {
                     currentLanguage.textContent = langData.code;
                 }
             }
-            
+
             // Dictionnaire de traductions étendu
             const fullTranslations = {
                 'en': {
@@ -2812,7 +2802,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Réservation': 'Booking',
                     'Contact': 'Contact',
                     'Mon compte': 'My Account',
-                    
+
                     // Hero Section
                     'Nous sommes le Leader du Transfert/Shuttle Aéroportuaire': 'We are the Leader in Airport Transfer/Shuttle',
                     'Service de navette, location de voiture avec chauffeur et Transferts privés vers l\'Aéroport International Blaise Diagne(AIBD).': 'Shuttle service, car rental with driver and private transfers to Blaise Diagne International Airport (AIBD).',
@@ -2826,14 +2816,14 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'AIBD - Dakar': 'AIBD - Dakar',
                     'AIBD - Saly': 'AIBD - Saly',
                     'Saly - AIBD': 'Saly - AIBD',
-                    
+
                     // Actualités
                     'Dernières actualités': 'Latest news',
                     'Restez informé de nos actualités': 'Stay informed of our news',
                     'Voir moins': 'See less',
                     'Voir plus': 'See more',
                     'En savoir plus': 'Learn more',
-                    
+
                     // Tarifs
                     'Nos Tarifs': 'Our Rates',
                     'Des prix transparents et compétitifs pour tous nos services': 'Transparent and competitive prices for all our services',
@@ -2851,7 +2841,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Chauffeur professionnel': 'Professional driver',
                     'Conciergerie (Meet & Greet)': 'Concierge (Meet & Greet)',
                     'Réserver': 'Book',
-                    
+
                     // Services
                     'Nos Services': 'Our Services',
                     'Nous offrons des solutions de transport adaptées à tous vos besoins vers l\'aéroport AIBD et au-delà': 'We offer transport solutions adapted to all your needs to AIBD airport and beyond',
@@ -2870,7 +2860,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Suivi et informations de vol': 'Flight tracking and information',
                     'Accueil et Facilitation de passage': 'Welcome and facilitation of passage',
                     'Récupération valises / Réclamations': 'Baggage recovery / Claims',
-                    
+
                     // Services annexes
                     'Services annexes': 'Additional Services',
                     'Location voiture': 'Car rental',
@@ -2885,7 +2875,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Tout confort compris': 'All comfort included',
                     'Les tarifs peuvent varier selon la distance et le nombre de passagers.': 'Rates may vary according to distance and number of passengers.',
                     'Contactez-nous pour un devis personnalisé': 'Contact us for a personalized quote',
-                    
+
                     // Section Entreprises
                     'Solutions de transport pour entreprises': 'Corporate transport solutions',
                     'Confiez-nous les déplacements professionnels de vos collaborateurs et bénéficiez d\'un service sur mesure, fiable et sécurisé.': 'Entrust us with your employees\' business travel and benefit from a tailor-made, reliable and secure service.',
@@ -2905,12 +2895,12 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Un interlocuteur unique pour vos réservations.': 'A single contact for your bookings.',
                     'Reporting complet': 'Complete reporting',
                     'Analysez et optimisez vos dépenses de transport.': 'Analyze and optimize your transport expenses.',
-                    
+
                     // CTA Banner
                     'Vous voyagez bientôt ? Réservez dès maintenant !': 'Traveling soon? Book now!',
                     'Évitez les mauvaises surprises et garantissez votre transport vers l\'aéroport AIBD en réservant à l\'avance. Nos chauffeurs professionnels vous attendront à l\'heure convenue, peu importe votre destination de départ.': 'Avoid unpleasant surprises and guarantee your transport to AIBD airport by booking in advance. Our professional drivers will be waiting for you at the agreed time, regardless of your departure destination.',
                     'Faire une réservation': 'Make a booking',
-                    
+
                     // Réservation Section
                     'Réservez votre transport en quelques clics': 'Book your transport in a few clicks',
                     'Notre plateforme simple et intuitive vous permet de réserver votre transport vers l\'aéroport AIBD en moins de 2 minutes.': 'Our simple and intuitive platform allows you to book your transport to AIBD airport in less than 2 minutes.',
@@ -2935,7 +2925,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Finaliser la réservation': 'Complete booking',
                     'Réservation confirmée !': 'Booking confirmed!',
                     'Vous recevrez une confirmation par email et SMS dans quelques minutes.': 'You will receive a confirmation by email and SMS within a few minutes.',
-                    
+
                     // Section Compte
                     'Créez votre compte client': 'Create your customer account',
                     'Accédez à toutes vos réservations passées et futures, consultez votre historique de trajets et vos points de fidélité pour gagner des avantages.': 'Access all your past and future bookings, view your trip history and loyalty points to earn benefits.',
@@ -2947,7 +2937,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Évaluez votre expérience pour nous aider à améliorer nos services.': 'Rate your experience to help us improve our services.',
                     'Créer un compte': 'Create an account',
                     'Se connecter': 'Sign in',
-                    
+
                     // Section Rating
                     'Comment s\'est passé votre trajet ?': 'How was your trip?',
                     'Votre avis compte ! Notez votre chauffeur et partagez votre expérience pour nous aider à améliorer continuellement nos services.': 'Your opinion matters! Rate your driver and share your experience to help us continuously improve our services.',
@@ -2959,7 +2949,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Commentaire (optionnel)': 'Comment (optional)',
                     'Décrivez votre expérience...': 'Describe your experience...',
                     'Envoyer l\'évaluation': 'Send evaluation',
-                    
+
                     // Contact Section
                     'Contactez-nous': 'Contact us',
                     'Nous sommes disponibles 24h/24 pour répondre à vos questions et prendre vos réservations': 'We are available 24/7 to answer your questions and take your bookings',
@@ -2967,7 +2957,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Adresse': 'Address',
                     'Sacré cœur, Dakar, Sénégal': 'Sacré cœur, Dakar, Senegal',
                     'Horaires': 'Hours',
-                    
+
                     // Contact
                     'Contactez-nous': 'Contact us',
                     'Adresse': 'Address',
@@ -2978,7 +2968,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Erreur lors de la vérification. Veuillez réessayer.': 'Error during verification. Please try again.',
                     'Réservation en cours...': 'Booking in progress...',
                     'Une erreur est survenue. Veuillez réessayer.': 'An error occurred. Please try again.',
-                    
+
                     // Chatbox
                     'Bonjour ! 👋': 'Hi there! 👋',
                     'Besoin d\'aide pour votre transport vers l\'aéroport ? Je suis là pour vous accompagner !': 'Need help with your airport transport? I\'m here to assist you!',
@@ -3008,7 +2998,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Réservation': 'Reserva',
                     'Contact': 'Contacto',
                     'Mon compte': 'Mi Cuenta',
-                    
+
                     // Contenido
                     'Nous sommes le Leader du Transfert/Shuttle Aéroportuaire': 'Somos el Líder en Traslados/Shuttle Aeroportuario',
                     'Réserver maintenant': 'Reservar ahora',
@@ -3025,7 +3015,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Réservation': 'Prenotazione',
                     'Contact': 'Contatto',
                     'Mon compte': 'Il Mio Account',
-                    
+
                     // Contenido
                     'Nous sommes le Leader du Transfert/Shuttle Aéroportuaire': 'Siamo il Leader nei Trasferimenti/Shuttle Aeroportuali',
                     'Réserver maintenant': 'Prenota ora',
@@ -3034,17 +3024,17 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     'Contactez-nous': 'Contattaci'
                 }
             };
-            
+
             // Fonction améliorée de traduction complète
             function translateFullPage(lang) {
                 if (lang === 'fr') {
                     location.reload();
                     return;
                 }
-                
+
                 const translations = fullTranslations[lang];
                 if (!translations) return;
-                
+
                 // Fonction pour traduire récursivement tous les nœuds texte
                 function walkAndTranslate(node) {
                     if (node.nodeType === Node.TEXT_NODE) {
@@ -3054,13 +3044,13 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                         }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
                         // Éviter de traduire certains éléments
-                        if (node.classList.contains('no-translate') || 
+                        if (node.classList.contains('no-translate') ||
                             node.id === 'current-language' ||
                             node.tagName === 'SCRIPT' ||
                             node.tagName === 'STYLE') {
                             return;
                         }
-                        
+
                         // Traduire les attributs
                         if (node.hasAttribute('placeholder')) {
                             const placeholder = node.getAttribute('placeholder');
@@ -3068,24 +3058,24 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                                 node.setAttribute('placeholder', translations[placeholder]);
                             }
                         }
-                        
+
                         // Continuer avec les enfants
                         for (let child of node.childNodes) {
                             walkAndTranslate(child);
                         }
                     }
                 }
-                
+
                 // Démarrer la traduction depuis le body
                 walkAndTranslate(document.body);
-                
+
                 // Traitement spécial pour les liens de navigation avec icônes
                 document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
                     const originalText = link.getAttribute('data-original-text') || link.textContent.trim();
                     if (!link.hasAttribute('data-original-text')) {
                         link.setAttribute('data-original-text', originalText);
                     }
-                    
+
                     if (translations[originalText]) {
                         const icon = link.querySelector('i');
                         if (icon) {
@@ -3095,42 +3085,42 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                         }
                     }
                 });
-                
+
                 console.log(`Page entièrement traduite en ${languages[lang].name}`);
             }
-            
+
             // Remplacer l'ancienne fonction par la nouvelle
             function translatePage(lang) {
                 translateFullPage(lang);
                 updateChatboxLanguage(lang);
             }
-            
+
             // Fonction pour mettre à jour la langue du chatbox
             function updateChatboxLanguage(lang) {
                 const translations = fullTranslations[lang];
                 if (!translations) return;
-                
+
                 // Mettre à jour les textes du chatbox
                 const invitationBubble = document.querySelector('#invitation-bubble p:first-of-type');
                 if (invitationBubble && translations['Bonjour ! 👋']) {
                     invitationBubble.textContent = translations['Bonjour ! 👋'];
                 }
-                
+
                 const invitationText = document.querySelector('#invitation-bubble p:nth-of-type(2)');
                 if (invitationText && translations['Besoin d\'aide pour votre transport vers l\'aéroport ? Je suis là pour vous accompagner !']) {
                     invitationText.textContent = translations['Besoin d\'aide pour votre transport vers l\'aéroport ? Je suis là pour vous accompagner !'];
                 }
-                
+
                 const clickText = document.querySelector('#invitation-bubble .text-red-600');
                 if (clickText && translations['Cliquez pour discuter']) {
                     clickText.innerHTML = `<i class="fas fa-comment-dots mr-2"></i>${translations['Cliquez pour discuter']}<i class="fas fa-arrow-right ml-2 animate-bounce"></i>`;
                 }
-                
+
                 // Mettre à jour le greeting message
-                responses.greeting.response = lang === 'en' ? 
+                responses.greeting.response = lang === 'en' ?
                     `Hello! I'm Mami, your virtual assistant.\nChoose a question below to get detailed information!` :
                     `Bonjour ! Je suis Mami, votre assistante virtuelle.\nChoisissez une question ci-dessous pour obtenir des informations détaillées !`;
-                
+
                 // Mettre à jour les réponses du chatbot selon la langue
                 if (lang === 'en') {
                     updateChatResponsesToEnglish();
@@ -3138,7 +3128,7 @@ N'hésitez pas à choisir une question dans la liste ou à reformuler votre dema
                     updateChatResponsesToFrench();
                 }
             }
-            
+
             // Fonction pour mettre à jour les réponses en anglais
             function updateChatResponsesToEnglish() {
                 responses.reservation.response = `I can help you book your transfer! Here are the different options:
@@ -3197,7 +3187,7 @@ Our team is available for:
 - Personalized quotes
 - Customer service`;
             }
-            
+
             // Fonction pour mettre à jour les réponses en français
             function updateChatResponsesToFrench() {
                 responses.reservation.response = `Je peux vous aider à réserver votre transfert ! Voici les différentes options :
