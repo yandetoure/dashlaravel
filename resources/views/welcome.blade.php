@@ -191,6 +191,7 @@
             width: 100%;
             height: 100%;
             padding: 20px 0;
+            overflow: hidden;
         }
 
         .swiper-slide {
@@ -199,7 +200,8 @@
             background: transparent;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: stretch;
+            height: auto;
         }
 
         .swiper-button-next,
@@ -698,7 +700,7 @@
                     <div class="swiper-wrapper">
                         @foreach($actus->take(5) as $actu)
                             <div class="swiper-slide">
-                                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300"
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col"
                                      data-actu-id="{{ $actu->id }}"
                                      data-actu-title="{{ $actu->title }}"
                                      data-actu-content="{{ $actu->content }}"
@@ -708,7 +710,7 @@
                                      data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
                                      data-actu-link="{{ $actu->external_link }}">
                                     @if($actu->image)
-                                        <div class="relative h-48">
+                                        <div class="relative h-48 flex-shrink-0">
                                             <img src="{{ asset('storage/' . $actu->image) }}"
                                                  alt="{{ $actu->title }}"
                                                  class="w-full h-full object-cover">
@@ -720,12 +722,12 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="p-6">
+                                    <div class="p-6 flex-grow flex flex-col">
                                         <h4 class="font-semibold text-gray-900 text-lg mb-2 line-clamp-1">{{ $actu->title }}</h4>
-                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ Str::limit($actu->content, 120) }}</p>
-                                        <div class="flex items-center justify-between">
+                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{{ Str::limit($actu->content, 120) }}</p>
+                                        <div class="flex items-center justify-between mt-auto">
                                             <span class="text-sm text-gray-500">{{ $actu->created_at->format('d/m/Y') }}</span>
-                                            <span class="text-blue-600 text-sm font-medium hover:text-blue-800">Lire plus →</span>
+                                            <span class="text-green-600 text-sm font-medium hover:text-green-800 transition-colors duration-200">Voir plus →</span>
                                         </div>
                                     </div>
                                 </div>
