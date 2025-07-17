@@ -190,7 +190,7 @@
         .swiper-container {
             width: 100%;
             height: 100%;
-            padding: 20px 0;
+            padding: 15px 0;
             overflow: hidden;
         }
 
@@ -487,6 +487,10 @@
             text-shadow: none;
         }
 
+        .navbar-scrolled .nav-link:hover {
+            color: #970808cf !important;
+        }
+
         .nav-transparent .nav-link.active {
             color: #ef4444 !important;
             background-color: rgba(255, 255, 255, 0.2);
@@ -537,16 +541,16 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#accueil" class="nav-link hover:text-white transition">Accueil</a>
-                    <a href="#actualites" class="nav-link hover:text-white transition">Actualités</a>
-                    <a href="#tarifs" class="nav-link hover:text-white transition">Tarifs</a>
-                    <a href="#services" class="nav-link hover:text-white transition">Services</a>
-                    <a href="#reservation" class="nav-link hover:text-white transition">Réservation</a>
-                    <a href="#contact" class="nav-link hover:text-white transition">Contact</a>
+                    <a href="#accueil" class="nav-link hover:text-red-600 transition">Accueil</a>
+                    <a href="#actualites" class="nav-link hover:text-red-600 transition">Actualités</a>
+                    <a href="#tarifs" class="nav-link hover:text-red-600 transition">Tarifs</a>
+                    <a href="#services" class="nav-link hover:text-red-600 transition">Services</a>
+                    <a href="#reservation" class="nav-link hover:text-red-600 transition">Réservation</a>
+                    <a href="#contact" class="nav-link hover:text-red-600 transition">Contact</a>
                     @auth
-                        <a href="{{ route('profile.edit') }}" class="nav-link hover:text-white transition">Mon compte</a>
+                        <a href="{{ route('profile.edit') }}" class="nav-link hover:text-red-600 transition">Mon compte</a>
                     @else
-                        <a href="#compte" class="nav-link hover:text-white transition">Mon compte</a>
+                        <a href="#compte" class="nav-link hover:text-red-600 transition">Mon compte</a>
                     @endauth
 
                     <!-- Boutons de contrôle -->
@@ -686,12 +690,13 @@
 </section>
 
     <!-- Main Content with Sidebar -->
-        <!-- Actualités Carousel Section -->
-    <section class="bg-white py-12">
+            <!-- Actualités Carousel Section -->
+    <section id="actualites" class="bg-white py-8">
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Dernières actualités</h2>
-                <p class="text-lg text-gray-600">Restez informé de nos actualités</p>
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Dernières actualités</h2>
+                <p class="text-base text-gray-600">Restez informé de nos actualités</p>
             </div>
             
             <!-- Carousel Container -->
@@ -710,7 +715,7 @@
                                      data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
                                      data-actu-link="{{ $actu->external_link }}">
                                     @if($actu->image)
-                                        <div class="relative h-48 flex-shrink-0">
+                                        <div class="relative h-40 flex-shrink-0">
                                             <img src="{{ asset('storage/' . $actu->image) }}"
                                                  alt="{{ $actu->title }}"
                                                  class="w-full h-full object-cover">
@@ -722,7 +727,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="p-6 flex-grow flex flex-col">
+                                    <div class="p-4 flex-grow flex flex-col">
                                         <h4 class="font-semibold text-gray-900 text-lg mb-2 line-clamp-1">{{ $actu->title }}</h4>
                                         <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{{ Str::limit($actu->content, 120) }}</p>
                                         <div class="flex items-center justify-between mt-auto">
