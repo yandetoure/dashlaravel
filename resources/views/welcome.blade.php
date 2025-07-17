@@ -703,7 +703,7 @@
             <div class="relative">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        @foreach($actus->take(5) as $actu)
+                        @foreach($actus->take(8) as $actu)
                             <div class="swiper-slide">
                                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col"
                                      data-actu-id="{{ $actu->id }}"
@@ -1882,12 +1882,23 @@
             breakpoints: {
                 640: {
                     slidesPerView: 2,
+                    spaceBetween: 15,
                 },
                 768: {
-                    slidesPerView: 2,
+                    slidesPerView: 3,
+                    spaceBetween: 20,
                 },
                 1024: {
-                    slidesPerView: 3,
+                    slidesPerView: 4,
+                    spaceBetween: 20,
+                },
+                1280: {
+                    slidesPerView: 6,
+                    spaceBetween: 15,
+                },
+                1536: {
+                    slidesPerView: 8,
+                    spaceBetween: 10,
                 },
             },
         });
