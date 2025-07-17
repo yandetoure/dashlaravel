@@ -728,8 +728,8 @@
                                         </div>
                                     @endif
                                     <div class="p-4 flex-grow flex flex-col">
-                                        <h4 class="font-semibold text-gray-900 text-lg mb-2 line-clamp-1">{{ $actu->title }}</h4>
-                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">{{ Str::limit($actu->content, 120) }}</p>
+                                        <h4 class="font-semibold text-gray-900 text-base mb-2 line-clamp-1">{{ $actu->title }}</h4>
+                                        <p class="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{{ Str::limit($actu->content, 100) }}</p>
                                         <div class="flex items-center justify-between mt-auto">
                                             <span class="text-sm text-gray-500">{{ $actu->created_at->format('d/m/Y') }}</span>
                                             <span class="text-green-600 text-sm font-medium hover:text-green-800 transition-colors duration-200">Voir plus →</span>
@@ -771,7 +771,7 @@
                 <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
                 <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
                     <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200" onclick="window.open(this.getAttribute('data-href'), '_blank')">
-                        <span>En savoir plus</span>
+                        <span>Visiter le site</span>
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                         </svg>
