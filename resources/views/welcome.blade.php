@@ -11,6 +11,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <style>
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1556388158-158ea5ccacbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
@@ -118,84 +120,115 @@
             scrollbar-width: thin;
         }
 
-        /* Responsive : cacher la sidebar sur mobile */
-        @media (max-width: 768px) {
-            .fixed.left-0 {
-                display: none;
-            }
-            .ml-80 {
-                margin-left: 0;
-            }
-
-            /* Responsive pour les actualités sur mobile */
-            #sidebar {
-                position: relative !important;
-                width: 100% !important;
-                margin-left: 0 !important;
-            }
-
-            .sidebar-container {
-                width: 100% !important;
-                position: relative !important;
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-            }
-
-            /* Style pour le bouton toggle des actualités */
-            #toggle-news-btn {
-                display: block;
-            }
-
-            .news-content.collapsed {
-                max-height: 200px;
-                overflow: hidden;
-                position: relative;
-            }
-
-            .news-content.collapsed::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 50px;
-                background: linear-gradient(transparent, white);
-                pointer-events: none;
-            }
+        /* Styles pour le carousel des actualités */
+        .actu-card {
+            transition: all 0.3s ease;
         }
 
-        /* Desktop/Tablette : sidebar fixe après le hero */
-        @media (min-width: 769px) {
-            #toggle-news-btn {
-                display: none;
-            }
+        .actu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
 
-            .sidebar-container {
-                position: relative;
-                z-index: 10;
-            }
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
-            #sidebar {
-                transition: all 0.3s ease;
-            }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
-            #sidebar.fixed-sidebar {
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 320px;
-                height: calc(100vh - 80px);
-                z-index: 30;
-            }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
 
-            .main-content {
-                transition: margin-left 0.3s ease;
-            }
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            .main-content.with-fixed-sidebar {
-                margin-left: 320px;
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+
+        /* Swiper Carousel Styles */
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+            padding: 20px 0;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #ef4444;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .swiper-button-next:after,
+        .swiper-button-prev:after {
+            font-size: 18px;
+        }
+
+        .swiper-pagination-bullet {
+            background: #ef4444;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #ef4444;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .swiper-slide {
+                padding: 0 10px;
             }
         }
 
@@ -651,87 +684,98 @@
 </section>
 
     <!-- Main Content with Sidebar -->
-    <div class="flex" style="margin-top: 0;">
-        <!-- Sidebar Container -->
-        <div class="w-80 relative sidebar-container">
-            <!-- Sidebar Content -->
-            <div id="sidebar" class="w-80">
-                <div class="bg-white shadow-lg border-r border-gray-200">
-                    <!-- En-tête de la sidebar -->
-                  
-
-                    <!-- Liste des actualités scrollable -->
-                    <div id="news-content" class="news-content overflow-y-auto p-4 space-y-4" style="max-height: calc(100vh - 100px);">
+        <!-- Actualités Carousel Section -->
+    <section class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Dernières actualités</h2>
+                <p class="text-lg text-gray-600">Restez informé de nos actualités</p>
+            </div>
+            
+            <!-- Carousel Container -->
+            <div class="relative">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
                         @foreach($actus->take(5) as $actu)
-                            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border border-gray-100 cursor-pointer actu-card"
-                                 data-actu-id="{{ $actu->id }}"
-                                 data-actu-title="{{ $actu->title }}"
-                                 data-actu-content="{{ $actu->content }}"
-                                 data-actu-category="{{ $actu->category?->name ?? 'Non classé' }}"
-                                 data-actu-category-color="{{ $actu->category?->color ?? '#3B82F6' }}"
-                                 data-actu-date="{{ $actu->created_at->format('d/m/Y') }}"
-                                 data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
-                                 data-actu-link="{{ $actu->external_link }}">
+                            <div class="swiper-slide">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300"
+                                     data-actu-id="{{ $actu->id }}"
+                                     data-actu-title="{{ $actu->title }}"
+                                     data-actu-content="{{ $actu->content }}"
+                                     data-actu-category="{{ $actu->category?->name ?? 'Non classé' }}"
+                                     data-actu-category-color="{{ $actu->category?->color ?? '#3B82F6' }}"
+                                     data-actu-date="{{ $actu->created_at->format('d/m/Y') }}"
+                                     data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
+                                     data-actu-link="{{ $actu->external_link }}">
                                     @if($actu->image)
-                                        <div class="relative h-32">
+                                        <div class="relative h-48">
                                             <img src="{{ asset('storage/' . $actu->image) }}"
                                                  alt="{{ $actu->title }}"
                                                  class="w-full h-full object-cover">
-                                            <div class="absolute top-2 right-2">
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
+                                            <div class="absolute top-3 right-3">
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white shadow-lg"
                                                       style="background-color: {{ $actu->category?->color ?? '#3B82F6' }}">
                                                     {{ $actu->category?->name ?? 'Non classé' }}
                                                 </span>
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="p-3">
-                                        <h4 class="font-medium text-gray-900 text-sm mb-1 line-clamp-1">{{ $actu->title }}</h4>
-                                        <p class="text-gray-500 text-xs mb-2 line-clamp-2">{{ Str::limit($actu->content, 80) }}</p>
+                                    <div class="p-6">
+                                        <h4 class="font-semibold text-gray-900 text-lg mb-2 line-clamp-1">{{ $actu->title }}</h4>
+                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ Str::limit($actu->content, 120) }}</p>
                                         <div class="flex items-center justify-between">
-                                            <span class="text-xs text-gray-400">{{ $actu->created_at->format('d/m/Y') }}</span>
+                                            <span class="text-sm text-gray-500">{{ $actu->created_at->format('d/m/Y') }}</span>
+                                            <span class="text-blue-600 text-sm font-medium hover:text-blue-800">Lire plus →</span>
                                         </div>
                                     </div>
                                 </div>
-                            @endforeach
-                        </div>
-
-                        <!-- Modal pour les détails de l'actualité -->
-                        <div id="actuModal" class="modal">
-                            <div class="modal-content max-h-[90vh] overflow-y-auto">
-                                <div class="relative">
-                                    <img id="modalImage" src="" alt="" class="modal-image hidden">
-                                    <button class="absolute top-4 right-4 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75" onclick="closeModal()">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="p-6">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <span id="modalCategory" class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"></span>
-                                        <span id="modalDate" class="text-sm text-gray-500"></span>
-                                    </div>
-                                    <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
-                                    <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
-                                    <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
-                                        <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200" onclick="window.open(this.getAttribute('data-href'), '_blank')">
-                                            <span>En savoir plus</span>
-                                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
+                </div>
+                
+                <!-- Navigation arrows -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                
+                <!-- Pagination dots -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal pour les détails de l'actualité -->
+    <div id="actuModal" class="modal">
+        <div class="modal-content max-h-[90vh] overflow-y-auto">
+            <div class="relative">
+                <img id="modalImage" src="" alt="" class="modal-image hidden">
+                <button class="absolute top-4 right-4 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75" onclick="closeModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="modalCategory" class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"></span>
+                    <span id="modalDate" class="text-sm text-gray-500"></span>
+                </div>
+                <h3 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
+                <div id="modalContent" class="prose max-w-none text-gray-600 mb-6"></div>
+                <div id="modalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
+                    <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200" onclick="window.open(this.getAttribute('data-href'), '_blank')">
+                        <span>En savoir plus</span>
+                        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 main-content" style="margin-left: 320px;">
+    <!-- Main Content -->
+    <div class="main-content">
         <!-- Tarifs Section -->
 
     <section id="tarifs" class="bg-gray-50 pt-6">
@@ -1712,8 +1756,6 @@
         // Mobile menu toggle
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarContainer = sidebar.parentElement;
 
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
@@ -1813,38 +1855,35 @@
         // Appliquer l'état initial
         updateNavbarOnScroll();
 
-      // Gestion du scroll de la sidebar
-        function updateSidebarPosition() {
-            const sidebarRect = sidebar.getBoundingClientRect();
-            const heroSection = document.querySelector('.hero');
-            const heroBottom = heroSection.getBoundingClientRect().bottom;
-
-            // Si on est dans la zone de la bannière, on retire la position fixe
-            if (heroBottom > 0) {
-                sidebar.style.position = 'relative';
-                sidebar.style.top = 'auto';
-                sidebar.style.left = 'auto';
-                sidebar.style.width = 'auto';
-                return;
-            }
-
-            // Sinon, on applique la logique de fixation normale
-            if (sidebarRect.top <= 0) {
-                sidebar.style.position = 'fixed';
-                sidebar.style.top = '0';
-                sidebar.style.left = '0';
-                sidebar.style.width = '20rem';
-            } else {
-                sidebar.style.position = 'relative';
-                sidebar.style.top = 'auto';
-                sidebar.style.left = 'auto';
-                sidebar.style.width = 'auto';
-            }
-        }
-
-        // Écouteurs d'événements
-        window.addEventListener('scroll', updateSidebarPosition);
-        window.addEventListener('resize', updateSidebarPosition);
+              // Initialisation du Swiper Carousel
+        const swiper = new Swiper('.swiper-container', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                },
+                768: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                },
+            },
+        });
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
