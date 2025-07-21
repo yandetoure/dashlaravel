@@ -32,7 +32,7 @@ class InfoController extends Controller
                 'content' => 'required|string|min:10',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'category_id' => 'required|exists:categories,id',
-                'external_link' => 'nullable|url|max:255'
+                'external_link' => 'nullable|url|max:500'
             ], [
                 'title.required' => 'Le titre est obligatoire',
                 'title.min' => 'Le titre doit contenir au moins 3 caractères',
@@ -95,7 +95,7 @@ class InfoController extends Controller
             'content' => 'required|string|min:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'category_id' => 'required|exists:categories,id',
-            'external_link' => 'nullable|url|max:255'
+            'external_link' => 'nullable|url|max:500'
         ]);
 
         if ($request->hasFile('image')) {
