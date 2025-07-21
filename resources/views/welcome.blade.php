@@ -689,6 +689,45 @@
     </div>
 </section>
 
+
+    <!-- Section Infos en cards (avant les actualités) -->
+    <section class="bg-white py-8" id="infos">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Infos utiles</h2>
+                <p class="text-base text-gray-600">Les dernières informations importantes</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                @foreach($infos as $info)
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col">
+                        @if($info->image)
+                            <div class="relative h-40 flex-shrink-0">
+                                <img src="{{ asset('storage/' . $info->image) }}"
+                                     alt="{{ $info->title }}"
+                                     class="w-full h-full object-cover">
+                                <div class="absolute top-3 right-3">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white shadow-lg"
+                                          style="background-color: {{ $info->category?->color ?? '#3B82F6' }}">
+                                        {{ $info->category?->name ?? 'Non classé' }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="p-4 flex-grow flex flex-col">
+                            <h4 class="font-semibold text-gray-900 text-base mb-2 line-clamp-1">{{ $info->title }}</h4>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{{ Str::limit($info->content, 100) }}</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <span class="text-sm text-gray-500">{{ $info->created_at->format('d/m/Y') }}</span>
+                                <a href="{{ route('infos.show', $info->id) }}" class="text-green-600 text-sm font-medium hover:text-green-800 transition-colors duration-200">Voir plus →</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+
     <!-- Main Content with Sidebar -->
             <!-- Actualités Carousel Section -->
     <section id="actualites" class="bg-white py-8">
@@ -698,7 +737,7 @@
                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Dernières actualités</h2>
                 <p class="text-base text-gray-600">Restez informé de nos actualités</p>
             </div>
-            
+
             <!-- Carousel Container -->
             <div class="relative">
                 <div class="swiper-container">
@@ -740,11 +779,11 @@
                         @endforeach
                     </div>
                 </div>
-                
+
                 <!-- Navigation arrows -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
-                
+
                 <!-- Pagination dots -->
                 <div class="swiper-pagination"></div>
             </div>
@@ -3305,5 +3344,6 @@ Notre équipe est disponible pour :
             }
         });
     </script>
+
 </body>
 </html>

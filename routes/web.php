@@ -21,12 +21,13 @@ use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 use App\Http\Controllers\ClientDashboardController;
-
+use App\Models\Info;
 
 
 Route::get('/', function () {
     $trips = Trip::all();
     $actus = Actu::with('category')->orderBy('created_at', 'desc')->get(); // Récupère toutes les actualités avec catégories, triées par date
+    $infos = Info::with('category')->orderBy('created_at', 'desc')->take(4)->get();
 
     $chauffeurs = User::whereHas('roles', function ($query) {
         $query->where('name', 'chauffeur');
@@ -36,7 +37,7 @@ Route::get('/', function () {
         $query->where('name', 'client');
     })->get();
 
-    return view('welcome', compact('trips', 'actus'));
+    return view('welcome', compact('trips', 'actus', 'infos'));
 });
 
 // Route pour afficher tous les utilisateurs avec filtre
@@ -70,6 +71,7 @@ Route::middleware('auth:')->group(function () {
 });
 
 Route::resource('actus', ActuController::class);
+Route::resource('infos', App\Http\Controllers\InfoController::class);
 
 Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'])->name('reservations.confirmed');
 

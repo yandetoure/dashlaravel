@@ -13,17 +13,17 @@
             background-size: cover;
             background-position: center;
         }
-        
+
         .service-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
+
         .active {
             color: #3b82f6;
             font-weight: 600;
         }
-        
+
         .booking-form {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
@@ -35,23 +35,23 @@
         .bg-primary {
             background-color: rgb(168, 16, 16);
         }
-        
+
         .bg-primary-dark {
             background-color: rgb(120, 10, 10);
         }
-        
+
         .text-primary {
             color: rgb(168, 16, 16);
         }
-        
+
         .border-primary {
             border-color: rgb(168, 16, 16);
         }
-        
+
         .focus\:ring-primary:focus {
             --tw-ring-color: rgb(168, 16, 16);
         }
-        
+
         .hover\:bg-primary-dark:hover {
             background-color: rgb(120, 10, 10);
         }
@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
             <a href="#accueil" class="block py-2 text-gray-700 hover:text-blue-600 nav-link active">Accueil</a>
@@ -134,7 +134,7 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Services</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous offrons des solutions de transport adaptées à tous vos besoins vers l'aéroport AIBD</p>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Service 1 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
@@ -158,7 +158,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!-- Service 2 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-blue-600 mb-4">
@@ -181,7 +181,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!-- Service 3 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                     <div class="text-blue-600 mb-4">
@@ -215,7 +215,7 @@
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">Réservez votre transport en quelques clics</h2>
                     <p class="text-xl text-gray-600 mb-8">Notre plateforme simple et intuitive vous permet de réserver votre transport vers l'aéroport AIBD en moins de 2 minutes.</p>
-                    
+
                     <div class="space-y-6">
                         <div class="flex items-start">
                             <div class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
@@ -226,7 +226,7 @@
                                 <p class="text-gray-600">Confirmation immédiate de votre réservation par email et SMS.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
@@ -236,7 +236,7 @@
                                 <p class="text-gray-600">Payez en ligne de manière sécurisée ou en espèces au chauffeur.</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <div class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
                                 <i class="fas fa-check"></i>
@@ -248,7 +248,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="md:w-1/2">
                     <div class="bg-white p-8 rounded-lg shadow-xl max-w-md mx-auto">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Complétez votre réservation</h3>
@@ -295,7 +295,7 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Nos Tarifs</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Des prix transparents et compétitifs pour tous nos services</p>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Tarif 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -328,7 +328,7 @@
                         <a href="#reservation" class="block text-center bg-gray-100 hover:bg-blue-600 hover:text-white text-blue-600 font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
-                
+
                 <!-- Tarif 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform scale-105">
                     <div class="bg-blue-800 text-white py-6 px-8">
@@ -360,7 +360,7 @@
                         <a href="#reservation" class="block text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Réserver</a>
                     </div>
                 </div>
-                
+
                 <!-- Tarif 3 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-blue-600 text-white py-6 px-8">
@@ -393,7 +393,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="mt-12 text-center">
                 <p class="text-gray-600 mb-4">* Les tarifs peuvent varier selon la distance et le nombre de passagers.</p>
                 <a href="#contact" class="text-blue-600 hover:text-blue-800 font-semibold">Contactez-nous pour un devis personnalisé</a>
@@ -408,12 +408,12 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Contactez-nous</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Nous sommes disponibles 24h/24 pour répondre à vos questions et prendre vos réservations</p>
             </div>
-            
+
             <div class="md:flex">
                 <div class="md:w-1/2 mb-10 md:mb-0">
                     <div class="bg-white p-8 rounded-lg shadow-md h-full">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Nos coordonnées</h3>
-                        
+
                         <div class="space-y-6">
                             <div class="flex items-start">
                                 <div class="text-blue-600 mr-4 mt-1">
@@ -424,7 +424,7 @@
                                     <p class="text-gray-600">Avenue Blaise Diagne, Dakar, Sénégal</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-phone-alt text-xl"></i>
@@ -435,7 +435,7 @@
                                     <p class="text-gray-600">+221 77 123 45 67 (WhatsApp)</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-envelope text-xl"></i>
@@ -446,7 +446,7 @@
                                     <p class="text-gray-600">reservation@dakartransport.sn</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <div class="text-blue-600 mr-4 mt-1">
                                     <i class="fas fa-clock text-xl"></i>
@@ -458,7 +458,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mt-8">
                             <h4 class="font-bold text-gray-800 mb-4">Suivez-nous</h4>
                             <div class="flex space-x-4">
@@ -475,7 +475,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="md:w-1/2">
                     <div class="bg-white p-8 rounded-lg shadow-md h-full">
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">Envoyez-nous un message</h3>
@@ -522,7 +522,7 @@
                     <a href="#accueil" class="text-xl font-bold text-white">Dakar<span class="text-blue-400">Transport</span></a>
                     <p class="mt-4 text-gray-400 max-w-xs">Service de transport professionnel vers l'aéroport international Blaise Diagne de Dakar.</p>
                 </div>
-                
+
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
@@ -534,7 +534,7 @@
                             <li><a href="#contact" class="text-gray-400 hover:text-white transition">Contact</a></li>
                         </ul>
                     </div>
-                    
+
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Services</h4>
                         <ul class="space-y-2">
@@ -544,7 +544,7 @@
                             <li><a href="#" class="text-gray-400 hover:text-white transition">Service VIP</a></li>
                         </ul>
                     </div>
-                    
+
                     <div>
                         <h4 class="text-lg font-semibold mb-4">Légal</h4>
                         <ul class="space-y-2">
@@ -555,7 +555,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400 mb-4 md:mb-0">© 2023 CPRO-VLC. Tous droits réservés.</p>
                 <div class="flex space-x-6">
@@ -577,41 +577,41 @@
         // Mobile menu toggle
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        
+
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-        
+
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                
+
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
-                
+
                 // Close mobile menu if open
                 mobileMenu.classList.add('hidden');
             });
         });
-        
+
         // Highlight active nav link on scroll
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
-        
+
         window.addEventListener('scroll', () => {
             let current = '';
-            
+
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                
+
                 if (pageYOffset >= (sectionTop - 100)) {
                     current = section.getAttribute('id');
                 }
             });
-            
+
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === `#${current}`) {
