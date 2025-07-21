@@ -699,7 +699,7 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 @foreach($infos as $info)
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col info-card" data-info-id="{{ $info->id }}" data-info-title="{{ $info->title }}" data-info-content="{{ $info->content }}" data-info-category="{{ $info->category?->name ?? 'Non classé' }}" data-info-category-color="{{ $info->category?->color ?? '#3B82F6' }}" data-info-date="{{ $info->created_at->format('d/m/Y') }}" data-info-image="{{ $info->image ? asset('storage/' . $info->image) : '' }}" data-info-link="{{ $info->external_link }}">
                         @if($info->image)
                             <div class="relative h-40 flex-shrink-0">
                                 <img src="{{ asset('storage/' . $info->image) }}"
@@ -718,7 +718,6 @@
                             <p class="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{{ Str::limit($info->content, 100) }}</p>
                             <div class="flex items-center justify-between mt-auto">
                                 <span class="text-sm text-gray-500">{{ $info->created_at->format('d/m/Y') }}</span>
-                                <a href="{{ route('infos.show', $info->id) }}" class="text-green-600 text-sm font-medium hover:text-green-800 transition-colors duration-200">Voir plus →</a>
                             </div>
                         </div>
                     </div>
@@ -3342,6 +3341,84 @@ Notre équipe est disponible pour :
 - Devis personnalisés
 - Service client`;
             }
+        });
+    </script>
+
+    <!-- Modal pour les détails de l'info -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content max-h-[90vh] overflow-y-auto">
+            <div class="relative">
+                <img id="infoModalImage" src="" alt="" class="modal-image hidden">
+                <button class="absolute top-4 right-4 text-white bg-gray-800 bg-opacity-50 rounded-full p-2 hover:bg-opacity-75" onclick="closeInfoModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="infoModalCategory" class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"></span>
+                    <span id="infoModalDate" class="text-sm text-gray-500"></span>
+                </div>
+                <h3 id="infoModalTitle" class="text-2xl font-bold text-gray-900 mb-4"></h3>
+                <div id="infoModalContent" class="prose max-w-none text-gray-600 mb-6"></div>
+                <div id="infoModalLinkContainer" class="hidden mt-4 pt-4 border-t border-gray-200">
+                    <a id="infoModalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
+                        <span>Visiter le site</span>
+                        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion du modal des infos
+        const infoModal = document.getElementById('infoModal');
+        const infoModalImage = document.getElementById('infoModalImage');
+        const infoModalCategory = document.getElementById('infoModalCategory');
+        const infoModalDate = document.getElementById('infoModalDate');
+        const infoModalTitle = document.getElementById('infoModalTitle');
+        const infoModalContent = document.getElementById('infoModalContent');
+        const infoModalLink = document.getElementById('infoModalLink');
+        const infoModalLinkContainer = document.getElementById('infoModalLinkContainer');
+
+        function closeInfoModal() {
+            infoModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        document.querySelectorAll('.info-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const data = card.dataset;
+                // Image
+                if (data.infoImage) {
+                    infoModalImage.src = data.infoImage;
+                    infoModalImage.classList.remove('hidden');
+                } else {
+                    infoModalImage.classList.add('hidden');
+                }
+                // Catégorie
+                infoModalCategory.textContent = data.infoCategory;
+                infoModalCategory.style.backgroundColor = data.infoCategoryColor;
+                // Date
+                infoModalDate.textContent = data.infoDate;
+                // Titre
+                infoModalTitle.textContent = data.infoTitle;
+                // Contenu
+                infoModalContent.innerHTML = data.infoContent.replace(/\n/g, '<br>');
+                // Lien externe
+                if (data.infoLink) {
+                    infoModalLink.href = data.infoLink;
+                    infoModalLinkContainer.classList.remove('hidden');
+                } else {
+                    infoModalLinkContainer.classList.add('hidden');
+                }
+                infoModal.classList.add('active');
+                document.body.classList.add('modal-open');
+            });
         });
     </script>
 
