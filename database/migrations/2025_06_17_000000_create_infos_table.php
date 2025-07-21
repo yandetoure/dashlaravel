@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('image')->nullable(); // chemin vers l’image
             $table->text('content');
-            $table->string('external_link')->nullable();
+            $table->string('external_link', 500)->nullable();
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
 
