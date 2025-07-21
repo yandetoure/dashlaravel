@@ -720,12 +720,9 @@
                                 <span class="text-sm text-gray-500">{{ $info->created_at->format('d/m/Y') }}</span>
                             </div>
                             @if($info->external_link)
-                                <div class="mt-4">
-                                    <a href="{{ $info->external_link }}" target="_blank" onclick="event.stopPropagation();" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 w-full justify-center">
+                                <div class="mt-4 text-center">
+                                    <a href="{{ $info->external_link }}" target="_blank" onclick="event.stopPropagation();" class="text-blue-600 hover:text-blue-800 underline">
                                         Visiter le site
-                                        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                        </svg>
                                     </a>
                                 </div>
                             @endif
