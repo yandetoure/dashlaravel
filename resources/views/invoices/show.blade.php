@@ -76,11 +76,29 @@
                         <div class="col-sm-6">
                             <h6 class="mb-3">À:</h6>
                             <div>
-                                <strong>{{ $invoice->reservation->client->first_name }} {{ $invoice->reservation->client->last_name }}</strong>
+                                <strong>
+                                    @if($invoice->reservation->client)
+                                        {{ $invoice->reservation->client->first_name }} {{ $invoice->reservation->client->last_name }}
+                                    @else
+                                        {{ $invoice->reservation->first_name }} {{ $invoice->reservation->last_name }} (Prospect)
+                                    @endif
+                                </strong>
                             </div>
                             <div>{{ $invoice->reservation->adresse_rammassage }}</div>
-                            <div>Email: {{ $invoice->reservation->client->email }}</div>
-                            <div>Téléphone: {{ $invoice->reservation->client->phone_number }}</div>
+                            <div>Email:
+                                @if($invoice->reservation->client)
+                                    {{ $invoice->reservation->client->email }}
+                                @else
+                                    {{ $invoice->reservation->email }}
+                                @endif
+                            </div>
+                            <div>Téléphone:
+                                @if($invoice->reservation->client)
+                                    {{ $invoice->reservation->client->phone_number }}
+                                @else
+                                    {{ $invoice->reservation->phone_number }}
+                                @endif
+                            </div>
                         </div>
                     </div>
 

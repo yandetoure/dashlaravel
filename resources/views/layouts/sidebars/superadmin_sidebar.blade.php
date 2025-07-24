@@ -145,6 +145,7 @@
                 <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
 
                 <h6>Utilisateurs</h6>
+                <li><a href="{{ route('driver-groups.index') }}" class="nav-link {{ request()->routeIs('driver-groups.index') ? 'active' : '' }}"><span class="material-icons">groups</span> Groupes de Chauffeurs</a></li>
                 <li><a href="{{ route('admin.create.account.page') }}" class="nav-link {{ request()->routeIs('admin.create.account.page') ? 'active' : '' }}"><span class="material-icons">person_add</span> Ajouter un utilisateur</a></li>
                 <li><a href="{{ route('superadmins.index') }}" class="nav-link {{ request()->routeIs('superadmins.index') ? 'active' : '' }}"><span class="material-icons">people</span> Listes des Utilisateurs</a></li>
                 <li><a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.index') ? 'active' : '' }}"><span class="material-icons">person</span> Clients</a></li>

@@ -179,7 +179,13 @@
                                 @forelse($invoices as $invoice)
                                     <tr>
                                         <td>{{ $invoice->invoice_number }}</td>
-                                        <td>{{ $invoice->reservation->client->first_name }} {{ $invoice->reservation->client->last_name }}</td>
+                                        <td>
+                                            @if($invoice->reservation->client)
+                                                {{ $invoice->reservation->client->first_name }} {{ $invoice->reservation->client->last_name }}
+                                            @else
+                                                {{ $invoice->reservation->first_name }} {{ $invoice->reservation->last_name }} (Prospect)
+                                            @endif
+                                        </td>
                                         <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d/m/Y') }}</td>
                                         <td>{{ number_format((float) $invoice->amount) }} Fcfa</td>
                                         <td>

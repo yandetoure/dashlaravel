@@ -44,17 +44,41 @@
             <div class="row g-4">
                 <div class="col-md-6">
                     <div class="p-3 bg-light rounded shadow-sm">
-                        <h6><i class="bi bi-person-circle"></i> <strong>Client :</strong> {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</h6>
-                        <h6><i class="bi bi-telephone"></i> <strong>Téléphone :</strong> {{ $reservation->client->phone_number }}</h6>
+                        <h6><i class="bi bi-person-circle"></i> <strong>Client :</strong>
+                            @if($reservation->client)
+                                {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                            @else
+                                {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+                            @endif
+                        </h6>
+                        <h6><i class="bi bi-telephone"></i> <strong>Téléphone :</strong>
+                            @if($reservation->client)
+                                {{ $reservation->client->phone_number }}
+                            @else
+                                {{ $reservation->phone_number }}
+                            @endif
+                        </h6>
                         <h6><i class="bi bi-geo-alt"></i> <strong>Adresse de Récupération :</strong> {{ $reservation->adresse_rammassage }}</h6>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6">
                     <div class="p-3 bg-light rounded shadow-sm">
-                        <h6><i class="bi bi-car-front"></i> <strong>Chauffeur :</strong> {{ $reservation->carDriver->chauffeur->first_name ?? 'Non assigné' }} {{ $reservation->carDriver->chauffeur->last_name ?? '' }}</h6>
+                        <h6><i class="bi bi-car-front"></i> <strong>Chauffeur :</strong>
+                            @if($reservation->carDriver && $reservation->carDriver->chauffeur)
+                                {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }}
+                            @else
+                                Non assigné
+                            @endif
+                        </h6>
                         @if ($reservation->carDriver && $reservation->carDriver->car)
-                            <h6><i class="bi bi-telephone"></i> <strong>Numéro :</strong> {{ $reservation->carDriver->chauffeur->phone_number ?? 'Non précisé' }}</h6>
+                            <h6><i class="bi bi-telephone"></i> <strong>Numéro :</strong>
+                                @if($reservation->carDriver && $reservation->carDriver->chauffeur)
+                                    {{ $reservation->carDriver->chauffeur->phone_number ?? 'Non précisé' }}
+                                @else
+                                    Non précisé
+                                @endif
+                            </h6>
                             <h6><i class="bi bi-car-front"></i> <strong>Voiture :</strong> {{ $reservation->carDriver->car->marque }} - {{ $reservation->carDriver->car->model }}</h6>
                             <h6><i class="bi bi-card-checklist"></i> <strong>Matricule :</strong> {{ $reservation->carDriver->car->matricule }}</h6>
                         @endif
@@ -98,13 +122,13 @@
                             @elseif($reservation->status == 'annulée')
                                 <span class="badge bg-danger">Annulée</span>
                             @endif
-                        </h6>
+                </h6>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="p-3 bg-light rounded shadow-sm">
                         <h6><i class="bi bi-airplane-engines"></i> <strong>Numéro de Vol :</strong> {{ $reservation->numero_vol ?? 'Non précisé' }}</h6>
-                    </div>
+                </div>
                 </div>
             </div>
 
@@ -122,7 +146,7 @@
         @csrf
         <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Confirmer</button>
     </form>
-    
+
     <form action="{{ route('reservations.cancel', $reservation->id) }}" method="POST">
         @csrf
         <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i> Annuler</button>
@@ -141,19 +165,29 @@
     <a href="{{ route('reservations.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Retour</a>
     <div class="mt-3">
     @php
-    $phone = preg_replace('/[^0-9]/', '', $reservation->client->phone_number); // Nettoyage du numéro
-    $phone = '221' . $phone; // Ajout de l'indicatif du Sénégal
+    // Get client information safely
+    $clientName = $reservation->client ? $reservation->client->first_name . ' ' . $reservation->client->last_name : $reservation->first_name . ' ' . $reservation->last_name . ' (Prospect)';
+    $clientPhone = $reservation->client ? $reservation->client->phone_number : $reservation->phone_number;
+    $clientFirstName = $reservation->client ? $reservation->client->first_name : $reservation->first_name;
+
+    // Clean phone number if available
+    $phone = '';
+    if ($clientPhone) {
+        $phone = preg_replace('/[^0-9]/', '', $clientPhone); // Nettoyage du numéro
+        $phone = '221' . $phone; // Ajout de l'indicatif du Sénégal
+    }
+
     $message = urlencode(
-        "Bonjour " . $reservation->client->first_name . ",\n\n" .
+        "Bonjour " . $clientFirstName . ",\n\n" .
         "Votre réservation #{$reservation->id} a bien été confirmée.\n\n" .
         "Détails de la réservation :\n" .
-        "Client : " . $reservation->client->first_name . " " . $reservation->client->last_name . "\n" .
-        "Téléphone : " . $reservation->client->phone_number . "\n" .
+        "Client : " . $clientName . "\n" .
+        "Téléphone : " . ($clientPhone ?? 'Non précisé') . "\n" .
         "Adresse de Récupération : " . $reservation->adresse_rammassage . "\n" .
-        "Chauffeur : " . ($reservation->carDriver->chauffeur->first_name ?? 'Non assigné') . " " . ($reservation->carDriver->chauffeur->last_name ?? '') . "\n" .
-        "Numéro Chauffeur : " . ($reservation->carDriver->chauffeur->phone_number ?? 'Non précisé') . "\n" .
-        "Voiture : " . ($reservation->carDriver->car->marque ?? 'Non précisé') . " - " . ($reservation->carDriver->car->model ?? 'Non précisé') . "\n" .
-        "Matricule : " . ($reservation->carDriver->car->matricule ?? 'Non précisé') . "\n" .
+        "Chauffeur : " . ($reservation->carDriver && $reservation->carDriver->chauffeur ? $reservation->carDriver->chauffeur->first_name . ' ' . $reservation->carDriver->chauffeur->last_name : 'Non assigné') . "\n" .
+        "Numéro Chauffeur : " . ($reservation->carDriver && $reservation->carDriver->chauffeur ? ($reservation->carDriver->chauffeur->phone_number ?? 'Non précisé') : 'Non précisé') . "\n" .
+        "Voiture : " . ($reservation->carDriver && $reservation->carDriver->car ? $reservation->carDriver->car->marque . ' - ' . $reservation->carDriver->car->model : 'Non précisé') . "\n" .
+        "Matricule : " . ($reservation->carDriver && $reservation->carDriver->car ? $reservation->carDriver->car->matricule : 'Non précisé') . "\n" .
         "Nombre de Valises : " . $reservation->nb_valises . "\n" .
         "Date : " . \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') . "\n" .
         "Heure Ramassage : " . \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') . "\n" .
@@ -169,9 +203,9 @@
     <hr>
     <div class="mt-4">
         <h5><i class="bi bi-star-fill text-warning"></i> Laissez une note</h5>
-        <form action="{{ route('reservations.avis', $reservation->id) }}" method="POST">
+      <form action="{{ route('reservations.avis', $reservation->id) }}" method="POST">
             @csrf
-            <div class="mb-3 d-flex gap-2">
+                         <div class="mb-3 d-flex gap-2">
                 @for ($i = 1; $i <= 5; $i++)
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="note" id="note{{ $i }}" value="{{ $i }}">
@@ -185,7 +219,7 @@
                 <label for="comment" class="form-label">Commentaire (optionnel)</label>
                 <textarea name="comment" id="comment" rows="3" class="form-control"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Envoyer l’avis</button>
+           <button type="submit" class="btn btn-primary">Envoyer l’avis</button>
         </form>
     </div>
 @endif
@@ -203,13 +237,15 @@
     </div>
 @endif
 
-    <a 
-        href="https://wa.me/{{ $phone }}?text={{ $message }}" 
-        class="btn btn-success" 
+    @if($phone)
+    <a
+        href="https://wa.me/{{ $phone }}?text={{ $message }}"
+        class="btn btn-success"
         target="_blank"
     >
         <i class="bi bi-whatsapp"></i> Envoyer par WhatsApp
     </a>
+    @endif
 
     </div>
 </div>

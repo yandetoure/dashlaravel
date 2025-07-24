@@ -279,7 +279,11 @@
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ $reservation->id }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @if($reservation->client)
                                         {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                                        @else
+                                            {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $reservation->trip->departure }} → {{ $reservation->trip->destination }}

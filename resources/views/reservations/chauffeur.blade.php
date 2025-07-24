@@ -91,10 +91,18 @@
                         <div class="flex items-center text-sm">
                             <i class="fas fa-user text-gray-400 w-5"></i>
                             <span class="ml-2 text-gray-700">
-                                {{ $reservation->client->first_name ?? '' }} {{ $reservation->client->last_name ?? '' }}
+                                @if($reservation->client)
+                                    {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                                @else
+                                    {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+                                @endif
                             </span>
-                            @if($reservation->client->phone_number)
+                            @if($reservation->client && $reservation->client->phone_number)
                             <a href="tel:{{ $reservation->client->phone_number }}" class="ml-4 px-2 py-1 bg-primary text-white rounded text-xs hover:bg-blue-700 flex items-center">
+                                <i class="fas fa-phone-alt mr-1"></i>Appeler
+                            </a>
+                            @elseif($reservation->phone_number)
+                            <a href="tel:{{ $reservation->phone_number }}" class="ml-4 px-2 py-1 bg-primary text-white rounded text-xs hover:bg-blue-700 flex items-center">
                                 <i class="fas fa-phone-alt mr-1"></i>Appeler
                             </a>
                             @endif

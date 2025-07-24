@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use App\Models\Actu;
+use App\Models\Info;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -12,16 +13,16 @@ use App\Http\Controllers\DashController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\ProfileController;
 // use Google_Client;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrafficController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CardriverController;
+use App\Http\Controllers\DriverGroupController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ReservationController;
 use Spatie\Permission\Middlewares\RoleMiddleware;
 use App\Http\Controllers\ClientDashboardController;
-use App\Models\Info;
 
 
 Route::get('/', function () {
@@ -39,6 +40,8 @@ Route::get('/', function () {
 
     return view('welcome', compact('trips', 'actus', 'infos'));
 });
+
+
 
 // Route pour afficher tous les utilisateurs avec filtre
 
@@ -68,6 +71,8 @@ Route::middleware('auth:')->group(function () {
 
     // Route de suppression d'utilisateur
     Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('users.destroy');
+
+
 });
 
 Route::resource('actus', ActuController::class);
@@ -77,8 +82,7 @@ Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'
 
 Route::get('/reservations/cancelled', [ReservationController::class, 'cancelled'])->name('reservations.cancelled');
 
-Route::get('/assign-day-off', [AuthController::class, 'createDayOff'])->name('admins.assign-day-off');
-Route::post('/assign-day-off', [AuthController::class, 'assignRandomDayOff'])->name('admin.assign-day-off');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -190,6 +194,17 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/traffic', [TrafficController::class, 'index'])->name('traffic.index');
 Route::get('/traffic/fetch', [TrafficController::class, 'fetchIncidents'])->name('traffic.fetch');
 Route::get('/traffic/api', [TrafficController::class, 'api'])->name('traffic.api');
+
+// Routes pour la gestion des groupes de chauffeurs
+Route::middleware('auth')->group(function () {
+    Route::get('/driver-groups/schedule', [DriverGroupController::class, 'schedule'])->name('driver-groups.schedule');
+    Route::get('/driver-groups/available-drivers', [DriverGroupController::class, 'getAvailableDrivers'])->name('driver-groups.available-drivers');
+    Route::resource('driver-groups', DriverGroupController::class);
+    Route::post('/driver-groups/{driverGroup}/advance-rotation', [DriverGroupController::class, 'advanceRotation'])->name('driver-groups.advance-rotation');
+    Route::post('/driver-groups/{driverGroup}/reverse-rotation', [DriverGroupController::class, 'reverseRotation'])->name('driver-groups.reverse-rotation');
+    Route::post('/driver-groups/{driverGroup}/reset-rotation', [DriverGroupController::class, 'resetRotation'])->name('driver-groups.reset-rotation');
+    Route::post('/driver-groups/auto-assign', [DriverGroupController::class, 'autoAssignGroups'])->name('driver-groups.auto-assign');
+});
 
 Route::get('/google-auth', function () {
     $client = new Google_Client();

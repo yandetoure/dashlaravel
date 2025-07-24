@@ -45,6 +45,7 @@
                 {{-- <li><a href="{{ route('agents.index') }}" class="nav-link {{ request()->routeIs('agents.index') ? 'active' : '' }}"><span class="material-icons">people</span> Liste des agents</a></li> --}}
                 {{-- <li><a href="{{ route('drivers.index') }}" class="nav-link {{ request()->routeIs('drivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li> --}}
                 <li><a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.index') ? 'active' : '' }}"><span class="material-icons">person</span> Clients</a></li>
+                <li><a href="{{ route('driver-groups.index') }}" class="nav-link {{ request()->routeIs('driver-groups.index') ? 'active' : '' }}"><span class="material-icons">groups</span> Groupes de Chauffeurs</a></li>
 
                 <h6>Voitures</h6>
                 <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>

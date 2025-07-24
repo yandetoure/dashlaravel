@@ -56,8 +56,20 @@
                 @foreach ($reservations as $reservation)
                     <tr>
                         <td>{{ $reservation->id }}</td>
-                        <td>{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</td>
-                        <td>{{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }}</td>
+                        <td>
+                            @if($reservation->client)
+                                {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                            @else
+                                {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+                            @endif
+                        </td>
+                        <td>
+                            @if($reservation->chauffeur)
+                                {{ $reservation->chauffeur->first_name }} {{ $reservation->chauffeur->last_name }}
+                            @else
+                                Non assigné
+                            @endif
+                        </td>
                         <td>{{ $reservation->trip->name }}</td>
                         <td>{{ $reservation->date }}</td>
                         <td>{{ $reservation->heure_ramassage }}</td>

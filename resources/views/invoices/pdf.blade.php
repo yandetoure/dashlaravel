@@ -91,10 +91,24 @@
                     </td>
                     <td>
                         <strong>À:</strong><br>
-                        {{ $invoice->reservation->client->first_name }} {{ $invoice->reservation->client->last_name }}<br>
+                        @if($invoice->reservation->client)
+                            {{ $invoice->reservation->client->first_name }} {{ $invoice->reservation->client->last_name }}
+                        @else
+                            {{ $invoice->reservation->first_name }} {{ $invoice->reservation->last_name }} (Prospect)
+                        @endif<br>
                         {{ $invoice->reservation->adresse_rammassage }}<br>
-                        Email: {{ $invoice->reservation->client->email }}<br>
-                        Téléphone: {{ $invoice->reservation->client->phone_number }}
+                        Email:
+                        @if($invoice->reservation->client)
+                            {{ $invoice->reservation->client->email }}
+                        @else
+                            {{ $invoice->reservation->email }}
+                        @endif<br>
+                        Téléphone:
+                        @if($invoice->reservation->client)
+                            {{ $invoice->reservation->client->phone_number }}
+                        @else
+                            {{ $invoice->reservation->phone_number }}
+                        @endif
                     </td>
                 </tr>
             </table>

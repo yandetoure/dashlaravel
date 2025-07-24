@@ -66,7 +66,13 @@
                 @if ($reservationsByDay->has("$year-$month-$day"))
                     @foreach ($reservationsByDay["$year-$month-$day"] as $reservation)
                         <div class="reservation">
-                            <strong>{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</strong><br>
+                            <strong>
+                                @if($reservation->client)
+                                    {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                                @else
+                                    {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+                                @endif
+                            </strong><br>
                             Heure : {{ $reservation->heure_ramassage }}<br>
                             Statut : {{ $reservation->status }}
                         </div>

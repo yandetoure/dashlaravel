@@ -22,8 +22,20 @@
         <tbody>
         @foreach($reservations as $reservation)
         <tr>
-            <td>{{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</td>
-            <td>{{ $reservation->carDriver->chauffeur->first_name ?? 'Non assigné' }} {{ $reservation->carDriver->chauffeur->last_name ?? 'Non assigné' }}</td>
+            <td>
+                @if($reservation->client)
+                    {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+                @else
+                    {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+                @endif
+            </td>
+            <td>
+                @if($reservation->carDriver && $reservation->carDriver->chauffeur)
+                    {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }}
+                @else
+                    Non assigné
+                @endif
+            </td>
             <td>{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</td>
             <td>{{ \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') }}</td>
             <td>{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}</td>
