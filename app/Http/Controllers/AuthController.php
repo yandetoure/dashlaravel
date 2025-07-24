@@ -53,8 +53,8 @@ class AuthController extends Controller
           ? $request->file('profile_photo')->store('profile_photos', 'public')
           : null;
 
-        // Génération d'un mot de passe aléatoire
-        $password = Str::random(12);
+        // Mot de passe par défaut
+        $password = 'password123';
 
         // Création de l'utilisateur
         $user = User::create([
@@ -233,7 +233,7 @@ private function registerUser(Request $request, string $role)
         ? $request->file('profile_photo')->store('profile_photos', 'public')
         : null;
 
-    $password = Str::random(12);
+    $password = 'password123';
 
     $user = User::create([
         'first_name' => $request->first_name,

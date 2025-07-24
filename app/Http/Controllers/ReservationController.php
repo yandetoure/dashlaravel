@@ -291,7 +291,7 @@ class ReservationController extends Controller
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-                'password' => Hash::make(Str::random(12)),
+                'password' => Hash::make('password123'),
                 'phone_number' => $request->phone_number,
             ]);
         
