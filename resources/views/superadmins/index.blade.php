@@ -34,7 +34,14 @@
         <div class="card shadow-lg p-4">
             <div class="mb-4 d-flex justify-content-between align-items-center">
                 <h1 class="text-center flex-grow-1">📋 Liste des Utilisateurs</h1>
-                
+
+                <!-- Message d'information -->
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Nouvelles fonctionnalités :</strong> Vous pouvez maintenant voir les détails et modifier les informations des utilisateurs en cliquant sur les boutons d'action.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
                 <!-- Filtre par rôle -->
                 <div class="filter-section">
                     <form method="get" action="{{ route('superadmins.index') }}" class="d-flex align-items-center">
@@ -81,16 +88,16 @@
                                 <td class="px-2 py-1">{{ $user->points }}</td>
                                 <td class="px-2 py-1">
                                     <div class="btn-group" role="group">
-                                        <a href="#" class="btn btn-sm btn-info me-1 p-1">
+                                        <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-info me-1 p-1" title="Voir les détails">
                                             <i class="fas fa-eye text-xs"></i>
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-warning me-1 p-1">
+                                        <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-warning me-1 p-1" title="Modifier">
                                             <i class="fas fa-edit text-xs"></i>
                                         </a>
-                                        <form method="POST" action="#" class="d-inline">
+                                        <form method="POST" action="{{ route('users.destroy', $user->id) }}" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger p-1" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?')">
+                                            <button type="submit" class="btn btn-sm btn-danger p-1" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?')" title="Supprimer">
                                                 <i class="fas fa-trash text-xs"></i>
                                             </button>
                                         </form>
@@ -109,6 +116,39 @@
             <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
                 {{ $users->withQueryString()->links() }}
+            </div>
+
+            <!-- Guide d'utilisation -->
+            <div class="mt-4">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-question-circle me-2"></i>Guide d'utilisation
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="text-primary">
+                                    <i class="fas fa-eye me-1"></i>Voir les détails
+                                </h6>
+                                <p class="small text-muted">Cliquez sur l'icône <i class="fas fa-eye text-info"></i> pour voir toutes les informations d'un utilisateur, y compris sa photo de profil et son historique.</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-warning">
+                                    <i class="fas fa-edit me-1"></i>Modifier
+                                </h6>
+                                <p class="small text-muted">Cliquez sur l'icône <i class="fas fa-edit text-warning"></i> pour modifier les informations d'un utilisateur, changer son rôle ou sa photo de profil.</p>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-danger">
+                                    <i class="fas fa-trash me-1"></i>Supprimer
+                                </h6>
+                                <p class="small text-muted">Cliquez sur l'icône <i class="fas fa-trash text-danger"></i> pour supprimer un utilisateur (action irréversible).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -25,10 +25,10 @@ class AuthController extends Controller
         // if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('superadmin')) {
         //     abort(403, 'Accès interdit. Vous devez être administrateur pour créer un compte.');
         // }
-    
+
         return view('admins.add-user');  // Vérifie que la vue existe
     }
-    
+
 
     public function createAccount(Request $request)
     {
@@ -83,7 +83,7 @@ class AuthController extends Controller
         {
             // Récupérer tous les utilisateurs ayant le rôle "client"
             $clients = User::role('client')->paginate(10); // Pagination de 10 clients par page
-    
+
             // Retourner la vue avec les clients
             return view('clients.index', compact('clients'));
         }
@@ -92,7 +92,7 @@ class AuthController extends Controller
         {
             // Récupérer tous les utilisateurs ayant le rôle "chauffeur"
             $drivers = User::role('chauffeur')->paginate(10); // Pagination de 10 chauffeur par page
-    
+
             // Retourner la vue avec les clients
             return view('drivers.index', compact('drivers'));
         }
@@ -101,7 +101,7 @@ class AuthController extends Controller
         {
             // Récupérer tous les utilisateurs ayant le rôle "agent"
             $agents = User::role('agent')->paginate(10); // Pagination de 10 agent par page
-    
+
             // Retourner la vue avec les clients
             return view('agents.index', compact('agents'));
         }
@@ -110,7 +110,7 @@ class AuthController extends Controller
         {
             // Récupérer tous les utilisateurs ayant le rôle "agent"
             $admins = User::role('admin')->paginate(10); // Pagination de 10 agent par page
-    
+
             // Retourner la vue avec les clients
             return view('admins.index', compact('admins'));
         }
@@ -119,11 +119,11 @@ class AuthController extends Controller
         {
             // Récupérer tous les utilisateurs ayant le rôle "agent"
             $superadmins = User::role('super-admin')->paginate(10); // Pagination de 10 agent par page
-    
+
             // Retourner la vue avec les clients
             return view('superadmins.index', compact('superadmins'));
         }
-        
+
 
         public function createDayOff()
         {
@@ -131,21 +131,21 @@ class AuthController extends Controller
             if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('super-admin')) {
                 abort(403, 'Accès interdit. Vous devez être administrateur pour créer un compte.');
             }
-        
+
             return view('admins.assign-day-off');  // Vérifie que la vue existe
         }
-        
+
         public function assignRandomDayOff(Request $request)
         {
             // Jours disponibles
             $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-        
+
             // Récupérer les chauffeurs sans jour de repos assigné ou avec un jour de repos non assigné récemment
             $chauffeurs = User::role('chauffeur')
                               ->whereNull('day_off')
                               ->orWhereNull('day_off_assigned_at')
                               ->get();
-        
+
             foreach ($chauffeurs as $chauffeur) {
                 // Récupérer les jours de repos déjà assignés à d'autres chauffeurs (ou ceux assignés récemment)
                 $occupiedDays = User::role('chauffeur')
@@ -153,15 +153,15 @@ class AuthController extends Controller
                                     ->where('day_off_assigned_at', '>=', Carbon::now()->subDay()) // Jours assignés dans les dernières 24h
                                     ->pluck('day_off')
                                     ->toArray();
-        
+
                 // Trouver les jours non occupés
                 $availableDays = array_diff($days, $occupiedDays);
-        
+
                 // Si des jours sont disponibles
                 if (!empty($availableDays)) {
                     // Choisir un jour au hasard
                     $randomDay = $availableDays[array_rand($availableDays)];
-        
+
                     // Mettre à jour le jour de repos du chauffeur
                     $chauffeur->update([
                         'day_off' => $randomDay,
@@ -169,10 +169,10 @@ class AuthController extends Controller
                     ]);
                 }
             }
-        
+
             return redirect()->route('drivers.index')->with('success', 'Jours de repos assignés avec succès.');
         }
-        
+
 
     public function createAgent()
 {
@@ -310,7 +310,7 @@ public function showAdminDashboard()
 
 /**
  * Affiche tous les utilisateurs avec possibilité de filtrer par rôle
- * 
+ *
  * @param Request $request
  * @return \Illuminate\View\View
  */
@@ -318,23 +318,70 @@ public function listAllUsers(Request $request)
 {
     // Récupérer le filtre de rôle s'il existe
     $roleFilter = $request->query('role');
-    
+
     // Liste de tous les rôles disponibles
     $roles = Role::all()->pluck('name');
-    
+
     // Requête de base
     $query = User::query();
-    
+
     // Appliquer le filtre de rôle si spécifié
     if ($roleFilter && $roleFilter !== 'all') {
         $query->role($roleFilter);
     }
-    
+
     // Récupérer les utilisateurs avec pagination
     $users = $query->paginate(10);
-    
+
     // Retourner la vue avec les utilisateurs et les rôles
     return view('superadmins.index', compact('users', 'roles', 'roleFilter'));
+}
+
+/**
+ * Afficher les détails d'un utilisateur
+ */
+public function showUser(User $user)
+{
+    return view('users.show', compact('user'));
+}
+
+/**
+ * Afficher le formulaire de modification d'un utilisateur
+ */
+public function editUser(User $user)
+{
+    $roles = Role::all();
+    return view('users.edit', compact('user', 'roles'));
+}
+
+/**
+ * Mettre à jour un utilisateur
+ */
+public function updateUser(Request $request, User $user)
+{
+    $request->validate([
+        'first_name' => ['required', 'string', 'max:255'],
+        'last_name' => ['required', 'string', 'max:255'],
+        'address' => ['nullable', 'string', 'max:255'],
+        'phone_number' => ['required', 'regex:/^[0-9]{9}$/', 'unique:users,phone_number,' . $user->id],
+        'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        'role' => ['required', 'exists:roles,name'],
+        'profile_photo' => ['nullable', 'image', 'max:2048'],
+    ]);
+
+    $data = $request->only(['first_name', 'last_name', 'address', 'phone_number', 'email']);
+
+    // Gestion de la photo de profil
+    if ($request->hasFile('profile_photo')) {
+        $data['profile_photo'] = $request->file('profile_photo')->store('profile_photos', 'public');
+    }
+
+    $user->update($data);
+
+    // Mise à jour du rôle
+    $user->syncRoles([$request->role]);
+
+    return redirect()->route('users.show', $user)->with('success', 'Utilisateur mis à jour avec succès.');
 }
 
 /**

@@ -66,30 +66,30 @@ class DriverGroup extends Model
             $date = Carbon::parse($date);
         }
 
-        // Calculer le jour de rotation (0-3)
-        $daysSinceStart = $date->diffInDays(Carbon::now()->startOfWeek());
-        $rotationDay = ($daysSinceStart + $this->current_rotation_day) % 4;
+        // Calculer le jour de rotation (0-3) basé sur le jour de la semaine
+        $dayOfWeek = $date->dayOfWeek; // 0 = dimanche, 1 = lundi, etc.
+        $rotationDay = ($dayOfWeek + $this->current_rotation_day) % 4;
 
         $restDays = [];
 
-        // Premier chauffeur : jours 0 et 1
-        if ($rotationDay == 0 || $rotationDay == 1) {
-            $restDays[] = $this->driver1_id;
-        }
-
-        // Deuxième chauffeur : jours 1 et 2
-        if ($rotationDay == 1 || $rotationDay == 2) {
-            $restDays[] = $this->driver2_id;
-        }
-
-        // Troisième chauffeur : jours 2 et 3
+        // Premier chauffeur : repos les jours 2 et 3
         if ($rotationDay == 2 || $rotationDay == 3) {
-            $restDays[] = $this->driver3_id;
+            $restDays[] = $this->driver_1_id;
         }
 
-        // Quatrième chauffeur : jours 3 et 0
+        // Deuxième chauffeur : repos les jours 3 et 0
         if ($rotationDay == 3 || $rotationDay == 0) {
-            $restDays[] = $this->driver4_id;
+            $restDays[] = $this->driver_2_id;
+        }
+
+        // Troisième chauffeur : repos les jours 0 et 1
+        if ($rotationDay == 0 || $rotationDay == 1) {
+            $restDays[] = $this->driver_3_id;
+        }
+
+        // Quatrième chauffeur : repos les jours 1 et 2
+        if ($rotationDay == 1 || $rotationDay == 2) {
+            $restDays[] = $this->driver_4_id;
         }
 
         return $restDays;

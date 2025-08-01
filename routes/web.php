@@ -57,6 +57,9 @@ Route::middleware('auth:')->group(function () {
     Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
     Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
     Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
+Route::get('/users/{user}', [AuthController::class, 'showUser'])->name('users.show');
+Route::get('/users/{user}/edit', [AuthController::class, 'editUser'])->name('users.edit');
+Route::put('/users/{user}', [AuthController::class, 'updateUser'])->name('users.update');
 
     Route::Resource('cars', CarController::class);
     Route::Resource('auth', AuthController::class);
@@ -206,16 +209,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/driver-groups/auto-assign', [DriverGroupController::class, 'autoAssignGroups'])->name('driver-groups.auto-assign');
 });
 
-Route::get('/google-auth', function () {
-    $client = new Google_Client();
-    $client->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
-    $client->addScope(Google_Service_Calendar::CALENDAR);
-    $client->setAccessType('offline');
-    $client->setPrompt('consent');
 
-    $authUrl = $client->createAuthUrl();
-    return redirect($authUrl);
-});
 
 Route::get('/google-auth', function () {
     $client = new Google_Client();
@@ -227,6 +221,71 @@ Route::get('/google-auth', function () {
     $authUrl = $client->createAuthUrl();
     return redirect($authUrl);
 });
+
+// Route de test temporaire (sans authentification)
+Route::get('/test-design', function() {
+    $groups = \App\Models\DriverGroup::with(['driver1', 'driver2', 'driver3', 'driver4'])->get();
+
+    // Ajouter les informations sur les chauffeurs en repos et au travail pour chaque groupe
+    foreach ($groups as $group) {
+        $today = \Carbon\Carbon::now();
+        $restDrivers = $group->getRestDaysForDate($today);
+        $availableDrivers = $group->getAvailableDriversForDate($today);
+
+        // Déterminer le jour de rotation actuel
+        $dayOfWeek = $today->dayOfWeek;
+        $rotationDay = ($dayOfWeek + $group->current_rotation_day) % 4;
+
+        // Déterminer quel jour de repos pour chaque chauffeur en repos
+        $restDriverDetails = [];
+        foreach ($restDrivers as $driverId) {
+            $dayOfRest = 1; // Par défaut premier jour
+
+            // Vérifier si c'est le deuxième jour de repos
+            if ($driverId == $group->driver_1_id && ($rotationDay == 2 || $rotationDay == 3)) {
+                $dayOfRest = ($rotationDay == 3) ? 2 : 1;
+            } elseif ($driverId == $group->driver_2_id && ($rotationDay == 3 || $rotationDay == 0)) {
+                $dayOfRest = ($rotationDay == 0) ? 2 : 1;
+            } elseif ($driverId == $group->driver_3_id && ($rotationDay == 0 || $rotationDay == 1)) {
+                $dayOfRest = ($rotationDay == 1) ? 2 : 1;
+            } elseif ($driverId == $group->driver_4_id && ($rotationDay == 1 || $rotationDay == 2)) {
+                $dayOfRest = ($rotationDay == 2) ? 2 : 1;
+            }
+
+            $restDriverDetails[$driverId] = $dayOfRest;
+        }
+
+        // Vérifier les voitures en maintenance et leurs chauffeurs
+        $maintenanceDrivers = [];
+        $maintenanceCars = [];
+
+        // Récupérer toutes les voitures en maintenance
+        $carsInMaintenance = \App\Models\Car::whereHas('maintenances', function($query) {
+            $query->where('statut', 1); // 1 = En cours, 0 = Terminé
+        })->with(['maintenances', 'drivers'])->get();
+
+        foreach ($carsInMaintenance as $car) {
+            $maintenanceCars[] = [
+                'car' => $car,
+                'maintenance' => $car->maintenances->where('statut', 1)->first()
+            ];
+
+            // Ajouter les chauffeurs de cette voiture à la liste des chauffeurs en maintenance
+            foreach ($car->drivers as $driver) {
+                $maintenanceDrivers[] = $driver->id;
+            }
+        }
+
+        $group->today_rest_drivers = $restDrivers;
+        $group->today_available_drivers = $availableDrivers;
+        $group->rest_driver_details = $restDriverDetails;
+        $group->current_rotation_day_display = $rotationDay;
+        $group->maintenance_drivers = $maintenanceDrivers;
+        $group->maintenance_cars = $maintenanceCars;
+    }
+
+    return view('driver-groups.index', compact('groups'));
+})->name('driver-groups.test');
 Route::get('/oauth2callback', function () {
     $client = new Google_Client();
     $client->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
