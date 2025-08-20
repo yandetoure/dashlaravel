@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KZSXDK2G');</script>
+        <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
-    <title>Formulaire d'inscription</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Dakar Transport - Services vers AIBD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,9 +58,19 @@
     </style>
 </head>
 <body>
+    <body>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KZSXDK2G');</script>
+            <!-- End Google Tag Manager -->
+
+
 <div class="container mt-5 d-flex justify-content-center">
     <div class="card shadow-lg p-4 rounded-4 w-100" style="max-width: 800px;">
-        
+
         <!-- Logo centré -->
         <img src="{{ asset('images/logo.png') }}" alt="Logo Mobile" class="logo-mobile">
 
@@ -70,7 +93,7 @@
             <div class="row">
                 <div class="mb-3 col-md-6">
                     <label for="first_name" class="form-label">Prénom</label>
-                    <input type="text" name="first_name" id="first_name" class="form-control rounded-3 shadow-sm @error('first_name') is-invalid @enderror" 
+                    <input type="text" name="first_name" id="first_name" class="form-control rounded-3 shadow-sm @error('first_name') is-invalid @enderror"
                            placeholder="Ex: Jean" required value="{{ old('first_name') }}">
                     <div class="invalid-feedback @if(!$errors->has('first_name')) d-none @endif">
                         @error('first_name')
@@ -83,7 +106,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="last_name" class="form-label">Nom</label>
-                    <input type="text" name="last_name" id="last_name" class="form-control rounded-3 shadow-sm @error('last_name') is-invalid @enderror" 
+                    <input type="text" name="last_name" id="last_name" class="form-control rounded-3 shadow-sm @error('last_name') is-invalid @enderror"
                            placeholder="Ex: Dupont" required value="{{ old('last_name') }}">
                     <div class="invalid-feedback @if(!$errors->has('last_name')) d-none @endif">
                         @error('last_name')
@@ -96,7 +119,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="address" class="form-label">Adresse</label>
-                    <input type="text" name="address" id="address" class="form-control rounded-3 shadow-sm @error('address') is-invalid @enderror" 
+                    <input type="text" name="address" id="address" class="form-control rounded-3 shadow-sm @error('address') is-invalid @enderror"
                            placeholder="Ex: 123 Rue Principale" required value="{{ old('address') }}">
                     <div class="invalid-feedback @if(!$errors->has('address')) d-none @endif">
                         @error('address')
@@ -109,7 +132,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="phone_number" class="form-label">Téléphone</label>
-                    <input type="text" name="phone_number" id="phone_number" class="form-control rounded-3 shadow-sm @error('phone_number') is-invalid @enderror" 
+                    <input type="text" name="phone_number" id="phone_number" class="form-control rounded-3 shadow-sm @error('phone_number') is-invalid @enderror"
                            placeholder="Ex: 77XXXXXXX" required value="{{ old('phone_number') }}">
                     <div class="invalid-feedback @if(!$errors->has('phone_number')) d-none @endif">
                         @error('phone_number')
@@ -122,7 +145,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" id="email" class="form-control rounded-3 shadow-sm @error('email') is-invalid @enderror" 
+                    <input type="email" name="email" id="email" class="form-control rounded-3 shadow-sm @error('email') is-invalid @enderror"
                            placeholder="Ex: agent@example.com" required value="{{ old('email') }}">
                     <div class="invalid-feedback @if(!$errors->has('email')) d-none @endif">
                         @error('email')
@@ -143,7 +166,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="password" class="form-label">Mot de passe</label>
-                    <input type="password" name="password" id="password" class="form-control rounded-3 shadow-sm @error('password') is-invalid @enderror" 
+                    <input type="password" name="password" id="password" class="form-control rounded-3 shadow-sm @error('password') is-invalid @enderror"
                            placeholder="Mot de passe" required>
                     <div class="invalid-feedback @if(!$errors->has('password')) d-none @endif">
                         @error('password')
@@ -156,7 +179,7 @@
 
                 <div class="mb-3 col-md-6">
                     <label for="password_confirmation" class="form-label">Confirmer mot de passe</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control rounded-3 shadow-sm" 
+                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control rounded-3 shadow-sm"
                            placeholder="Confirmer" required>
                     <div class="invalid-feedback d-none">Les mots de passe ne correspondent pas.</div>
                 </div>
@@ -174,15 +197,15 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('registrationForm');
-    
+
     // Objets pour suivre l'état de chaque champ
     const fieldTouched = {};
-    
+
     // Au chargement initial, supprimer toutes les classes is-invalid des champs
     // sauf si nous sommes revenus d'une soumission avec des erreurs Laravel
     const formFields = form.querySelectorAll('input');
     const hasLaravelErrors = document.querySelector('.alert-danger') !== null;
-    
+
     if (!hasLaravelErrors) {
         formFields.forEach(field => {
             if (!field.classList.contains('@error(' + field.name + ') is-invalid @enderror')) {
@@ -190,17 +213,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Fonction pour valider un champ
     function validateField(field) {
         let isValid = true;
-        
+
         // Si le champ n'a pas encore été touché, ne pas valider
         if (!fieldTouched[field.id] && field.value.trim() === '') {
             field.classList.remove('is-invalid');
             return true;
         }
-        
+
         // Validation du prénom
         if (field.id === 'first_name') {
             if (field.value.trim().length < 3 && field.value.trim() !== '') {
@@ -210,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('is-invalid');
             }
         }
-        
+
         // Validation du nom
         if (field.id === 'last_name') {
             if (field.value.trim() === '' && fieldTouched[field.id]) {
@@ -220,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('is-invalid');
             }
         }
-        
+
         // Validation de l'adresse
         if (field.id === 'address') {
             if (field.value.trim() === '' && fieldTouched[field.id]) {
@@ -230,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('is-invalid');
             }
         }
-        
+
         // Validation du téléphone
         if (field.id === 'phone_number') {
             const phoneRegex = /^(77|76|78|75)[0-9]{7}$/;
@@ -241,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('is-invalid');
             }
         }
-        
+
         // Validation de l'email
         if (field.id === 'email') {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -252,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('is-invalid');
             }
         }
-        
+
         // Validation du mot de passe
         if (field.id === 'password') {
             if (field.value.trim() !== '' && field.value.trim().length < 6) {
@@ -260,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             } else {
                 field.classList.remove('is-invalid');
-                
+
                 // Vérifier aussi la confirmation du mot de passe si elle existe déjà
                 const confirmPassword = document.getElementById('password_confirmation');
                 if (confirmPassword.value.trim() !== '') {
@@ -268,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
-        
+
         // Validation de la confirmation du mot de passe
         if (field.id === 'password_confirmation') {
             const password = document.getElementById('password');
@@ -279,10 +302,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.classList.remove('is-invalid');
             }
         }
-        
+
         return isValid;
     }
-    
+
     // Surveiller les événements sur tous les champs
     const formFields = form.querySelectorAll('input');
     formFields.forEach(field => {
@@ -291,30 +314,30 @@ document.addEventListener('DOMContentLoaded', function() {
             fieldTouched[this.id] = true;
             validateField(this);
         });
-        
+
         // Valider lors de la perte de focus
         field.addEventListener('blur', function() {
             fieldTouched[this.id] = true;
             validateField(this);
         });
     });
-    
+
     // Validation du formulaire lors de la soumission
     form.addEventListener('submit', function(e) {
         let formValid = true;
-        
+
         // Marquer tous les champs comme touchés
         formFields.forEach(field => {
             fieldTouched[field.id] = true;
         });
-        
+
         // Valider tous les champs
         formFields.forEach(field => {
             if (!validateField(field)) {
                 formValid = false;
             }
         });
-        
+
         // Vérifier spécifiquement que les mots de passe correspondent
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('password_confirmation');
@@ -323,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmPassword.classList.add('is-invalid');
             formValid = false;
         }
-        
+
         // Empêcher l'envoi du formulaire si non valide
         if (!formValid) {
             e.preventDefault();
