@@ -99,6 +99,49 @@
         .hover\:shadow-md {
             transition: all 0.2s ease-in-out;
         }
+
+        /* Styles pour le modal de réservation */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: scale(0.7);
+            transition: transform 0.3s ease-in-out;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-open {
+            overflow: hidden;
+        }
+
         .hover\:shadow-md:hover {
             transform: translateY(-2px);
         }
@@ -1449,63 +1492,100 @@
                             </ul>
                         </div>
                     @endif
+
+                    @if(isset($error))
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
+                            <strong>Erreur :</strong>
+                            <p>{{ $error }}</p>
+                        </div>
+                    @endif
                         <form id="reservation-form" action="{{ route('reservations.storeByProspect') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @csrf
                             <!-- 1. Nom complet -->
                             <div>
                                 <label for="first_name" class="block text-gray-700 mb-2">Prénom</label>
-                                <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="text" name="first_name" value="{{ old('first_name') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('first_name') border-red-500 @enderror" required>
+                                @error('first_name')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
-                                <label for="last_name"class="block text-gray-700 mb-2">Nom</label>
-                                <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <label for="last_name" class="block text-gray-700 mb-2">Nom</label>
+                                <input type="text" name="last_name" value="{{ old('last_name') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('last_name') border-red-500 @enderror" required>
+                                @error('last_name')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- 2. Email -->
                             <div>
                                 <label for="email" class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="email" name="email" value="{{ old('email') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('email') border-red-500 @enderror" required>
+                                @error('email')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <!-- 3. Téléphone -->
                             <div>
                                 <label for="phone" class="block text-gray-700 mb-2">Téléphone</label>
-                                <input type="tel" name="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="tel" name="phone" value="{{ old('phone') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('phone') border-red-500 @enderror" required>
+                                @error('phone')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <!-- 4. Point de départ -->
                             <div>
                                 <label for="adresse_rammassage" class="block text-gray-700 mb-2">Point de départ</label>
-                                <input type="text" name="adresse_rammassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="text" name="adresse_rammassage" value="{{ old('adresse_rammassage') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('adresse_rammassage') border-red-500 @enderror" required>
+                                @error('adresse_rammassage')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <!-- 5. Point d'arrivée -->
                             <div>
                                 <label for="nb_personnes" class="block mb-2">Nombre de passagers</label>
-                                <input type="number" name="nb_personnes" id="nb_personnes" min="1" max="20" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="number" name="nb_personnes" id="nb_personnes" min="1" max="20" value="{{ old('nb_personnes') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('nb_personnes') border-red-500 @enderror" required>
+                                @error('nb_personnes')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label for="date" class="block mb-2">Date</label>
-                                <input type="date" name="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="date" name="date" value="{{ old('date') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('date') border-red-500 @enderror" required>
+                                @error('date')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <!-- 7. Heure de ramassage -->
                             <div>
                                 <label for="heure_ramassage" class="block mb-2">Heure de ramassage</label>
-                                <input type="time" name="heure_ramassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <input type="time" name="heure_ramassage" value="{{ old('heure_ramassage') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('heure_ramassage') border-red-500 @enderror" required>
+                                @error('heure_ramassage')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <!-- 8. Nombre de passagers -->
                             <div>
-                                <label  for="nb_valises" class="block mb-2">Nombre de valises</label>
-                                <input type="number" name="nb_valises" id="nb_valises" min="1" max="20" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                                <label for="nb_valises" class="block mb-2">Nombre de valises</label>
+                                <input type="number" name="nb_valises" id="nb_valises" min="1" max="20" value="{{ old('nb_valises') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('nb_valises') border-red-500 @enderror" required>
+                                @error('nb_valises')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <!-- 9. Type de service -->
                             <div>
                                 <label for="trip_id_reservation" class="block text-sm font-medium text-gray-700 mb-1">Sens du trajet <span class="text-red-500">*</span></label>
-                                <select id="trip_id_reservation" name="trip_id" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                                <select id="trip_id_reservation" name="trip_id" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('trip_id') border-red-500 @enderror" required>
                                     <option value="">-- Sélectionner un trajet --</option>
                                     @foreach($trips as $trip)
-                                        <option value="{{ $trip->id }}">{{ $trip->departure }} - {{ $trip->destination }}</option>
+                                        <option value="{{ $trip->id }}" {{ old('trip_id') == $trip->id ? 'selected' : '' }}>{{ $trip->departure }} - {{ $trip->destination }}</option>
                                     @endforeach
                                 </select>
+                                @error('trip_id')
+                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
@@ -2219,84 +2299,17 @@
             }
         });
 
-        // Gestion du formulaire de réservation avec AJAX
+        // Gestion du formulaire de réservation sans AJAX
         document.getElementById('reservation-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const form = this;
+            // Le formulaire sera soumis normalement, pas de preventDefault()
             const submitBtn = document.getElementById('submit-btn');
             const submitText = submitBtn.querySelector('.submit-text');
             const submitSpinner = submitBtn.querySelector('.submit-spinner');
-            const successMessage = document.getElementById('success-message');
 
             // Désactiver le bouton et afficher le spinner
             submitBtn.disabled = true;
             submitText.textContent = 'Réservation en cours...';
             submitSpinner.classList.remove('hidden');
-
-            // Cacher les messages précédents
-            successMessage.classList.add('hidden');
-            document.querySelectorAll('.error-message').forEach(el => el.remove());
-
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Afficher le popup SweetAlert
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Réservation confirmée !',
-                        html: `<b>Merci ${data.reservation.first_name} ${data.reservation.last_name} !</b><br>
-                            Votre réservation pour le ${data.reservation.date} à ${data.reservation.heure_ramassage} est enregistrée.<br><br>
-                            <span>Vous recevrez un email de confirmation.</span><br><br>
-                            <b>Besoin d'aide ?</b> <br>
-                            <a href='tel:+221777056767' class='text-red-600'>Contactez le service client</a><br>
-                            <a href='/register' class='text-blue-600'>Créer un compte client</a>`,
-                        showConfirmButton: false,
-                        timer: 8000,
-                        timerProgressBar: true
-                    });
-                    // Réinitialiser le formulaire
-                    form.reset();
-                    document.getElementById('tarif_reservation').value = '';
-                    // Faire défiler vers le message de succès (optionnel)
-                    // successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    // Afficher les erreurs
-                    if (data.errors) {
-                        for (const [field, messages] of Object.entries(data.errors)) {
-                            const input = form.querySelector(`[name="${field}"]`);
-                            if (input) {
-                                const errorDiv = document.createElement('div');
-                                errorDiv.className = 'error-message text-red-600 text-sm mt-1';
-                                errorDiv.textContent = messages[0];
-                                input.parentNode.appendChild(errorDiv);
-                            }
-                        }
-                    } else {
-                        alert(data.message || 'Une erreur est survenue. Veuillez réessayer.');
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-                alert('Une erreur est survenue. Veuillez réessayer.');
-            })
-            .finally(() => {
-                // Réactiver le bouton
-                submitBtn.disabled = false;
-                submitText.textContent = 'Finaliser la réservation';
-                submitSpinner.classList.add('hidden');
-            });
         });
     </script>
 
@@ -3387,9 +3400,121 @@ Notre équipe est disponible pour :
                     <a id="infoModalLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
                         <span>Visiter le site</span>
                         <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 002 2v10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                         </svg>
                     </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour les détails de la réservation -->
+    <div id="reservationModal" class="modal">
+        <div class="modal-content max-w-2xl">
+            <div class="relative">
+                <button class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors" onclick="closeReservationModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                        <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Réservation confirmée !</h3>
+                    <p class="text-gray-600">Votre demande a été enregistrée avec succès</p>
+                </div>
+
+                @if(isset($reservation) && isset($trip))
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <h4 class="font-semibold text-gray-900 mb-3">Détails de votre réservation</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="font-medium text-gray-700">Nom complet :</span>
+                            <p class="text-gray-900">{{ $reservation->first_name }} {{ $reservation->last_name }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Email :</span>
+                            <p class="text-gray-900">{{ $reservation->email }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Téléphone :</span>
+                            <p class="text-gray-900">{{ $reservation->phone_number }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Date :</span>
+                            <p class="text-gray-900">{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Heure :</span>
+                            <p class="text-gray-900">{{ $reservation->heure_ramassage }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Trajet :</span>
+                            <p class="text-gray-900">{{ $trip->departure }} → {{ $trip->destination }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Passagers :</span>
+                            <p class="text-gray-900">{{ $reservation->nb_personnes }} personne(s)</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Valises :</span>
+                            <p class="text-gray-900">{{ $reservation->nb_valises }} valise(s)</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Adresse de ramassage :</span>
+                            <p class="text-gray-900">{{ $reservation->adresse_rammassage }}</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-700">Tarif estimé :</span>
+                            <p class="text-gray-900 font-semibold text-red-600">{{ number_format($reservation->tarif, 0, ',', ' ') }} FCFA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                <strong>Important :</strong> Votre réservation est actuellement en attente de confirmation par un agent. 
+                                Vous recevrez un email de confirmation une fois validée.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <h4 class="font-semibold text-gray-900 mb-3">Besoin d'aide ?</h4>
+                    <div class="space-y-3">
+                        <a href="tel:+221777056767" class="flex items-center text-red-600 hover:text-red-700 transition-colors">
+                            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                            <span>Contactez le service client : +221 77 705 67 67</span>
+                        </a>
+                        <a href="/register" class="flex items-center text-blue-600 hover:text-blue-700 transition-colors">
+                            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            <span>Créer un compte client pour suivre vos réservations</span>
+                        </a>
+                    </div>
+                </div>
+                @endif
+
+                <div class="flex justify-center">
+                    <button onclick="closeReservationModal()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                        Fermer
+                    </button>
                 </div>
             </div>
         </div>
@@ -3410,6 +3535,22 @@ Notre équipe est disponible pour :
             infoModal.classList.remove('active');
             document.body.classList.remove('modal-open');
         }
+
+        // Gestion du modal de réservation
+        const reservationModal = document.getElementById('reservationModal');
+
+        function closeReservationModal() {
+            reservationModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Afficher automatiquement le modal de réservation si showReservationModal est true
+        @if(isset($showReservationModal) && $showReservationModal)
+            document.addEventListener('DOMContentLoaded', function() {
+                reservationModal.classList.add('active');
+                document.body.classList.add('modal-open');
+            });
+        @endif
 
         document.querySelectorAll('.info-card').forEach(card => {
             card.addEventListener('click', () => {

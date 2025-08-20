@@ -3,34 +3,37 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Google_Client;
 use App\Models\Car;
+use App\Models\Actu;
+use App\Models\Info;
 use App\Models\Trip;
 use App\Models\User;
+use App\Models\Invoice;
 use App\Models\CarDriver;
 use App\Models\Maintenance;
-use App\Models\Invoice;
 use App\Models\Reservation;
 use Illuminate\Support\Str;
+use Google_Service_Calendar;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Mail\AccountCreatedMail;
-use App\Mail\ReservationCanceled;
-use App\Mail\ReservationCanceledclient;
-use App\Mail\ReservationCanceledDriver;
 use App\Mail\ReservationCreated;
 use App\Mail\ReservationUpdated;
+use App\Mail\ReservationCanceled;
+use App\Mail\ReservationConfirmed;
+use Google_Service_Calendar_Event;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationCreatedclient;
-use App\Mail\ReservationConfirmed;
+use App\Mail\ReservationCanceledclient;
+use App\Mail\ReservationCanceledDriver;
 use App\Mail\ReservationConfirmedclient;
 use App\Mail\ReservationConfirmedDriver;
-use Google_Client;
-use Google_Service_Calendar;
-use Google_Service_Calendar_Event;
 use App\Mail\ReservationCreatedProspect;
+
 
 
 
@@ -474,7 +477,7 @@ try {
         }
 
         return $tarifBase;
-
+}
 
      // Méthode pour enregistrer un email lors de la création ou modification de la réservation
      private function envoyerEmailReservation(Reservation $reservation, $status = 'created')
@@ -581,9 +584,10 @@ try {
         return view('reservations.cancelled', compact('reservations'));
     }
 
-
+  /**
      * Affiche une réservation spécifique.
      */
+    
     public function show($id)
 {
     $reservation = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip', 'carDriver'])->findOrFail($id);
@@ -1057,16 +1061,29 @@ public function showCalendar()
             // Envoi des e-mails de notification pour prospects
             $this->envoyerEmailProspect($reservation);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Votre demande de réservation a été enregistrée avec succès. Vous recevrez une confirmation par email une fois qu\'un agent aura validé votre demande.'
+            // Récupérer les informations du trajet pour l'affichage
+            $trip = Trip::find($request->trip_id);
+
+            // Retourner la vue avec les données de la réservation
+            return view('welcome', [
+                'reservation' => $reservation,
+                'trip' => $trip,
+                'showReservationModal' => true,
+                'trips' => Trip::all(), // Nécessaire pour le formulaire
+                'actus' => Actu::all(), // Nécessaire pour la page d'accueil
+                'infos' => Info::all(), // Nécessaire pour la page d'accueil
             ]);
+
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la création de la réservation: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.'
-            ], 500);
+            
+            // Retourner la vue avec l'erreur
+            return view('welcome', [
+                'error' => 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.',
+                'trips' => Trip::all(),
+                'actus' => Actu::all(),
+                'infos' => Info::all(),
+            ]);
         }
     }
 
