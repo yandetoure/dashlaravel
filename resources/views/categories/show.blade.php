@@ -6,14 +6,14 @@
         <!-- En-tête -->
         <div class="mb-8">
             <div class="flex items-center space-x-3 mb-4">
-                <a href="{{ route('categories.index') }}" 
+                <a href="{{ route('categories.index') }}"
                    class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <h1 class="text-3xl font-bold text-gray-900">{{ $category->name }}</h1>
                 <div class="w-4 h-4 rounded-full" style="background-color: {{ $category->color }}"></div>
             </div>
-            
+
             @if($category->description)
                 <p class="text-gray-600 mb-4">{{ $category->description }}</p>
             @endif
@@ -25,7 +25,7 @@
                 <span class="text-gray-500">
                     {{ $category->actus->count() }} actualité(s)
                 </span>
-                <a href="{{ route('categories.edit', $category) }}" 
+                <a href="{{ route('categories.edit', $category) }}"
                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
                     <i class="fas fa-edit mr-2"></i>
                     Modifier la catégorie
@@ -38,7 +38,7 @@
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-medium text-gray-900">Actualités dans cette catégorie</h3>
             </div>
-            
+
             @if($category->actus->count() > 0)
                 <div class="divide-y divide-gray-200">
                     @foreach($category->actus as $actu)
@@ -73,11 +73,11 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2 ml-4">
-                                    <a href="{{ route('actus.show', $actu) }}" 
+                                    <a href="{{ route('actus.show', $actu) }}"
                                        class="text-blue-600 hover:text-blue-900">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('actus.edit', $actu) }}" 
+                                    <a href="{{ route('actus.edit', $actu) }}"
                                        class="text-indigo-600 hover:text-indigo-900">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -94,7 +94,7 @@
                     <h3 class="mt-2 text-sm font-medium text-gray-900">Aucune actualité</h3>
                     <p class="mt-1 text-sm text-gray-500">Cette catégorie ne contient encore aucune actualité.</p>
                     <div class="mt-6">
-                        <a href="{{ route('actus.create') }}" 
+                        <a href="{{ route('actus.create') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                             <i class="fas fa-plus mr-2"></i>
                             Créer une actualité
@@ -105,4 +105,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

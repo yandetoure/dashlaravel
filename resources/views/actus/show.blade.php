@@ -44,8 +44,8 @@
                 <!-- Image -->
     @if ($actu->image)
                     <div class="relative h-96">
-                        <img src="{{ asset('storage/' . $actu->image) }}" 
-                             alt="{{ $actu->title }}" 
+                        <img src="{{ asset('storage/' . $actu->image) }}"
+                             alt="{{ $actu->title }}"
                              class="w-full h-full object-cover">
                         <div class="absolute top-4 right-4">
                             <span class="text-white px-4 py-2 rounded-full text-sm font-semibold"
@@ -73,8 +73,8 @@
                     <!-- Lien externe si présent -->
                     @if($actu->external_link)
                         <div class="mt-6 border-t pt-6">
-                            <a href="{{ $actu->external_link }}" 
-                               target="_blank" 
+                            <a href="{{ $actu->external_link }}"
+                               target="_blank"
                                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
                                 <span>Cliquez ici</span>
                                 <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,13 +95,13 @@
 
                     <!-- Boutons d'action -->
                     <div class="mt-8 flex flex-wrap gap-4">
-                        <a href="{{ route('actus.index') }}" 
+                        <a href="{{ route('actus.index') }}"
                            class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
                             Retour à la liste
                         </a>
 
                         @if(auth()->check() && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin') || auth()->user()->hasRole('agent')))
-                            <a href="{{ route('actus.edit', $actu->id) }}" 
+                            <a href="{{ route('actus.edit', $actu->id) }}"
                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
                                 Modifier
                             </a>
@@ -109,7 +109,7 @@
                             <form action="{{ route('actus.destroy', $actu->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" 
+                                <button type="submit"
                                         onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette actualité ?')"
                                         class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200">
                                     Supprimer

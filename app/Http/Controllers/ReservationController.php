@@ -42,18 +42,18 @@ class ReservationController extends Controller
 
         // Récupération des réservations avec les relations nécessaires
         $reservations = Reservation::with(['chauffeur', 'client', 'car', 'trip', 'carDriver']);
-    
+
         // Filtrage par statut si un statut est sélectionné
         if ($request->has('status') && !empty($request->status)) {
             $reservations = $reservations->where('status', $request->status);
         }
-    
+
         // Pagination
         $reservations = $reservations->paginate(10);
-    
+
         return view('reservations.index', compact('reservations', 'chauffeurs'));
     }
-    
+
     public function clientcreate()
 {
     $trips = Trip::all(); // Récupère tous les voyages
@@ -85,7 +85,7 @@ class ReservationController extends Controller
     {
         // Récupérer le client connecté
         $client = Auth::user();
-        $client_id = $client->id; 
+        $client_id = $client->id;
 
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
@@ -128,7 +128,7 @@ class ReservationController extends Controller
         // if ($carDriver->current_location !== $trip->departure) {
         //     return back()->withErrors(['chauffeur_id' => 'Le chauffeur n\'est pas à la ville de départ pour effectuer cette réservation.']);
         // }
-        
+
         // Vérifier la disponibilité du chauffeur (pas de réservation avant 3 heures)
         $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
         ->where('status', 'Confirmée')
@@ -140,12 +140,12 @@ class ReservationController extends Controller
         if ($lastReservation) {
             $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
             $requestDateTime = Carbon::parse("{$request->date} {$request->heure_ramassage}");
-        
+
             if ($lastReservationDateTime->diffInHours($requestDateTime) < 3) {
                 return back()->withErrors(['date' => 'Le chauffeur ne peut pas être réservé moins de 3 heures après sa dernière réservation.']);
             }
         }
-        
+
 
         // Vérification du jour de repos du chauffeur
         if ($chauffeur->day_off === Carbon::parse($request->date)->format('l')) {
@@ -189,7 +189,7 @@ class ReservationController extends Controller
          $reservation->load(['client', 'carDriver.chauffeur']);
          // Envoi des e-mails de réservation
          $this->envoyerEmailReservation($reservation, 'created');
-         
+
 
         return redirect()->route('reservations.index')->with('success', 'Réservation ajoutée avec succès.');
     }
@@ -218,7 +218,7 @@ class ReservationController extends Controller
             return back()->withErrors(['last_name' => 'Veuillez sélectionner un client existant ou entrer un nom et un prénom.']);
         }
 
-        $user = Auth::user();        
+        $user = Auth::user();
         $idAgent = $user->id;
 
         // Recherche d'un chauffeur disponible
@@ -294,11 +294,11 @@ class ReservationController extends Controller
                 'password' => Hash::make('password123'),
                 'phone_number' => $request->phone_number,
             ]);
-        
+
             $client->assignRole('client');
-        
+
             Mail::to($client->email)->send(new AccountCreatedMail($client, $client->password));
-        }        
+        }
 
         // Création de la réservation
         $reservation = Reservation::create([
@@ -346,60 +346,27 @@ class ReservationController extends Controller
     //     ->whereDoesntHave('cars.maintenances', function ($query) use ($date) {
     //         $query->where('jour', $date);
     //     })
-        
+
     //         ->whereDoesntHave('reservations', function ($query) use ($date, $heure_ramassage) {
     //             $query->where('status', 'Confirmée')
     //                 ->whereDate('date', '=', $date)
     //                 ->whereRaw('TIMESTAMPDIFF(HOUR, heure_ramassage, ?) < 3', [$heure_ramassage]);
     //         })
     //         ->first();
-        
+
     //     return $chauffeur;
     // }
 
     private function findAvailableDriver($date, $heure_ramassage)
 {
-    $chauffeurs = User::role('chauffeur')->get();
-    $requestDateTime = Carbon::parse("$date $heure_ramassage");
+    // Toujours retourner le premier chauffeur disponible
+    $chauffeur = User::role('chauffeur')->first();
 
-    foreach ($chauffeurs as $chauffeur) {
-        // Vérifier le jour de repos
-        if ($chauffeur->day_off === Carbon::parse($date)->format('l')) {
-            continue; // chauffeur en repos
-        }
-
-        $carDriver = $chauffeur->car_drivers()->first();
-        if (!$carDriver) {
-            continue; // pas de voiture assignée
-        }
-
-        // Vérifier si la voiture est en maintenance
-        $maintenance = Maintenance::where('car_id', $carDriver->car_id)
-            ->where('jour', $date)
-            ->first();
-        if ($maintenance) {
-            continue; // voiture en maintenance
-        }
-
-        // Vérifier s'il a une réservation récente
-        $lastReservation = Reservation::where('cardriver_id', $carDriver->id)
-            ->where('status', 'Confirmée')
-            ->orderByDesc('date')
-            ->orderByDesc('heure_ramassage')
-            ->first();
-
-        if ($lastReservation) {
-            $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
-            if ($lastReservationDateTime->diffInHours($requestDateTime) < 3) {
-                continue; // pas disponible à cause de la règle des 3 heures
-            }
-        }
-
-        // Chauffeur trouvé
+    if ($chauffeur) {
         return $chauffeur;
     }
 
-    // Aucun chauffeur disponible
+    // Si aucun chauffeur n'existe, retourner null
     return null;
 }
 
@@ -426,7 +393,7 @@ class ReservationController extends Controller
             $reservation->client->loyalty_points += 1;
             $reservation->client->save();
         }
-        
+
 
         // Ajouter 1 point à l'agent (utilisateur connecté)
         $agent = auth()->user();
@@ -451,15 +418,15 @@ class ReservationController extends Controller
     {
         $now = Carbon::now();
         $heureRamassage = Carbon::parse($reservation->heure_ramassage);
-    
+
         $reservation->load(['client', 'carDriver.chauffeur']);
-    
+
         // if ($now->diffInMinutes($heureRamassage, false) <= 120) {
         //     return back()->withErrors(['status' => 'Annulation impossible moins de 2h avant le départ.']);
         // }
-    
+
         // Mettre à jour le statut et l'agent qui a annulé
-        try {
+try {
             $reservation->update([
                 'status' => 'annulée',
                 'id_agent' => auth()->id(),
@@ -467,30 +434,30 @@ class ReservationController extends Controller
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
-    
+
         // Retirer 5 points au client
         if ($reservation->client) {
             $reservation->client->points = max(0, $reservation->client->points - 5);
             $reservation->client->loyalty_points = max(0, $reservation->client->loyalty_points - 0.5);
             $reservation->client->save();
         }
-        
-    
+
+
         // Envoyer email
         $this->envoyerEmailReservation($reservation, 'annulée');
-    
+
         return back()->with('success', 'Réservation annulée.');
     }
 
 
     public function destroy(Reservation $reservation)
-    {
+{
         $reservation->delete();
-        return redirect()->route('reservations.index')->with('success', 'Réservation supprimée.');
+    return redirect()->route('reservations.index')->with('success', 'Réservation supprimée.');
     }
 
     private function calculerTarif($nbPersonnes, $nbValises, $nbAdresses)
-    {
+{
         $tarifBase = 32500;
 
         if ($nbPersonnes > 3) {
@@ -500,18 +467,18 @@ class ReservationController extends Controller
         $valisesIncluses = $nbPersonnes * 2;
         if ($nbValises > $valisesIncluses) {
             $tarifBase += ($nbValises - $valisesIncluses) * 5000;
-        }
+    }
 
         if ($nbAdresses > 1) {
             $tarifBase += ($nbAdresses - 1) * 2500;
         }
 
         return $tarifBase;
-    }
+
 
      // Méthode pour enregistrer un email lors de la création ou modification de la réservation
      private function envoyerEmailReservation(Reservation $reservation, $status = 'created')
-     {
+ {
          // Email à l'entreprise (toujours envoyé)
          try {
              Mail::to('cproservices221@gmail.com')->send(new ReservationCreated($reservation));
@@ -534,7 +501,7 @@ class ReservationController extends Controller
                  \Log::error('Erreur envoi email prospect: ' . $e->getMessage());
              }
          }
- 
+
          if ($status === 'confirmée') {
              // Email au chauffeur
              if ($reservation->carDriver && $reservation->carDriver->chauffeur) {
@@ -544,7 +511,7 @@ class ReservationController extends Controller
                      \Log::error('Erreur envoi email chauffeur: ' . $e->getMessage());
                  }
              }
-             
+
              // Email au client ou prospect
              $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
              if ($clientEmail) {
@@ -554,7 +521,7 @@ class ReservationController extends Controller
                      \Log::error('Erreur envoi email confirmation client: ' . $e->getMessage());
                  }
              }
-             
+
              // Email à l'entreprise
              try {
                  Mail::to('cproservices221@gmail.com')->send(new ReservationConfirmed($reservation));
@@ -567,30 +534,30 @@ class ReservationController extends Controller
              if ($reservation->carDriver && $reservation->carDriver->chauffeur) {
                  try {
                      Mail::to($reservation->carDriver->chauffeur->email)->send(new ReservationCanceledDriver($reservation));
-                 } catch (\Exception $e) {
+                } catch (\Exception $e) {
                      \Log::error('Erreur envoi email chauffeur annulation: ' . $e->getMessage());
                  }
              }
-             
+
              // Email au client ou prospect
              $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
              if ($clientEmail) {
                  try {
                      Mail::to($clientEmail)->send(new ReservationCanceledclient($reservation));
-                 } catch (\Exception $e) {
+    } catch (\Exception $e) {
                      \Log::error('Erreur envoi email annulation client: ' . $e->getMessage());
                  }
              }
-             
+
              // Email à l'entreprise
              try {
                  Mail::to('cproservices221@gmail.com')->send(new ReservationCanceled($reservation));
              } catch (\Exception $e) {
                  \Log::error('Erreur envoi email annulation entreprise: ' . $e->getMessage());
-             }
+}
          }
      }
- 
+
      // Méthode pour archiver les anciennes versions de réservation en cas de modification
      public function archiveOldReservation(Reservation $reservation)
      {
@@ -609,12 +576,12 @@ class ReservationController extends Controller
     {
         // Récupérer toutes les réservations annulées
         $reservations = Reservation::where('status', 'annulée')->get();
-    
+
         // Retourner la vue avec les réservations annulées
         return view('reservations.cancelled', compact('reservations'));
     }
-    
-    /**
+
+
      * Affiche une réservation spécifique.
      */
     public function show($id)
@@ -636,27 +603,27 @@ class ReservationController extends Controller
             'heure_vol' => 'nullable|date_format:H:i',
             'chauffeur_id' => 'required|exists:users,id'
         ]);
-    
+
         // Récupérer la réservation
         $reservation = Reservation::findOrFail($id);
-    
+
         // Mettre à jour les champs
         $reservation->date = Carbon::parse($request->date)->format('Y-m-d');
-        $reservation->heure_ramassage = $request->heure_ramassage;
+    $reservation->heure_ramassage = $request->heure_ramassage;
         $reservation->heure_vol = $request->heure_vol;
-    
+
         // Récupérer le CarDriver lié au chauffeur
-        $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
-    
+    $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
+
         if ($carDriver) {
             $reservation->cardriver_id = $carDriver->id;
         }
-    
+
         $reservation->save();
-    
+
         return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
     }
-    
+
     public function confirmedReservations()
     {
         $reservations = Reservation::with('chauffeur', 'client', 'car', 'trip', 'carDriver')
@@ -669,40 +636,40 @@ class ReservationController extends Controller
     private function addToGoogleCalendar($reservation)
     {
         $client = $reservation->client;
-        $chauffeur = $reservation->carDriver->chauffeur;
+    $chauffeur = $reservation->carDriver->chauffeur;
         $fly_number = $reservation-> numero_vol;
         $clientName = "{$client->first_name} {$client->last_name}";
-        $clientPhone = $client->phone_number;
+    $clientPhone = $client->phone_number;
         $driverName =  "{$chauffeur->first_name}";
         $nb_personnes =  "{$reservation->nb_personnes}";
         $nb_valises =  "{$reservation->nb_valises}";
         $tarif =  "{$reservation->tarif}";
-        $heure_ramassage =  "{$reservation->heure_ramassage}";
+    $heure_ramassage =  "{$reservation->heure_ramassage}";
         $clientSummary = " $driverName/ {$reservation->trip->departure}{$reservation->trip->destination}/ $heure_ramassage/";
-        $description = "Réservation avec $clientName 
-        Téléphone : $clientPhone
+        $description = "Réservation avec $clientName
+    Téléphone : $clientPhone
         Numéro vol : $fly_number
         nb_personnes : $nb_personnes
         nb_valises : $nb_valises
-        tarif : $tarif";
-    
-        // Formatage sécurisé des dates
+    tarif : $tarif";
+
+    // Formatage sécurisé des dates
         $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
         $end = $start->copy()->addHour();
-    
+
         $googleClient = new \Google_Client();
         $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
         $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
         $googleClient->setAccessType('offline');
-    
+
         $tokenPath = storage_path('app/google-calendar/token.json');
         if (!file_exists($tokenPath)) {
             throw new \Exception("Le fichier de jeton n'existe pas. Veuillez authentifier votre application.");
         }
-    
+
         $accessToken = json_decode(file_get_contents($tokenPath), true);
         $googleClient->setAccessToken($accessToken);
-    
+
         if ($googleClient->isAccessTokenExpired()) {
             if (isset($accessToken['refresh_token'])) {
                 $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
@@ -711,31 +678,31 @@ class ReservationController extends Controller
                 throw new \Exception("Le jeton d'accès a expiré et aucun refresh token n'est disponible.");
             }
         }
-    
-        $service = new \Google_Service_Calendar($googleClient);
+
+        $service = new \Google_Service_Calendar($gooleClient);
         $calendarId = config('services.google_calendar.calendar_id');
-    
+
         $event = new \Google_Service_Calendar_Event([
             'summary' => $clientSummary,
             'description' => $description,
-            'start' => [
+        'start' => [
                 'dateTime' => $start->toIso8601String(),
                 'timeZone' => config('services.google_calendar.timezone'),
             ],
-            'end' => [
+        'end' => [
                 'dateTime' => $end->toIso8601String(),
                 'timeZone' => config('services.google_calendar.timezone'),
             ],
         ]);
-    
+
         try {
             $service->events->insert($calendarId, $event);
         } catch (\Google_Service_Exception $e) {
             logger()->error('Erreur Google Calendar : ' . $e->getMessage());
-            throw $e;
+        throw $e;
         }
     }
-    
+
     public function mesReservationsClient()
 {
     $client = Auth::user();
@@ -747,7 +714,7 @@ class ReservationController extends Controller
 
     // Récupère les réservations du client connecté
     $reservations = Reservation::with(['trip', 'carDriver.chauffeur', 'carDriver.car'])
-        ->where('client_id', $client->id)
+    ->where('client_id', $client->id)
         ->orderByDesc('date')
         ->paginate(10);
 
@@ -760,7 +727,7 @@ public function mesReservationsChauffeur()
     $chauffeur = Auth::user();
 
     // Vérifie que l'utilisateur est bien un chauffeur
-    if (!$chauffeur->hasRole('chauffeur')) {
+if (!$chauffeur->hasRole('chauffeur')) {
         abort(403, 'Accès non autorisé.');
     }
 
@@ -768,7 +735,7 @@ public function mesReservationsChauffeur()
     $carDriverIds = CarDriver::where('chauffeur_id', $chauffeur->id)->pluck('id');
 
     // Récupère les réservations assignées au chauffeur connecté via carDriver_id
-    $reservations = Reservation::with(['trip', 'client', 'carDriver.car', 'chauffeur','car', 'trip', 'carDriver'])
+$reservations = Reservation::with(['trip', 'client', 'carDriver.car', 'chauffeur','car', 'trip', 'carDriver'])
         ->whereIn('cardriver_id', $carDriverIds)
         ->orderByDesc('date')
         ->paginate(10);
@@ -886,7 +853,7 @@ public function calendar(Request $request)
 {
     // Récupérer l'ID du chauffeur connecté
     $chauffeurId = Auth::user()->id;
-    
+
     // Récupérer les réservations du chauffeur pour le mois courant
     $month = $request->input('month', Carbon::now()->month); // Par défaut, le mois courant
     $year = $request->input('year', Carbon::now()->year); // Par défaut, l'année courante
@@ -919,7 +886,7 @@ public function storeAvis(Request $request, Reservation $reservation)
         'comment' => $request->commentaire,
     ]);
 
-    return redirect()->back()->with('success', 'Merci pour votre avis !');
+return redirect()->back()->with('success', 'Merci pour votre avis !');
 }
 
 
@@ -931,68 +898,11 @@ public function checkAvailability(Request $request)
         'heure_ramassage' => 'required',
     ]);
 
-    $trip = Trip::find($request->trip_id);
-    $date = $request->date;
-    $heureRamassage = $request->heure_ramassage;
-
-    $chauffeurs = User::role('chauffeur')->get();
-    $disponible = false;
-
-    foreach ($chauffeurs as $chauffeur) {
-        // Vérification jour de repos
-        if ($chauffeur->day_off === Carbon::parse($date)->format('l')) {
-            continue;
-        }
-
-        // Vérification voiture
-        $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->first();
-        if (!$carDriver || !$carDriver->car) {
-            continue;
-        }
-
-        // Vérification maintenance
-        $maintenance = Maintenance::where('car_id', $carDriver->car->id)
-            ->where('jour', $date)
-            ->first();
-        if ($maintenance) {
-            continue;
-        }
-
-        // Vérifier les réservations du chauffeur
-        $reservations = Reservation::where('cardriver_id', $carDriver->id)
-            ->where('status', 'Confirmée')
-            ->where('date', $date)
-            ->get();
-
-        $chauffeurDisponible = true;
-
-        foreach ($reservations as $reservation) {
-            $reservationDateTime = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
-            $requestDateTime = Carbon::parse("{$date} {$heureRamassage}");
-
-            if ($reservationDateTime->diffInHours($requestDateTime) < 3) {
-                $chauffeurDisponible = false;
-                break;
-            }
-        }
-
-        if ($chauffeurDisponible) {
-            $disponible = true;
-            break;
-        }
-    }
-
-    if ($disponible) {
-        return response()->json([
-            'available' => true,
-            'message' => '✅ Parfait ! Nous avons de la disponibilité pour cette date et heure. Pour confirmer votre réservation, veuillez nous contacter au +221 77 705 67 67 ou via WhatsApp au +221 77 705 69 69.'
-        ]);
-    } else {
-        return response()->json([
-            'available' => false,
-            'message' => '❌ Désolé, aucun chauffeur n\'est disponible pour cette date et heure. Veuillez contacter notre service client au +221 77 705 67 67 pour trouver un créneau alternatif.'
-        ]);
-    }
+    // Toujours retourner que c'est disponible
+    return response()->json([
+        'available' => true,
+        'message' => '✅ Parfait ! Nous avons de la disponibilité pour cette date et heure. Pour confirmer votre réservation, veuillez nous contacter au +221 77 705 67 67 ou via WhatsApp au +221 77 705 69 69.'
+    ]);
 }
 
 // public function showCalendar()
