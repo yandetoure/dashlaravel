@@ -115,17 +115,17 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div>
                             <label for="heure_ramassage" class="block text-sm font-medium text-gray-700 mb-1">Heure de ramassage <span class="text-red-500">*</span></label>
-                            <input type="time" id="heure_ramassage" name="heure_ramassage" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <input type="time" id="heure_ramassage" name="heure_ramassage" step="300" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                         </div>
                         
                         <div>
                             <label for="heure_vol" class="block text-sm font-medium text-gray-700 mb-1">Heure de vol <span class="text-red-500">*</span></label>
-                            <input type="time" id="heure_vol" name="heure_vol" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <input type="time" id="heure_vol" name="heure_vol" step="300" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                         </div>
                         
                         <div>
                             <label for="heure_convocation" class="block text-sm font-medium text-gray-700 mb-1">Heure de convocation <span class="text-red-500">*</span></label>
-                            <input type="time" id="heure_convocation" name="heure_convocation" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                            <input type="time" id="heure_convocation" name="heure_convocation" step="300" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                         </div>
                     </div>
                     

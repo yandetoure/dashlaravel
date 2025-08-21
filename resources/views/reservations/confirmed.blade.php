@@ -79,12 +79,12 @@
 
                             <div class="mb-3">
                                 <label for="heure_ramassage" class="form-label">Heure Ramassage</label>
-                                <input type="time" class="form-control" id="heure_ramassage" name="heure_ramassage" value="{{ \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') }}" required>
+                                <input type="time" step="300" class="form-control" id="heure_ramassage" name="heure_ramassage" value="{{ \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') }}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="heure_vol" class="form-label">Heure Vol</label>
-                                <input type="time" class="form-control" id="heure_vol" name="heure_vol" value="{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}">
+                                <input type="time" step="300" class="form-control" id="heure_vol" name="heure_vol" value="{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}">
                             </div>
 
                             <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>

@@ -11,6 +11,7 @@ use App\Models\Trip;
 use App\Models\User;
 use App\Models\Invoice;
 use App\Models\CarDriver;
+use App\Models\DriverGroup;
 use App\Models\Maintenance;
 use App\Models\Reservation;
 use Illuminate\Support\Str;
@@ -41,7 +42,19 @@ class ReservationController extends Controller
 {
     public function index(Request $request)
     {
-        $chauffeurs = User::role('chauffeur')->get(); // récupère tous les utilisateurs ayant le rôle 'chauffeur'
+        // Récupérer tous les chauffeurs avec une disponibilité simplifiée
+        $chauffeurs = User::role('chauffeur')->get()->map(function ($chauffeur) {
+            try {
+                $chauffeur->disponibilite = $this->getChauffeurDisponibilite($chauffeur);
+                $chauffeur->en_repos = $this->estChauffeurEnRepos($chauffeur);
+            } catch (\Exception $e) {
+                // En cas d'erreur, considérer le chauffeur comme disponible
+                $chauffeur->disponibilite = ['aujourdhui' => 'Disponible'];
+                $chauffeur->en_repos = false;
+                \Log::error('Erreur lors de la vérification de disponibilité pour le chauffeur ' . $chauffeur->id . ': ' . $e->getMessage());
+            }
+            return $chauffeur;
+        });
 
         // Récupération des réservations avec les relations nécessaires
         $reservations = Reservation::with(['chauffeur', 'client', 'car', 'trip', 'carDriver']);
@@ -613,16 +626,21 @@ try {
 
         // Mettre à jour les champs
         $reservation->date = Carbon::parse($request->date)->format('Y-m-d');
-    $reservation->heure_ramassage = $request->heure_ramassage;
+        $reservation->heure_ramassage = $request->heure_ramassage;
         $reservation->heure_vol = $request->heure_vol;
 
-        // Récupérer le CarDriver lié au chauffeur
-    $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
-
-        if ($carDriver) {
-            $reservation->cardriver_id = $carDriver->id;
+        // Récupérer ou créer le CarDriver lié au chauffeur
+        $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
+        
+        if (!$carDriver) {
+            // Créer un nouveau CarDriver si il n'existe pas
+            $carDriver = CarDriver::create([
+                'chauffeur_id' => $request->chauffeur_id,
+                'car_id' => null // Pas de voiture assignée pour l'instant
+            ]);
         }
 
+        $reservation->cardriver_id = $carDriver->id;
         $reservation->save();
 
         return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
@@ -683,7 +701,7 @@ try {
             }
         }
 
-        $service = new \Google_Service_Calendar($gooleClient);
+        $service = new \Google_Service_Calendar($googleClient);
         $calendarId = config('services.google_calendar.calendar_id');
 
         $event = new \Google_Service_Calendar_Event([
@@ -1102,6 +1120,162 @@ public function showCalendar()
             Mail::to($reservation->email)->send(new ReservationCreatedProspect($reservation));
         } catch (\Exception $e) {
             \Log::error('Erreur envoi email prospect: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Obtenir la disponibilité d'un chauffeur selon le planning des groupes
+     */
+    private function getChauffeurDisponibilite(User $chauffeur, $date = null)
+    {
+        try {
+            // Si aucune date n'est fournie, utiliser la date actuelle
+            if (!$date) {
+                $date = Carbon::today();
+            } else {
+                $date = Carbon::parse($date);
+            }
+            
+            $disponibilite = [];
+
+            // Vérifier d'abord le planning des groupes de chauffeurs
+            $disponibilitePlanning = $this->getDisponibilitePlanning($chauffeur, $date);
+
+            // Vérifier ensuite les réservations existantes
+            $reservationsAujourdhui = Reservation::where('cardriver_id', $chauffeur->id)
+                ->where('date', $date->format('Y-m-d'))
+                ->where('status', '!=', 'Annulée')
+                ->get();
+
+            // Combiner planning et réservations
+            if ($disponibilitePlanning === 'En repos') {
+                $disponibilite['aujourdhui'] = 'En repos';
+            } else {
+                $disponibilite['aujourdhui'] = $reservationsAujourdhui->isEmpty() ? 'Disponible' : 'Occupé';
+            }
+
+            return $disponibilite;
+
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la vérification de disponibilité: ' . $e->getMessage());
+            return ['aujourdhui' => 'Disponible']; // En cas d'erreur, considérer comme disponible
+        }
+    }
+
+    /**
+     * Obtenir la disponibilité d'un chauffeur selon le planning des groupes
+     */
+    private function getDisponibilitePlanning(User $chauffeur, Carbon $date)
+    {
+        try {
+            // Trouver le groupe auquel appartient le chauffeur
+            $driverGroup = DriverGroup::where(function($query) use ($chauffeur) {
+                $query->where('driver_1_id', $chauffeur->id)
+                      ->orWhere('driver_2_id', $chauffeur->id)
+                      ->orWhere('driver_3_id', $chauffeur->id)
+                      ->orWhere('driver_4_id', $chauffeur->id);
+            })->where('is_active', true)->first();
+
+            if (!$driverGroup) {
+                return 'Disponible'; // Pas de groupe = disponible par défaut
+            }
+
+            // Vérifier si le chauffeur est en repos selon le planning
+            $restDrivers = $driverGroup->getRestDaysForDate($date);
+            
+            if (in_array($chauffeur->id, $restDrivers)) {
+                return 'En repos';
+            }
+
+            return 'Disponible';
+
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la vérification du planning: ' . $e->getMessage());
+            return 'Disponible'; // En cas d'erreur, considérer comme disponible
+        }
+    }
+
+    /**
+     * Vérifier si un chauffeur est en repos
+     */
+    private function estChauffeurEnRepos(User $chauffeur)
+    {
+        try {
+            // Vérifier d'abord le planning des groupes de chauffeurs
+            $disponibilitePlanning = $this->getDisponibilitePlanning($chauffeur, Carbon::today());
+            
+            if ($disponibilitePlanning === 'En repos') {
+                return true;
+            }
+
+            // Vérifier s'il a un jour de repos assigné manuellement
+            if (isset($chauffeur->day_off) && $chauffeur->day_off) {
+                $aujourdhui = Carbon::today()->format('l'); // Jour de la semaine en anglais
+                $joursRepos = explode(',', $chauffeur->day_off);
+                
+                // Convertir les jours français en anglais si nécessaire
+                $joursMapping = [
+                    'Lundi' => 'Monday',
+                    'Mardi' => 'Tuesday', 
+                    'Mercredi' => 'Wednesday',
+                    'Jeudi' => 'Thursday',
+                    'Vendredi' => 'Friday',
+                    'Samedi' => 'Saturday',
+                    'Dimanche' => 'Sunday'
+                ];
+
+                foreach ($joursRepos as $jour) {
+                    $jour = trim($jour);
+                    if (isset($joursMapping[$jour])) {
+                        $jour = $joursMapping[$jour];
+                    }
+                    
+                    if ($aujourdhui === $jour) {
+                        return true; // Chauffeur en repos aujourd'hui
+                    }
+                }
+            }
+
+            return false; // Chauffeur pas en repos
+
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la vérification du repos: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Récupérer les chauffeurs avec leur disponibilité selon une date spécifique
+     */
+    private function getChauffeursDisponiblesPourDate($date = null)
+    {
+        $chauffeurs = User::role('chauffeur')->get()->map(function ($chauffeur) use ($date) {
+            $chauffeur->disponibilite = $this->getChauffeurDisponibilite($chauffeur, $date);
+            $chauffeur->en_repos = $this->estChauffeurEnRepos($chauffeur);
+            return $chauffeur;
+        });
+
+        return $chauffeurs;
+    }
+
+
+
+    /**
+     * API pour récupérer les chauffeurs disponibles selon une date
+     */
+    public function getChauffeursDisponibles(Request $request)
+    {
+        try {
+            $request->validate([
+                'date' => 'required|date'
+            ]);
+
+            $chauffeurs = $this->getChauffeursDisponiblesPourDate($request->date);
+
+            return response()->json($chauffeurs);
+        } catch (\Exception $e) {
+            \Log::error('Erreur dans getChauffeursDisponibles: ' . $e->getMessage());
+            return response()->json(['error' => 'Erreur lors de la récupération des chauffeurs'], 500);
         }
     }
 

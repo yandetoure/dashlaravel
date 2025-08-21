@@ -85,6 +85,8 @@ Route::get('/reservations/confirmed', [ReservationController::class, 'confirmed'
 
 Route::get('/reservations/cancelled', [ReservationController::class, 'cancelled'])->name('reservations.cancelled');
 
+Route::post('/reservations/chauffeurs-disponibles', [ReservationController::class, 'getChauffeursDisponibles'])->name('reservations.chauffeurs.disponibles');
+
 
 
 Route::middleware('auth')->group(function () {

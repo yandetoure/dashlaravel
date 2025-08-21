@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de votre réservation</title>
+    <title>Nouvelle réservation assignée</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
             padding: 20px;
         }
         .header {
-            background-color: #10b981;
+            background-color: #2563eb;
             color: white;
             padding: 20px;
             text-align: center;
@@ -30,7 +30,7 @@
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
-            border-left: 4px solid #10b981;
+            border-left: 4px solid #2563eb;
         }
         .detail-row {
             display: flex;
@@ -46,13 +46,6 @@
         .detail-value {
             color: #1e293b;
         }
-        .chauffeur-info {
-            background-color: #dbeafe;
-            border: 1px solid #3b82f6;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
         .footer {
             text-align: center;
             margin-top: 20px;
@@ -60,25 +53,9 @@
             color: #64748b;
             font-size: 14px;
         }
-        .status {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-        .status-en-attente {
-            background-color: #fef3c7;
-            color: #d97706;
-        }
-        .status-en-attente-chauffeur {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
         .important {
-            background-color: #f0f9ff;
-            border: 1px solid #0ea5e9;
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
@@ -87,17 +64,32 @@
 </head>
 <body>
     <div class="header">
-        <h1>✅ Réservation confirmée</h1>
-        <p>Votre demande de transport a été reçue et traitée</p>
+        <h1>🚗 Nouvelle réservation assignée</h1>
+        <p>Vous avez une nouvelle réservation à traiter</p>
     </div>
 
     <div class="content">
-        <p>Bonjour {{ $reservation->first_name }},</p>
+        <p>Bonjour,</p>
         
-        <p>Nous avons bien reçu votre demande de réservation. Voici un récapitulatif de votre demande :</p>
+        <p>Une nouvelle réservation vous a été automatiquement assignée. Veuillez consulter les détails ci-dessous :</p>
 
         <div class="reservation-details">
-            <h3>📋 Détails de votre réservation</h3>
+            <h3>📋 Détails de la réservation</h3>
+            
+            <div class="detail-row">
+                <span class="detail-label">Nom du client :</span>
+                <span class="detail-value">{{ $reservation->first_name }} {{ $reservation->last_name }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Email :</span>
+                <span class="detail-value">{{ $reservation->email }}</span>
+            </div>
+            
+            <div class="detail-row">
+                <span class="detail-label">Téléphone :</span>
+                <span class="detail-value">{{ $reservation->phone_number }}</span>
+            </div>
             
             <div class="detail-row">
                 <span class="detail-label">Date :</span>
@@ -128,49 +120,28 @@
                 <span class="detail-label">Tarif :</span>
                 <span class="detail-value">{{ number_format($reservation->tarif, 0, ',', ' ') }} FCFA</span>
             </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Statut :</span>
-                <span class="detail-value">
-                    <span class="status {{ $reservation->chauffeur_id ? 'status-en-attente' : 'status-en-attente-chauffeur' }}">
-                        {{ $reservation->chauffeur_id ? 'En attente de confirmation' : 'En attente d\'assignation chauffeur' }}
-                    </span>
-                </span>
-            </div>
         </div>
 
-        @if($reservation->chauffeur_id)
-        <div class="chauffeur-info">
-            <h3>🚗 Chauffeur assigné</h3>
-            <p><strong>Un chauffeur a été automatiquement assigné à votre réservation.</strong></p>
-            <p>Vous recevrez une confirmation finale dans les prochaines heures.</p>
-        </div>
-        @else
         <div class="important">
-            <h3>⏳ En cours de traitement</h3>
-            <p>Nous recherchons actuellement un chauffeur disponible pour votre trajet.</p>
-            <p>Vous recevrez une notification dès qu'un chauffeur sera assigné.</p>
-        </div>
-        @endif
-
-        <div class="important">
-            <p><strong>📞 Contact :</strong></p>
-            <p>Pour toute question ou modification, contactez-nous :</p>
+            <p><strong>⚠️ Important :</strong></p>
             <ul>
-                <li>📧 Email : cproservices221@gmail.com</li>
-                <li>📱 Téléphone : +221 XX XX XX XX</li>
+                <li>Cette réservation a été créée par un prospect (nouveau client)</li>
+                <li>Veuillez confirmer votre disponibilité dans le système</li>
+                <li>Contactez le client pour confirmer les détails</li>
+                <li>Mettez à jour le statut de la réservation après confirmation</li>
             </ul>
         </div>
 
-        <p>Merci de votre confiance en CPRO Services.</p>
+        <p>Merci de traiter cette réservation dans les plus brefs délais.</p>
         
         <p>Cordialement,<br>
         L'équipe CPRO Services</p>
     </div>
 
     <div class="footer">
-        <p>Cet email confirme votre demande de réservation. Merci de le conserver.</p>
+        <p>Cet email a été envoyé automatiquement. Merci de ne pas y répondre directement.</p>
         <p>© {{ date('Y') }} CPRO Services. Tous droits réservés.</p>
     </div>
 </body>
 </html>
+

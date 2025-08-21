@@ -7,6 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Mes Réservations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -177,7 +178,8 @@
                         <div class="mb-4">
                             <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
                             <input type="date" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                   name="date" value="{{ \Carbon\Carbon::parse($reservation->date)->format('Y-m-d') }}" required>
+                                   name="date" value="{{ \Carbon\Carbon::parse($reservation->date)->format('Y-m-d') }}" 
+                                   onchange="updateChauffeursDisponibles(this.value, {{ $reservation->id }})" required>
                         </div>
 
                         <div class="mb-4">
@@ -198,12 +200,23 @@
                                     name="chauffeur_id" required>
                                 <option value="">-- Sélectionner un chauffeur --</option>
                                 @foreach ($chauffeurs as $chauffeur)
+                                    @php
+                                        $dateReservation = \Carbon\Carbon::parse($reservation->date);
+                                        $disponibilite = $chauffeur->disponibilite['aujourdhui'] ?? 'Disponible';
+                                        $enRepos = $chauffeur->en_repos ?? false;
+                                        $isAvailable = $disponibilite === 'Disponible' && !$enRepos;
+                                    @endphp
                                     <option value="{{ $chauffeur->id }}"
-                                        {{ $reservation->carDriver && $reservation->carDriver->chauffeur && $reservation->carDriver->chauffeur->id == $chauffeur->id ? 'selected' : '' }}>
+                                        {{ $reservation->carDriver && $reservation->carDriver->chauffeur && $reservation->carDriver->chauffeur->id == $chauffeur->id ? 'selected' : '' }}
+                                        {{ !$isAvailable ? 'disabled' : '' }}>
                                         {{ $chauffeur->first_name }} {{ $chauffeur->last_name }}
+                                        @if(!$isAvailable)
+                                            ({{ $disponibilite === 'En repos' ? 'En repos' : 'Occupé' }})
+                                        @endif
                                     </option>
                                 @endforeach
                             </select>
+                            <p class="text-sm text-gray-500 mt-1">Seuls les chauffeurs disponibles pour cette date sont affichés</p>
                         </div>
 
                         <div class="mt-6">
@@ -236,6 +249,52 @@
             if (event.target == modal) {
                 modal.classList.add('hidden');
             }
+        });
+    }
+
+    // Fonction pour mettre à jour la liste des chauffeurs disponibles selon la date
+    function updateChauffeursDisponibles(date, reservationId) {
+        if (!date) return;
+
+        // Récupérer le select des chauffeurs pour cette réservation
+        const modal = document.getElementById(`editReservationModal${reservationId}`);
+        const chauffeurSelect = modal.querySelector('select[name="chauffeur_id"]');
+        
+        // Afficher un indicateur de chargement
+        chauffeurSelect.innerHTML = '<option value="">Chargement des chauffeurs...</option>';
+
+        // Appel AJAX pour récupérer les chauffeurs disponibles
+        fetch('/reservations/chauffeurs-disponibles', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ date: date })
+        })
+        .then(response => response.json())
+        .then(chauffeurs => {
+            // Vider le select
+            chauffeurSelect.innerHTML = '<option value="">-- Sélectionner un chauffeur --</option>';
+            
+            // Ajouter les chauffeurs disponibles
+            chauffeurs.forEach(chauffeur => {
+                const isAvailable = chauffeur.disponibilite && chauffeur.disponibilite.aujourdhui === 'Disponible' && !chauffeur.en_repos;
+                const option = document.createElement('option');
+                option.value = chauffeur.id;
+                option.textContent = `${chauffeur.first_name} ${chauffeur.last_name}`;
+                
+                if (!isAvailable) {
+                    option.disabled = true;
+                    option.textContent += ` (${chauffeur.disponibilite && chauffeur.disponibilite.aujourdhui === 'En repos' ? 'En repos' : 'Occupé'})`;
+                }
+                
+                chauffeurSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des chauffeurs:', error);
+            chauffeurSelect.innerHTML = '<option value="">Erreur lors du chargement</option>';
         });
     }
 </script>

@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use App\Models\Reservation;
 
-class ReservationCreatedProspect extends Mailable
+class ReservationCreatedDriver extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,17 +23,18 @@ class ReservationCreatedProspect extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre réservation a bien été prise en compte'
+            subject: 'Nouvelle réservation assignée'
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.reservation_created_prospect',
+            view: 'emails.reservation_created_driver',
             with: [
                 'reservation' => $this->reservation,
             ],
         );
     }
 }
+

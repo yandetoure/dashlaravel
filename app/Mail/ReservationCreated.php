@@ -43,7 +43,7 @@ class ReservationCreated extends Mailable
             with: [
                 'reservation' => $this->reservation,
                 'client' => $this->reservation->client,
-                'chauffeur' => $this->reservation->carDriver->chauffeur            
+                'chauffeur' => $this->reservation->carDriver?->chauffeur            
             ],
         );
     }
