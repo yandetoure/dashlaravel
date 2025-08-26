@@ -1869,8 +1869,8 @@
     <section id="partenaires" class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Nos Partenaires</h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Ils nous on fait confiance.</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Ils nous ont fait confiance</h2>
+                {{-- <p class="text-lg text-gray-600 max-w-2xl mx-auto">Ils nous on fait confiance.</p> --}}
             </div>
 
             <div class="partners-carousel relative overflow-hidden">
