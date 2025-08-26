@@ -514,6 +514,52 @@
         </div>
     </section>
 
+    <!-- Section Partenaires -->
+    <section id="partenaires" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Nos Partenaires</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Nous collaborons avec des entreprises de confiance pour vous offrir un service de qualité exceptionnelle.</p>
+            </div>
+
+            <div class="partners-carousel relative overflow-hidden">
+                <div class="partners-track flex transition-transform duration-500 ease-in-out">
+                    <!-- Premier groupe d'images -->
+                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center space-x-8 md:space-x-16">
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                    </div>
+
+                    <!-- Deuxième groupe d'images (dupliqué pour l'effet de continuité) -->
+                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center space-x-8 md:space-x-16">
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                        <div class="partner-item">
+                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="h-16 md:h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -100,6 +100,34 @@
             transition: all 0.2s ease-in-out;
         }
 
+        /* Styles pour les logos des partenaires */
+        .partner-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+
+        .partner-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .partner-item img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .partner-item p {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
         /* Styles pour le modal de réservation */
         .modal {
             display: none;
@@ -603,6 +631,7 @@
                     <a href="#tarifs" class="nav-link hover:text-red-600 transition">Tarifs</a>
                     <a href="#services" class="nav-link hover:text-red-600 transition">Services</a>
                     <a href="#reservation" class="nav-link hover:text-red-600 transition">Réservation</a>
+                    <a href="#partenaires" class="nav-link hover:text-red-600 transition">Partenaires</a>
                     <a href="#contact" class="nav-link hover:text-red-600 transition">Contact</a>
                     @auth
                         <a href="{{ route('profile.edit') }}" class="nav-link hover:text-red-600 transition">Mon compte</a>
@@ -1830,6 +1859,60 @@
                             </div>
                             <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Envoyer le message</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Partenaires -->
+    <section id="partenaires" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Nos Partenaires</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Nous collaborons avec des entreprises de confiance pour vous offrir un service de qualité exceptionnelle.</p>
+            </div>
+
+            <div class="partners-carousel relative overflow-hidden">
+                <div class="partners-track flex transition-transform duration-500 ease-in-out">
+                    <!-- Premier groupe d'images -->
+                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center space-x-8 md:space-x-16">
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">CMA CGM</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">Air France</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">Meet & Greet</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">OBT</p>
+                        </div>
+                    </div>
+
+                    <!-- Deuxième groupe d'images (dupliqué pour l'effet de continuité) -->
+                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center space-x-8 md:space-x-16">
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">CMA CGM</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">Air France</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">Meet & Greet</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <p class="text-xs font-medium text-gray-700 mt-2">OBT</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3485,7 +3568,7 @@ Notre équipe est disponible pour :
                         </div>
                         <div class="ml-3">
                             <p class="text-sm text-blue-700">
-                                <strong>Important :</strong> Votre réservation est actuellement en attente de confirmation par un agent. 
+                                <strong>Important :</strong> Votre réservation est actuellement en attente de confirmation par un agent.
                                 Vous recevrez un email de confirmation une fois validée.
                             </p>
                         </div>
@@ -3581,6 +3664,26 @@ Notre équipe est disponible pour :
                 infoModal.classList.add('active');
                 document.body.classList.add('modal-open');
             });
+        });
+
+        // Carrousel automatique des partenaires
+        document.addEventListener('DOMContentLoaded', function() {
+            const partnersTrack = document.querySelector('.partners-track');
+            if (partnersTrack) {
+                let currentPosition = 0;
+                const slideWidth = 100; // 100% de la largeur
+
+                function moveCarousel() {
+                    currentPosition -= 0.5; // Défilement plus lent
+                    if (currentPosition <= -100) {
+                        currentPosition = 0;
+                    }
+                    partnersTrack.style.transform = `translateX(${currentPosition}%)`;
+                }
+
+                // Démarrer le carrousel automatique
+                setInterval(moveCarousel, 50); // Mise à jour toutes les 50ms pour un défilement fluide
+            }
         });
     </script>
 

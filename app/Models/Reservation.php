@@ -96,7 +96,14 @@ class Reservation extends Model
     }
     
     public function chauffeur() {
-        return $this->belongsTo(User::class, 'cardriver_id');
+        return $this->hasOneThrough(
+            User::class,
+            CarDriver::class,
+            'id',           // clé primaire dans CarDriver
+            'id',           // clé primaire dans User
+            'cardriver_id', // clé étrangère dans Reservation
+            'chauffeur_id'  // clé étrangère dans CarDriver
+        );
     }
     
     public function entreprise() {

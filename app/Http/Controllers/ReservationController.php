@@ -401,7 +401,12 @@ class ReservationController extends Controller
         $this->envoyerEmailReservation($reservation, 'confirmée');
 
         // Ajouter à Google Calendar
-        $this->addToGoogleCalendar($reservation);
+        try {
+            $this->addToGoogleCalendar($reservation);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de l\'ajout à Google Calendar: ' . $e->getMessage());
+            // Continuer même si Google Calendar échoue
+        }
 
         // Ajouter 5 points au client
         if ($reservation->client) {
@@ -657,23 +662,39 @@ try {
 
     private function addToGoogleCalendar($reservation)
     {
+        // Vérifications de sécurité
+        if (!$reservation->client) {
+            \Log::error('Réservation sans client: ' . $reservation->id);
+            return false;
+        }
+
+        if (!$reservation->carDriver || !$reservation->carDriver->chauffeur) {
+            \Log::error('Réservation sans chauffeur assigné: ' . $reservation->id);
+            return false;
+        }
+
+        if (!$reservation->trip) {
+            \Log::error('Réservation sans trajet: ' . $reservation->id);
+            return false;
+        }
+
         $client = $reservation->client;
-    $chauffeur = $reservation->carDriver->chauffeur;
-        $fly_number = $reservation-> numero_vol;
+        $chauffeur = $reservation->carDriver->chauffeur;
+        $fly_number = $reservation->numero_vol;
         $clientName = "{$client->first_name} {$client->last_name}";
-    $clientPhone = $client->phone_number;
-        $driverName =  "{$chauffeur->first_name}";
-        $nb_personnes =  "{$reservation->nb_personnes}";
-        $nb_valises =  "{$reservation->nb_valises}";
-        $tarif =  "{$reservation->tarif}";
-    $heure_ramassage =  "{$reservation->heure_ramassage}";
+        $clientPhone = $client->phone_number ?? 'Non renseigné';
+        $driverName = "{$chauffeur->first_name}";
+        $nb_personnes = "{$reservation->nb_personnes}";
+        $nb_valises = "{$reservation->nb_valises}";
+        $tarif = "{$reservation->tarif}";
+        $heure_ramassage = "{$reservation->heure_ramassage}";
         $clientSummary = " $driverName/ {$reservation->trip->departure}{$reservation->trip->destination}/ $heure_ramassage/";
         $description = "Réservation avec $clientName
-    Téléphone : $clientPhone
-        Numéro vol : $fly_number
-        nb_personnes : $nb_personnes
-        nb_valises : $nb_valises
-    tarif : $tarif";
+Téléphone : $clientPhone
+Numéro vol : $fly_number
+nb_personnes : $nb_personnes
+nb_valises : $nb_valises
+tarif : $tarif";
 
     // Formatage sécurisé des dates
         $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
@@ -719,9 +740,10 @@ try {
 
         try {
             $service->events->insert($calendarId, $event);
+            return true;
         } catch (\Google_Service_Exception $e) {
-            logger()->error('Erreur Google Calendar : ' . $e->getMessage());
-        throw $e;
+            \Log::error('Erreur Google Calendar : ' . $e->getMessage());
+            return false;
         }
     }
 
