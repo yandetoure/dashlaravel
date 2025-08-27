@@ -103,11 +103,17 @@
         /* Styles pour les logos des partenaires */
         .partner-item {
             background: white;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border: 1px solid #e5e7eb;
+            width: 200px;
+            height: 160px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .partner-item:hover {
@@ -118,6 +124,26 @@
         .partner-item img {
             display: block;
             margin: 0 auto;
+            width: 160px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        /* Classe spécifique pour les logos des partenaires */
+        .partner-logo {
+            width: 150px !important;
+            height: 80px !important;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+
+        /* Espacement entre les éléments partenaires */
+        .partners-slide {
+            gap: 2rem !important;
+        }
+
+        .partners-slide .partner-item {
+            margin: 0 1rem;
         }
 
         .partner-item p {
@@ -311,6 +337,8 @@
                 padding: 0 10px;
             }
         }
+
+
 
         /* Variables CSS pour le mode sombre */
         :root {
@@ -587,6 +615,8 @@
         .nav-transparent .mobile-menu-btn {
             color: rgba(255, 255, 255, 0.9);
         }
+
+
     </style>
 </head>
 <body class="font-sans">
@@ -1876,44 +1906,44 @@
             <div class="partners-carousel relative overflow-hidden">
                 <div class="partners-track flex transition-transform duration-500 ease-in-out">
                     <!-- Premier groupe d'images -->
-                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center space-x-8 md:space-x-16">
+                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center">
                         <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="partner-logo">
                             <p class="text-xs font-medium text-gray-700 mt-2">CMA CGM</p>
                         </div>
                         <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="partner-logo">
                             <p class="text-xs font-medium text-gray-700 mt-2">Air France</p>
                         </div>
                         <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="partner-logo">
                             <p class="text-xs font-medium text-gray-700 mt-2">Meet & Greet</p>
                         </div>
                         <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="h-16 md:h-20 object-contain transition-all duration-300">
+                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="partner-logo">
                             <p class="text-xs font-medium text-gray-700 mt-2">OBT</p>
                         </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/Aibd.png') }}" alt="AIBD" class="partner-logo">
+                            <p class="text-xs font-medium text-gray-700 mt-2">AIBD</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/IPAR1.webp') }}" alt="IPAR" class="partner-logo">
+                            <p class="text-xs font-medium text-gray-700 mt-2">IPAR</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/TSI.png') }}" alt="TSI" class="partner-logo">
+                            <p class="text-xs font-medium text-gray-700 mt-2">TSI</p>
+                        </div>
+                        <div class="partner-item text-center">
+                            <img src="{{ asset('images/partners/Sen.png') }}" alt="SEN" class="partner-logo">
+                            <p class="text-xs font-medium text-gray-700 mt-2">SEN</p>
+                        </div>
+
                     </div>
 
                     <!-- Deuxième groupe d'images (dupliqué pour l'effet de continuité) -->
-                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center space-x-8 md:space-x-16">
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="h-16 md:h-20 object-contain transition-all duration-300">
-                            <p class="text-xs font-medium text-gray-700 mt-2">CMA CGM</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="h-16 md:h-20 object-contain transition-all duration-300">
-                            <p class="text-xs font-medium text-gray-700 mt-2">Air France</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="h-16 md:h-20 object-contain transition-all duration-300">
-                            <p class="text-xs font-medium text-gray-700 mt-2">Meet & Greet</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="h-16 md:h-20 object-contain transition-all duration-300">
-                            <p class="text-xs font-medium text-gray-700 mt-2">OBT</p>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -3667,24 +3697,31 @@ Notre équipe est disponible pour :
         });
 
         // Carrousel automatique des partenaires
-        document.addEventListener('DOMContentLoaded', function() {
-            const partnersTrack = document.querySelector('.partners-track');
-            if (partnersTrack) {
-                let currentPosition = 0;
-                const slideWidth = 100; // 100% de la largeur
+        document.addEventListener("DOMContentLoaded", function () {
+    const track = document.querySelector(".partners-track");
+    if (!track) return;
 
-                function moveCarousel() {
-                    currentPosition -= 0.5; // Défilement plus lent
-                    if (currentPosition <= -100) {
-                        currentPosition = 0;
-                    }
-                    partnersTrack.style.transform = `translateX(${currentPosition}%)`;
-                }
+    // Dupliquer le contenu pour créer l'effet infini
+    track.innerHTML += track.innerHTML;
 
-                // Démarrer le carrousel automatique
-                setInterval(moveCarousel, 50); // Mise à jour toutes les 50ms pour un défilement fluide
-            }
-        });
+    let position = 0;
+    const speed = 1; // vitesse de défilement (px/frame)
+
+    function animate() {
+        position -= speed;
+
+        // Quand la moitié du contenu est sortie, on reset
+        if (Math.abs(position) >= track.scrollWidth / 2) {
+            position = 0;
+        }
+
+        track.style.transform = `translateX(${position}px)`;
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+});
+
     </script>
 
 </body>
