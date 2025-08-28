@@ -1077,7 +1077,7 @@
                     </div>
                     <div class="p-6">
                         <h4 class="text-xl font-bold text-gray-800 mb-2">Salon Business</h4>
-                        <p class="text-gray-600 mb-4">Véhicule spacieux et élégant pour les groupes et familles</p>
+                        <p class="text-gray-600 mb-4">Véhicule spacieux et élégant pour bien commencer votre voyage.</p>
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
                             <span><i class="fas fa-users mr-2"></i>Jusqu'à 4 passagers</span>
                             <span><i class="fas fa-suitcase mr-2"></i>Bagages inclus</span>
@@ -1097,9 +1097,9 @@
                     </div>
                     <div class="p-6">
                         <h4 class="text-xl font-bold text-gray-800 mb-2">Hyundai H1</h4>
-                        <p class="text-gray-600 mb-4">Van moderne et confortable pour les trajets quotidiens</p>
+                        <p class="text-gray-600 mb-4">Van moderne et confortable pour un voyage </p>
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 6 passagers</span>
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 7 passagers</span>
                             <span><i class="fas fa-suitcase mr-2"></i>Espace bagages</span>
                         </div>
                         <div class="text-center">
@@ -1119,8 +1119,8 @@
             <h4 class="text-xl font-bold text-gray-800 mb-2">H1 Familial</h4>
             <p class="text-gray-600 mb-4">Parfait pour les voyages en famille et les excursions</p>
             <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <span><i class="fas fa-users mr-2"></i>Jusqu'à 7 passagers</span>
-                <span><i class="fas fa-baby mr-2"></i>Siège bébé</span>
+                <span><i class="fas fa-users mr-2"></i>Jusqu'à 11 passagers</span>
+                <span><i class="fas fa-suitcase mr-2"></i>Bagages Limités</span>
             </div>
             <div class="text-center">
                 <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
