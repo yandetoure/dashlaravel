@@ -1052,7 +1052,7 @@
                 <div class="absolute inset-0 bg-gradient-to-r from-red-900/80 to-transparent flex items-center">
                     <div class="text-white p-8 md:p-16">
                         <h3 class="text-3xl md:text-5xl font-bold mb-4">Une flotte moderne et diversifiée</h3>
-                        <p class="text-xl md:text-2xl mb-6 max-w-2xl">Des véhicules de dernière génération équipés des meilleures technologies pour votre confort et votre sécurité</p>
+                        <p class="text-xl md:text-2xl mb-6 max-w-2xl">Des véhicules robustes, spacieux et confortables, garants de votre sécurité</p>
                         <div class="flex flex-wrap gap-4">
                             <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                                 <span class="text-white font-semibold">✓ Climatisation</span>
@@ -1073,13 +1073,13 @@
                 <!-- Véhicule 1 - Van de luxe -->
                 <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="relative overflow-hidden">
-                        <img src="{{ asset('images/flotte/van-d-luxe-500x334.png') }}" alt="Van de luxe" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="{{ asset('images/flotte/business.jpeg') }}" alt="Van de luxe" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
                     </div>
                     <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">Van de Luxe</h4>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Salon Business</h4>
                         <p class="text-gray-600 mb-4">Véhicule spacieux et élégant pour les groupes et familles</p>
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 8 passagers</span>
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 4 passagers</span>
                             <span><i class="fas fa-suitcase mr-2"></i>Bagages inclus</span>
                         </div>
                         <div class="text-center">
@@ -1110,85 +1110,26 @@
                     </div>
                 </div>
 
-                <!-- Véhicule 3 - Van écran -->
-                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="relative overflow-hidden">
-                        <img src="{{ asset('images/flotte/ecran-van--500x280.jpg') }}" alt="Van écran" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">Van Écran</h4>
-                        <p class="text-gray-600 mb-4">Solution économique pour les navettes partagées</p>
-                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 12 passagers</span>
-                            <span><i class="fas fa-suitcase mr-2"></i>Bagages limités</span>
-                        </div>
-                        <div class="text-center">
-                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
-                                Réserver
-                            </a>
-                        </div>
-                    </div>
-                </div>
+     <!-- Véhicule 5 - H1 Gallery -->
+     <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+        <div class="relative overflow-hidden">
+            <img src="{{ asset('images/flotte/h1-tq-highlights-gallery-original-28-pc.jpg') }}" alt="H1 Gallery" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+        </div>
+        <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-800 mb-2">H1 Familial</h4>
+            <p class="text-gray-600 mb-4">Parfait pour les voyages en famille et les excursions</p>
+            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <span><i class="fas fa-users mr-2"></i>Jusqu'à 7 passagers</span>
+                <span><i class="fas fa-baby mr-2"></i>Siège bébé</span>
+            </div>
+            <div class="text-center">
+                <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                    Réserver
+                </a>
+            </div>
+        </div>
+    </div>        
 
-                <!-- Véhicule 4 - H1 Highlights -->
-                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="relative overflow-hidden">
-                        <img src="{{ asset('images/flotte/h1-tq-highlights-gallery-original-03-pc.jpg') }}" alt="H1 Highlights" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">H1 Business</h4>
-                        <p class="text-gray-600 mb-4">Véhicule professionnel pour les déplacements d'affaires</p>
-                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 4 passagers</span>
-                            <span><i class="fas fa-briefcase mr-2"></i>Espace travail</span>
-                        </div>
-                        <div class="text-center">
-                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
-                                Réserver
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Véhicule 5 - H1 Gallery -->
-                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="relative overflow-hidden">
-                        <img src="{{ asset('images/flotte/h1-tq-highlights-gallery-original-28-pc.jpg') }}" alt="H1 Gallery" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">H1 Familial</h4>
-                        <p class="text-gray-600 mb-4">Parfait pour les voyages en famille et les excursions</p>
-                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 7 passagers</span>
-                            <span><i class="fas fa-baby mr-2"></i>Siège bébé</span>
-                        </div>
-                        <div class="text-center">
-                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
-                                Réserver
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Véhicule 6 - OIP -->
-                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="relative overflow-hidden">
-                        <img src="{{ asset('images/flotte/OIP-1-e1730809419352.jpeg') }}" alt="Véhicule OIP" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">Véhicule Spécial</h4>
-                        <p class="text-gray-600 mb-4">Solution sur mesure pour vos besoins particuliers</p>
-                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Sur mesure</span>
-                            <span><i class="fas fa-cog mr-2"></i>Personnalisé</span>
-                        </div>
-                        <div class="text-center">
-                            <a href="#contact" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
-                                Demander
-                            </a>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Call to action -->
