@@ -146,6 +146,98 @@
             margin: 0 1rem;
         }
 
+        /* Styles responsives pour les partenaires */
+        @media (max-width: 1024px) {
+            .partner-logo {
+                width: 120px !important;
+                height: 70px !important;
+            }
+
+            .partners-slide {
+                gap: 1.5rem !important;
+            }
+
+            .partners-slide .partner-item {
+                margin: 0 0.75rem;
+            }
+
+            .partner-item {
+                width: 180px;
+                height: 140px;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .partner-logo {
+                width: 100px !important;
+                height: 60px !important;
+            }
+
+            .partners-slide {
+                gap: 1rem !important;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .partners-slide .partner-item {
+                margin: 0.5rem;
+            }
+
+            .partner-item {
+                width: 150px;
+                height: 120px;
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .partner-logo {
+                width: 80px !important;
+                height: 50px !important;
+            }
+
+            .partners-slide {
+                gap: 0.75rem !important;
+            }
+
+            .partners-slide .partner-item {
+                margin: 0.25rem;
+            }
+
+            .partner-item {
+                width: 120px;
+                height: 100px;
+                padding: 0.5rem;
+            }
+
+            .partner-item p {
+                font-size: 0.7rem;
+                margin-top: 0.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .partner-logo {
+                width: 70px !important;
+                height: 45px !important;
+            }
+
+            .partners-slide {
+                gap: 0.5rem !important;
+            }
+
+            .partner-item {
+                width: 100px;
+                height: 80px;
+                padding: 0.5rem;
+            }
+
+            .partner-item p {
+                font-size: 0.65rem;
+            }
+        }
+
         .partner-item p {
             margin-top: 0.5rem;
             text-align: center;
@@ -658,6 +750,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#accueil" class="nav-link hover:text-red-600 transition">Accueil</a>
                     <a href="#actualites" class="nav-link hover:text-red-600 transition">Actualités</a>
+                    <a href="#flotte" class="nav-link hover:text-red-600 transition">Flotte</a>
                     <a href="#tarifs" class="nav-link hover:text-red-600 transition">Tarifs</a>
                     <a href="#services" class="nav-link hover:text-red-600 transition">Services</a>
                     <a href="#reservation" class="nav-link hover:text-red-600 transition">Réservation</a>
@@ -725,6 +818,9 @@
                 </a>
                 <a href="#actualites" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
                     <i class="fas fa-newspaper mr-3"></i>Actualités
+                </a>
+                <a href="#flotte" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <i class="fas fa-car mr-3"></i>Flotte
                 </a>
                 <a href="#tarifs" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
                     <i class="fas fa-tags mr-3"></i>Tarifs
@@ -941,6 +1037,177 @@
             </div>
         </div>
     </div>
+
+    <!-- Section Flotte -->
+    <section id="flotte" class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Notre Flotte de Véhicules</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Découvrez notre gamme complète de véhicules modernes et confortables pour tous vos besoins de transport</p>
+            </div>
+
+            <!-- Image principale avec overlay -->
+            <div class="relative mb-16 rounded-2xl overflow-hidden shadow-2xl">
+                <img src="{{ asset('images/flotte/banner.jpeg') }}" alt="Notre flotte de véhicules" class="w-full h-96 md:h-[500px] object-cover">
+                <div class="absolute inset-0 bg-gradient-to-r from-red-900/80 to-transparent flex items-center">
+                    <div class="text-white p-8 md:p-16">
+                        <h3 class="text-3xl md:text-5xl font-bold mb-4">Une flotte moderne et diversifiée</h3>
+                        <p class="text-xl md:text-2xl mb-6 max-w-2xl">Des véhicules de dernière génération équipés des meilleures technologies pour votre confort et votre sécurité</p>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                                <span class="text-white font-semibold">✓ Climatisation</span>
+                            </div>
+                            <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                                <span class="text-white font-semibold">✓ GPS intégré</span>
+                            </div>
+                            <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                                <span class="text-white font-semibold">✓ Entretien régulier</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grille des véhicules -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Véhicule 1 - Van de luxe -->
+                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ asset('images/flotte/van-d-luxe-500x334.png') }}" alt="Van de luxe" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Van de Luxe</h4>
+                        <p class="text-gray-600 mb-4">Véhicule spacieux et élégant pour les groupes et familles</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 8 passagers</span>
+                            <span><i class="fas fa-suitcase mr-2"></i>Bagages inclus</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                                Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Véhicule 2 - Hyundai H1 -->
+                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ asset('images/flotte/hyundai-h-1-van-mod-image-1220w-500x265.jpg') }}" alt="Hyundai H1" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Hyundai H1</h4>
+                        <p class="text-gray-600 mb-4">Van moderne et confortable pour les trajets quotidiens</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 6 passagers</span>
+                            <span><i class="fas fa-suitcase mr-2"></i>Espace bagages</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                                Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Véhicule 3 - Van écran -->
+                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ asset('images/flotte/ecran-van--500x280.jpg') }}" alt="Van écran" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Van Écran</h4>
+                        <p class="text-gray-600 mb-4">Solution économique pour les navettes partagées</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 12 passagers</span>
+                            <span><i class="fas fa-suitcase mr-2"></i>Bagages limités</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                                Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Véhicule 4 - H1 Highlights -->
+                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ asset('images/flotte/h1-tq-highlights-gallery-original-03-pc.jpg') }}" alt="H1 Highlights" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">H1 Business</h4>
+                        <p class="text-gray-600 mb-4">Véhicule professionnel pour les déplacements d'affaires</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 4 passagers</span>
+                            <span><i class="fas fa-briefcase mr-2"></i>Espace travail</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                                Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Véhicule 5 - H1 Gallery -->
+                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ asset('images/flotte/h1-tq-highlights-gallery-original-28-pc.jpg') }}" alt="H1 Gallery" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">H1 Familial</h4>
+                        <p class="text-gray-600 mb-4">Parfait pour les voyages en famille et les excursions</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 7 passagers</span>
+                            <span><i class="fas fa-baby mr-2"></i>Siège bébé</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                                Réserver
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Véhicule 6 - OIP -->
+                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="relative overflow-hidden">
+                        <img src="{{ asset('images/flotte/OIP-1-e1730809419352.jpeg') }}" alt="Véhicule OIP" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Véhicule Spécial</h4>
+                        <p class="text-gray-600 mb-4">Solution sur mesure pour vos besoins particuliers</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                            <span><i class="fas fa-users mr-2"></i>Sur mesure</span>
+                            <span><i class="fas fa-cog mr-2"></i>Personnalisé</span>
+                        </div>
+                        <div class="text-center">
+                            <a href="#contact" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
+                                Demander
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="text-center mt-16">
+                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 md:p-12 text-white">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4">Besoin d'un véhicule spécifique ?</h3>
+                    <p class="text-lg mb-6">Notre équipe est là pour vous conseiller et vous proposer la solution la plus adaptée à vos besoins</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#reservation" class="bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">
+                            Réserver maintenant
+                        </a>
+                        <a href="#contact" class="border-2 border-white text-white hover:bg-white hover:text-red-600 font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">
+                            Nous contacter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -1906,7 +2173,7 @@
             <div class="partners-carousel relative overflow-hidden">
                 <div class="partners-track flex transition-transform duration-500 ease-in-out">
                     <!-- Premier groupe d'images -->
-                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center">
+                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center flex-wrap">
                         <div class="partner-item text-center">
                             <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="partner-logo">
                             <p class="text-xs font-medium text-gray-700 mt-2">CMA CGM</p>
