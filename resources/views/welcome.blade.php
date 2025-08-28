@@ -100,6 +100,52 @@
             transition: all 0.2s ease-in-out;
         }
 
+        /* Animation de défilement des partenaires */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-scroll {
+            animation: scroll 30s linear infinite;
+        }
+
+        .partners-scroll-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partners-scroll-track {
+            display: flex;
+            width: max-content;
+        }
+
+        .partners-group {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .partner-item {
+            flex-shrink: 0;
+            width: 12rem;
+        }
+
+        @media (min-width: 768px) {
+            .partner-item {
+                width: 14rem;
+            }
+        }
+
+        /* Pause au survol */
+        .partners-scroll-container:hover .animate-scroll {
+            animation-play-state: paused;
+        }
+        }
+
         /* Styles pour les logos des partenaires */
         .partner-item {
             background: white;
@@ -1129,8 +1175,7 @@
             </div>
         </div>
     </div>        
-
-            </div>
+</div>
 
             <!-- Call to action -->
             <div class="text-center mt-16">
@@ -2104,54 +2149,239 @@
     </section>
 
     <!-- Section Partenaires -->
-    <section id="partenaires" class="py-16 bg-white">
+    <section id="partenaires" class="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Ils nous ont fait confiance</h2>
-                {{-- <p class="text-lg text-gray-600 max-w-2xl mx-auto">Ils nous on fait confiance.</p> --}}
             </div>
 
-            <div class="partners-carousel relative overflow-hidden">
-                <div class="partners-track flex transition-transform duration-500 ease-in-out">
-                    <!-- Premier groupe d'images -->
-                    <div class="partners-slide flex-shrink-0 w-full flex justify-center items-center flex-wrap">
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" alt="CMA CGM" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">CMA CGM</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" alt="Air France" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">Air France</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" alt="Meet & Greet" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">Meet & Greet</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/logo_obt.jpeg') }}" alt="OBT" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">OBT</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/Aibd.png') }}" alt="AIBD" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">AIBD</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/IPAR1.webp') }}" alt="IPAR" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">IPAR</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/TSI.png') }}" alt="TSI" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">TSI</p>
-                        </div>
-                        <div class="partner-item text-center">
-                            <img src="{{ asset('images/partners/Sen.png') }}" alt="SEN" class="partner-logo">
-                            <p class="text-xs font-medium text-gray-700 mt-2">SEN</p>
+            <!-- Bande défilante des partenaires -->
+            <div class="partners-scroll-container relative overflow-hidden">
+                <div class="partners-scroll-track flex animate-scroll">
+                    <!-- Premier groupe de partenaires -->
+                    <div class="partners-group flex space-x-8 md:space-x-12 flex-shrink-0">
+                        <!-- Partenaire 1 - CMA CGM -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-red-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" 
+                                         alt="CMA CGM" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">CMA CGM</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Transport maritime</p>
+                            </div>
                         </div>
 
+                        <!-- Partenaire 2 - Air France -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-blue-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" 
+                                         alt="Air France" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">Air France</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Compagnie aérienne</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 3 - Meet & Greet -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-green-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" 
+                                         alt="Meet & Greet" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">Meet & Greet</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Service VIP</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 4 - OBT -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-purple-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/logo_obt.jpeg') }}" 
+                                         alt="OBT" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">OBT</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Organisation voyages</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 5 - AIBD -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/Aibd.png') }}" 
+                                         alt="AIBD" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">AIBD</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Aéroport international</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 6 - IPAR -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-teal-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/IPAR1.webp') }}" 
+                                         alt="IPAR" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">IPAR</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Institut recherche</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 7 - TSI -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-indigo-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/TSI.png') }}" 
+                                         alt="TSI" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">TSI</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Technologies</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 8 - SEN -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-pink-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/Sen.png') }}" 
+                                         alt="SEN" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">SEN</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Services nationaux</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Deuxième groupe d'images (dupliqué pour l'effet de continuité) -->
+                    <!-- Deuxième groupe (dupliqué pour l'effet de continuité) -->
+                    <div class="partners-group flex space-x-8 md:space-x-12 flex-shrink-0">
+                        <!-- Partenaire 1 - CMA CGM -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-red-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/CMA_CGM_logo.svg (1).png') }}" 
+                                         alt="CMA CGM" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">CMA CGM</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Transport maritime</p>
+                            </div>
+                        </div>
 
+                        <!-- Partenaire 2 - Air France -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-blue-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/Air-France-Logo (1).png') }}" 
+                                         alt="Air France" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">Air France</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Compagnie aérienne</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 3 - Meet & Greet -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-green-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/MEET & GREET Logo.png') }}" 
+                                         alt="Meet & Greet" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">Meet & Greet</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Service VIP</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 4 - OBT -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-purple-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/logo_obt.jpeg') }}" 
+                                         alt="OBT" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">OBT</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Organisation voyages</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 5 - AIBD -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-orange-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/Aibd.png') }}" 
+                                         alt="AIBD" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">AIBD</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Aéroport international</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 6 - IPAR -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-teal-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/IPAR1.webp') }}" 
+                                         alt="IPAR" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">IPAR</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Institut recherche</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 7 - TSI -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-indigo-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/TSI.png') }}" 
+                                         alt="TSI" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">TSI</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Technologies</p>
+                            </div>
+                        </div>
+
+                        <!-- Partenaire 8 - SEN -->
+                        <div class="partner-item group bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex-shrink-0 w-48 md:w-56">
+                            <div class="text-center">
+                                <div class="partner-logo-container mb-4 p-3 bg-gray-50 rounded-lg group-hover:bg-pink-50 transition-colors duration-300">
+                                    <img src="{{ asset('images/partners/Sen.png') }}" 
+                                         alt="SEN" 
+                                         class="h-12 md:h-16 w-auto mx-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300">
+                                </div>
+                                <h4 class="text-sm md:text-base font-semibold text-gray-800 mb-1">SEN</h4>
+                                <p class="text-xs md:text-sm text-gray-600">Services nationaux</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to action -->
+            <div class="text-center mt-16">
+                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 md:p-12 text-white">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4">Devenez notre partenaire</h3>
+                    <p class="text-lg mb-6">Rejoignez notre réseau de partenaires et développons ensemble des solutions innovantes</p>
+                    <a href="#contact" class="bg-white text-red-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">
+                        <i class="fas fa-handshake mr-2"></i>Nous contacter
+                    </a>
                 </div>
             </div>
         </div>
