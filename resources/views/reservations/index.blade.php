@@ -199,24 +199,21 @@
                             <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                                     name="chauffeur_id" required>
                                 <option value="">-- Sélectionner un chauffeur --</option>
-                                @foreach ($chauffeurs as $chauffeur)
-                                    @php
-                                        $dateReservation = \Carbon\Carbon::parse($reservation->date);
-                                        $disponibilite = $chauffeur->disponibilite['aujourdhui'] ?? 'Disponible';
-                                        $enRepos = $chauffeur->en_repos ?? false;
-                                        $isAvailable = $disponibilite === 'Disponible' && !$enRepos;
-                                    @endphp
-                                    <option value="{{ $chauffeur->id }}"
-                                        {{ $reservation->carDriver && $reservation->carDriver->chauffeur && $reservation->carDriver->chauffeur->id == $chauffeur->id ? 'selected' : '' }}
-                                        {{ !$isAvailable ? 'disabled' : '' }}>
-                                        {{ $chauffeur->first_name }} {{ $chauffeur->last_name }}
-                                        @if(!$isAvailable)
-                                            ({{ $disponibilite === 'En repos' ? 'En repos' : 'Occupé' }})
+                                @foreach ($reservation->available_drivers as $driver)
+                                    <option value="{{ $driver['id'] }}"
+                                        {{ $reservation->carDriver && $reservation->carDriver->chauffeur && $reservation->carDriver->chauffeur->id == $driver['id'] ? 'selected' : '' }}
+                                        {{ !$driver['is_available'] ? 'disabled' : '' }}>
+                                        {{ $driver['first_name'] }} {{ $driver['last_name'] }}
+                                        @if(isset($driver['group_name']) && $driver['group_name'] !== 'Aucun groupe')
+                                            ({{ $driver['group_name'] }})
+                                        @endif
+                                        @if(!$driver['is_available'])
+                                            - {{ $driver['reason'] }}
                                         @endif
                                     </option>
                                 @endforeach
                             </select>
-                            <p class="text-sm text-gray-500 mt-1">Seuls les chauffeurs disponibles pour cette date sont affichés</p>
+                            <p class="text-sm text-gray-500 mt-1">Seuls les chauffeurs disponibles pour le {{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }} sont affichés (selon les groupes de chauffeurs)</p>
                         </div>
 
                         <div class="mt-6">
