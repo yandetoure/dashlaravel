@@ -45,29 +45,6 @@
                 </div>
             @endif
 
-            @if($cars->isEmpty())
-                <div class="alert alert-warning mb-3">
-                    <strong>⚠️ Aucune voiture disponible</strong><br>
-                    Aucune voiture n'est enregistrée dans le système.
-                </div>
-            @else
-                <div class="alert alert-info mb-3">
-                    <strong>ℹ️ Réassignation de voiture</strong><br>
-                    Vous pouvez réassigner une voiture existante à un nouveau chauffeur. L'ancienne assignation sera automatiquement supprimée.
-                </div>
-            @endif
-
-            @if($drivers->isEmpty())
-                <div class="alert alert-warning mb-3">
-                    <strong>⚠️ Aucun chauffeur disponible</strong><br>
-                    Aucun chauffeur n'est enregistré dans le système.
-                </div>
-            @else
-                <div class="alert alert-info mb-3">
-                    <strong>ℹ️ Informations d'assignation</strong><br>
-                    Les voitures montrent leur chauffeur assigné actuel, et les chauffeurs montrent leur voiture assignée actuelle. Vous pouvez réassigner en sélectionnant une nouvelle combinaison.
-                </div>
-            @endif
 
             <form action="{{ route('cardrivers.store') }}" method="POST">
                 @csrf
