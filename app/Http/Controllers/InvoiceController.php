@@ -1,4 +1,4 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -79,9 +79,9 @@ class InvoiceController extends Controller
         'overdue' => $statsQuery->where('status', 'offert')->count(),
         'total_amount' => $statsQuery->sum('amount'),
         'paid_amount' => $statsQuery->where('status', 'payée')->sum('amount'),
-        'unpaid_amount' => $statsQuery->where('status', '<>', 'en_attente')->sum('amount'),
-    ];    
-    
+        'unpaid_amount' => $statsQuery->where('status', 'en_attente')->sum('amount'),
+    ];
+
     return view('invoices.index', compact('invoices', 'stats'));
 }
 
@@ -89,49 +89,49 @@ class InvoiceController extends Controller
     // {
     //     $user = Auth::user();
     //     $query = Invoice::with(['reservation.client', 'reservation.trip']);
-    
+
     //     // Filtrage par statut de facture
     //     if ($request->has('status') && $request->status != '') {
     //         $query->where('status', $request->status);
     //     }
-    
+
     //     // Filtrage par date
     //     if ($request->has('date_from') && $request->date_from != '') {
     //         $query->whereDate('invoice_date', '>=', $request->date_from);
     //     }
-    
+
     //     if ($request->has('date_to') && $request->date_to != '') {
     //         $query->whereDate('invoice_date', '<=', $request->date_to);
     //     }
-    
+
     //     // Si c'est un client, ne montrer que ses factures
     //     if ($user->hasRole('client')) {
     //         $query->whereHas('reservation', function ($q) use ($user) {
     //             $q->where('client_id', $user->id);
     //         });
     //     }
-    
+
     //     // Si c'est un chauffeur, ne montrer que les factures où il est assigné
     //     if ($user->hasRole('chauffeur')) {
     //         $query->whereHas('reservation.carDriver', function ($q) use ($user) {
     //             $q->where('chauffeur_id', $user->id);
     //         });
     //     }
-    
+
     //     // Si recherche par numéro de facture
     //     if ($request->has('invoice_number') && $request->invoice_number != '') {
     //         $query->where('invoice_number', 'like', '%' . $request->invoice_number . '%');
     //     }
-    
+
     //     // Si recherche par nom de client
     //     if ($request->has('client_name') && $request->client_name != '') {
     //         $query->whereHas('reservation.client', function ($q) use ($request) {
     //             $q->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', '%' . $request->client_name . '%');
     //         });
     //     }
-    
+
     //     $invoices = $query->orderBy('invoice_date', 'desc')->paginate(10);
-    
+
     //     // Obtenir les statistiques pour le tableau de bord
     //     $stats = [
     //         'total' => Invoice::count(),
@@ -139,10 +139,10 @@ class InvoiceController extends Controller
     //         'pending' => Invoice::where('status', 'En attente')->count(),
     //         'overdue' => Invoice::where('status', 'En retard')->count(),
     //     ];
-    
+
     //     return view('invoices.index', compact('invoices', 'stats'));
     // }
-    
+
 
     /**
      * Affiche les détails d'une facture spécifique
@@ -156,7 +156,7 @@ class InvoiceController extends Controller
         }
         return view('invoices.show', compact('invoice'));
     }
-    
+
 
     /**
      * Télécharger la facture en PDF
@@ -164,16 +164,16 @@ class InvoiceController extends Controller
     public function downloadPdf(Invoice $invoice)
     {
         $user = Auth::user();
-        
+
         // Vérifier les permissions
         // if ($user->hasRole('client') && $invoice->reservation->client_id != $user->id) {
         //     abort(403, 'Vous n\'êtes pas autorisé à télécharger cette facture.');
         // }
 
         $invoice->load(['reservation.client', 'reservation.trip', 'reservation.chauffeur']);
-        
+
         $pdf = \PDF::loadView('invoices.pdf', compact('invoice'));
-        
+
         return $pdf->download('facture-' . $invoice->invoice_number . '.pdf');
     }
 

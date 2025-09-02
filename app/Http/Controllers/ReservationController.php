@@ -426,7 +426,7 @@ class ReservationController extends Controller
         Invoice::create([
             'reservation_id' => $reservation->id,
             'amount' => $reservation->tarif,
-            'status' => 'unpaid',
+            'status' => 'en_attente',
             'invoice_number' => Invoice::generateInvoiceNumber(),
             'invoice_date' => now(),
         ]);
@@ -605,7 +605,7 @@ try {
   /**
      * Affiche une réservation spécifique.
      */
-    
+
     public function show($id)
 {
     $reservation = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip', 'carDriver'])->findOrFail($id);
@@ -636,7 +636,7 @@ try {
 
         // Récupérer ou créer le CarDriver lié au chauffeur
         $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
-        
+
         if (!$carDriver) {
             // Créer un nouveau CarDriver si il n'existe pas
             $carDriver = CarDriver::create([
@@ -1116,7 +1116,7 @@ public function showCalendar()
 
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la création de la réservation: ' . $e->getMessage());
-            
+
             // Retourner la vue avec l'erreur
             return view('welcome', [
                 'error' => 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.',
@@ -1157,7 +1157,7 @@ public function showCalendar()
             } else {
                 $date = Carbon::parse($date);
             }
-            
+
             $disponibilite = [];
 
             // Vérifier d'abord le planning des groupes de chauffeurs
@@ -1204,7 +1204,7 @@ public function showCalendar()
 
             // Vérifier si le chauffeur est en repos selon le planning
             $restDrivers = $driverGroup->getRestDaysForDate($date);
-            
+
             if (in_array($chauffeur->id, $restDrivers)) {
                 return 'En repos';
             }
@@ -1225,7 +1225,7 @@ public function showCalendar()
         try {
             // Vérifier d'abord le planning des groupes de chauffeurs
             $disponibilitePlanning = $this->getDisponibilitePlanning($chauffeur, Carbon::today());
-            
+
             if ($disponibilitePlanning === 'En repos') {
                 return true;
             }
@@ -1234,11 +1234,11 @@ public function showCalendar()
             if (isset($chauffeur->day_off) && $chauffeur->day_off) {
                 $aujourdhui = Carbon::today()->format('l'); // Jour de la semaine en anglais
                 $joursRepos = explode(',', $chauffeur->day_off);
-                
+
                 // Convertir les jours français en anglais si nécessaire
                 $joursMapping = [
                     'Lundi' => 'Monday',
-                    'Mardi' => 'Tuesday', 
+                    'Mardi' => 'Tuesday',
                     'Mercredi' => 'Wednesday',
                     'Jeudi' => 'Thursday',
                     'Vendredi' => 'Friday',
@@ -1251,7 +1251,7 @@ public function showCalendar()
                     if (isset($joursMapping[$jour])) {
                         $jour = $joursMapping[$jour];
                     }
-                    
+
                     if ($aujourdhui === $jour) {
                         return true; // Chauffeur en repos aujourd'hui
                     }

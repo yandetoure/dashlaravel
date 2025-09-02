@@ -1,4 +1,4 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -40,7 +40,7 @@ class DashboardClientController extends Controller
         // Factures impayées
         $unpaidInvoices = Invoice::whereHas('reservation', function ($q) use ($user) {
             $q->where('client_id', $user->id);
-        })->where('status', 'unpaid')->get();
+        })->where('status', 'en_attente')->get();
         $unpaidTotal = $unpaidInvoices->sum('amount');
 
         // Points fidélité et statut
