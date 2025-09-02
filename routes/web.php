@@ -57,9 +57,13 @@ Route::middleware('auth:')->group(function () {
     Route::get('/agents', [AuthController::class, 'listagent'])->name('agents.index');
     Route::get('/admin', [AuthController::class, 'listadmin'])->name('admins.index');
     Route::get('/superaddmin', [AuthController::class, 'listAllUsers'])->name('superadmins.index');
-Route::get('/users/{user}', [AuthController::class, 'showUser'])->name('users.show');
-Route::get('/users/{user}/edit', [AuthController::class, 'editUser'])->name('users.edit');
-Route::put('/users/{user}', [AuthController::class, 'updateUser'])->name('users.update');
+    Route::get('/users/{user}', [AuthController::class, 'showUser'])->name('users.show');
+    Route::get('/users/{user}/edit', [AuthController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [AuthController::class, 'updateUser'])->name('users.update');
+    
+    // Routes pour l'assignation des jours de repos
+    Route::get('/admin/assign-day-off', [AuthController::class, 'createDayOff'])->name('admin.assign-day-off');
+    Route::post('/admin/assign-day-off', [AuthController::class, 'assignRandomDayOff'])->name('admin.assign-day-off');
 
     Route::Resource('cars', CarController::class);
     Route::Resource('auth', AuthController::class);

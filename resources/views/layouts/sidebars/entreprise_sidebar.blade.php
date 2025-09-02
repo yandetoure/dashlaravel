@@ -48,7 +48,6 @@
             <!-- Chauffeurs -->
             <li><a href="{{ route('drivers.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Liste des chauffeurs</a></li>
             <li><a href="{{ route('admin.create.account.page') }}" class="nav-link"><span class="material-icons">person_add</span> Ajouter un Chauffeur</a></li>
-            <li><a href="{{ route('admin.assign-day-off') }}" class="nav-link"><span class="material-icons">event_busy</span> Jour de repos</a></li>
 
             <!-- Voitures assignées -->
             <li><a href="{{ route('cardrivers.index') }}" class="nav-link"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>

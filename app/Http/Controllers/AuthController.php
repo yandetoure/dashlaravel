@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\DriverGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -90,10 +91,40 @@ class AuthController extends Controller
 
         public function listdriver()
         {
-            // Récupérer tous les utilisateurs ayant le rôle "chauffeur"
-            $drivers = User::role('chauffeur')->paginate(10); // Pagination de 10 chauffeur par page
+            // Récupérer tous les utilisateurs ayant le rôle "chauffeur" avec pagination
+            $drivers = User::role('chauffeur')->paginate(10);
 
-            // Retourner la vue avec les clients
+            // Récupérer tous les groupes de chauffeurs actifs
+            $driverGroups = DriverGroup::where('is_active', true)->get();
+            
+            // Calculer la disponibilité pour chaque chauffeur basée sur les groupes
+            $today = Carbon::now();
+            $availableDriverIds = [];
+            $restDriverIds = [];
+            
+            foreach ($driverGroups as $group) {
+                $restDays = $group->getRestDaysForDate($today);
+                $availableDays = $group->getAvailableDriversForDate($today);
+                
+                $restDriverIds = array_merge($restDriverIds, $restDays);
+                $availableDriverIds = array_merge($availableDriverIds, $availableDays);
+            }
+            
+            // Ajouter les informations de disponibilité à chaque chauffeur
+            foreach ($drivers as $driver) {
+                if (in_array($driver->id, $restDriverIds)) {
+                    $driver->availability_status = 'rest';
+                    $driver->availability_text = 'En repos';
+                } elseif (in_array($driver->id, $availableDriverIds)) {
+                    $driver->availability_status = 'available';
+                    $driver->availability_text = 'Disponible';
+                } else {
+                    $driver->availability_status = 'unknown';
+                    $driver->availability_text = 'Non assigné';
+                }
+            }
+
+            // Retourner la vue avec les chauffeurs
             return view('drivers.index', compact('drivers'));
         }
 
