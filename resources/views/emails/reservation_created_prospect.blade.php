@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation de votre réservation</title>
+    <title>Nouvelle de votre réservation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,8 +87,8 @@
 </head>
 <body>
     <div class="header">
-        <h1>✅ Réservation confirmée</h1>
-        <p>Votre demande de transport a été reçue et traitée</p>
+        <h1>✅ Nouvelle Réservation </h1>
+        <p>Votre demande de transport a été reçue et est en cours de traitement</p>
     </div>
 
     <div class="content">
