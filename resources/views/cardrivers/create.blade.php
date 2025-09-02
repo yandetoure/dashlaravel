@@ -39,6 +39,26 @@
         <div class="card shadow-lg p-4 mx-auto" style="max-width: 500px;">
             <h2 class="text-center mb-4">🚗 Assigner un Chauffeur</h2>
 
+            @if(session('error'))
+                <div class="alert alert-danger mb-3">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if($cars->isEmpty())
+                <div class="alert alert-warning mb-3">
+                    <strong>⚠️ Aucune voiture disponible</strong><br>
+                    Toutes les voitures sont déjà assignées à des chauffeurs.
+                </div>
+            @endif
+
+            @if($drivers->isEmpty())
+                <div class="alert alert-warning mb-3">
+                    <strong>⚠️ Aucun chauffeur disponible</strong><br>
+                    Tous les chauffeurs sont déjà assignés à des voitures.
+                </div>
+            @endif
+
             <form action="{{ route('cardrivers.store') }}" method="POST">
                 @csrf
 

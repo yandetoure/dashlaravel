@@ -690,11 +690,11 @@ try {
         $heure_ramassage = "{$reservation->heure_ramassage}";
         $clientSummary = " $driverName/ {$reservation->trip->departure}{$reservation->trip->destination}/ $heure_ramassage/";
         $description = "Réservation avec $clientName
-Téléphone : $clientPhone
-Numéro vol : $fly_number
-nb_personnes : $nb_personnes
-nb_valises : $nb_valises
-tarif : $tarif";
+        Téléphone : $clientPhone
+        Numéro vol : $fly_number
+        nb_personnes : $nb_personnes
+        nb_valises : $nb_valises
+        tarif : $tarif";
 
     // Formatage sécurisé des dates
         $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");

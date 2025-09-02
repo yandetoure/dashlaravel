@@ -16,7 +16,7 @@ class CardriverController extends Controller
                 $roleQuery->where('name', 'chauffeur');
             });
         })->with('drivers')->paginate(10);
-    
+
         return view('cardrivers.index', compact('cars'));
     }
 
