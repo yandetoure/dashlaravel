@@ -48,7 +48,12 @@
             @if($cars->isEmpty())
                 <div class="alert alert-warning mb-3">
                     <strong>⚠️ Aucune voiture disponible</strong><br>
-                    Toutes les voitures sont déjà assignées à des chauffeurs.
+                    Aucune voiture n'est enregistrée dans le système.
+                </div>
+            @else
+                <div class="alert alert-info mb-3">
+                    <strong>ℹ️ Réassignation de voiture</strong><br>
+                    Vous pouvez réassigner une voiture existante à un nouveau chauffeur. L'ancienne assignation sera automatiquement supprimée.
                 </div>
             @endif
 
