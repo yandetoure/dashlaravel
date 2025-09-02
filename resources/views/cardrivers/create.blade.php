@@ -60,7 +60,12 @@
             @if($drivers->isEmpty())
                 <div class="alert alert-warning mb-3">
                     <strong>⚠️ Aucun chauffeur disponible</strong><br>
-                    Tous les chauffeurs sont déjà assignés à des voitures.
+                    Aucun chauffeur n'est enregistré dans le système.
+                </div>
+            @else
+                <div class="alert alert-info mb-3">
+                    <strong>ℹ️ Informations d'assignation</strong><br>
+                    Les voitures montrent leur chauffeur assigné actuel, et les chauffeurs montrent leur voiture assignée actuelle. Vous pouvez réassigner en sélectionnant une nouvelle combinaison.
                 </div>
             @endif
 
@@ -72,7 +77,14 @@
                     <select name="car_id" id="car_id" class="form-select shadow-sm">
                         <option selected disabled>-- Sélectionner une voiture --</option>
                         @foreach($cars as $car)
-                            <option value="{{ $car->id }}">{{ $car->marque }} - {{ $car->matricule }}</option>
+                            <option value="{{ $car->id }}">
+                                {{ $car->marque }} - {{ $car->matricule }}
+                                @if($car->assigned_driver)
+                                    🔴 Assignée à: {{ $car->assigned_driver->first_name }} {{ $car->assigned_driver->last_name }}
+                                @else
+                                    🟢 Disponible
+                                @endif
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -82,7 +94,14 @@
                     <select name="chauffeur_id" id="chauffeur_id" class="form-select shadow-sm">
                         <option selected disabled>-- Sélectionner un chauffeur --</option>
                         @foreach($drivers as $driver)
-                            <option value="{{ $driver->id }}">{{ $driver->first_name }} {{ $driver->last_name }}</option>
+                            <option value="{{ $driver->id }}">
+                                {{ $driver->first_name }} {{ $driver->last_name }}
+                                @if($driver->assigned_car)
+                                    🔴 Assigné à: {{ $driver->assigned_car->marque }} - {{ $driver->assigned_car->matricule }}
+                                @else
+                                    🟢 Disponible
+                                @endif
+                            </option>
                         @endforeach
                     </select>
                 </div>
