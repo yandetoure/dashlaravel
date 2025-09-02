@@ -35,6 +35,7 @@ use App\Mail\ReservationConfirmedclient;
 use App\Mail\ReservationConfirmedDriver;
 use App\Mail\ReservationCreatedProspect;
 use App\Mail\ReservationAdminNotification;
+use App\Mail\ReservationClientNotification;
 
 
 
@@ -525,11 +526,11 @@ try {
                  }
              }
 
-             // Email au client ou prospect
+             // Email au client ou prospect avec numéro du chauffeur
              $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
              if ($clientEmail) {
                  try {
-                     Mail::to($clientEmail)->send(new ReservationConfirmedclient($reservation));
+                     Mail::to($clientEmail)->send(new ReservationClientNotification($reservation, 'confirmed'));
                  } catch (\Exception $e) {
                      \Log::error('Erreur envoi email confirmation client: ' . $e->getMessage());
                  }
@@ -552,12 +553,12 @@ try {
                  }
              }
 
-             // Email au client ou prospect
+             // Email au client ou prospect avec numéro du chauffeur
              $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
              if ($clientEmail) {
                  try {
-                     Mail::to($clientEmail)->send(new ReservationCanceledclient($reservation));
-    } catch (\Exception $e) {
+                     Mail::to($clientEmail)->send(new ReservationClientNotification($reservation, 'cancelled'));
+                 } catch (\Exception $e) {
                      \Log::error('Erreur envoi email annulation client: ' . $e->getMessage());
                  }
              }
