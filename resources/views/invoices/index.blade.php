@@ -39,13 +39,13 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="mb-4">Gestion des factures</h1>
-            
+
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
-            
+
             <!-- Cartes statistiques -->
             <div class="row mb-4">
                 <div class="col-md-3">
@@ -135,10 +135,9 @@
                             <label for="status">Statut</label>
                             <select class="form-control" id="status" name="status">
                                 <option value="">Tous</option>
-                                <option value="En attente" {{ request('status') == 'en_attente' ? 'selected' : '' }}>En attente</option>
-                                <option value="Payée" {{ request('status') == 'payée' ? 'selected' : '' }}>Payée</option>
-                                {{-- <option value="En retard" {{ request('status') == 'en_attente' ? 'selected' : '' }}>En retard</option> --}}
-                                <option value="Annulée" {{ request('status') == 'offert' ? 'selected' : '' }}>Gratuit</option>
+                                <option value="en_attente" {{ request('status') == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                                <option value="payée" {{ request('status') == 'payée' ? 'selected' : '' }}>Payée</option>
+                                <option value="offert" {{ request('status') == 'offert' ? 'selected' : '' }}>Gratuit</option>
                             </select>
                         </div>
                         {{-- <div class="col-md-2 mb-3">
@@ -156,8 +155,8 @@
                     </form>
                 </div>
             </div>
-            
-            <!-- Tableau des factures -->
+
+<!-- Tableau des factures -->
             <div class="card">
                 <div class="card-header">
                     <h5>Liste des factures</h5>
@@ -193,7 +192,7 @@
                                         <span class="badge bg-success">Payée</span>
                                         @elseif($invoice->status == 'en_attente')
                                             <span class="badge bg-warning text-dark">En attente</span>
-                                        @elseif($invoice->status == 'en_attente')
+                                        @elseif($invoice->status == 'offert')
                                             <span class="badge bg-danger">Gratuit</span>
                                         @else
                                             <span class="badge bg-secondary">{{ $invoice->status }}</span>
@@ -207,7 +206,7 @@
                                                 <a href="{{ route('invoices.download', $invoice->id) }}" class="btn btn-sm btn-secondary">
                                                     <i class="fas fa-download"></i> PDF
                                                 </a>
-                                                @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']) && $invoice->status != 'Payée')
+                                                @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']) && $invoice->status != 'payée')
                                                     <form action="{{ route('invoices.markAsPaid', $invoice->id) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Marquer cette facture comme payée?')">
@@ -226,8 +225,8 @@
                             </tbody>
                         </table>
                     </div>
-                    
-                    <!-- Pagination -->
+
+
                     <div class="d-flex justify-content-center mt-4">
                         {{ $invoices->appends(request()->query())->links() }}
                     </div>

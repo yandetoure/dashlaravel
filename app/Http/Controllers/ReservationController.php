@@ -34,38 +34,31 @@ use App\Mail\ReservationCanceledDriver;
 use App\Mail\ReservationConfirmedclient;
 use App\Mail\ReservationConfirmedDriver;
 use App\Mail\ReservationCreatedProspect;
+use App\Mail\ReservationAdminNotification;
+use App\Mail\ReservationClientNotification;
 
 
 
 
 class ReservationController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Affiche la liste des réservations.
+     */
+    public function index()
     {
-        // Récupérer tous les chauffeurs avec une disponibilité simplifiée
-        $chauffeurs = User::role('chauffeur')->get()->map(function ($chauffeur) {
-            try {
-                $chauffeur->disponibilite = $this->getChauffeurDisponibilite($chauffeur);
-                $chauffeur->en_repos = $this->estChauffeurEnRepos($chauffeur);
-            } catch (\Exception $e) {
-                // En cas d'erreur, considérer le chauffeur comme disponible
-                $chauffeur->disponibilite = ['aujourdhui' => 'Disponible'];
-                $chauffeur->en_repos = false;
-                \Log::error('Erreur lors de la vérification de disponibilité pour le chauffeur ' . $chauffeur->id . ': ' . $e->getMessage());
-            }
-            return $chauffeur;
-        });
+        $reservations = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip'])
+            ->orderBy('date', 'desc')
+            ->orderBy('heure_ramassage', 'desc')
+            ->paginate(10);
 
-        // Récupération des réservations avec les relations nécessaires
-        $reservations = Reservation::with(['chauffeur', 'client', 'car', 'trip', 'carDriver']);
+        // Récupérer tous les chauffeurs avec leur disponibilité pour aujourd'hui
+        $chauffeurs = User::role('chauffeur')->get();
 
-        // Filtrage par statut si un statut est sélectionné
-        if ($request->has('status') && !empty($request->status)) {
-            $reservations = $reservations->where('status', $request->status);
+        // Pour chaque réservation, calculer les chauffeurs disponibles pour sa date
+        foreach ($reservations as $reservation) {
+            $reservation->available_drivers = $this->getAvailableDriversForDate($reservation->date, $reservation->heure_ramassage);
         }
-
-        // Pagination
-        $reservations = $reservations->paginate(10);
 
         return view('reservations.index', compact('reservations', 'chauffeurs'));
     }
@@ -426,7 +419,7 @@ class ReservationController extends Controller
         Invoice::create([
             'reservation_id' => $reservation->id,
             'amount' => $reservation->tarif,
-            'status' => 'unpaid',
+            'status' => 'en_attente',
             'invoice_number' => Invoice::generateInvoiceNumber(),
             'invoice_date' => now(),
         ]);
@@ -500,11 +493,11 @@ try {
      // Méthode pour enregistrer un email lors de la création ou modification de la réservation
      private function envoyerEmailReservation(Reservation $reservation, $status = 'created')
  {
-         // Email à l'entreprise (toujours envoyé)
+         // Email à l'admin (toujours envoyé)
          try {
-             Mail::to('cproservices221@gmail.com')->send(new ReservationCreated($reservation));
+             Mail::to('cproservices221@gmail.com')->send(new ReservationAdminNotification($reservation, $status));
          } catch (\Exception $e) {
-             \Log::error('Erreur envoi email entreprise: ' . $e->getMessage());
+             \Log::error('Erreur envoi email admin: ' . $e->getMessage());
          }
 
          // Email au client (si ce n'est pas un prospect)
@@ -533,21 +526,21 @@ try {
                  }
              }
 
-             // Email au client ou prospect
+             // Email au client ou prospect avec numéro du chauffeur
              $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
              if ($clientEmail) {
                  try {
-                     Mail::to($clientEmail)->send(new ReservationConfirmedclient($reservation));
+                     Mail::to($clientEmail)->send(new ReservationClientNotification($reservation, 'confirmed'));
                  } catch (\Exception $e) {
                      \Log::error('Erreur envoi email confirmation client: ' . $e->getMessage());
                  }
              }
 
-             // Email à l'entreprise
+             // Email à l'admin
              try {
-                 Mail::to('cproservices221@gmail.com')->send(new ReservationConfirmed($reservation));
+                 Mail::to('cproservices221@gmail.com')->send(new ReservationAdminNotification($reservation, 'confirmed'));
              } catch (\Exception $e) {
-                 \Log::error('Erreur envoi email confirmation entreprise: ' . $e->getMessage());
+                 \Log::error('Erreur envoi email confirmation admin: ' . $e->getMessage());
              }
 
          } elseif ($status === 'annulée') {
@@ -560,22 +553,22 @@ try {
                  }
              }
 
-             // Email au client ou prospect
+             // Email au client ou prospect avec numéro du chauffeur
              $clientEmail = $reservation->client ? $reservation->client->email : $reservation->email;
              if ($clientEmail) {
                  try {
-                     Mail::to($clientEmail)->send(new ReservationCanceledclient($reservation));
-    } catch (\Exception $e) {
+                     Mail::to($clientEmail)->send(new ReservationClientNotification($reservation, 'cancelled'));
+                 } catch (\Exception $e) {
                      \Log::error('Erreur envoi email annulation client: ' . $e->getMessage());
                  }
              }
 
-             // Email à l'entreprise
+                          // Email à l'admin
              try {
-                 Mail::to('cproservices221@gmail.com')->send(new ReservationCanceled($reservation));
+                 Mail::to('cproservices221@gmail.com')->send(new ReservationAdminNotification($reservation, 'cancelled'));
              } catch (\Exception $e) {
-                 \Log::error('Erreur envoi email annulation entreprise: ' . $e->getMessage());
-}
+                 \Log::error('Erreur envoi email annulation admin: ' . $e->getMessage());
+             }
          }
      }
 
@@ -602,15 +595,27 @@ try {
         return view('reservations.cancelled', compact('reservations'));
     }
 
-  /**
+      /**
      * Affiche une réservation spécifique.
      */
-    
     public function show($id)
-{
-    $reservation = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip', 'carDriver'])->findOrFail($id);
-    return view('reservations.show', compact('reservation'));
-}
+    {
+        $reservation = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip', 'carDriver'])->findOrFail($id);
+        return view('reservations.show', compact('reservation'));
+    }
+
+    /**
+     * Affiche le formulaire d'édition d'une réservation.
+     */
+    public function edit($id)
+    {
+        $reservation = Reservation::with(['carDriver.chauffeur', 'carDriver.car', 'client', 'trip'])->findOrFail($id);
+
+        // Récupérer les chauffeurs disponibles pour la date de la réservation
+        $availableDrivers = $this->getAvailableDriversForDate($reservation->date, $reservation->heure_ramassage);
+
+        return view('reservations.edit', compact('reservation', 'availableDrivers'));
+    }
 
 
     /**
@@ -636,7 +641,7 @@ try {
 
         // Récupérer ou créer le CarDriver lié au chauffeur
         $carDriver = CarDriver::where('chauffeur_id', $request->chauffeur_id)->first();
-        
+
         if (!$carDriver) {
             // Créer un nouveau CarDriver si il n'existe pas
             $carDriver = CarDriver::create([
@@ -647,6 +652,16 @@ try {
 
         $reservation->cardriver_id = $carDriver->id;
         $reservation->save();
+
+        // Charger les relations nécessaires pour l'email
+        $reservation->load(['client', 'carDriver.chauffeur', 'trip']);
+
+        // Envoyer notification à l'admin
+        try {
+            Mail::to('cproservices221@gmail.com')->send(new ReservationAdminNotification($reservation, 'updated'));
+        } catch (\Exception $e) {
+            \Log::error('Erreur envoi email notification modification admin: ' . $e->getMessage());
+        }
 
         return redirect()->route('reservations.index')->with('success', 'Réservation mise à jour avec succès.');
     }
@@ -690,11 +705,11 @@ try {
         $heure_ramassage = "{$reservation->heure_ramassage}";
         $clientSummary = " $driverName/ {$reservation->trip->departure}{$reservation->trip->destination}/ $heure_ramassage/";
         $description = "Réservation avec $clientName
-Téléphone : $clientPhone
-Numéro vol : $fly_number
-nb_personnes : $nb_personnes
-nb_valises : $nb_valises
-tarif : $tarif";
+        Téléphone : $clientPhone
+        Numéro vol : $fly_number
+        nb_personnes : $nb_personnes
+        nb_valises : $nb_valises
+        tarif : $tarif";
 
     // Formatage sécurisé des dates
         $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
@@ -1116,7 +1131,7 @@ public function showCalendar()
 
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la création de la réservation: ' . $e->getMessage());
-            
+
             // Retourner la vue avec l'erreur
             return view('welcome', [
                 'error' => 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.',
@@ -1157,7 +1172,7 @@ public function showCalendar()
             } else {
                 $date = Carbon::parse($date);
             }
-            
+
             $disponibilite = [];
 
             // Vérifier d'abord le planning des groupes de chauffeurs
@@ -1204,7 +1219,7 @@ public function showCalendar()
 
             // Vérifier si le chauffeur est en repos selon le planning
             $restDrivers = $driverGroup->getRestDaysForDate($date);
-            
+
             if (in_array($chauffeur->id, $restDrivers)) {
                 return 'En repos';
             }
@@ -1225,7 +1240,7 @@ public function showCalendar()
         try {
             // Vérifier d'abord le planning des groupes de chauffeurs
             $disponibilitePlanning = $this->getDisponibilitePlanning($chauffeur, Carbon::today());
-            
+
             if ($disponibilitePlanning === 'En repos') {
                 return true;
             }
@@ -1234,11 +1249,11 @@ public function showCalendar()
             if (isset($chauffeur->day_off) && $chauffeur->day_off) {
                 $aujourdhui = Carbon::today()->format('l'); // Jour de la semaine en anglais
                 $joursRepos = explode(',', $chauffeur->day_off);
-                
+
                 // Convertir les jours français en anglais si nécessaire
                 $joursMapping = [
                     'Lundi' => 'Monday',
-                    'Mardi' => 'Tuesday', 
+                    'Mardi' => 'Tuesday',
                     'Mercredi' => 'Wednesday',
                     'Jeudi' => 'Thursday',
                     'Vendredi' => 'Friday',
@@ -1251,7 +1266,7 @@ public function showCalendar()
                     if (isset($joursMapping[$jour])) {
                         $jour = $joursMapping[$jour];
                     }
-                    
+
                     if ($aujourdhui === $jour) {
                         return true; // Chauffeur en repos aujourd'hui
                     }
@@ -1289,16 +1304,152 @@ public function showCalendar()
     {
         try {
             $request->validate([
-                'date' => 'required|date'
+                'date' => 'required|date',
+                'heure_ramassage' => 'nullable|date_format:H:i'
             ]);
 
-            $chauffeurs = $this->getChauffeursDisponiblesPourDate($request->date);
+            $availableDrivers = $this->getAvailableDriversForDate($request->date, $request->heure_ramassage);
 
-            return response()->json($chauffeurs);
+            return response()->json($availableDrivers);
         } catch (\Exception $e) {
             \Log::error('Erreur dans getChauffeursDisponibles: ' . $e->getMessage());
             return response()->json(['error' => 'Erreur lors de la récupération des chauffeurs'], 500);
         }
+    }
+
+    /**
+     * Route pour récupérer les chauffeurs disponibles pour une date spécifique
+     */
+    public function getAvailableDriversForReservation(Request $request)
+    {
+        try {
+            $request->validate([
+                'date' => 'required|date',
+                'heure_ramassage' => 'nullable|date_format:H:i'
+            ]);
+
+            $availableDrivers = $this->getAvailableDriversForDate($request->date, $request->heure_ramassage);
+
+            return response()->json([
+                'success' => true,
+                'drivers' => $availableDrivers
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Erreur dans getAvailableDriversForReservation: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Erreur lors de la récupération des chauffeurs'
+            ], 500);
+        }
+    }
+
+    /**
+     * Récupère les chauffeurs disponibles pour une date spécifique
+     */
+    private function getAvailableDriversForDate($date, $heure_ramassage = null)
+    {
+        $dateCarbon = Carbon::parse($date);
+
+        // Récupérer tous les chauffeurs
+        $chauffeurs = User::role('chauffeur')->get();
+
+        $availableDrivers = [];
+
+        foreach ($chauffeurs as $chauffeur) {
+            $isAvailable = true;
+            $reason = null;
+
+            // 1. Vérifier la disponibilité selon les groupes de chauffeurs
+            $driverGroup = DriverGroup::where(function($query) use ($chauffeur) {
+                $query->where('driver_1_id', $chauffeur->id)
+                      ->orWhere('driver_2_id', $chauffeur->id)
+                      ->orWhere('driver_3_id', $chauffeur->id)
+                      ->orWhere('driver_4_id', $chauffeur->id);
+            })->where('is_active', true)->first();
+
+            if ($driverGroup) {
+                // Vérifier si le chauffeur est en repos selon le planning du groupe
+                $restDrivers = $driverGroup->getRestDaysForDate($date);
+                if (in_array($chauffeur->id, $restDrivers)) {
+                    $isAvailable = false;
+                    $reason = 'En repos selon le planning du groupe';
+                }
+            } else {
+                // Si le chauffeur n'est dans aucun groupe actif, vérifier son jour de repos personnel
+                if ($chauffeur->day_off) {
+                    $dayOfWeek = $dateCarbon->format('l'); // Jour de la semaine (Monday, Tuesday, etc.)
+
+                    // Convertir les jours français en anglais si nécessaire
+                    $joursMapping = [
+                        'Lundi' => 'Monday',
+                        'Mardi' => 'Tuesday',
+                        'Mercredi' => 'Wednesday',
+                        'Jeudi' => 'Thursday',
+                        'Vendredi' => 'Friday',
+                        'Samedi' => 'Saturday',
+                        'Dimanche' => 'Sunday'
+                    ];
+
+                    $jourRepos = $chauffeur->day_off;
+                    if (isset($joursMapping[$jourRepos])) {
+                        $jourRepos = $joursMapping[$jourRepos];
+                    }
+
+                    if ($jourRepos === $dayOfWeek) {
+                        $isAvailable = false;
+                        $reason = 'En repos ce jour-là';
+                    }
+                }
+            }
+
+            // 2. Vérifier s'il a une voiture assignée
+            $carDriver = CarDriver::where('chauffeur_id', $chauffeur->id)->first();
+            if (!$carDriver) {
+                $isAvailable = false;
+                $reason = 'Aucune voiture assignée';
+            } else {
+                // 3. Vérifier si la voiture est en maintenance
+                $maintenance = Maintenance::where('car_id', $carDriver->car_id)
+                    ->where('jour', $date)
+                    ->first();
+
+                if ($maintenance) {
+                    $isAvailable = false;
+                    $reason = 'Voiture en maintenance';
+                }
+            }
+
+            // 4. Vérifier les réservations existantes (si une heure est spécifiée)
+            if ($heure_ramassage && $isAvailable && $carDriver) {
+                $existingReservations = Reservation::where('cardriver_id', $carDriver->id)
+                    ->where('status', 'Confirmée')
+                    ->where('date', $date)
+                    ->get();
+
+                foreach ($existingReservations as $reservation) {
+                    $reservationTime = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
+                    $requestTime = Carbon::parse("{$date} {$heure_ramassage}");
+
+                    // Vérifier si les réservations se chevauchent (moins de 3 heures d'écart)
+                    if ($reservationTime->diffInHours($requestTime) < 3) {
+                        $isAvailable = false;
+                        $reason = 'Réservation existante';
+                        break;
+                    }
+                }
+            }
+
+            $availableDrivers[] = [
+                'id' => $chauffeur->id,
+                'first_name' => $chauffeur->first_name,
+                'last_name' => $chauffeur->last_name,
+                'is_available' => $isAvailable,
+                'reason' => $reason,
+                'group_name' => $driverGroup ? $driverGroup->group_name : 'Aucun groupe'
+            ];
+        }
+
+        return $availableDrivers;
     }
 
 }

@@ -8,7 +8,7 @@
     <title>Réservation Annulée</title>
 </head>
 <body>
-    <h1>Bonjour {{ $reservation->carDriver->chauffeur->first_name}} {{ $reservation->carDriver->chauffeur->first_name }},</h1>
+    <h1>Bonjour {{ $reservation->carDriver->chauffeur->first_name}} {{ $reservation->carDriver->chauffeur->last_name }},</h1>
 
     <p>Nous vous informons que votre réservation a été annulée</p>
     <p>Voici les détails de votre réservation :</p>

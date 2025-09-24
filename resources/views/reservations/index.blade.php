@@ -115,14 +115,13 @@
                             </span>
                         </td>
                         <td class="py-4 px-4 whitespace-nowrap text-sm font-medium">
-                            <button type="button"
-                                    class="inline-flex items-center mr-2 px-3 py-1.5 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                                    onclick="openModal('editReservationModal{{ $reservation->id }}')">
+                            <a href="{{ route('reservations.edit', $reservation->id) }}"
+                               class="inline-flex items-center mr-2 px-3 py-1.5 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                                 Modifier
-                            </button>
+                            </a>
                             <a href="{{ route('reservations.show', $reservation->id) }}"
                                class="inline-flex items-center px-3 py-1.5 border border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-md transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,158 +145,10 @@
         </div>
     </div>
 
-    <!-- Modals -->
-    @foreach($reservations as $reservation)
-    <div id="editReservationModal{{ $reservation->id }}" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
 
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-blue-600 px-4 py-3 sm:px-6">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg leading-6 font-medium text-white">
-                            Modifier la Réservation
-                        </h3>
-                        <button type="button" class="text-white hover:text-gray-200" onclick="closeModal('editReservationModal{{ $reservation->id }}')">
-                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <form action="{{ route('reservations.update', $reservation->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="mb-4">
-                            <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                            <input type="date" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                   name="date" value="{{ \Carbon\Carbon::parse($reservation->date)->format('Y-m-d') }}" 
-                                   onchange="updateChauffeursDisponibles(this.value, {{ $reservation->id }})" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="heure_ramassage" class="block text-sm font-medium text-gray-700 mb-1">Heure Ramassage</label>
-                            <input type="time" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                   name="heure_ramassage" value="{{ \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') }}" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="heure_vol" class="block text-sm font-medium text-gray-700 mb-1">Heure Vol</label>
-                            <input type="time" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                   name="heure_vol" value="{{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}">
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="chauffeur_id" class="block text-sm font-medium text-gray-700 mb-1">Chauffeur</label>
-                            <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                    name="chauffeur_id" required>
-                                <option value="">-- Sélectionner un chauffeur --</option>
-                                @foreach ($chauffeurs as $chauffeur)
-                                    @php
-                                        $dateReservation = \Carbon\Carbon::parse($reservation->date);
-                                        $disponibilite = $chauffeur->disponibilite['aujourdhui'] ?? 'Disponible';
-                                        $enRepos = $chauffeur->en_repos ?? false;
-                                        $isAvailable = $disponibilite === 'Disponible' && !$enRepos;
-                                    @endphp
-                                    <option value="{{ $chauffeur->id }}"
-                                        {{ $reservation->carDriver && $reservation->carDriver->chauffeur && $reservation->carDriver->chauffeur->id == $chauffeur->id ? 'selected' : '' }}
-                                        {{ !$isAvailable ? 'disabled' : '' }}>
-                                        {{ $chauffeur->first_name }} {{ $chauffeur->last_name }}
-                                        @if(!$isAvailable)
-                                            ({{ $disponibilite === 'En repos' ? 'En repos' : 'Occupé' }})
-                                        @endif
-                                    </option>
-                                @endforeach
-                            </select>
-                            <p class="text-sm text-gray-500 mt-1">Seuls les chauffeurs disponibles pour cette date sont affichés</p>
-                        </div>
-
-                        <div class="mt-6">
-                            <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm transition-colors duration-200">
-                                Sauvegarder
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    @endforeach
 </div>
 
-<!-- JavaScript pour les modals -->
-<script>
-    function openModal(modalId) {
-        document.getElementById(modalId).classList.remove('hidden');
-    }
 
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.add('hidden');
-    }
-
-    // Pour fermer le modal quand on clique en dehors
-    window.onclick = function(event) {
-        const modals = document.querySelectorAll('[id^="editReservationModal"]');
-        modals.forEach(modal => {
-            if (event.target == modal) {
-                modal.classList.add('hidden');
-            }
-        });
-    }
-
-    // Fonction pour mettre à jour la liste des chauffeurs disponibles selon la date
-    function updateChauffeursDisponibles(date, reservationId) {
-        if (!date) return;
-
-        // Récupérer le select des chauffeurs pour cette réservation
-        const modal = document.getElementById(`editReservationModal${reservationId}`);
-        const chauffeurSelect = modal.querySelector('select[name="chauffeur_id"]');
-        
-        // Afficher un indicateur de chargement
-        chauffeurSelect.innerHTML = '<option value="">Chargement des chauffeurs...</option>';
-
-        // Appel AJAX pour récupérer les chauffeurs disponibles
-        fetch('/reservations/chauffeurs-disponibles', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ date: date })
-        })
-        .then(response => response.json())
-        .then(chauffeurs => {
-            // Vider le select
-            chauffeurSelect.innerHTML = '<option value="">-- Sélectionner un chauffeur --</option>';
-            
-            // Ajouter les chauffeurs disponibles
-            chauffeurs.forEach(chauffeur => {
-                const isAvailable = chauffeur.disponibilite && chauffeur.disponibilite.aujourdhui === 'Disponible' && !chauffeur.en_repos;
-                const option = document.createElement('option');
-                option.value = chauffeur.id;
-                option.textContent = `${chauffeur.first_name} ${chauffeur.last_name}`;
-                
-                if (!isAvailable) {
-                    option.disabled = true;
-                    option.textContent += ` (${chauffeur.disponibilite && chauffeur.disponibilite.aujourdhui === 'En repos' ? 'En repos' : 'Occupé'})`;
-                }
-                
-                chauffeurSelect.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Erreur lors de la récupération des chauffeurs:', error);
-            chauffeurSelect.innerHTML = '<option value="">Erreur lors du chargement</option>';
-        });
-    }
-</script>
 
 <style>
     /* Style personnalisé pour la pagination de Laravel avec Tailwind */

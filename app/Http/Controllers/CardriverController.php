@@ -16,19 +16,34 @@ class CardriverController extends Controller
                 $roleQuery->where('name', 'chauffeur');
             });
         })->with('drivers')->paginate(10);
-    
+
         return view('cardrivers.index', compact('cars'));
     }
 
     public function create()
     {
-        // Récupérer les voitures non assignées
-        $assignedCars = CarDriver::pluck('car_id')->toArray();
-        $cars = Car::whereNotIn('id', $assignedCars)->get();
+        // Récupérer toutes les voitures avec leur chauffeur assigné
+        $cars = Car::all();
+        $carAssignments = CarDriver::with('chauffeur')->get()->keyBy('car_id');
+        
+        // Ajouter l'information du chauffeur assigné à chaque voiture
+        $cars = $cars->map(function ($car) use ($carAssignments) {
+            $assignment = $carAssignments->get($car->id);
+            $car->assigned_driver = $assignment ? $assignment->chauffeur : null;
+            return $car;
+        });
 
-        // Récupérer les chauffeurs non assignés
-        $assignedDrivers = CarDriver::pluck('chauffeur_id')->toArray();
-        $drivers = User::role('chauffeur')->whereNotIn('id', $assignedDrivers)->get();
+        // Récupérer tous les chauffeurs avec leur voiture assignée
+        $allDrivers = User::role('chauffeur')->get();
+        $driverAssignments = CarDriver::with('car')->get()->keyBy('chauffeur_id');
+        
+        // Ajouter l'information de la voiture assignée à chaque chauffeur
+        $drivers = $allDrivers->map(function ($driver) use ($driverAssignments) {
+            $assignment = $driverAssignments->get($driver->id);
+            $driver->assigned_car = $assignment ? $assignment->car : null;
+            $driver->is_assigned = $assignment ? true : false;
+            return $driver;
+        });
 
         return view('cardrivers.create', compact('cars', 'drivers'));
     }
@@ -40,17 +55,11 @@ class CardriverController extends Controller
             'chauffeur_id' => 'required|exists:users,id',
         ]);
 
-        // Vérifier si la voiture est déjà assignée
-        $exists = CarDriver::where('car_id', $request->car_id)->exists();
-        if ($exists) {
-            return redirect()->back()->with('error', 'Cette voiture est déjà assignée à un chauffeur.');
-        }
+        // Supprimer l'ancienne assignation de la voiture si elle existe
+        CarDriver::where('car_id', $request->car_id)->delete();
 
-        // Vérifier si le chauffeur est déjà assigné
-        $exists = CarDriver::where('chauffeur_id', $request->chauffeur_id)->exists();
-        if ($exists) {
-            return redirect()->back()->with('error', 'Ce chauffeur est déjà assigné à une voiture.');
-        }
+        // Supprimer l'ancienne assignation du chauffeur s'il est déjà assigné à une autre voiture
+        CarDriver::where('chauffeur_id', $request->chauffeur_id)->delete();
 
         // Assigner le chauffeur à la voiture
         CarDriver::create([

@@ -39,6 +39,13 @@
         <div class="card shadow-lg p-4 mx-auto" style="max-width: 500px;">
             <h2 class="text-center mb-4">🚗 Assigner un Chauffeur</h2>
 
+            @if(session('error'))
+                <div class="alert alert-danger mb-3">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+
             <form action="{{ route('cardrivers.store') }}" method="POST">
                 @csrf
 
@@ -47,7 +54,14 @@
                     <select name="car_id" id="car_id" class="form-select shadow-sm">
                         <option selected disabled>-- Sélectionner une voiture --</option>
                         @foreach($cars as $car)
-                            <option value="{{ $car->id }}">{{ $car->marque }} - {{ $car->matricule }}</option>
+                            <option value="{{ $car->id }}">
+                                {{ $car->marque }} - {{ $car->matricule }}
+                                @if($car->assigned_driver)
+                                    🔴 Assignée à: {{ $car->assigned_driver->first_name }} {{ $car->assigned_driver->last_name }}
+                                @else
+                                    🟢 Disponible
+                                @endif
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -57,7 +71,14 @@
                     <select name="chauffeur_id" id="chauffeur_id" class="form-select shadow-sm">
                         <option selected disabled>-- Sélectionner un chauffeur --</option>
                         @foreach($drivers as $driver)
-                            <option value="{{ $driver->id }}">{{ $driver->first_name }} {{ $driver->last_name }}</option>
+                            <option value="{{ $driver->id }}">
+                                {{ $driver->first_name }} {{ $driver->last_name }}
+                                @if($driver->assigned_car)
+                                    🔴 Assigné à: {{ $driver->assigned_car->marque }} - {{ $driver->assigned_car->matricule }}
+                                @else
+                                    🟢 Disponible
+                                @endif
+                            </option>
                         @endforeach
                     </select>
                 </div>

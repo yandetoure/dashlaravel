@@ -1,13 +1,13 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 namespace App\Mail;
 
+use App\Models\Reservation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Content;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use App\Models\Reservation; 
 
 class ReservationCreated extends Mailable
 {
@@ -43,7 +43,7 @@ class ReservationCreated extends Mailable
             with: [
                 'reservation' => $this->reservation,
                 'client' => $this->reservation->client,
-                'chauffeur' => $this->reservation->carDriver?->chauffeur            
+                'chauffeur' => $this->reservation->carDriver?->chauffeur
             ],
         );
     }
