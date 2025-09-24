@@ -1302,7 +1302,7 @@
                             <div class="mt-2">
                                 <span class="text-2xl font-bold">65 000</span>
                                 <span class="text-base ml-1">FCFA</span>
-                                <span class="text-sm text-red-200">/trajet</span>
+                                <span class="text-sm text-red-200">/personne</span>
                         </div>
                     </div>
                         <div class="p-6">
