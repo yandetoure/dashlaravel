@@ -52,7 +52,52 @@ class UserSeeder extends Seeder
             'email' => 'driver@gmail.com',
             'password' => Hash::make('password1234'), 
             'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777355197',
+        ]);
+        $user2->assignRole('chauffeur'); 
+
+
+        $user2 = User::create([
+            'first_name' => 'Albert',
+            'last_name' => 'Chauffeur',
+            'email' => 'albet@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777075197',
+        ]);
+        $user2->assignRole('chauffeur'); 
+
+
+        $user2 = User::create([
+            'first_name' => 'New',
+            'last_name' => 'Chauffeur',
+            'email' => 'drir@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221777900197',
+        ]);
+        $user2->assignRole('chauffeur'); 
+
+
+
+        $user2 = User::create([
+            'first_name' => 'New',
+            'last_name' => 'Chauffeur',
+            'email' => 'dri@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
             'phone_number' => '+221777955197',
+        ]);
+        $user2->assignRole('chauffeur'); 
+
+
+        $user2 = User::create([
+            'first_name' => 'Cheih',
+            'last_name' => 'Chauffeur',
+            'email' => 'cheikhr@gmail.com',
+            'password' => Hash::make('password1234'), 
+            'address' => 'Dieuppeul 1',
+            'phone_number' => '+221776955197',
         ]);
         $user2->assignRole('chauffeur'); 
     }   
