@@ -3083,7 +3083,7 @@ Que souhaitez-vous savoir de plus spécifique ?`
 - Wifi et confort premium
 - Bagages inclus (2 par personne)
 
-✨ Transfert AIBDP (32 500 FCFA)
+✨ Transfert AIBD (32 500 FCFA)
 - Service privé confortable
 - Jusqu'à 3 personnes
 - Disponible 24h/24
