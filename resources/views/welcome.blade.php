@@ -2807,7 +2807,10 @@
         }
 
         // Fonction pour fermer la bulle d'invitation
-        function closeInvitation() {
+        function closeInvitation(event) {
+            if (event) {
+                event.stopPropagation(); // Empêche la propagation de l'événement
+            }
             invitationBubble.classList.remove('show', 'float-animation');
             chatButton.classList.remove('pulse-glow', 'bounce-attention');
             chatButton.classList.add('animate-pulse');
@@ -2888,7 +2891,7 @@
         <!-- Message d'invitation (affiché temporairement) -->
         <div id="invitation-bubble" class="absolute bottom-20 right-0 bg-gradient-to-r from-white to-gray-50 rounded-xl shadow-2xl p-6 w-80 transform scale-0 transition-all duration-500 border border-gray-100 backdrop-blur-sm">
             <!-- Bouton de fermeture -->
-            <button id="close-invitation" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors" onclick="closeInvitation()">
+            <button id="close-invitation" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors" onclick="closeInvitation(event)">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
