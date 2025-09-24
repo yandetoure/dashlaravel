@@ -2176,7 +2176,7 @@
     <section id="partenaires" class="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Ils nous ont fait confiance</h2>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Ils nous ont fait confiance</h2>
             </div>
 
             <!-- Bande défilante des partenaires -->
