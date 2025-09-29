@@ -154,7 +154,23 @@
             @if($reservation->numero_vol)
                 <p><strong>Numéro de vol :</strong> {{ $reservation->numero_vol }}</p>
             @endif
+
+            @if($reservation->chauffeur_id)
+            <div class="chauffeur-info">
+                <h3>🚗 Chauffeur assigné</h3>
+                <p><strong>Un chauffeur a été automatiquement assigné à votre réservation.</strong></p>
+                <p>Vous recevrez une confirmation finale dans les prochaines heures.</p>
+            </div>
+            @else
+            <div class="important">
+                <h3>⏳ En cours de traitement</h3>
+                <p>Nous recherchons actuellement un chauffeur disponible pour votre trajet.</p>
+                <p>Vous recevrez une notification dès qu'un chauffeur sera assigné.</p>
+            </div>
+            @endif
         </div>
+
+        
 
         <p>Cette notification a été envoyée automatiquement par le système de gestion des réservations CPRO Services.</p>
     </div>
