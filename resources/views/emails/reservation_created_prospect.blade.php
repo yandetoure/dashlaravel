@@ -103,7 +103,7 @@
                 <span class="detail-label">No complet :</span>
                 <span class="detail-value">{{ $reservation->first_name }} {{ $reservation->last_name }}</span>
             </div>
-            
+
             <div class="detail-row">
                 <span class="detail-label">Date :</span>
                 <span class="detail-value">{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</span>
@@ -163,7 +163,7 @@
             <p>Pour toute question ou modification, contactez-nous :</p>
             <ul>
                 <li>📧 Email : cproservices221@gmail.com</li>
-                <li>📱 Téléphone : +221 XX XX XX XX</li>
+                <li>📱 Téléphone :  +221 77 705 67 67/li>
             </ul>
         </div>
 

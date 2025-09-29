@@ -88,11 +88,12 @@
 <body>
     <div class="header">
         <h1>Nouvelle Réservation en attente</h1>
-        <p>Une nouvelle demande de réservation doit être traitée</p>
     </div>
 
     <div class="content">
-        <p>Bonjour {{ $reservation->first_name }},</p>
+        <p>Bonjour chère équipe,</p>
+
+        <p>Une nouvelle demande de réservation doit être traitée</p>
         
 
         <div class="reservation-details">
@@ -157,19 +158,6 @@
         </div>
         @endif
 
-        <div class="important">
-            <p><strong>📞 Contact :</strong></p>
-            <p>Pour toute question ou modification, contactez-nous :</p>
-            <ul>
-                <li>📧 Email : cproservices221@gmail.com</li>
-                <li>📱 Téléphone : +221 XX XX XX XX</li>
-            </ul>
-        </div>
-
-        <p>Merci de votre confiance en CPRO Services.</p>
-        
-        <p>Cordialement,<br>
-        L'équipe CPRO Services</p>
     </div>
 
     <div class="footer">
