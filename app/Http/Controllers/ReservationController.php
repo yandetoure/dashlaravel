@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 use Google_Service_Calendar;
 use Illuminate\Http\Request;
 use App\Mail\AccountCreatedMail;
-use App\Mail\ReservationCreated;
+use App\Mail\ReservationCreated as ReservationCreatedMail;
 use App\Mail\ReservationUpdated;
 use App\Mail\ReservationCanceled;
 use App\Mail\ReservationConfirmed;
@@ -36,6 +36,7 @@ use App\Mail\ReservationConfirmedDriver;
 use App\Mail\ReservationCreatedProspect;
 use App\Mail\ReservationAdminNotification;
 use App\Mail\ReservationClientNotification;
+
 
 
 
@@ -1147,7 +1148,7 @@ public function showCalendar()
     {
         // Email à l'entreprise pour notification d'une nouvelle demande prospect
         try {
-            Mail::to('cproservices221@gmail.com')->send(new ReservationCreated($reservation));
+            Mail::to('cproservices221@gmail.com')->send(new ReservationCreatedMail($reservation));
         } catch (\Exception $e) {
             \Log::error('Erreur envoi email entreprise prospect: ' . $e->getMessage());
         }

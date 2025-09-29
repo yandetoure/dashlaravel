@@ -15,8 +15,20 @@
 
     <h3>Détails de la réservation :</h3>
     <ul>
-        <li><strong>Client :</strong> {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}</li>
-        <li><strong>Chauffeur assigné :</strong> {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }}</li>
+        <li><strong>Client :</strong> 
+            @if($reservation->client)
+                {{ $reservation->client->first_name }} {{ $reservation->client->last_name }}
+            @else
+                {{ $reservation->first_name }} {{ $reservation->last_name }} (Prospect)
+            @endif
+        </li>
+        <li><strong>Chauffeur assigné :</strong> 
+            @if($reservation->carDriver && $reservation->carDriver->chauffeur)
+                {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }}
+            @else
+                Aucun chauffeur assigné pour le moment
+            @endif
+        </li>
         <li><strong>Date de réservation :</strong> {{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</li>
         <li><strong>Heure de ramassage :</strong> {{ $reservation->heure_ramassage }}</li>
         <li><strong>Numéro de vol :</strong> {{ $reservation->numero_vol }}</li>
