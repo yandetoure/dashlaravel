@@ -38,9 +38,6 @@ use App\Mail\ReservationAdminNotification;
 use App\Mail\ReservationClientNotification;
 
 
-
-
-
 class ReservationController extends Controller
 {
     /**
@@ -146,7 +143,7 @@ class ReservationController extends Controller
         ->orderByDesc('heure_ramassage')
         ->first();
 
-
+        
         if ($lastReservation) {
             $lastReservationDateTime = Carbon::parse("{$lastReservation->date} {$lastReservation->heure_ramassage}");
             $requestDateTime = Carbon::parse("{$request->date} {$request->heure_ramassage}");

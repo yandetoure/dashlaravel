@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle de votre réservation</title>
+    <meta charset="utf-8">
+    <title>Notification de Réservation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,71 +13,52 @@
             padding: 20px;
         }
         .header {
-            background-color: #10b981;
+            background-color: #10B981;
             color: white;
             padding: 20px;
             text-align: center;
             border-radius: 8px 8px 0 0;
         }
         .content {
-            background-color: #f8fafc;
+            background-color: #f9fafb;
             padding: 20px;
-            border: 1px solid #e2e8f0;
+            border-radius: 0 0 8px 8px;
         }
         .reservation-details {
             background-color: white;
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
-            border-left: 4px solid #10b981;
+            border-left: 4px solid #10B981;
         }
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            padding: 5px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .detail-label {
-            font-weight: bold;
-            color: #475569;
-        }
-        .detail-value {
-            color: #1e293b;
-        }
-        .chauffeur-info {
-            background-color: #dbeafe;
-            border: 1px solid #3b82f6;
+        .driver-info {
+            background-color: #d1fae5;
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
+            border-left: 4px solid #059669;
         }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-en-attente { background-color: #fef3c7; color: #92400e; }
+        .status-confirmée { background-color: #d1fae5; color: #065f46; }
+        .status-annulée { background-color: #fee2e2; color: #991b1b; }
         .footer {
             text-align: center;
             margin-top: 20px;
-            padding: 20px;
-            color: #64748b;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
             font-size: 14px;
         }
-        .status {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-        .status-en-attente {
-            background-color: #fef3c7;
-            color: #d97706;
-        }
-        .status-en-attente-chauffeur {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
-        .important {
-            background-color: #f0f9ff;
-            border: 1px solid #0ea5e9;
+        .contact-info {
+            background-color: #f3f4f6;
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
@@ -88,104 +67,114 @@
 </head>
 <body>
     <div class="header">
-        <h1>✅ Nouvelle Réservation </h1>
-        <p>Votre demande de transport a été reçue et est en cours de traitement</p>
+        <h1>CPRO Services</h1>
+        <h2>
+            @switch($action)
+                @case('confirmed')
+                    Réservation Confirmée
+                    @break
+                @case('cancelled')
+                    Réservation Annulée
+                    @break
+                @default
+                    Notification de Réservation
+            @endswitch
+        </h2>
     </div>
 
     <div class="content">
-        <h1>Bonjour {{ $reservation->client->first_name }} {{ $reservation->client->last_name }},</h1>
-        
-        <p>Nous avons bien reçu votre demande de réservation. Voici un récapitulatif de votre demande :</p>
+        <p>Bonjour
+            @if($reservation->client)
+                {{ $reservation->client->first_name }} {{ $reservation->client->last_name }},
+            @else
+                {{ $reservation->first_name }} {{ $reservation->last_name }},
+            @endif
+        </p>
+
+        <p>
+            @switch($action)
+                @case('confirmed')
+                    Votre réservation a été confirmée. Voici les détails de votre trajet :
+                    @break
+                @case('cancelled')
+                    Votre réservation a été annulée. Voici les détails :
+                    @break
+                @default
+                    Voici les détails de votre réservation :
+            @endswitch
+        </p>
 
         <div class="reservation-details">
-            <h3>📋 Détails de votre réservation</h3>
-            
-            <div class="detail-row">
-                <span class="detail-label">Nom complet :</span>
-                <span class="detail-value">{{ $reservation->first_name }} {{ $reservation->last_name }}</span>
-            </div>
+            <h3>Détails de la Réservation</h3>
 
-            <div class="detail-row">
-                <span class="detail-label">Date :</span>
-                <span class="detail-value">{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</span>
-            </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Heure de ramassage :</span>
-                <span class="detail-value">{{ $reservation->heure_ramassage }}</span>
-            </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Adresse de ramassage :</span>
-                <span class="detail-value">{{ $reservation->adresse_rammassage }}</span>
-            </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Nombre de personnes :</span>
-                <span class="detail-value">{{ $reservation->nb_personnes }}</span>
-            </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Nombre de valises :</span>
-                <span class="detail-value">{{ $reservation->nb_valises }}</span>
-            </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Tarif :</span>
-                <span class="detail-value">{{ number_format($reservation->tarif, 0, ',', ' ') }} FCFA</span>
-            </div>
-            
-            <div class="detail-row">
-                <span class="detail-label">Statut :</span>
-                <span class="detail-value">
-                    <span class="status {{ $reservation->chauffeur_id ? 'status-en-attente' : 'status-en-attente-chauffeur' }}">
-                        {{ $reservation->chauffeur_id ? 'En attente de confirmation' : 'En attente d\'assignation chauffeur' }}
-                    </span>
+            @if($reservation->trip)
+                <p><strong>Trajet :</strong> {{ $reservation->trip->departure }} → {{ $reservation->trip->destination }}</p>
+            @endif
+
+            <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</p>
+            <p><strong>Heure de ramassage :</strong> {{ \Carbon\Carbon::parse($reservation->heure_ramassage)->format('H:i') }}</p>
+            <p><strong>Heure de vol :</strong> {{ \Carbon\Carbon::parse($reservation->heure_vol)->format('H:i') }}</p>
+            <p><strong>Nombre de personnes :</strong> {{ $reservation->nb_personnes }}</p>
+            <p><strong>Nombre de valises :</strong> {{ $reservation->nb_valises }}</p>
+            <p><strong>Adresse de ramassage :</strong> {{ $reservation->adresse_rammassage }}</p>
+            <p><strong>Tarif :</strong> {{ number_format($reservation->tarif, 0, ',', ' ') }} FCFA</p>
+
+            <p><strong>Statut :</strong>
+                <span class="status-badge
+                    @switch($reservation->status)
+                        @case('En_attente')
+                            status-en-attente
+                            @break
+                        @case('confirmée')
+                            status-confirmée
+                            @break
+                        @case('annulée')
+                            status-annulée
+                            @break
+                        @default
+                            status-en-attente
+                    @endswitch">
+                    {{ ucfirst($reservation->status) }}
                 </span>
-            </div>
+            </p>
+
+            @if($reservation->numero_vol)
+                <p><strong>Numéro de vol :</strong> {{ $reservation->numero_vol }}</p>
+            @endif
         </div>
 
-        @if($reservation->chauffeur_id)
-
-        <div class="chauffeur-info">
-            <div class="detail-row">
-                <span class="detail-label">Nombre de valises :</span>
-                <span class="detail-value">{{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }}</span>
+        @if($action === 'confirmed' && $reservation->carDriver && $reservation->carDriver->chauffeur)
+            <div class="driver-info">
+                <h3>🚗 Informations du Chauffeur</h3>
+                <p><strong>Nom du chauffeur :</strong> {{ $reservation->carDriver->chauffeur->first_name }} {{ $reservation->carDriver->chauffeur->last_name }}</p>
+                @if($reservation->carDriver->chauffeur->phone_number)
+                    <p><strong>Numéro de téléphone :</strong> <a href="tel:{{ $reservation->carDriver->chauffeur->phone_number }}">{{ $reservation->carDriver->chauffeur->phone_number }}</a></p>
+                @endif
+                @if($reservation->carDriver->car)
+                    <p><strong>Véhicule :</strong> {{ $reservation->carDriver->car->marque }} {{ $reservation->carDriver->car->modele }} ({{ $reservation->carDriver->car->immatriculation }})</p>
+                @endif
             </div>
-
-        <div class="chauffeur-info">
-            <div class="detail-row">
-                <span class="detail-label">Nombre de valises :</span>
-                <span class="detail-value">{{ $reservation->carDriver->chauffeur->phone_number }}</span>
-            </div>
-             
-        </div>
-        @else
-        <div class="important">
-            <h3>⏳ En cours de traitement</h3>
-            <p>Nous recherchons actuellement un chauffeur disponible pour votre trajet.</p>
-            <p>Vous recevrez une notification dès qu'un chauffeur sera assigné.</p>
-        </div>
         @endif
 
-        <div class="important">
-            <p><strong>📞 Contact :</strong></p>
-            <p>Pour toute question ou modification, contactez-nous :</p>
-            <ul>
-                <li>📧 Email : cproservices221@gmail.com</li>
-                <li>📱 Téléphone :  +221 77 705 67 67/li>
-            </ul>
+        <div class="contact-info">
+            <h3>📞 Contact CPRO Services</h3>
+            <p><strong>Téléphone :</strong> +221 77 705 67 67</p>
+            <p><strong>WhatsApp :</strong> +221 77 705 69 69</p>
+            <p><strong>Email :</strong> cproservices221@gmail.com</p>
         </div>
 
-        <p>Merci de votre confiance en CPRO Services.</p>
-        
-        <p>Cordialement,<br>
-        L'équipe CPRO Services</p>
+        @if($action === 'confirmed')
+            <p><strong>Important :</strong> Veuillez être prêt à l'adresse de ramassage 15 minutes avant l'heure prévue. Le chauffeur vous contactera pour confirmer son arrivée.</p>
+        @endif
+
+        @if($action === 'cancelled')
+            <p><strong>Note :</strong> Si vous avez des questions concernant cette annulation, n'hésitez pas à nous contacter.</p>
+        @endif
     </div>
 
     <div class="footer">
-        <p>Cet email confirme votre demande de réservation. Merci de le conserver.</p>
-        <p>© {{ date('Y') }} CPRO Services. Tous droits réservés.</p>
+        <p>CPRO Services - Transport de qualité</p>
+        <p>Merci de votre confiance !</p>
     </div>
 </body>
 </html>
