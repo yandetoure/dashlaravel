@@ -100,6 +100,11 @@
             <h3>📋 Détails de votre réservation</h3>
             
             <div class="detail-row">
+                <span class="detail-label">No complet :</span>
+                <span class="detail-value">{{ $reservation->first_name }} {{ $reservation->last_name }}</span>
+            </div>
+            
+            <div class="detail-row">
                 <span class="detail-label">Date :</span>
                 <span class="detail-value">{{ \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') }}</span>
             </div>
