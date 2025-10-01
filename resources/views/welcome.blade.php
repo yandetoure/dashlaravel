@@ -2101,7 +2101,6 @@
                                 <div>
                                     <h4 class="font-bold text-gray-800">Email</h4>
                                     <p class="text-gray-600">221cproservices@gmail.com</p>
-                                    <p class="text-gray-600">reservation@dakartransport.sn</p>
                                 </div>
                             </div>
 
