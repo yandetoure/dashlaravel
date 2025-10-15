@@ -31,9 +31,13 @@
                 <li><a href="{{ route('infos.index') }}" class="nav-link {{ request()->routeIs('infos.*') ? 'active' : '' }}"><span class="material-icons">info</span> Infos</a></li>
                 <li><a href="{{ route('categories.index') }}" class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}"><span class="material-icons">category</span> Catégories</a></li>
 
-                <h6>Réservations</h6>
-                <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
-                <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
+                        <h6>Réservations</h6>
+                        <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
+                        <li><a href="{{ route('courses.index') }}" class="nav-link {{ request()->routeIs('courses.*') ? 'active' : '' }}"><span class="material-icons">local_taxi</span> Gestion des courses</a></li>
+                        <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
+                        
+                        <h6>Suivi</h6>
+                        <li><a href="{{ route('admin.driver-location') }}" class="nav-link {{ request()->routeIs('admin.driver-location*') ? 'active' : '' }}"><span class="material-icons">my_location</span> Localisation des chauffeurs</a></li>
 
                 <h6>Trafic</h6>
                 <li><a href="{{ route('traffic.index') }}" class="nav-link {{ request()->routeIs('traffic.index') ? 'active' : '' }}"><span class="material-icons">traffic</span> Alertes Trafic</a></li>

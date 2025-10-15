@@ -7,7 +7,7 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class InvoiceController extends Controller
@@ -76,10 +76,11 @@ class InvoiceController extends Controller
         'total' => $statsQuery->count(),
         'paid' => $statsQuery->where('status', 'payée')->count(),
         'pending' => $statsQuery->where('status', 'en_attente')->count(),
-        'overdue' => $statsQuery->where('status', 'offert')->count(),
+        'free' => $statsQuery->where('status', 'offert')->count(),
         'total_amount' => $statsQuery->sum('amount'),
         'paid_amount' => $statsQuery->where('status', 'payée')->sum('amount'),
-        'unpaid_amount' => $statsQuery->where('status', 'en_attente')->sum('amount'),
+        'pending_amount' => $statsQuery->where('status', 'en_attente')->sum('amount'),
+        'free_amount' => $statsQuery->where('status', 'offert')->sum('amount'),
     ];
 
     return view('invoices.index', compact('invoices', 'stats'));
@@ -172,7 +173,7 @@ class InvoiceController extends Controller
 
         $invoice->load(['reservation.client', 'reservation.trip', 'reservation.chauffeur']);
 
-        $pdf = \PDF::loadView('invoices.pdf', compact('invoice'));
+        $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
 
         return $pdf->download('facture-' . $invoice->invoice_number . '.pdf');
     }
@@ -183,14 +184,19 @@ class InvoiceController extends Controller
     public function markAsPaid(Invoice $invoice)
     {
         // Vérifier que l'utilisateur a les droits pour modifier les factures
-        // if (!Auth::user()->hasPermissionTo('manage invoices')) {
-        //     abort(403, 'Vous n\'êtes pas autorisé à effectuer cette action.');
-        // }
+        if (!Auth::user()->hasAnyRole(['admin', 'agent', 'super-admin'])) {
+            abort(403, 'Vous n\'êtes pas autorisé à effectuer cette action.');
+        }
+
+        // Vérifier que la facture n'est pas déjà payée
+        if ($invoice->status === 'payée') {
+            return redirect()->back()->with('error', 'Cette facture est déjà marquée comme payée.');
+        }
 
         $invoice->update([
             'status' => 'payée'
         ]);
 
-        return redirect()->back()->with('success', 'La facture a été marquée comme payée.');
+        return redirect()->back()->with('success', 'La facture a été marquée comme payée avec succès.');
     }
 }

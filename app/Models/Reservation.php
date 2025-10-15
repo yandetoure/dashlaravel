@@ -148,5 +148,10 @@ public function invoice()
     return $this->hasOne(Invoice::class);
 }
 
+public function course()
+{
+    return $this->hasOne(Course::class);
+}
+
 
 }

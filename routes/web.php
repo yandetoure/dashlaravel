@@ -68,6 +68,29 @@ Route::middleware('auth:')->group(function () {
     Route::Resource('cars', CarController::class);
     Route::Resource('auth', AuthController::class);
     Route::resource('trips', TripController::class);
+    Route::resource('courses', App\Http\Controllers\CourseController::class);
+    
+    // Routes supplémentaires pour la gestion des courses
+    Route::post('/courses/{course}/demarrer', [App\Http\Controllers\CourseController::class, 'demarrer'])->name('courses.demarrer');
+    Route::get('/courses/{course}/suivi', [App\Http\Controllers\CourseController::class, 'suivi'])->name('courses.suivi');
+    Route::post('/courses/{course}/terminer', [App\Http\Controllers\CourseController::class, 'terminer'])->name('courses.terminer');
+    Route::post('/courses/{course}/annuler', [App\Http\Controllers\CourseController::class, 'annuler'])->name('courses.annuler');
+    Route::get('/courses/{course}/notation', [App\Http\Controllers\CourseController::class, 'notation'])->name('courses.notation');
+    Route::post('/courses/{course}/noter', [App\Http\Controllers\CourseController::class, 'noter'])->name('courses.noter');
+    Route::get('/courses/statut/{statut}', [App\Http\Controllers\CourseController::class, 'parStatut'])->name('courses.parStatut');
+
+    // Routes pour la localisation des chauffeurs
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/admin/driver-location', [App\Http\Controllers\DriverLocationController::class, 'index'])->name('admin.driver-location');
+        Route::get('/admin/driver-locations', [App\Http\Controllers\DriverLocationController::class, 'getAllDriversLocations'])->name('admin.driver-locations');
+        Route::get('/admin/driver-location/{driver}', [App\Http\Controllers\DriverLocationController::class, 'getDriverLocation'])->name('admin.driver-location.get');
+        Route::post('/driver/update-location', [App\Http\Controllers\DriverLocationController::class, 'updateDriverLocation'])->name('driver.update-location');
+    });
+
+    // Route de test pour Google Maps
+    Route::get('/test-google-maps', function () {
+        return view('test-google-maps');
+    })->name('test.google.maps');
 
     // Route::get('/users', [AuthController::class, 'listAllUsers'])->name('users.all');
 
@@ -103,7 +126,7 @@ Route::middleware('auth')->group(function () {
     // Routes pour les dashboards avec contrôleur
     Route::get('/admin/dashboard', [DashController::class, 'adminIndex'])->name('dashboard.admin');
     Route::get('/client/dashboard', [DashController::class, 'clientIndex'])->name('dashboard.client');
-    Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->name('dashboard.chauffeur');
+    Route::get('/chauffeur/dashboard', [DashController::class, 'chauffeurIndex'])->middleware('driver.location')->name('dashboard.chauffeur');
     Route::get('/entreprise/dashboard', [DashController::class, 'entrepriseIndex'])->name('dashboard.entreprise');
     Route::get('/agent/dashboard', [DashController::class, 'agentIndex'])->name('dashboard.agent');
     Route::get('/superadmin/dashboard', [DashController::class, 'superadminIndex'])->name('dashboard.superadmin');
@@ -187,7 +210,7 @@ Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name
 
 Route::middleware(['auth'])->group(function () {
     // Routes réservées aux Chauffeurs
-    Route::get('/chauffeur/reservations', [ReservationController::class, 'chauffeurReservations'])->name('chauffeur.reservations')->middleware('role:chauffeur');
+    Route::get('/chauffeur/reservations', [ReservationController::class, 'chauffeurReservations'])->name('chauffeur.reservations')->middleware(['role:chauffeur', 'driver.location']);
 
     // Routes réservées aux Clients
     Route::get('/client/reservations', [ReservationController::class, 'clientReservations'])->name('client.reservations')->middleware('role:client');

@@ -137,6 +137,7 @@
             <h6>Réservations</h6>
             <li><a href="{{ route('reservations.chauffeur.mes') }}" class="nav-link {{ request()->routeIs('reservations.client.mes') ? 'active' : '' }}"><span class="material-icons">assignment</span> Mes réservations</a></li>
             <li><a href="{{ route('reservations.clientcreate') }}" class="nav-link {{ request()->routeIs('reservations.create') ? 'active' : '' }}"><span class="material-icons">add</span> Ajouter une réservation</a></li>
+            <li><a href="{{ route('courses.index') }}" class="nav-link {{ request()->routeIs('courses.*') ? 'active' : '' }}"><span class="material-icons">local_taxi</span> Mes courses</a></li>
             <!-- Trajets -->
             <li><a href="{{ route('trips.index') }}" class="nav-link {{ request()->routeIs('trips.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Liste des trajets</a></li>
 

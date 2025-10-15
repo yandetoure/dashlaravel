@@ -32,6 +32,9 @@ class User extends Authenticatable
         'day_off_assigned_at',
         'points',
         'loyalty_points',
+        'current_lat',
+        'current_lng',
+        'location_updated_at',
     ];
 
     /**
@@ -54,6 +57,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'location_updated_at' => 'datetime',
         ];
     }
 

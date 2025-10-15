@@ -28,7 +28,8 @@
                 <li><a href="{{ route('categories.index') }}" class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}"><span class="material-icons">category</span> Catégories</a></li>
 
             <h6>Réservations</h6> 
-            {{-- <li><a href="{{ route('superadmins.index') }}" class="nav-link" aria-label="View Super Admins"><span class="material-icons">people</span> Liste des Super Admins</a></li> --}}
+            <li><a href="{{ route('reservations.index') }}" class="nav-link {{ request()->routeIs('reservations.index') ? 'active' : '' }}"><span class="material-icons">assignment</span> Liste des réservations</a></li>
+            <li><a href="{{ route('courses.index') }}" class="nav-link {{ request()->routeIs('courses.*') ? 'active' : '' }}"><span class="material-icons">local_taxi</span> Gestion des courses</a></li>
             <li><a href="{{ route('trips.index') }}" class="nav-link" aria-label="Manage trips"><span class="material-icons">directions_car</span> Trajets</a></li>
 
             <h6>Utilisateurs</h6>

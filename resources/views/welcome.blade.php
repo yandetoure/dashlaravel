@@ -936,7 +936,7 @@
 
             <div class="md:w-1/2">
                 <div class="booking-form p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Réserver votre trajet</h3>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Réservez votre trajet</h3>
 
                     <form id="availability-form" class="text-gray-800">
                         <div class="mb-4">

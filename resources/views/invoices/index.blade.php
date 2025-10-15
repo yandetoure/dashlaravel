@@ -32,7 +32,18 @@
             top: -10px;
             right: -10px;
         }
+        .card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
     </style>
+    <script>
+        function confirmMarkAsPaid(invoiceId, invoiceNumber) {
+            return confirm(`Êtes-vous sûr de vouloir marquer la facture ${invoiceNumber} comme payée ?\n\nCette action ne peut pas être annulée.`);
+        }
+    </script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 <div class="container">
@@ -41,8 +52,16 @@
             <h1 class="mb-4">Gestion des factures</h1>
 
             @if(session('success'))
-                <div class="alert alert-success">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
@@ -53,6 +72,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Total des factures</h5>
                             <h2 class="card-text">{{ $stats['total'] }}</h2>
+                            <p class="card-text mb-0">{{ number_format($stats['total_amount'], 0) }} Fcfa</p>
                         </div>
                     </div>
                 </div>
@@ -61,6 +81,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Factures payées</h5>
                             <h2 class="card-text">{{ $stats['paid'] }}</h2>
+                            <p class="card-text mb-0">{{ number_format($stats['paid_amount'], 0) }} Fcfa</p>
                         </div>
                     </div>
                 </div>
@@ -69,53 +90,20 @@
                         <div class="card-body">
                             <h5 class="card-title">En attente</h5>
                             <h2 class="card-text">{{ $stats['pending'] }}</h2>
+                            <p class="card-text mb-0">{{ number_format($stats['pending_amount'], 0) }} Fcfa</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card bg-danger text-white">
+                    <div class="card bg-info text-white">
                         <div class="card-body">
-                            <h5 class="card-title">En retard</h5>
-                            <h2 class="card-text">{{ $stats['overdue'] }}</h2>
+                            <h5 class="card-title">Gratuites</h5>
+                            <h2 class="card-text">{{ $stats['free'] }}</h2>
+                            <p class="card-text mb-0">{{ number_format($stats['free_amount'], 0) }} Fcfa</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Cartes statistiques -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <h5 class="card-title">Total des factures</h5>
-                <h2 class="card-text mb-2">{{ number_format($stats['total_amount'], 2) }} Fcfa</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <h5 class="card-title">Factures payées</h5>
-                <h4 class="card-text mb-2">{{ number_format($stats['paid_amount'], 2) }} Fcfa</h4>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-warning text-dark">
-            <div class="card-body">
-                <h5 class="card-title">En attente</h5>
-                <h2 class="card-text mb-2">{{ number_format($stats['total_amount'] - $stats['paid_amount'], 2) }} Fcfa</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-danger text-white">
-            <div class="card-body">
-                <h5 class="card-title">En retard</h5>
-                <h2 class="card-text mb-2">{{ number_format($stats['unpaid_amount'], 2) }}</h2>
-            </div>
-        </div>
-    </div>
-</div>
             <!-- Filtres -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -207,9 +195,9 @@
                                                     <i class="fas fa-download"></i> PDF
                                                 </a>
                                                 @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']) && $invoice->status != 'payée')
-                                                    <form action="{{ route('invoices.markAsPaid', $invoice->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('invoices.markAsPaid', $invoice->id) }}" method="POST" class="d-inline" id="markPaidForm{{ $invoice->id }}">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Marquer cette facture comme payée?')">
+                                                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirmMarkAsPaid({{ $invoice->id }}, '{{ $invoice->invoice_number }}')">
                                                             <i class="fas fa-check"></i> Marquer payée
                                                         </button>
                                                     </form>

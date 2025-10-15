@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'google' => [
+        'maps_api_key' => env('GOOGLE_MAPS_API_KEY'),
+    ],
+
     'google_calendar' => [
         'credentials_path' => env('GOOGLE_CALENDAR_CREDENTIALS_PATH'),
         'client_id' => env('GOOGLE_CALENDAR_CLIENT_ID'),
