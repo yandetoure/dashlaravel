@@ -32,12 +32,25 @@ class NabooPayService
     {
         try {
             $payload = [
-                'method_of_payment' => $data['payment_methods'] ?? ['WAVE', 'ORANGE_MONEY'],
+                'method_of_payment' => $data['method_of_payment'] ?? $data['payment_methods'] ?? ['WAVE', 'ORANGE_MONEY'],
                 'products' => $data['products'],
                 'success_url' => $data['success_url'] ?? config('naboopay.success_url'),
                 'error_url' => $data['error_url'] ?? config('naboopay.error_url'),
                 'is_escrow' => $data['is_escrow'] ?? false,
+                'webhook_url' => $data['webhook_url'] ?? null,
             ];
+
+            // Log des données envoyées pour debug
+            Log::info('NabooPay - Données envoyées à l\'API (POST)', [
+                'url' => $this->apiUrl . '/transaction/create-transaction',
+                'method' => 'POST',
+                'payload' => $payload,
+                'headers' => [
+                    'Authorization' => 'Bearer ' . substr($this->apiToken, 0, 10) . '...',
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ]
+            ]);
 
             $response = Http::timeout($this->timeout)
                 ->withHeaders([
@@ -45,7 +58,7 @@ class NabooPayService
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
                 ])
-                ->put($this->apiUrl . '/transaction/create-transaction', $payload);
+                ->post($this->apiUrl . '/transaction/create-transaction', $payload);
 
             if ($response->successful()) {
                 $responseData = $response->json();
@@ -78,9 +91,17 @@ class NabooPayService
                     'transaction_id' => $responseData['transaction_id'] ?? $responseData['id'] ?? null
                 ];
             } else {
+                // Log de l'erreur pour debug
+                Log::error('NabooPay - Erreur API', [
+                    'status_code' => $response->status(),
+                    'response_body' => $response->body(),
+                    'response_json' => $response->json(),
+                    'payload_sent' => $payload
+                ]);
+                
                 return [
                     'success' => false,
-                    'error' => 'Erreur API NabooPay: ' . $response->body()
+                    'error' => 'Erreur API NabooPay (' . $response->status() . '): ' . $response->body()
                 ];
             }
 
@@ -338,18 +359,34 @@ class NabooPayService
             ]
         ];
 
-        // Utiliser HTTPS pour les URLs (requis par NabooPay)
+        // Utiliser des URLs publiques (requis par NabooPay)
         $baseUrl = config('app.url');
         if (strpos($baseUrl, 'http://') === 0) {
             $baseUrl = str_replace('http://', 'https://', $baseUrl);
         }
         
+        // Pour le développement local, utiliser une URL publique ou ngrok
+        if (strpos($baseUrl, 'localhost') !== false || strpos($baseUrl, '127.0.0.1') !== false) {
+            $baseUrl = 'https://horizonexquis.com'; // URL publique de votre site
+        }
+        
         $data = [
-            'payment_methods' => ['WAVE', 'ORANGE_MONEY'],
+            'method_of_payment' => ['WAVE', 'ORANGE_MONEY'], // Nom correct selon la doc
             'products' => $products,
             'success_url' => $baseUrl . '/payment/success/' . $reservation->id,
             'error_url' => $baseUrl . '/payment/error/' . $reservation->id,
-            'is_escrow' => true // Protection escrow pour les réservations
+            'is_escrow' => true, // Protection escrow pour les réservations
+            'webhook_url' => $baseUrl . '/webhook/naboopay', // Ajouter le webhook
+            'customer_info' => [
+                'name' => $reservation->first_name . ' ' . $reservation->last_name,
+                'email' => $reservation->email,
+                'phone' => $reservation->phone_number
+            ],
+            'metadata' => [
+                'reservation_id' => $reservation->id,
+                'trip_id' => $reservation->trip_id,
+                'passengers' => $reservation->nb_personnes
+            ]
         ];
 
         return $this->createTransaction($data);
