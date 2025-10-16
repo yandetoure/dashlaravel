@@ -55,6 +55,10 @@
                 <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
                 <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
                 <li><a href="{{ route('cars.index') }}" class="nav-link {{ request()->routeIs('cars.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures</a></li>
+
+                <h6>Paiements</h6>
+                <li><a href="{{ route('payments.history') }}" class="nav-link {{ request()->routeIs('payments.history') ? 'active' : '' }}"><span class="material-icons">payment</span> Historique des Paiements</a></li>
+                <li><a href="{{ route('admin.cashout') }}" class="nav-link {{ request()->routeIs('admin.cashout*') ? 'active' : '' }}"><span class="material-icons">account_balance_wallet</span> Gestion des Cashouts</a></li>
         </ul>
     </div>
 </div>

@@ -161,6 +161,61 @@
     </div>
 @endif
 
+    @elseif($reservation->status == 'Confirmée')
+        <!-- Section Paiement pour les réservations confirmées -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="p-3 bg-light rounded shadow-sm">
+                    <h6><i class="bi bi-credit-card"></i> <strong>Paiement</strong></h6>
+                    
+                    @php
+                        $invoice = \App\Models\Invoice::where('reservation_id', $reservation->id)->first();
+                    @endphp
+                    
+                    @if($invoice && $invoice->status === 'payé')
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle"></i> 
+                            <strong>Paiement effectué</strong> - Facture #{{ $invoice->invoice_number }}
+                            <br>
+                            <small>Payé le {{ $invoice->paid_at ? $invoice->paid_at->format('d/m/Y H:i') : 'N/A' }}</small>
+                        </div>
+                        
+                        @if($invoice->payment_url)
+                            <a href="{{ $invoice->payment_url }}" class="btn btn-info btn-sm" target="_blank">
+                                <i class="bi bi-receipt"></i> Voir le reçu
+                            </a>
+                        @endif
+                    @else
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i> 
+                            <strong>Paiement en attente</strong>
+                        </div>
+                        
+                        <!-- Boutons de paiement selon le rôle -->
+                        @if(auth()->check())
+                            @if(auth()->user()->hasRole('client') && $reservation->client_id === auth()->id())
+                                <a href="{{ route('reservations.pay.direct', $reservation) }}" class="btn btn-primary">
+                                    <i class="bi bi-credit-card"></i> Payer maintenant
+                                </a>
+                            @elseif(auth()->user()->hasRole('chauffeur'))
+                                @php
+                                    $carDrivers = auth()->user()->car_drivers->pluck('id');
+                                @endphp
+                                @if($carDrivers->contains($reservation->cardriver_id))
+                                    <a href="{{ route('reservations.payment', $reservation) }}" class="btn btn-primary">
+                                        <i class="bi bi-credit-card"></i> Payer maintenant
+                                    </a>
+                                @endif
+                            @elseif(auth()->user()->hasRole('admin') || auth()->user()->hasRole('super-admin'))
+                                <a href="{{ route('reservations.pay.direct', $reservation) }}" class="btn btn-primary">
+                                    <i class="bi bi-credit-card"></i> Payer maintenant
+                                </a>
+                            @endif
+                        @endif
+                    @endif
+                </div>
+            </div>
+        </div>
     @endif
     <a href="{{ route('reservations.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Retour</a>
     <div class="mt-3">

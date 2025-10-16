@@ -133,6 +133,19 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('maintenances', MaintenanceController::class);
     Route::resource('cars', CarController::class);
+
+    // Routes pour les paiements NabooPay
+    Route::get('/reservations/{reservation}/payment', [App\Http\Controllers\PaymentController::class, 'showPaymentForm'])->name('reservations.payment');
+    Route::post('/reservations/{reservation}/payment', [App\Http\Controllers\PaymentController::class, 'createPayment'])->name('reservations.payment.create');
+    Route::get('/reservations/{reservation}/pay-direct', [App\Http\Controllers\PaymentController::class, 'payDirect'])->name('reservations.pay.direct');
+    Route::get('/payment/success/{reservation}', [App\Http\Controllers\PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/error/{reservation}', [App\Http\Controllers\PaymentController::class, 'paymentError'])->name('payment.error');
+    Route::get('/payments/history', [App\Http\Controllers\PaymentController::class, 'paymentHistory'])->name('payments.history');
+    
+    // Routes pour les cashouts admin
+    Route::get('/admin/cashout', [App\Http\Controllers\CashoutController::class, 'index'])->name('admin.cashout');
+    Route::post('/admin/cashout/retirer', [App\Http\Controllers\CashoutController::class, 'retirer'])->name('admin.cashout.retirer');
+    Route::get('/admin/cashout/redirect', [App\Http\Controllers\CashoutController::class, 'redirectToNabooPay'])->name('admin.cashout.redirect');
 });
 
 Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');
@@ -361,5 +374,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::get('/api/categories/active', [CategoryController::class, 'getActive'])->name('categories.active');
 });
+
+// Webhook pour NabooPay (sans middleware auth)
+Route::post('/webhook/naboopay', [App\Http\Controllers\PaymentController::class, 'webhook'])->name('webhook.naboopay');
 
 require __DIR__.'/auth.php';

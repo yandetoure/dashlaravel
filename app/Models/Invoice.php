@@ -13,11 +13,19 @@ class Invoice extends Model
         'status',
         'invoice_number',
         'invoice_date',
+        'payment_method',
+        'transaction_id',
+        'payment_url',
+        'paid_at',
+        'transaction_data',
     ];
 
     // Ajoute ceci pour forcer le type float
     protected $casts = [
         'amount' => 'float',
+        'paid_at' => 'datetime',
+        'invoice_date' => 'datetime',
+        'transaction_data' => 'array',
     ];
 
     public static function generateInvoiceNumber()
