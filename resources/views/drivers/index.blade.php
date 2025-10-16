@@ -1,71 +1,65 @@
 <?php declare(strict_types=1); ?>
 @extends('layouts.app')
 
+@section('title', 'Gestion des Chauffeurs')
+
 @section('content')
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Chauffeurs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3B82F6',
-                        secondary: '#10B981',
-                        dark: '#1F2937',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .driver-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        .status-badge {
-            top: -8px;
-            right: -8px;
-        }
-        .search-input:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-    </style>
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-<div class="py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- En-tête de page amélioré -->
-        <div class="mb-8 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
-                <i class="fas fa-users text-white text-2xl"></i>
-            </div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">
-                Équipe de Chauffeurs
-            </h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                Gérez votre équipe de conducteurs professionnels et suivez leurs informations essentielles
-            </p>
-            <div class="mt-4 flex justify-center space-x-4">
-                <div class="bg-white rounded-lg px-4 py-2 shadow-sm">
-                    <span class="text-sm font-medium text-gray-500">Total:</span>
-                    <span class="text-lg font-bold text-blue-600 ml-2">{{ $drivers->total() }}</span>
+<div class="container-fluid py-4">
+    <!-- En-tête principal avec navigation -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="h4 mb-1 text-white">
+                                <i class="fas fa-users me-2"></i>
+                                Gestion des Chauffeurs
+                            </h1>
+                            <p class="text-white-50 mb-0">Gérez et suivez tous vos chauffeurs de transport</p>
+                        </div>
+                        <div>
+                            @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']))
+                                <a href="{{ route('drivers.create') }}" class="btn btn-light">
+                                    <i class="fas fa-plus me-1"></i> Nouveau Chauffeur
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-white rounded-lg px-4 py-2 shadow-sm">
-                    <span class="text-sm font-medium text-gray-500">Disponibles:</span>
-                    <span class="text-lg font-bold text-green-600 ml-2">{{ $drivers->where('availability_status', 'available')->count() }}</span>
-                </div>
-                <div class="bg-white rounded-lg px-4 py-2 shadow-sm">
-                    <span class="text-sm font-medium text-gray-500">En repos:</span>
-                    <span class="text-lg font-bold text-orange-600 ml-2">{{ $drivers->where('availability_status', 'rest')->count() }}</span>
+                <div class="card-body bg-white py-3">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('dashboard') }}" class="text-decoration-none">
+                                    <i class="fas fa-home me-1"></i> Tableau de bord
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <i class="fas fa-users me-1"></i> Chauffeurs
+                            </li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Messages d'alerte -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
         <!-- Carte principale améliorée -->
         <div class="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
@@ -306,7 +300,4 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFilterButtons('all');
 });
 </script>
-
-</body>
-</html>
 @endsection

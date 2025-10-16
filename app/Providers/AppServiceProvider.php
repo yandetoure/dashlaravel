@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1); 
 
 namespace App\Providers;
 
@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Charger les helpers personnalisés
+        if (file_exists(app_path('Helpers/NumberHelper.php'))) {
+            require_once app_path('Helpers/NumberHelper.php');
+        }
     }
 }

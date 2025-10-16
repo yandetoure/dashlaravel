@@ -1,5 +1,5 @@
 <?php declare(strict_types=1); ?>
-<div class="w-0 p-0 md:w-64 md:p-4 bg-white shadow-md h-screen">
+<div class="sidebar bg-white shadow-md h-100">
     @if(Auth::check())
         @php
             $role = Auth::user()->getRoleNames()->first();

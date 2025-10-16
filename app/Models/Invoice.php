@@ -28,6 +28,22 @@ class Invoice extends Model
         'transaction_data' => 'array',
     ];
 
+    /**
+     * Formater le montant de manière sécurisée
+     */
+    public function getFormattedAmountAttribute(): string
+    {
+        return number_format((float) $this->amount, 0) . ' XOF';
+    }
+
+    /**
+     * Obtenir le montant comme nombre
+     */
+    public function getNumericAmountAttribute(): float
+    {
+        return (float) $this->amount;
+    }
+
     public static function generateInvoiceNumber()
     {
         return 'INV-' . strtoupper(Str::random(8));

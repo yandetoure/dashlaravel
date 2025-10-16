@@ -207,7 +207,7 @@ class PaymentController extends Controller
                     $invoice = Invoice::where('reservation_id', $reservation->id)->first();
                     if ($invoice) {
                         $invoice->update([
-                            'status' => 'payé',
+                            'status' => 'payée',
                             'paid_at' => now(),
                             'transaction_data' => json_encode($transactionData)
                         ]);
@@ -269,7 +269,7 @@ class PaymentController extends Controller
                         
                         if ($status === 'paid' || $status === 'done') {
                             $invoice->update([
-                                'status' => 'payé',
+                                'status' => 'payée',
                                 'paid_at' => now(),
                                 'transaction_data' => json_encode($transactionData)
                             ]);
