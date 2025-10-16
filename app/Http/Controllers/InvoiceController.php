@@ -202,13 +202,10 @@ class InvoiceController extends Controller
             abort(403, 'Vous n\'êtes pas autorisé à créer des factures.');
         }
 
-        $reservations = Reservation::with(['client', 'trip'])
-            ->whereDoesntHave('invoice')
-            ->where('status', 'Confirmée')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Récupérer les trajets disponibles pour créer une nouvelle réservation
+        $trips = \App\Models\Trip::orderBy('created_at', 'desc')->get();
 
-        return view('invoices.create', compact('reservations'));
+        return view('invoices.create', compact('trips'));
     }
 
     /**
@@ -221,19 +218,41 @@ class InvoiceController extends Controller
         }
 
         $request->validate([
-            'reservation_id' => 'required|exists:reservations,id',
+            'trip_id' => 'required|exists:trips,id',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:20',
+            'nb_personnes' => 'required|integer|min:1',
             'amount' => 'required|numeric|min:0',
             'status' => 'required|in:en_attente,payée,offert',
-            'note' => 'nullable|string|max:500'
+            'note' => 'nullable|string|max:500',
+            'date' => 'required|date',
+            'heure_ramassage' => 'required',
+            'adresse_ramassage' => 'required|string|max:255',
+            'numero_vol' => 'required|string|max:50',
+            'nb_valises' => 'required|integer|min:0'
         ]);
 
-        $reservation = Reservation::findOrFail($request->reservation_id);
+        // Créer une nouvelle réservation
+        $reservation = Reservation::create([
+            'trip_id' => $request->trip_id,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'nb_personnes' => $request->nb_personnes,
+            'tarif' => $request->amount,
+            'status' => 'Confirmée', // Réservation automatiquement confirmée
+            'date' => $request->date,
+            'heure_ramassage' => $request->heure_ramassage,
+            'adresse_ramassage' => $request->adresse_ramassage,
+            'numero_vol' => $request->numero_vol,
+            'nb_valises' => $request->nb_valises,
+            'note' => $request->note
+        ]);
 
-        // Vérifier qu'il n'y a pas déjà une facture pour cette réservation
-        if ($reservation->invoice) {
-            return back()->withErrors(['reservation_id' => 'Cette réservation a déjà une facture.']);
-        }
-
+        // Créer la facture liée à cette réservation
         $invoice = Invoice::create([
             'reservation_id' => $reservation->id,
             'amount' => $request->amount,
@@ -243,8 +262,19 @@ class InvoiceController extends Controller
             'note' => $request->note
         ]);
 
+        // Log de la création
+        \Log::info('Facture et réservation créées manuellement', [
+            'invoice_id' => $invoice->id,
+            'invoice_number' => $invoice->invoice_number,
+            'reservation_id' => $reservation->id,
+            'amount' => $invoice->amount,
+            'client_name' => $reservation->first_name . ' ' . $reservation->last_name,
+            'user_id' => Auth::id(),
+            'user_email' => Auth::user()->email
+        ]);
+
         return redirect()->route('invoices.show', $invoice)
-            ->with('success', 'Facture créée avec succès.');
+            ->with('success', 'Facture et réservation créées avec succès.');
     }
 
     /**
