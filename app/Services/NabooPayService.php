@@ -363,11 +363,11 @@ class NabooPayService
         
         $products = [
             [
-                'name' => 'Trajet ' . $trip->departure . ' - ' . $trip->destination,
+                'name' => 'Prix de livraison - ' . $trip->departure . ' vers ' . $trip->destination,
                 'category' => 'Transport',
-                'amount' => (int) $amount, // Montant en XOF (pas de conversion en centimes pour NabooPay)
+                'amount' => (int) $amount, // Prix de livraison en XOF
                 'quantity' => 1,
-                'description' => 'Réservation de transport - ' . $trip->departure . ' vers ' . $trip->destination . ' (' . $reservation->nb_personnes . ' personne(s))'
+                'description' => 'Prix de livraison pour réservation de transport - ' . $trip->departure . ' vers ' . $trip->destination . ' (' . $reservation->nb_personnes . ' personne(s), ' . $reservation->nb_valises . ' valise(s))'
             ]
         ];
 

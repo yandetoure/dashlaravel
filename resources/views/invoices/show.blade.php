@@ -47,7 +47,18 @@
                     <a href="{{ route('invoices.download', $invoice->id) }}" class="btn btn-primary">
                         <i class="fas fa-download"></i> Télécharger PDF
                     </a>
-                    @if(Auth::user()->can('manage invoices') && $invoice->status != 'Payée')
+                    
+                    @if($invoice->status != 'payé')
+                        <a href="{{ route('invoices.qrcode', $invoice->id) }}" class="btn btn-info">
+                            <i class="fas fa-qrcode"></i> QR Code
+                        </a>
+                        
+                        <a href="{{ route('invoices.whatsapp', $invoice->id) }}" class="btn btn-success" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Envoyer par WhatsApp
+                        </a>
+                    @endif
+                    
+                    @if(Auth::user()->can('manage invoices') && $invoice->status != 'payé')
                         <form action="{{ route('invoices.markAsPaid', $invoice->id) }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-success" onclick="return confirm('Marquer cette facture comme payée?')">

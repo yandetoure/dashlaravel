@@ -155,7 +155,7 @@ class PaymentController extends Controller
             $checkoutUrl = $result['checkout_url'] ?? null;
             $transactionId = $result['transaction_id'] ?? null;
 
-            // Utiliser le champ 'tarif' pour le montant
+            // Utiliser le champ 'tarif' pour le montant (prix de livraison)
             $amount = $reservation->tarif ?? $reservation->total_amount ?? 0;
             
             // Créer ou mettre à jour la facture

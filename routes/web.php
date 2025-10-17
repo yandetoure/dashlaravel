@@ -100,6 +100,8 @@ Route::middleware('auth:')->group(function () {
     Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
     Route::post('/invoices/{invoice}/mark-as-paid', [InvoiceController::class, 'markAsPaid'])->name('invoices.markAsPaid');
     Route::get('/invoices/{invoice}/download', [InvoiceController::class, 'downloadPdf'])->name('invoices.download');
+    Route::get('/invoices/{invoice}/whatsapp', [InvoiceController::class, 'sendWhatsAppPayment'])->name('invoices.whatsapp');
+    Route::get('/invoices/{invoice}/qrcode', [InvoiceController::class, 'generateQRCode'])->name('invoices.qrcode');
 
     // Route de suppression d'utilisateur
     Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('users.destroy');

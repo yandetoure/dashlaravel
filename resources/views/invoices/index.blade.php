@@ -286,6 +286,18 @@
                                                data-bs-toggle="tooltip" title="Payer avec NabooPay">
                                                 <i class="fas fa-credit-card"></i>
                                             </a>
+                                            
+                                            <a href="{{ route('invoices.qrcode', $invoice->id) }}" 
+                                               class="btn btn-outline-info btn-sm"
+                                               data-bs-toggle="tooltip" title="Générer QR Code">
+                                                <i class="fas fa-qrcode"></i>
+                                            </a>
+                                            
+                                            <a href="{{ route('invoices.whatsapp', $invoice->id) }}" 
+                                               class="btn btn-outline-success btn-sm"
+                                               data-bs-toggle="tooltip" title="Envoyer par WhatsApp" target="_blank">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </a>
                                         @endif
                                         
                                         @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']))

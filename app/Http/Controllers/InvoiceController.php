@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class InvoiceController extends Controller
@@ -303,6 +304,113 @@ class InvoiceController extends Controller
             ->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
 
         return $pdf->download('facture-' . $invoice->invoice_number . '.pdf');
+    }
+
+    /**
+     * Générer et afficher le QR code pour le paiement
+     */
+    public function generateQRCode(Invoice $invoice)
+    {
+        $user = Auth::user();
+        
+        // Vérifier les permissions
+        if ($user->hasRole('client') && $invoice->reservation->client_id != $user->id) {
+            abort(403, 'Vous n\'êtes pas autorisé à générer ce QR code.');
+        }
+
+        if ($user->hasRole('chauffeur')) {
+            $carDriverIds = $user->car_drivers->pluck('id');
+            if (!$carDriverIds->contains($invoice->reservation->cardriver_id)) {
+                abort(403, 'Vous n\'êtes pas autorisé à générer ce QR code.');
+            }
+        }
+
+        // Vérifier que la facture n'est pas déjà payée
+        if ($invoice->status === 'payé') {
+            return redirect()->back()->with('error', 'Cette facture est déjà payée.');
+        }
+
+        // Générer le lien de paiement
+        $paymentUrl = route('reservations.pay.direct', $invoice->reservation->id);
+        
+        // Générer le QR code en SVG (plus compatible)
+        $qrCodeSvg = QrCode::format('svg')
+            ->size(300)
+            ->margin(2)
+            ->generate($paymentUrl);
+
+        return view('invoices.qrcode', compact('invoice', 'qrCodeSvg', 'paymentUrl'));
+    }
+
+    /**
+     * Générer et envoyer un QR code WhatsApp pour le paiement
+     */
+    public function sendWhatsAppPayment(Invoice $invoice)
+    {
+        $user = Auth::user();
+        
+        // Vérifier les permissions
+        if ($user->hasRole('client') && $invoice->reservation->client_id != $user->id) {
+            abort(403, 'Vous n\'êtes pas autorisé à envoyer cette facture.');
+        }
+
+        if ($user->hasRole('chauffeur')) {
+            $carDriverIds = $user->car_drivers->pluck('id');
+            if (!$carDriverIds->contains($invoice->reservation->cardriver_id)) {
+                abort(403, 'Vous n\'êtes pas autorisé à envoyer cette facture.');
+            }
+        }
+
+        // Vérifier que la facture n'est pas déjà payée
+        if ($invoice->status === 'payé') {
+            return redirect()->back()->with('error', 'Cette facture est déjà payée.');
+        }
+
+        // Générer le message WhatsApp
+        $message = $this->generateWhatsAppMessage($invoice);
+        
+        // Générer l'URL WhatsApp
+        $whatsappUrl = $this->generateWhatsAppUrl($message);
+        
+        return redirect($whatsappUrl);
+    }
+
+    /**
+     * Générer le message WhatsApp pour le paiement
+     */
+    private function generateWhatsAppMessage(Invoice $invoice): string
+    {
+        $reservation = $invoice->reservation;
+        $client = $reservation->client;
+        
+        $message = "🚗 *FACTURE DE TRANSPORT*\n\n";
+        $message .= "📋 *Numéro de facture:* {$invoice->invoice_number}\n";
+        $message .= "👤 *Client:* {$client->first_name} {$client->last_name}\n";
+        $message .= "📱 *Téléphone:* {$client->phone_number}\n";
+        $message .= "📍 *Trajet:* {$reservation->trip->departure} → {$reservation->trip->destination}\n";
+        $message .= "📅 *Date:* " . \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') . "\n";
+        $message .= "🕐 *Heure de ramassage:* {$reservation->heure_ramassage}\n";
+        $message .= "👥 *Personnes:* {$reservation->nb_personnes}\n";
+        $message .= "🧳 *Valises:* {$reservation->nb_valises}\n\n";
+        $message .= "💰 *Montant à payer:* {$invoice->formatted_amount}\n\n";
+        $message .= "💳 *Méthodes de paiement acceptées:*\n";
+        $message .= "• Wave\n";
+        $message .= "• Orange Money\n";
+        $message .= "• Free Money\n";
+        $message .= "• Virement bancaire\n\n";
+        $message .= "🔗 *Lien de paiement:* " . route('reservations.pay.direct', $reservation->id) . "\n\n";
+        $message .= "Merci pour votre confiance ! 🙏";
+        
+        return $message;
+    }
+
+    /**
+     * Générer l'URL WhatsApp avec le message
+     */
+    private function generateWhatsAppUrl(string $message): string
+    {
+        $encodedMessage = urlencode($message);
+        return "https://wa.me/?text={$encodedMessage}";
     }
 
     /**
