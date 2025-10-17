@@ -289,13 +289,16 @@ class PaymentController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Facture non trouvée'], 404);
             }
 
-            // Mettre à jour la facture selon le statut de paiement
-            $this->updateInvoiceStatus($invoice, $paymentStatus, $transactionData);
+        // Mettre à jour la facture selon le statut de paiement
+        $this->updateInvoiceStatus($invoice, $paymentStatus, $transactionData);
+        
+        // Mettre à jour la réservation si le paiement est réussi
+        if (in_array($paymentStatus, ['paid', 'done', 'completed', 'success'])) {
+            $this->updateReservationStatus($invoice->reservation);
             
-            // Mettre à jour la réservation si le paiement est réussi
-            if (in_array($paymentStatus, ['paid', 'done', 'completed', 'success'])) {
-                $this->updateReservationStatus($invoice->reservation);
-            }
+            // Calculer et enregistrer les frais de transaction
+            $this->calculateAndRecordFees($invoice, $transactionData);
+        }
 
             return response()->json(['status' => 'success']);
 
@@ -420,6 +423,63 @@ class PaymentController extends Controller
             'webhook_data' => $webhookData,
             'response' => $response->getData()
         ]);
+    }
+
+    /**
+     * Calculer et enregistrer les frais de transaction
+     */
+    private function calculateAndRecordFees(Invoice $invoice, array $transactionData)
+    {
+        try {
+            // Récupérer le montant total payé par le client
+            $totalAmount = $transactionData['amount'] ?? $invoice->amount;
+            
+            // Calculer les frais NabooPay (généralement 2-3% selon la méthode de paiement)
+            $paymentMethod = $transactionData['payment_method'] ?? 'unknown';
+            $feeRate = $this->getFeeRate($paymentMethod);
+            $feeAmount = $totalAmount * $feeRate;
+            
+            // Montant net reçu par le vendeur (après déduction des frais)
+            $netAmount = $totalAmount - $feeAmount;
+            
+            // Enregistrer les informations de frais dans la facture
+            $invoice->update([
+                'total_amount_paid' => $totalAmount,
+                'fee_amount' => $feeAmount,
+                'net_amount_received' => $netAmount,
+                'fee_rate' => $feeRate,
+                'payment_method_used' => $paymentMethod
+            ]);
+            
+            Log::info('Frais de transaction calculés', [
+                'invoice_id' => $invoice->id,
+                'total_amount' => $totalAmount,
+                'fee_amount' => $feeAmount,
+                'net_amount' => $netAmount,
+                'fee_rate' => $feeRate,
+                'payment_method' => $paymentMethod
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Erreur calcul des frais: ' . $e->getMessage(), [
+                'invoice_id' => $invoice->id,
+                'transaction_data' => $transactionData
+            ]);
+        }
+    }
+    
+    /**
+     * Obtenir le taux de frais selon la méthode de paiement
+     */
+    private function getFeeRate(string $paymentMethod): float
+    {
+        return match(strtolower($paymentMethod)) {
+            'wave' => 0.025, // 2.5%
+            'orange_money' => 0.025, // 2.5%
+            'free_money' => 0.02, // 2%
+            'bank' => 0.015, // 1.5%
+            default => 0.025 // 2.5% par défaut
+        };
     }
 
     /**

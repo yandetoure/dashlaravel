@@ -38,7 +38,19 @@ class NabooPayService
                 'error_url' => $data['error_url'] ?? config('naboopay.error_url'),
                 'is_escrow' => $data['is_escrow'] ?? false,
                 'webhook_url' => $data['webhook_url'] ?? null,
+                'fee_payer' => $data['fee_payer'] ?? 'seller', // Frais prélevés sur le vendeur par défaut
             ];
+
+            // Ajouter les paramètres optionnels s'ils sont présents
+            if (isset($data['customer_info'])) {
+                $payload['customer_info'] = $data['customer_info'];
+            }
+            if (isset($data['metadata'])) {
+                $payload['metadata'] = $data['metadata'];
+            }
+            if (isset($data['fee_structure'])) {
+                $payload['fee_structure'] = $data['fee_structure'];
+            }
 
             // Log des données envoyées pour debug
             Log::info('NabooPay - Données envoyées à l\'API (POST)', [
@@ -377,6 +389,7 @@ class NabooPayService
             'error_url' => $baseUrl . '/payment/error/' . $reservation->id,
             'is_escrow' => false, // Pas d'escrow - paiement direct
             'webhook_url' => $baseUrl . '/webhook/naboopay', // Ajouter le webhook
+            'fee_payer' => 'seller', // Frais prélevés sur le vendeur (plateforme)
             'customer_info' => [
                 'name' => $reservation->first_name . ' ' . $reservation->last_name,
                 'email' => $reservation->email,
