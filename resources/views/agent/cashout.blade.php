@@ -5,8 +5,13 @@
     <div class="max-w-4xl mx-auto">
         <!-- En-tête -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-2">Gestion des Cashouts</h1>
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Gestion des Cashouts - Agent</h1>
             <p class="text-gray-600">Retirez vos fonds vers Wave ou Orange Money</p>
+            <div class="mt-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    Agent: {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
+                </span>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -86,7 +91,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Effectuer un Retrait</h2>
                 
-                <form action="{{ route('admin.cashout.wave') }}" method="POST" id="wave-form">
+                <form action="{{ route('agent.cashout.wave') }}" method="POST" id="wave-form">
                     @csrf
                     
                     <div class="space-y-4">
@@ -142,7 +147,7 @@
                 </form>
                 
                 <!-- Formulaire Orange Money -->
-                <form action="{{ route('admin.cashout.orange-money') }}" method="POST" id="orange-form" class="mt-6">
+                <form action="{{ route('agent.cashout.orange-money') }}" method="POST" id="orange-form" class="mt-6">
                     @csrf
                     
                     <div class="space-y-4">
@@ -197,7 +202,7 @@
 
         <!-- Bouton de redirection directe -->
         <div class="mt-6 text-center">
-            <a href="{{ route('admin.cashout.redirect') }}" 
+            <a href="{{ route('agent.cashout.redirect') }}" 
                class="inline-flex items-center bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -208,7 +213,7 @@
 
         <!-- Actions -->
         <div class="mt-6 flex justify-between">
-            <a href="{{ route('dashboard.admin') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-200">
+            <a href="{{ route('dashboard.agent') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-200">
                 Retour au Dashboard
             </a>
             

@@ -298,7 +298,7 @@ class PaymentController extends Controller
             
             // Calculer et enregistrer les frais de transaction
             $this->calculateAndRecordFees($invoice, $transactionData);
-        }
+            }
 
             return response()->json(['status' => 'success']);
 

@@ -156,10 +156,17 @@ Route::middleware('auth')->group(function () {
         })->name('test.qrcode');
     }
     
-    // Routes pour les cashouts admin
+    // Routes pour les cashouts admin et agents
     Route::get('/admin/cashout', [App\Http\Controllers\CashoutController::class, 'index'])->name('admin.cashout');
-    Route::post('/admin/cashout/retirer', [App\Http\Controllers\CashoutController::class, 'retirer'])->name('admin.cashout.retirer');
+    Route::post('/admin/cashout/wave', [App\Http\Controllers\CashoutController::class, 'cashoutWave'])->name('admin.cashout.wave');
+    Route::post('/admin/cashout/orange-money', [App\Http\Controllers\CashoutController::class, 'cashoutOrangeMoney'])->name('admin.cashout.orange-money');
     Route::get('/admin/cashout/redirect', [App\Http\Controllers\CashoutController::class, 'redirectToNabooPay'])->name('admin.cashout.redirect');
+    
+    // Routes pour les cashouts agents
+    Route::get('/agent/cashout', [App\Http\Controllers\CashoutController::class, 'index'])->name('agent.cashout');
+    Route::post('/agent/cashout/wave', [App\Http\Controllers\CashoutController::class, 'cashoutWave'])->name('agent.cashout.wave');
+    Route::post('/agent/cashout/orange-money', [App\Http\Controllers\CashoutController::class, 'cashoutOrangeMoney'])->name('agent.cashout.orange-money');
+    Route::get('/agent/cashout/redirect', [App\Http\Controllers\CashoutController::class, 'redirectToNabooPay'])->name('agent.cashout.redirect');
 });
 
 Route::get('/reservations/confirmees', [ReservationController::class, 'confirmedReservations'])->name('reservations.confirmed');

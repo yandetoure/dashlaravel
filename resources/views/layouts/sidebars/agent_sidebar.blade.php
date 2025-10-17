@@ -40,6 +40,9 @@
 
             <h6>Factures</h6>
             <li><a href="{{ route('invoices.index') }}" class="nav-link {{ request()->routeIs('invoices.index') ? 'active' : '' }}"><span class="material-icons">person_add</span> Factures</a></li>
+            
+            <h6>Paiements</h6>
+            <li><a href="{{ route('agent.cashout') }}" class="nav-link {{ request()->routeIs('agent.cashout') ? 'active' : '' }}"><span class="material-icons">account_balance_wallet</span> Cashout</a></li>
             <h6>Voitures</h6>
             <li><a href="{{ route('cardrivers.index') }}" class="nav-link {{ request()->routeIs('cardrivers.index') ? 'active' : '' }}"><span class="material-icons">directions_car</span> Voitures & Chauffeurs</a></li>
             <li><a href="{{ route('maintenances.index') }}" class="nav-link {{ request()->routeIs('maintenances.index') ? 'active' : '' }}"><span class="material-icons">build</span> Maintenance</a></li>
