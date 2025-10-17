@@ -357,12 +357,12 @@ class DashController extends Controller
             'total_reservations' => Reservation::where('entreprise_id', $user->id)->count(),
             'confirmed_reservations' => Reservation::where('entreprise_id', $user->id)->where('status', 'Confirmée')->count(),
             'pending_reservations' => Reservation::where('entreprise_id', $user->id)->where('status', 'En_attente')->count(),
-            'total_spent' => Invoice::whereHas('reservation', function($q) use ($user) {
+            'total_spent' => (float) (Invoice::whereHas('reservation', function($q) use ($user) {
                 $q->where('entreprise_id', $user->id);
-            })->where('status', 'payé')->sum('amount'),
-            'unpaid_amount' => Invoice::whereHas('reservation', function($q) use ($user) {
+            })->where('status', 'payé')->sum('amount') ?? 0),
+            'unpaid_amount' => (float) (Invoice::whereHas('reservation', function($q) use ($user) {
                 $q->where('entreprise_id', $user->id);
-            })->where('status', 'en_attente')->sum('amount'),
+            })->where('status', 'en_attente')->sum('amount') ?? 0),
         ];
 
         // Réservations récentes de l'entreprise

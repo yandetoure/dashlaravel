@@ -41,7 +41,7 @@ class DashboardClientController extends Controller
         $unpaidInvoices = Invoice::whereHas('reservation', function ($q) use ($user) {
             $q->where('client_id', $user->id);
         })->where('status', 'en_attente')->get();
-        $unpaidTotal = $unpaidInvoices->sum('amount');
+        $unpaidTotal = (float) ($unpaidInvoices->sum('amount') ?? 0);
 
         // Points fidélité et statut
         $points = $user->points ?? 0;

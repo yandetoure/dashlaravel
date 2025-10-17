@@ -124,7 +124,7 @@
             <!-- URL de paiement -->
             <div class="mb-4">
                 <h6><i class="fas fa-link"></i> Lien de paiement direct:</h6>
-                <div class="payment-url">{{ $paymentUrl }}</div>
+                <div class="payment-url">{{ $checkoutUrl }}</div>
             </div>
 
             <!-- Boutons d'action -->

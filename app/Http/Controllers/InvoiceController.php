@@ -311,35 +311,25 @@ class InvoiceController extends Controller
      */
     public function generateQRCode(Invoice $invoice)
     {
-        $user = Auth::user();
-        
-        // Vérifier les permissions
-        if ($user->hasRole('client') && $invoice->reservation->client_id != $user->id) {
-            abort(403, 'Vous n\'êtes pas autorisé à générer ce QR code.');
-        }
-
-        if ($user->hasRole('chauffeur')) {
-            $carDriverIds = $user->car_drivers->pluck('id');
-            if (!$carDriverIds->contains($invoice->reservation->cardriver_id)) {
-                abort(403, 'Vous n\'êtes pas autorisé à générer ce QR code.');
-            }
-        }
-
         // Vérifier que la facture n'est pas déjà payée
         if ($invoice->status === 'payé') {
             return redirect()->back()->with('error', 'Cette facture est déjà payée.');
         }
 
-        // Générer le lien de paiement
-        $paymentUrl = route('reservations.pay.direct', $invoice->reservation->id);
+        // Générer directement l'URL de checkout NabooPay
+        $checkoutUrl = $this->getDirectCheckoutUrl($invoice->reservation);
         
-        // Générer le QR code en SVG (plus compatible)
+        if (!$checkoutUrl) {
+            return redirect()->back()->with('error', 'Impossible de générer l\'URL de paiement. Veuillez réessayer.');
+        }
+        
+        // Générer le QR code en SVG avec l'URL de checkout NabooPay
         $qrCodeSvg = QrCode::format('svg')
             ->size(300)
             ->margin(2)
-            ->generate($paymentUrl);
+            ->generate($checkoutUrl);
 
-        return view('invoices.qrcode', compact('invoice', 'qrCodeSvg', 'paymentUrl'));
+        return view('invoices.qrcode', compact('invoice', 'qrCodeSvg', 'checkoutUrl'));
     }
 
     /**
@@ -398,7 +388,13 @@ class InvoiceController extends Controller
         $message .= "• Orange Money\n";
         $message .= "• Free Money\n";
         $message .= "• Virement bancaire\n\n";
-        $message .= "🔗 *Lien de paiement:* " . route('reservations.pay.direct', $reservation->id) . "\n\n";
+        // Générer l'URL de checkout directe pour WhatsApp
+        $checkoutUrl = $this->getDirectCheckoutUrl($reservation);
+        if ($checkoutUrl) {
+            $message .= "🔗 *Lien de paiement:* " . $checkoutUrl . "\n\n";
+        } else {
+            $message .= "⚠️ *Erreur:* Impossible de générer le lien de paiement\n\n";
+        }
         $message .= "Merci pour votre confiance ! 🙏";
         
         return $message;
@@ -456,5 +452,42 @@ class InvoiceController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'La facture ' . $invoice->invoice_number . ' a été marquée comme payée avec succès.');
+    }
+
+    /**
+     * Générer directement l'URL de checkout NabooPay
+     */
+    private function getDirectCheckoutUrl($reservation)
+    {
+        try {
+            // Créer directement la transaction NabooPay
+            $nabooPayService = app(\App\Services\NabooPayService::class);
+            $result = $nabooPayService->createReservationTransaction($reservation);
+            
+            if ($result['success'] && isset($result['checkout_url'])) {
+                // Mettre à jour la facture avec l'URL de checkout
+                $invoice = Invoice::where('reservation_id', $reservation->id)->first();
+                if ($invoice) {
+                    $invoice->update([
+                        'payment_url' => $result['checkout_url'],
+                        'transaction_id' => $result['transaction_id'] ?? null,
+                        'status' => 'en_attente'
+                    ]);
+                }
+                
+                return $result['checkout_url'];
+            } else {
+                Log::error('Erreur génération URL checkout NabooPay', [
+                    'reservation_id' => $reservation->id,
+                    'result' => $result
+                ]);
+                return null;
+            }
+        } catch (\Exception $e) {
+            Log::error('Exception génération URL checkout: ' . $e->getMessage(), [
+                'reservation_id' => $reservation->id
+            ]);
+            return null;
+        }
     }
 }

@@ -287,7 +287,7 @@
                                                 <i class="fas fa-credit-card"></i>
                                             </a>
                                             
-                                            <a href="{{ route('invoices.qrcode', $invoice->id) }}" 
+                                            <a href="{{ route('invoices.qrcode.public', $invoice->id) }}" 
                                                class="btn btn-outline-info btn-sm"
                                                data-bs-toggle="tooltip" title="Générer QR Code">
                                                 <i class="fas fa-qrcode"></i>

@@ -49,7 +49,7 @@
                     </a>
                     
                     @if($invoice->status != 'payé')
-                        <a href="{{ route('invoices.qrcode', $invoice->id) }}" class="btn btn-info">
+                        <a href="{{ route('invoices.qrcode.public', $invoice->id) }}" class="btn btn-info">
                             <i class="fas fa-qrcode"></i> QR Code
                         </a>
                         

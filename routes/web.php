@@ -146,6 +146,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/error/{reservation}', [App\Http\Controllers\PaymentController::class, 'paymentError'])->name('payment.error');
     Route::get('/payments/history', [App\Http\Controllers\PaymentController::class, 'paymentHistory'])->name('payments.history');
     
+    // Route publique pour le QR code (sans authentification)
+    Route::get('/qrcode/{invoice}', [App\Http\Controllers\InvoiceController::class, 'generateQRCode'])->name('invoices.qrcode.public');
+    
+    // Route de test pour le QR code (développement uniquement)
+    if (app()->environment('local')) {
+        Route::get('/test-qrcode/{invoice}', function(App\Models\Invoice $invoice) {
+            return app(App\Http\Controllers\InvoiceController::class)->generateQRCode($invoice);
+        })->name('test.qrcode');
+    }
+    
     // Routes pour les cashouts admin
     Route::get('/admin/cashout', [App\Http\Controllers\CashoutController::class, 'index'])->name('admin.cashout');
     Route::post('/admin/cashout/retirer', [App\Http\Controllers\CashoutController::class, 'retirer'])->name('admin.cashout.retirer');
