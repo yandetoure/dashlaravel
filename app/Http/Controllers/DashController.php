@@ -28,7 +28,7 @@ class DashController extends Controller
             'total_reservations' => Reservation::count(),
             'total_users' => User::count(),
             'total_cars' => Car::count(),
-            'total_revenue' => Invoice::where('status', 'payé')->sum('amount'),
+            'total_revenue' => (float) (Invoice::where('status', 'payé')->sum('amount') ?? 0),
             'pending_reservations' => Reservation::where('status', 'En_attente')->count(),
             'confirmed_reservations' => Reservation::where('status', 'Confirmée')->count(),
             'cancelled_reservations' => Reservation::where('status', 'Annulée')->count(),
@@ -99,7 +99,7 @@ class DashController extends Controller
         $stats = [
             'total_reservations' => Reservation::count(),
             'total_cars' => Car::count(),
-            'total_revenue' => Invoice::where('status', 'payé')->sum('amount'),
+            'total_revenue' => (float) (Invoice::where('status', 'payé')->sum('amount') ?? 0),
             'pending_reservations' => Reservation::where('status', 'En_attente')->count(),
             'confirmed_reservations' => Reservation::where('status', 'Confirmée')->count(),
             'cancelled_reservations' => Reservation::where('status', 'Annulée')->count(),
@@ -148,12 +148,12 @@ class DashController extends Controller
             'confirmed_reservations' => Reservation::where('client_id', $user->id)->where('status', 'Confirmée')->count(),
             'pending_reservations' => Reservation::where('client_id', $user->id)->where('status', 'En_attente')->count(),
             'cancelled_reservations' => Reservation::where('client_id', $user->id)->where('status', 'Annulée')->count(),
-            'total_spent' => Invoice::whereHas('reservation', function($q) use ($user) {
+            'total_spent' => (float) (Invoice::whereHas('reservation', function($q) use ($user) {
                 $q->where('client_id', $user->id);
-            })->where('status', 'payé')->sum('amount'),
-            'unpaid_amount' => Invoice::whereHas('reservation', function($q) use ($user) {
+            })->where('status', 'payé')->sum('amount') ?? 0),
+            'unpaid_amount' => (float) (Invoice::whereHas('reservation', function($q) use ($user) {
                 $q->where('client_id', $user->id);
-            })->where('status', 'en_attente')->sum('amount'),
+            })->where('status', 'en_attente')->sum('amount') ?? 0),
             'loyalty_points' => $user->loyalty_points ?? 0,
             'points' => $user->points ?? 0,
         ];
@@ -245,9 +245,9 @@ class DashController extends Controller
                 ->whereDate('date', Carbon::today())
                 ->where('status', 'Confirmée')
                 ->count(),
-            'total_earnings' => Invoice::whereHas('reservation', function($q) use ($carDrivers) {
+            'total_earnings' => (float) (Invoice::whereHas('reservation', function($q) use ($carDrivers) {
                 $q->whereIn('cardriver_id', $carDrivers->pluck('id'));
-            })->where('status', 'payé')->sum('amount') * 0.1, // 10% de commission
+            })->where('status', 'payé')->sum('amount') ?? 0) * 0.1, // 10% de commission
             'points' => $user->points ?? 0,
         ];
 
