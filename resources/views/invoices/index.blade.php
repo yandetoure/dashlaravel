@@ -248,7 +248,7 @@
                                             @endif
                                         </td>
                                 <td class="py-3 px-4">
-                                             @if($invoice->status == 'payée')
+                                             @if($invoice->status == 'payé')
                                         <span class="badge bg-success bg-gradient px-3 py-2">
                                             <i class="fas fa-check-circle me-1"></i>Payée
                                         </span>
@@ -289,7 +289,7 @@
                                         @endif
                                         
                                         @if(auth()->user()->hasAnyRole(['admin', 'agent', 'super-admin']))
-                                            @if($invoice->status == 'payée')
+                                            @if($invoice->status == 'payé')
                                                 <span class="btn btn-success btn-sm disabled" 
                                                       data-bs-toggle="tooltip" title="Facture payée">
                                                     <i class="fas fa-check-circle"></i>

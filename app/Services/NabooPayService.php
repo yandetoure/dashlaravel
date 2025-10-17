@@ -375,7 +375,7 @@ class NabooPayService
             'products' => $products,
             'success_url' => $baseUrl . '/payment/success/' . $reservation->id,
             'error_url' => $baseUrl . '/payment/error/' . $reservation->id,
-            'is_escrow' => true, // Protection escrow pour les réservations
+            'is_escrow' => false, // Pas d'escrow - paiement direct
             'webhook_url' => $baseUrl . '/webhook/naboopay', // Ajouter le webhook
             'customer_info' => [
                 'name' => $reservation->first_name . ' ' . $reservation->last_name,

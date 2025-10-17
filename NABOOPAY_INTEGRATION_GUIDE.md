@@ -23,7 +23,7 @@ NABOOPAY_BASE_URL=https://api.naboopay.com/api/v1
 
 ### Pour les Clients
 - **Paiement des réservations** via Wave, Orange Money, Free Money, Bank
-- **Protection Escrow** - Paiement sécurisé jusqu'à confirmation
+- **Paiement direct** - Pas d'escrow, paiement immédiat
 - **Historique des paiements** avec statuts détaillés
 - **Interface de paiement** intuitive et responsive
 
@@ -65,7 +65,7 @@ NABOOPAY_BASE_URL=https://api.naboopay.com/api/v1
 1. **Client/Chauffeur** clique sur "Payer maintenant" dans une réservation confirmée
 2. **Sélection** de la méthode de paiement (Wave, Orange Money, etc.)
 3. **Redirection** vers l'interface de paiement NabooPay
-4. **Paiement** effectué sur NabooPay
+4. **Paiement** effectué sur NabooPay (paiement direct)
 5. **Webhook** notifie votre application du statut
 6. **Mise à jour** automatique de la facture et du statut de réservation
 

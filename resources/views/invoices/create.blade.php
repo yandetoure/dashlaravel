@@ -299,7 +299,7 @@
                                     <option value="en_attente" {{ old('status') == 'en_attente' ? 'selected' : '' }}>
                                         En attente de paiement
                                     </option>
-                                    <option value="payée" {{ old('status') == 'payée' ? 'selected' : '' }}>
+                                    <option value="payé" {{ old('status') == 'payé' ? 'selected' : '' }}>
                                         Payée
                                     </option>
                                     <option value="offert" {{ old('status') == 'offert' ? 'selected' : '' }}>

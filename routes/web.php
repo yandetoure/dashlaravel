@@ -380,4 +380,9 @@ Route::middleware('auth')->group(function () {
 // Webhook pour NabooPay (sans middleware auth)
 Route::post('/webhook/naboopay', [App\Http\Controllers\PaymentController::class, 'webhook'])->name('webhook.naboopay');
 
+// Route de test pour le webhook (uniquement en développement)
+if (app()->environment('local', 'development')) {
+    Route::post('/webhook/naboopay/test', [App\Http\Controllers\PaymentController::class, 'testWebhook'])->name('webhook.naboopay.test');
+}
+
 require __DIR__.'/auth.php';

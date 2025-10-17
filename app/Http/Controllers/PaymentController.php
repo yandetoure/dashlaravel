@@ -207,7 +207,7 @@ class PaymentController extends Controller
                     $invoice = Invoice::where('reservation_id', $reservation->id)->first();
                     if ($invoice) {
                         $invoice->update([
-                            'status' => 'payée',
+                            'status' => 'payé',
                             'paid_at' => now(),
                             'transaction_data' => json_encode($transactionData)
                         ]);
@@ -254,42 +254,172 @@ class PaymentController extends Controller
             
             Log::info('Webhook NabooPay reçu: ' . json_encode($data));
 
-            if (isset($data['transaction_id'])) {
-                $result = $this->nabooPayService->getTransaction($data['transaction_id']);
-                
-                if ($result['success']) {
-                    $transactionData = $result['data'];
-                    
-                    // Trouver la facture correspondante
-                    $invoice = Invoice::where('transaction_id', $data['transaction_id'])->first();
-                    
-                    if ($invoice) {
-                        // Mettre à jour le statut selon la réponse de NabooPay
-                        $status = $transactionData['status'] ?? 'en_attente';
-                        
-                        if ($status === 'paid' || $status === 'done') {
-                            $invoice->update([
-                                'status' => 'payée',
-                                'paid_at' => now(),
-                                'transaction_data' => json_encode($transactionData)
-                            ]);
+            // Vérifier que nous avons un transaction_id
+            if (!isset($data['transaction_id'])) {
+                Log::warning('Webhook NabooPay reçu sans transaction_id', ['data' => $data]);
+                return response()->json(['status' => 'error', 'message' => 'transaction_id manquant'], 400);
+            }
 
-                            // Mettre à jour la réservation
-                            $reservation = $invoice->reservation;
-                            if ($reservation && $reservation->status === 'Confirmée') {
-                                $reservation->update(['status' => 'Payée']);
-                            }
-                        }
-                    }
-                }
+            $transactionId = $data['transaction_id'];
+            
+            // Récupérer les détails de la transaction depuis NabooPay
+            $result = $this->nabooPayService->getTransaction($transactionId);
+            
+            if (!$result['success']) {
+                Log::error('Impossible de récupérer la transaction NabooPay', [
+                    'transaction_id' => $transactionId,
+                    'error' => $result['error'] ?? 'Erreur inconnue'
+                ]);
+                return response()->json(['status' => 'error', 'message' => 'Transaction non trouvée'], 404);
+            }
+
+            $transactionData = $result['data'];
+            $paymentStatus = $transactionData['status'] ?? 'unknown';
+            
+            Log::info('Statut de paiement NabooPay: ' . $paymentStatus, [
+                'transaction_id' => $transactionId,
+                'transaction_data' => $transactionData
+            ]);
+            
+            // Trouver la facture correspondante
+            $invoice = Invoice::where('transaction_id', $transactionId)->first();
+            
+            if (!$invoice) {
+                Log::warning('Facture non trouvée pour la transaction', ['transaction_id' => $transactionId]);
+                return response()->json(['status' => 'error', 'message' => 'Facture non trouvée'], 404);
+            }
+
+            // Mettre à jour la facture selon le statut de paiement
+            $this->updateInvoiceStatus($invoice, $paymentStatus, $transactionData);
+            
+            // Mettre à jour la réservation si le paiement est réussi
+            if (in_array($paymentStatus, ['paid', 'done', 'completed', 'success'])) {
+                $this->updateReservationStatus($invoice->reservation);
             }
 
             return response()->json(['status' => 'success']);
 
         } catch (\Exception $e) {
-            Log::error('Erreur webhook NabooPay: ' . $e->getMessage());
+            Log::error('Erreur webhook NabooPay: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'data' => $request->all()
+            ]);
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Mettre à jour le statut de la facture
+     */
+    private function updateInvoiceStatus(Invoice $invoice, string $paymentStatus, array $transactionData)
+    {
+        $invoiceStatus = 'en_attente';
+        $paidAt = null;
+
+        // Déterminer le statut de la facture selon le statut de paiement NabooPay
+        switch (strtolower($paymentStatus)) {
+            case 'paid':
+            case 'done':
+            case 'completed':
+            case 'success':
+                $invoiceStatus = 'payé';
+                $paidAt = now();
+                break;
+            case 'failed':
+            case 'cancelled':
+            case 'expired':
+                $invoiceStatus = 'en_attente'; // Garder en attente pour permettre un nouveau paiement
+                break;
+            case 'pending':
+            case 'processing':
+                $invoiceStatus = 'en_attente';
+                break;
+            default:
+                Log::warning('Statut de paiement NabooPay non reconnu', [
+                    'payment_status' => $paymentStatus,
+                    'invoice_id' => $invoice->id
+                ]);
+                $invoiceStatus = 'en_attente';
+        }
+
+        // Mettre à jour la facture
+        $invoice->update([
+            'status' => $invoiceStatus,
+            'paid_at' => $paidAt,
+            'transaction_data' => json_encode($transactionData)
+        ]);
+
+        Log::info('Facture mise à jour', [
+            'invoice_id' => $invoice->id,
+            'old_status' => $invoice->getOriginal('status'),
+            'new_status' => $invoiceStatus,
+            'payment_status' => $paymentStatus
+        ]);
+    }
+
+    /**
+     * Mettre à jour le statut de la réservation
+     */
+    private function updateReservationStatus(Reservation $reservation)
+    {
+        if (!$reservation) {
+            Log::warning('Réservation non trouvée pour la mise à jour du statut');
+            return;
+        }
+
+        // Ne mettre à jour que si la réservation est confirmée
+        if ($reservation->status === 'Confirmée') {
+            $reservation->update(['status' => 'Payée']);
+            
+            Log::info('Réservation mise à jour en Payée', [
+                'reservation_id' => $reservation->id,
+                'old_status' => 'Confirmée',
+                'new_status' => 'Payée'
+            ]);
+        } else {
+            Log::info('Réservation non mise à jour - statut actuel: ' . $reservation->status, [
+                'reservation_id' => $reservation->id,
+                'current_status' => $reservation->status
+            ]);
+        }
+    }
+
+    /**
+     * Méthode de test pour simuler un webhook NabooPay
+     * Cette méthode permet de tester le webhook sans attendre une vraie notification NabooPay
+     */
+    public function testWebhook(Request $request)
+    {
+        // Cette méthode ne devrait être accessible qu'en environnement de développement
+        if (app()->environment('production')) {
+            abort(403, 'Cette méthode n\'est disponible qu\'en développement');
+        }
+
+        $request->validate([
+            'transaction_id' => 'required|string',
+            'status' => 'required|string|in:paid,done,completed,success,failed,cancelled,expired,pending,processing'
+        ]);
+
+        // Simuler les données du webhook NabooPay
+        $webhookData = [
+            'transaction_id' => $request->transaction_id,
+            'status' => $request->status,
+            'amount' => $request->amount ?? 0,
+            'currency' => $request->currency ?? 'XOF',
+            'timestamp' => now()->toISOString()
+        ];
+
+        // Créer une nouvelle requête avec les données simulées
+        $simulatedRequest = new Request($webhookData);
+
+        // Appeler la méthode webhook avec les données simulées
+        $response = $this->webhook($simulatedRequest);
+
+        return response()->json([
+            'message' => 'Webhook testé avec succès',
+            'webhook_data' => $webhookData,
+            'response' => $response->getData()
+        ]);
     }
 
     /**

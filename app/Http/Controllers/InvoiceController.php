@@ -110,11 +110,11 @@ class InvoiceController extends Controller
         
         return [
             'total' => (int) $baseQuery->count(),
-            'paid' => (int) (clone $baseQuery)->where('status', 'payée')->count(),
+            'paid' => (int) (clone $baseQuery)->where('status', 'payé')->count(),
             'pending' => (int) (clone $baseQuery)->where('status', 'en_attente')->count(),
             'free' => (int) (clone $baseQuery)->where('status', 'offert')->count(),
             'total_amount' => (float) $baseQuery->sum('amount'),
-            'paid_amount' => (float) (clone $baseQuery)->where('status', 'payée')->sum('amount'),
+            'paid_amount' => (float) (clone $baseQuery)->where('status', 'payé')->sum('amount'),
             'pending_amount' => (float) (clone $baseQuery)->where('status', 'en_attente')->sum('amount'),
             'free_amount' => (float) (clone $baseQuery)->where('status', 'offert')->sum('amount'),
         ];
@@ -225,7 +225,7 @@ class InvoiceController extends Controller
             'phone_number' => 'required|string|max:20',
             'nb_personnes' => 'required|integer|min:1',
             'amount' => 'required|numeric|min:0',
-            'status' => 'required|in:en_attente,payée,offert',
+            'status' => 'required|in:en_attente,payé,offert',
             'note' => 'nullable|string|max:500',
             'date' => 'required|date',
             'heure_ramassage' => 'required',
@@ -327,13 +327,13 @@ class InvoiceController extends Controller
         }
 
         // Vérifier que la facture n'est pas déjà payée
-        if ($invoice->status === 'payée') {
+        if ($invoice->status === 'payé') {
             return redirect()->back()->with('error', 'Cette facture est déjà marquée comme payée.');
         }
 
         // Mettre à jour la facture avec la date de paiement
         $invoice->update([
-            'status' => 'payée',
+            'status' => 'payé',
             'paid_at' => now(),
             'payment_method' => $invoice->payment_method ?: 'Manuel'
         ]);

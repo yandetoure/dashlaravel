@@ -138,7 +138,7 @@
 
         <div class="payment-info">
             <strong>Statut:</strong> 
-                                @if($invoice->status == 'payée')
+                                @if($invoice->status == 'payé')
                                     <span class="badge bg-success">Payée</span>
                                 @elseif($invoice->status == 'en_attente')
                                     <span class="badge bg-warning text-dark">En attente de paiement</span>
