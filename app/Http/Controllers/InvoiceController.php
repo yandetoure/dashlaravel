@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -263,6 +264,11 @@ class InvoiceController extends Controller
             'note' => $request->note
         ]);
 
+        // Générer automatiquement l'URL de checkout NabooPay si la facture est en attente
+        if ($request->status === 'en_attente') {
+            $this->generateCheckoutUrlForInvoice($invoice);
+        }
+
         // Log de la création
         \Log::info('Facture et réservation créées manuellement', [
             'invoice_id' => $invoice->id,
@@ -464,7 +470,7 @@ class InvoiceController extends Controller
             $nabooPayService = app(\App\Services\NabooPayService::class);
             $result = $nabooPayService->createReservationTransaction($reservation);
             
-            if ($result['success'] && isset($result['checkout_url'])) {
+            if (isset($result['checkout_url'])) {
                 // Mettre à jour la facture avec l'URL de checkout
                 $invoice = Invoice::where('reservation_id', $reservation->id)->first();
                 if ($invoice) {
@@ -488,6 +494,50 @@ class InvoiceController extends Controller
                 'reservation_id' => $reservation->id
             ]);
             return null;
+        }
+    }
+
+    /**
+     * Générer automatiquement l'URL de checkout pour une facture
+     */
+    private function generateCheckoutUrlForInvoice(Invoice $invoice)
+    {
+        try {
+            if (!$invoice->reservation) {
+                Log::warning('Impossible de générer l\'URL de checkout: réservation manquante', [
+                    'invoice_id' => $invoice->id
+                ]);
+                return false;
+            }
+
+            $nabooPayService = app(\App\Services\NabooPayService::class);
+            $result = $nabooPayService->createReservationTransaction($invoice->reservation);
+            
+            if (isset($result['checkout_url'])) {
+                $invoice->update([
+                    'payment_url' => $result['checkout_url'],
+                    'transaction_id' => $result['transaction_id'] ?? null
+                ]);
+                
+                Log::info('URL de checkout générée automatiquement', [
+                    'invoice_id' => $invoice->id,
+                    'checkout_url' => $result['checkout_url']
+                ]);
+                
+                return true;
+            } else {
+                Log::error('Impossible de générer l\'URL de checkout', [
+                    'invoice_id' => $invoice->id,
+                    'result' => $result
+                ]);
+                return false;
+            }
+        } catch (\Exception $e) {
+            Log::error('Erreur génération URL de checkout automatique', [
+                'invoice_id' => $invoice->id,
+                'error' => $e->getMessage()
+            ]);
+            return false;
         }
     }
 }

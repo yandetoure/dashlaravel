@@ -621,9 +621,9 @@ class NabooPayService
                 'webhook_url' => $baseUrl . '/webhook/naboopay', // Ajouter le webhook
                 'fee_payer' => 'seller', // Frais prélevés sur le vendeur (plateforme)
                 'customer_info' => [
-                    'name' => $reservation->client->first_name . ' ' . $reservation->client->last_name,
-                    'email' => $reservation->client->email,
-                    'phone' => $reservation->client->phone_number
+                    'name' => $reservation->client ? ($reservation->client->first_name . ' ' . $reservation->client->last_name) : 'Client',
+                    'email' => $reservation->client->email ?? 'client@example.com',
+                    'phone' => $reservation->client->phone_number ?? '0000000000'
                 ],
                 'metadata' => [
                     'reservation_id' => $reservation->id,

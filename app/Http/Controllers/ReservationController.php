@@ -340,13 +340,16 @@ class ReservationController extends Controller
             $agent->save();
         }
 
-        Invoice::create([
+        $invoice = Invoice::create([
             'reservation_id' => $reservation->id,
             'amount' => $reservation->tarif,
             'status' => 'en_attente',
             'invoice_number' => Invoice::generateInvoiceNumber(),
             'invoice_date' => now(),
         ]);
+
+        // Générer automatiquement l'URL de checkout NabooPay
+        $this->generateCheckoutUrlForInvoice($invoice);
 
         return back()->with('success', 'Réservation confirmée.');
     }
@@ -1376,4 +1379,47 @@ public function showCalendar()
         return $availableDrivers;
     }
 
+    /**
+     * Générer automatiquement l'URL de checkout pour une facture
+     */
+    private function generateCheckoutUrlForInvoice(Invoice $invoice)
+    {
+        try {
+            if (!$invoice->reservation) {
+                \Log::warning('Impossible de générer l\'URL de checkout: réservation manquante', [
+                    'invoice_id' => $invoice->id
+                ]);
+                return false;
+            }
+
+            $nabooPayService = app(\App\Services\NabooPayService::class);
+            $result = $nabooPayService->createReservationTransaction($invoice->reservation);
+            
+            if (isset($result['checkout_url'])) {
+                $invoice->update([
+                    'payment_url' => $result['checkout_url'],
+                    'transaction_id' => $result['transaction_id'] ?? null
+                ]);
+                
+                \Log::info('URL de checkout générée automatiquement', [
+                    'invoice_id' => $invoice->id,
+                    'checkout_url' => $result['checkout_url']
+                ]);
+                
+                return true;
+            } else {
+                \Log::error('Impossible de générer l\'URL de checkout', [
+                    'invoice_id' => $invoice->id,
+                    'result' => $result
+                ]);
+                return false;
+            }
+        } catch (\Exception $e) {
+            \Log::error('Erreur génération URL de checkout automatique', [
+                'invoice_id' => $invoice->id,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
 }

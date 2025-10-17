@@ -281,11 +281,37 @@
                                         </a>
                                         
                                         @if($invoice->status == 'en_attente' && $invoice->reservation)
-                                            <a href="{{ route('reservations.pay.direct', $invoice->reservation->id) }}" 
-                                               class="btn btn-success btn-sm"
-                                               data-bs-toggle="tooltip" title="Payer avec NabooPay">
-                                                <i class="fas fa-credit-card"></i>
-                                            </a>
+                                            @php
+                                                // Générer automatiquement l'URL de checkout si elle n'existe pas
+                                                $checkoutUrl = $invoice->payment_url;
+                                                if (!$checkoutUrl) {
+                                                    // Générer directement l'URL de checkout NabooPay
+                                                    $nabooPayService = app(\App\Services\NabooPayService::class);
+                                                    $result = $nabooPayService->createReservationTransaction($invoice->reservation);
+                                                    
+                                                    if (isset($result['checkout_url'])) {
+                                                        $checkoutUrl = $result['checkout_url'];
+                                                        // Mettre à jour la facture avec l'URL générée
+                                                        $invoice->update([
+                                                            'payment_url' => $checkoutUrl,
+                                                            'transaction_id' => $result['transaction_id'] ?? null
+                                                        ]);
+                                                    }
+                                                }
+                                            @endphp
+                                            @if($checkoutUrl)
+                                                <a href="{{ $checkoutUrl }}" 
+                                                   class="btn btn-success btn-sm"
+                                                   data-bs-toggle="tooltip" title="Payer avec NabooPay"
+                                                   target="_blank">
+                                                    <i class="fas fa-credit-card"></i>
+                                                </a>
+                                            @else
+                                                <button class="btn btn-secondary btn-sm" disabled
+                                                        data-bs-toggle="tooltip" title="Impossible de générer l'URL de paiement">
+                                                    <i class="fas fa-exclamation-triangle"></i>
+                                                </button>
+                                            @endif
                                             
                                             <a href="{{ route('invoices.qrcode.public', $invoice->id) }}" 
                                                class="btn btn-outline-info btn-sm"
