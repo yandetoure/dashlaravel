@@ -86,7 +86,27 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Effectuer un Retrait</h2>
                 
-                <form action="{{ route('admin.cashout.wave') }}" method="POST" id="wave-form">
+                @php
+                    $totalAvailable = $accountInfo['balance'] ?? 0;
+                    $canWithdraw = $totalAvailable >= 10;
+                @endphp
+                
+                @if(!$canWithdraw)
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="text-yellow-800 font-medium">Solde insuffisant pour un retrait</span>
+                        </div>
+                        <p class="text-yellow-700 text-sm mt-1">
+                            Le montant minimum pour un retrait est de 10 XOF. 
+                            Votre solde total disponible est de {{ number_format($totalAvailable, 0, ',', ' ') }} XOF.
+                        </p>
+                    </div>
+                @endif
+                
+                <form action="{{ route('admin.cashout.wave') }}" method="POST" id="wave-form" @if(!$canWithdraw) onsubmit="return false;" @endif>
                     @csrf
                     
                     <div class="space-y-4">
@@ -96,12 +116,13 @@
                                    id="amount" 
                                    name="amount" 
                                    min="10" 
-                                   max="{{ $accountInfo['balance'] ?? 0 }}" 
+                                   max="{{ $totalAvailable }}" 
                                    step="1"
-                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent @if(!$canWithdraw) opacity-50 cursor-not-allowed @endif"
+                                   @if(!$canWithdraw) disabled @endif
                                    required>
                             <p class="text-sm text-gray-500 mt-1">
-                                Montant disponible: {{ number_format($accountInfo['balance'] ?? 0, 0, ',', ' ') }} XOF
+                                Montant disponible: {{ number_format($totalAvailable, 0, ',', ' ') }} XOF
                             </p>
                         </div>
                         
@@ -135,14 +156,14 @@
                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
                         </div>
                         
-                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition duration-200">
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition duration-200 @if(!$canWithdraw) opacity-50 cursor-not-allowed @endif" @if(!$canWithdraw) disabled @endif>
                             Retirer vers Wave
                         </button>
                     </div>
                 </form>
                 
                 <!-- Formulaire Orange Money -->
-                <form action="{{ route('admin.cashout.orange-money') }}" method="POST" id="orange-form" class="mt-6">
+                <form action="{{ route('admin.cashout.orange-money') }}" method="POST" id="orange-form" class="mt-6" @if(!$canWithdraw) onsubmit="return false;" @endif>
                     @csrf
                     
                     <div class="space-y-4">
@@ -152,9 +173,10 @@
                                    id="amount_orange" 
                                    name="amount" 
                                    min="10" 
-                                   max="{{ $accountInfo['balance'] ?? 0 }}" 
+                                   max="{{ $totalAvailable }}" 
                                    step="1"
-                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-transparent @if(!$canWithdraw) opacity-50 cursor-not-allowed @endif"
+                                   @if(!$canWithdraw) disabled @endif
                                    required>
                         </div>
                         
@@ -187,7 +209,7 @@
                                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-orange-500 focus:border-transparent"></textarea>
                         </div>
                         
-                        <button type="submit" class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition duration-200">
+                        <button type="submit" class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition duration-200 @if(!$canWithdraw) opacity-50 cursor-not-allowed @endif" @if(!$canWithdraw) disabled @endif>
                             Retirer vers Orange Money
                         </button>
                     </div>

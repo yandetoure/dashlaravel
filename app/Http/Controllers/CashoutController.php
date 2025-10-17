@@ -33,16 +33,17 @@ class CashoutController extends Controller
 
         // Récupérer les informations du compte NabooPay via le service
         try {
-            $result = $this->nabooPayService->getAccountInfo();
+            $accountInfo = $this->nabooPayService->getAccountInfo();
             
-            if ($result['success']) {
-                $accountInfo = $result['data'];
-            } else {
-                $error = $result['error'];
+            // Vérifier que les données sont valides
+            if (!is_array($accountInfo) || !isset($accountInfo['balance'])) {
+                $error = 'Données du compte invalides';
+                $accountInfo = null;
             }
         } catch (\Exception $e) {
             $error = 'Erreur lors de la récupération des informations du compte: ' . $e->getMessage();
             Log::error('Erreur cashout index: ' . $e->getMessage());
+            $accountInfo = null;
         }
 
         // Déterminer quelle vue utiliser selon le rôle
@@ -67,7 +68,7 @@ class CashoutController extends Controller
 
         // Valider les données de la requête
         $request->validate([
-            'amount' => 'required|numeric|min:10|max:500000',
+            'amount' => 'required|numeric|min:10|max:2000000',
             'phone_number' => 'required|string|regex:/^[0-9+\-\s]+$/',
             'full_name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255'
@@ -75,7 +76,7 @@ class CashoutController extends Controller
             'amount.required' => 'Le montant est requis',
             'amount.numeric' => 'Le montant doit être un nombre',
             'amount.min' => 'Le montant minimum est de 10 FCFA',
-            'amount.max' => 'Le montant maximum est de 500 000 FCFA',
+            'amount.max' => 'Le montant maximum est de 2 000 000 FCFA',
             'phone_number.required' => 'Le numéro de téléphone est requis',
             'phone_number.regex' => 'Le format du numéro de téléphone est invalide',
             'full_name.required' => 'Le nom complet est requis',
