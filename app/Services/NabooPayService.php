@@ -61,7 +61,7 @@ class NabooPayService
             'Authorization' => 'Bearer ' . $this->apiKey,
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-        ])->put($this->baseUrl . '/transaction/create-transaction', $transactionData);
+        ])->post($this->baseUrl . '/transaction/create-transaction', $transactionData);
 
         $responseData = $response->json();
         
@@ -494,9 +494,14 @@ class NabooPayService
     public function cashOutToOrangeMoney($amount, $phoneNumber)
     {
         try {
+            $normalizedPhone = $this->normalizePhoneNumber($phoneNumber);
+            if (!$normalizedPhone) {
+                throw new \Exception('Numéro de téléphone invalide');
+            }
+
             $data = [
                 'amount' => (int) $amount,
-                'phone_number' => $phoneNumber
+                'phone_number' => $normalizedPhone
             ];
 
             Log::info('NabooPay - Tentative de cashout Orange Money', [
@@ -609,7 +614,13 @@ class NabooPayService
 
             $baseUrl = config('app.url');
             if (str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
-                $baseUrl = request()->getSchemeAndHttpHost();
+                // Pour le développement local, utiliser https://localhost ou une URL publique
+                $baseUrl = 'https://cprovlc.com'; // Remplacer par votre domaine de production
+            }
+            
+            // S'assurer que l'URL utilise https
+            if (!str_starts_with($baseUrl, 'https://')) {
+                $baseUrl = 'https://' . ltrim($baseUrl, 'http://');
             }
 
             $data = [
@@ -623,7 +634,7 @@ class NabooPayService
                 'customer_info' => [
                     'name' => $reservation->client ? ($reservation->client->first_name . ' ' . $reservation->client->last_name) : 'Client',
                     'email' => $reservation->client->email ?? 'client@example.com',
-                    'phone' => $reservation->client->phone_number ?? '0000000000'
+                    'phone' => $reservation->client ? $this->normalizePhoneNumber($reservation->client->phone_number) : '+221000000000'
                 ],
                 'metadata' => [
                     'reservation_id' => $reservation->id,
