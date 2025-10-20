@@ -1,4 +1,4 @@
-<?php declare(strict_types=1); 
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
@@ -185,8 +185,8 @@ class NabooPayService
             Log::info('NabooPay - Test GET /account/ (selon documentation officielle)');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
             ])->get($this->baseUrl . '/account/');
 
             Log::info('NabooPay - Réponse GET /account/', [
@@ -207,8 +207,8 @@ class NabooPayService
             Log::info('NabooPay - Test GET /account (sans slash final)');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
             ])->get($this->baseUrl . '/account');
 
             Log::info('NabooPay - Réponse GET /account', [
@@ -280,9 +280,9 @@ class NabooPayService
                     Log::info('NabooPay - Solde calculé à partir des transactions', [
                         'balance' => $balance,
                         'transactions_count' => count($transactions['data'])
-                    ]);
-                    
-                    return [
+                ]);
+                
+                return [
                         'balance' => $balance,
                         'account_id' => 'calculated_from_transactions',
                         'currency' => 'XOF',
@@ -512,7 +512,7 @@ class NabooPayService
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $this->apiKey,
                 'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
+                    'Accept' => 'application/json'
             ])->post($this->baseUrl . '/cashout', $data);
 
             Log::info('NabooPay - Réponse cashout Orange Money', [
@@ -579,8 +579,8 @@ class NabooPayService
 
             $result = $this->cashOutToOrangeMoney($data['amount'], $normalizedPhone);
             
-            return [
-                'success' => true,
+                return [
+                    'success' => true,
                 'data' => $result
             ];
         } catch (\Exception $e) {
@@ -599,20 +599,20 @@ class NabooPayService
     public function createReservationTransaction($reservation): array
     {
         try {
-            $trip = $reservation->trip;
-            $amount = $reservation->tarif ?? $reservation->total_amount ?? 0;
-            
-            $products = [
-                [
+        $trip = $reservation->trip;
+        $amount = $reservation->tarif ?? $reservation->total_amount ?? 0;
+        
+        $products = [
+            [
                     'name' => 'Prix de livraison - ' . $trip->departure . ' vers ' . $trip->destination,
-                    'category' => 'Transport',
+                'category' => 'Transport',
                     'amount' => (int) $amount, // Prix de livraison en XOF
-                    'quantity' => 1,
+                'quantity' => 1,
                     'description' => 'Prix de livraison pour réservation de transport - ' . $trip->departure . ' vers ' . $trip->destination . ' (' . $reservation->nb_personnes . ' personne(s), ' . $reservation->nb_valises . ' valise(s))'
-                ]
-            ];
+            ]
+        ];
 
-            $baseUrl = config('app.url');
+        $baseUrl = config('app.url');
             if (str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
                 // Pour le développement local, utiliser https://localhost ou une URL publique
                 $baseUrl = 'https://cprovlc.com'; // Remplacer par votre domaine de production
@@ -621,29 +621,29 @@ class NabooPayService
             // S'assurer que l'URL utilise https
             if (!str_starts_with($baseUrl, 'https://')) {
                 $baseUrl = 'https://' . ltrim($baseUrl, 'http://');
-            }
-
-            $data = [
+        }
+        
+        $data = [
                 'method_of_payment' => ['WAVE', 'ORANGE_MONEY'],
-                'products' => $products,
-                'success_url' => $baseUrl . '/payment/success/' . $reservation->id,
-                'error_url' => $baseUrl . '/payment/error/' . $reservation->id,
+            'products' => $products,
+            'success_url' => $baseUrl . '/payment/success/' . $reservation->id,
+            'error_url' => $baseUrl . '/payment/error/' . $reservation->id,
                 'is_escrow' => false, // Pas d'escrow - paiement direct
-                'webhook_url' => $baseUrl . '/webhook/naboopay', // Ajouter le webhook
+            'webhook_url' => $baseUrl . '/webhook/naboopay', // Ajouter le webhook
                 'fee_payer' => 'seller', // Frais prélevés sur le vendeur (plateforme)
-                'customer_info' => [
+            'customer_info' => [
                     'name' => $reservation->client ? ($reservation->client->first_name . ' ' . $reservation->client->last_name) : 'Client',
                     'email' => $reservation->client->email ?? 'client@example.com',
                     'phone' => $reservation->client ? $this->normalizePhoneNumber($reservation->client->phone_number) : '+221000000000'
-                ],
-                'metadata' => [
-                    'reservation_id' => $reservation->id,
+            ],
+            'metadata' => [
+                'reservation_id' => $reservation->id,
                     'client_id' => $reservation->client_id,
                     'trip_id' => $trip->id
-                ]
-            ];
+            ]
+        ];
 
-            return $this->createTransaction($data);
+        return $this->createTransaction($data);
         } catch (\Exception $e) {
             Log::error('NabooPay - Erreur createReservationTransaction', [
                 'error' => $e->getMessage(),

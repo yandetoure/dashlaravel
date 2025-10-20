@@ -343,6 +343,9 @@ class InvoiceController extends Controller
      */
     public function sendWhatsAppPayment(Invoice $invoice)
     {
+        // Eager load les relations nécessaires pour éviter les requêtes N+1
+        $invoice->load(['reservation.client', 'reservation.trip']);
+        
         $user = Auth::user();
         
         // Vérifier les permissions
@@ -379,10 +382,23 @@ class InvoiceController extends Controller
         $reservation = $invoice->reservation;
         $client = $reservation->client;
         
+        // Utiliser les informations du client lié ou celles stockées directement dans la réservation
+        $clientName = '';
+        $clientPhone = '';
+        
+        if ($client) {
+            $clientName = "{$client->first_name} {$client->last_name}";
+            $clientPhone = $client->phone_number;
+        } else {
+            // Fallback sur les données stockées directement dans la réservation
+            $clientName = "{$reservation->first_name} {$reservation->last_name}";
+            $clientPhone = $reservation->phone_number;
+        }
+        
         $message = "🚗 *FACTURE DE TRANSPORT*\n\n";
         $message .= "📋 *Numéro de facture:* {$invoice->invoice_number}\n";
-        $message .= "👤 *Client:* {$client->first_name} {$client->last_name}\n";
-        $message .= "📱 *Téléphone:* {$client->phone_number}\n";
+        $message .= "👤 *Client:* {$clientName}\n";
+        $message .= "📱 *Téléphone:* {$clientPhone}\n";
         $message .= "📍 *Trajet:* {$reservation->trip->departure} → {$reservation->trip->destination}\n";
         $message .= "📅 *Date:* " . \Carbon\Carbon::parse($reservation->date)->format('d/m/Y') . "\n";
         $message .= "🕐 *Heure de ramassage:* {$reservation->heure_ramassage}\n";
