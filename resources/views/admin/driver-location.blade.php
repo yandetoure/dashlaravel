@@ -31,33 +31,117 @@
             top: -10px;
             right: -10px;
         }
+        
+        /* Styles personnalisés pour la page de localisation */
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+        }
+        
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+        
+        .driver-item {
+            transition: all 0.3s ease;
+            border-radius: 8px !important;
+            margin-bottom: 0.5rem;
+            padding: 0.75rem !important;
+        }
+        
+        .driver-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1);
+            background-color: #f8fafc !important;
+        }
+        
+        .badge-sm {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        
+        .driver-status-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            animation: pulse-status 2s infinite;
+        }
+        
+        .driver-status-indicator[data-status="disponible"] {
+            background-color: #10B981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+        
+        .driver-status-indicator[data-status="en_course"] {
+            background-color: #3B82F6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+        
+        .driver-status-indicator[data-status="en_attente"] {
+            background-color: #F59E0B;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+        }
+        
+        @keyframes pulse-status {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .card {
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            border-radius: 16px 16px 0 0 !important;
+        }
+        
+        .btn {
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .badge {
+            border-radius: 8px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
 <div class="container-fluid px-3 py-4">
-    <!-- En-tête -->
+    <!-- En-tête amélioré -->
     <div class="row mb-4">
         <div class="col-12">
+            <div class="card border-0 shadow-sm bg-gradient-primary text-white">
+                <div class="card-body p-4">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <div class="mb-3 mb-md-0">
-                    <h1 class="h3 mb-1 text-primary fw-bold">
+                            <h1 class="h3 mb-2 fw-bold text-white">
                         <i class="fas fa-map-marked-alt me-2"></i>
                         Localisation des Chauffeurs
                     </h1>
-                    <p class="text-muted mb-0">Suivi en temps réel de la position de tous les chauffeurs</p>
+                            <p class="text-white-50 mb-0 fs-5">
+                                <i class="fas fa-eye me-1"></i>
+                                Suivi en temps réel de la position de tous les chauffeurs
+                            </p>
                 </div>
                 <div class="d-flex flex-wrap gap-2">
-                    <button id="refreshBtn" class="btn btn-outline-primary">
-                        <i class="fas fa-sync-alt me-1"></i>
+                            <button id="refreshBtn" class="btn btn-light btn-lg">
+                                <i class="fas fa-sync-alt me-2"></i>
                         Actualiser
                     </button>
-                    <div class="badge bg-info fs-6 px-3 py-2">
-                        <i class="fas fa-circle text-success me-1" id="statusIndicator"></i>
+                            <div class="badge bg-white bg-opacity-20 fs-6 px-4 py-3 text-white">
+                                <i class="fas fa-circle text-success me-2" id="statusIndicator"></i>
                         <span id="updateStatus">En temps réel</span>
                     </div>
-                    <div class="badge bg-success fs-6 px-3 py-2">
-                        <i class="fas fa-clock me-1"></i>
+                            <div class="badge bg-white bg-opacity-20 fs-6 px-4 py-3 text-white">
+                                <i class="fas fa-clock me-2"></i>
                         <span id="lastUpdate">--:--</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,76 +167,54 @@
         <!-- Liste des chauffeurs -->
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 pb-0">
+                <div class="card-header bg-gradient-secondary text-white border-0">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
+                        <div>
+                            <h5 class="card-title mb-1 fw-bold text-white">
                             <i class="fas fa-users me-2"></i>
-                            Chauffeurs
+                                Chauffeurs Actifs
                         </h5>
-                        <span class="badge bg-primary" id="driverCount">{{ $chauffeurs->count() }}</span>
+                            <small class="text-white-50">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                {{ $chauffeurs->count() }} chauffeurs sur la carte
+                            </small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-white bg-opacity-20 fs-5 px-3 py-2" id="driverCount">{{ $chauffeurs->count() }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush" id="driversList">
                         @foreach($chauffeurs as $chauffeur)
-                            <div class="list-group-item border-0 px-0 driver-item" data-driver-id="{{ $chauffeur['id'] }}">
-                                <div class="d-flex align-items-center mb-2">
+                            <div class="list-group-item border-0 px-0 py-2 driver-item" data-driver-id="{{ $chauffeur['id'] }}">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
                                     <div class="driver-status-indicator me-3" data-status="{{ $chauffeur['statut'] }}"></div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1 fw-bold">{{ $chauffeur['nom'] }}</h6>
-                                        <p class="mb-1 text-muted small">
+                                        <div>
+                                            <div class="d-flex align-items-center mb-1">
+                                                <h6 class="mb-0 fw-bold text-dark me-2">{{ $chauffeur['nom'] }}</h6>
+                                                <span class="badge bg-{{ $chauffeur['statut'] === 'disponible' ? 'success' : ($chauffeur['statut'] === 'en_course' ? 'primary' : 'warning') }} badge-sm">
+                                                    {{ ucfirst(str_replace('_', ' ', $chauffeur['statut'])) }}
+                                                </span>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <small class="text-muted me-3">
                                             <i class="fas fa-car me-1"></i>
-                                            {{ $chauffeur['voiture'] ?? 'Aucune voiture' }}
-                                        </p>
+                                                    {{ $chauffeur['immatriculation'] ?? 'N/A' }}
+                                                </small>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    {{ $chauffeur['localisation']['derniere_maj'] ? \Carbon\Carbon::parse($chauffeur['localisation']['derniere_maj'])->diffForHumans() : 'Jamais' }}
+                                                </small>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="centerOnDriver({{ $chauffeur['id'] }})">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="centerOnDriver({{ $chauffeur['id'] }})" title="Centrer sur ce chauffeur">
                                         <i class="fas fa-map-pin"></i>
                                     </button>
                                 </div>
-                                
-                                <div class="row g-2 mb-2">
-                                    <div class="col-4">
-                                        <div class="text-center p-2 bg-light rounded">
-                                            <div class="fw-bold text-primary">{{ $chauffeur['stats']['courses_aujourd_hui'] }}</div>
-                                            <small class="text-muted">Aujourd'hui</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="text-center p-2 bg-light rounded">
-                                            <div class="fw-bold text-success">{{ $chauffeur['stats']['courses_total'] }}</div>
-                                            <small class="text-muted">Total</small>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="text-center p-2 bg-light rounded">
-                                            <div class="fw-bold text-warning">{{ $chauffeur['stats']['courses_en_cours'] }}</div>
-                                            <small class="text-muted">En cours</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                @if($chauffeur['derniere_course'])
-                                    <div class="mt-2 p-2 bg-light rounded">
-                                        <small class="text-muted">
-                                            <i class="fas fa-route me-1"></i>
-                                            Course {{ $chauffeur['derniere_course']->statut_francais }}
-                                            @if($chauffeur['derniere_course']->reservation->client)
-                                                avec {{ $chauffeur['derniere_course']->reservation->client->first_name }}
-                                            @endif
-                                        </small>
-                                    </div>
-                                @endif
-
-                                <div class="mt-2">
-                                    <small class="text-muted">
-                                        <i class="fas fa-clock me-1"></i>
-                                        Dernière MAJ: {{ $chauffeur['localisation']['derniere_maj'] ? \Carbon\Carbon::parse($chauffeur['localisation']['derniere_maj'])->diffForHumans() : 'Jamais' }}
-                                    </small>
-                                </div>
                             </div>
-                            @if(!$loop->last)
-                                <hr class="my-2">
-                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -160,49 +222,65 @@
         </div>
     </div>
 
-    <!-- Statistiques générales -->
-    <div class="row g-3 mt-4">
+    <!-- Statistiques générales améliorées -->
+    <div class="row g-4 mt-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center">
-                <div class="card-body">
-                    <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                        <i class="fas fa-user-check text-white fs-4"></i>
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body p-4">
+                    <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                        <i class="fas fa-user-check text-white fs-3"></i>
                     </div>
-                    <h4 class="fw-bold text-success" id="availableDrivers">{{ $chauffeurs->where('statut', 'disponible')->count() }}</h4>
-                    <p class="text-muted mb-0">Disponibles</p>
+                    <h3 class="fw-bold text-success mb-1" id="availableDrivers">{{ $chauffeurs->where('statut', 'disponible')->count() }}</h3>
+                    <p class="text-muted mb-2 fw-semibold">Disponibles</p>
+                    <small class="text-success">
+                        <i class="fas fa-circle me-1"></i>
+                        Prêts à prendre des courses
+                    </small>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center">
-                <div class="card-body">
-                    <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                        <i class="fas fa-route text-white fs-4"></i>
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body p-4">
+                    <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                        <i class="fas fa-route text-white fs-3"></i>
                     </div>
-                    <h4 class="fw-bold text-primary" id="activeDrivers">{{ $chauffeurs->where('statut', 'en_course')->count() }}</h4>
-                    <p class="text-muted mb-0">En Course</p>
+                    <h3 class="fw-bold text-primary mb-1" id="activeDrivers">{{ $chauffeurs->where('statut', 'en_course')->count() }}</h3>
+                    <p class="text-muted mb-2 fw-semibold">En Course</p>
+                    <small class="text-primary">
+                        <i class="fas fa-circle me-1"></i>
+                        Actuellement en service
+                    </small>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center">
-                <div class="card-body">
-                    <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                        <i class="fas fa-clock text-white fs-4"></i>
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body p-4">
+                    <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                        <i class="fas fa-clock text-white fs-3"></i>
                     </div>
-                    <h4 class="fw-bold text-warning" id="waitingDrivers">{{ $chauffeurs->where('statut', 'en_attente')->count() }}</h4>
-                    <p class="text-muted mb-0">En Attente</p>
+                    <h3 class="fw-bold text-warning mb-1" id="waitingDrivers">{{ $chauffeurs->where('statut', 'en_attente')->count() }}</h3>
+                    <p class="text-muted mb-2 fw-semibold">En Attente</p>
+                    <small class="text-warning">
+                        <i class="fas fa-circle me-1"></i>
+                        En attente de client
+                    </small>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center">
-                <div class="card-body">
-                    <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
-                        <i class="fas fa-users text-white fs-4"></i>
+            <div class="card border-0 shadow-sm text-center h-100">
+                <div class="card-body p-4">
+                    <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                        <i class="fas fa-users text-white fs-3"></i>
                     </div>
-                    <h4 class="fw-bold text-info">{{ $chauffeurs->count() }}</h4>
-                    <p class="text-muted mb-0">Total</p>
+                    <h3 class="fw-bold text-info mb-1">{{ $chauffeurs->count() }}</h3>
+                    <p class="text-muted mb-2 fw-semibold">Total</p>
+                    <small class="text-info">
+                        <i class="fas fa-circle me-1"></i>
+                        Chauffeurs enregistrés
+                    </small>
                 </div>
             </div>
         </div>
@@ -210,17 +288,23 @@
 </div>
 
 <!-- Google Maps API -->
-<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=geometry"></script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=geometry&callback=initMap">
+</script>
 
 <script>
 let map;
 let drivers = @json($chauffeurs);
 let driverMarkers = {};
 
-// Initialisation de la carte
-function initMap() {
+// Vérifier que initMap est bien définie globalement
+console.log("🔍 Vérification de la fonction initMap:", typeof window.initMap);
+
+// Initialisation de la carte - déclarée globalement pour Google Maps
+window.initMap = function() {
+    try {
     // Position par défaut (Dakar)
-    const defaultPosition = { lat: 14.6928, lng: -17.4467 };
+        const defaultPosition = { lat: 14.71542, lng: -17.46055 };
     
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 12,
@@ -241,21 +325,47 @@ function initMap() {
     // Ajouter les marqueurs des chauffeurs
     addDriverMarkers();
     
-    // Actualiser les positions chaque seconde
-    setInterval(updateDriverLocations, 1000);
+        // Actualiser les positions toutes les 30 secondes
+        setInterval(updateDriverLocations, 30000);
     
     // Mettre à jour l'heure de dernière actualisation
     updateLastUpdateTime();
+        
+        // Démarrer la mise à jour automatique
+        updateDriverLocations();
+        
+        console.log("✅ Carte Google Maps initialisée avec succès");
+    } catch (error) {
+        console.error("❌ Erreur lors de l'initialisation de la carte:", error);
+        document.getElementById("map").innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #6c757d;">
+                <div style="text-align: center;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h4>Erreur de chargement de la carte</h4>
+                    <p>Impossible de charger Google Maps. Vérifiez votre connexion internet.</p>
+                </div>
+            </div>
+        `;
+    }
 }
+
+// Confirmer que la fonction est bien définie globalement
+console.log("✅ Fonction initMap définie globalement:", typeof window.initMap);
 
 // Ajouter les marqueurs des chauffeurs
 function addDriverMarkers() {
     drivers.forEach(driver => {
+        // Vérifier que les coordonnées sont valides
+        if (driver.localisation && driver.localisation.lat && driver.localisation.lng) {
+            const lat = parseFloat(driver.localisation.lat);
+            const lng = parseFloat(driver.localisation.lng);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
         const marker = new google.maps.Marker({
-            position: { lat: driver.localisation.lat, lng: driver.localisation.lng },
+                    position: { lat: lat, lng: lng },
             map: map,
             title: driver.nom,
-            icon: getDriverIcon(driver.statut),
+                    icon: getDriverIcon(driver.statut, true), // Par défaut en ligne au chargement
             animation: google.maps.Animation.DROP
         });
 
@@ -269,12 +379,18 @@ function addDriverMarkers() {
         });
 
         driverMarkers[driver.id] = marker;
+            } else {
+                console.warn("Coordonnées invalides pour le chauffeur:", driver.nom, "lat:", lat, "lng:", lng);
+            }
+        } else {
+            console.warn("Données de localisation manquantes pour le chauffeur:", driver.nom);
+        }
     });
 }
 
-// Obtenir l'icône selon le statut
-function getDriverIcon(status) {
-    const icons = {
+// Obtenir l'icône selon le statut et l'état en ligne
+function getDriverIcon(status, isOnline = true) {
+    const baseIcons = {
         'disponible': {
             url: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
             scaledSize: new google.maps.Size(40, 40)
@@ -289,18 +405,92 @@ function getDriverIcon(status) {
         }
     };
     
-    return icons[status] || icons['disponible'];
+    // Si le chauffeur est hors ligne, utiliser des icônes grises
+    if (!isOnline) {
+        return {
+            url: 'https://maps.google.com/mapfiles/ms/icons/gray-dot.png',
+            scaledSize: new google.maps.Size(35, 35)
+        };
+    }
+    
+    return baseIcons[status] || baseIcons['disponible'];
+}
+
+// Fonction pour obtenir la couleur du statut
+function getStatusColor(status) {
+    const colors = {
+        'disponible': '#10B981',
+        'en_course': '#3B82F6',
+        'en_attente': '#F59E0B'
+    };
+    return colors[status] || '#6B7280';
 }
 
 // Créer le contenu de l'InfoWindow
 function createInfoWindowContent(driver) {
+    const isOnline = driver.is_online !== undefined ? driver.is_online : true;
+    const onlineStatus = isOnline ? 
+        '<span style="color: #10B981; font-weight: bold;">● En ligne</span>' : 
+        '<span style="color: #6B7280; font-weight: bold;">● Hors ligne</span>';
+    
     return `
-        <div style="padding: 10px; min-width: 200px;">
-            <h6 class="fw-bold mb-2">${driver.nom}</h6>
-            <p class="mb-1"><strong>Statut:</strong> ${getStatusText(driver.statut)}</p>
-            <p class="mb-1"><strong>Voiture:</strong> ${driver.voiture || 'N/A'}</p>
-            <p class="mb-1"><strong>Téléphone:</strong> ${driver.telephone || 'N/A'}</p>
-            <p class="mb-0"><strong>Dernière MAJ:</strong> ${driver.localisation.derniere_maj ? new Date(driver.localisation.derniere_maj).toLocaleString() : 'Jamais'}</p>
+        <div style="padding: 15px; min-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <!-- En-tête -->
+            <div style="border-bottom: 2px solid #E5E7EB; padding-bottom: 10px; margin-bottom: 15px;">
+                <h4 style="margin: 0 0 5px 0; color: #1F2937; font-weight: 700;">${driver.nom}</h4>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="background: ${getStatusColor(driver.statut)}; color: white; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;">
+                        ${getStatusText(driver.statut)}
+                    </span>
+                    ${onlineStatus}
+                </div>
+            </div>
+            
+            <!-- Informations de la voiture -->
+            <div style="margin-bottom: 15px;">
+                <h5 style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-car" style="color: #3B82F6; margin-right: 8px;"></i>
+                    Véhicule
+                </h5>
+                <div style="background: #F9FAFB; padding: 10px; border-radius: 8px; border-left: 4px solid #3B82F6;">
+                    <div style="font-weight: 600; color: #1F2937; margin-bottom: 5px;">${driver.voiture || 'Aucune voiture assignée'}</div>
+                    <div style="color: #6B7280; font-size: 13px;">
+                        <i class="fas fa-id-card" style="margin-right: 5px;"></i>
+                        ${driver.immatriculation || 'N/A'}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Informations de contact -->
+            <div style="margin-bottom: 15px;">
+                <h5 style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-phone" style="color: #10B981; margin-right: 8px;"></i>
+                    Contact
+                </h5>
+                <div style="color: #6B7280; font-size: 13px;">
+                    <i class="fas fa-phone" style="margin-right: 5px;"></i>
+                    ${driver.telephone || 'N/A'}
+                </div>
+            </div>
+            
+            <!-- Position et dernière mise à jour -->
+            <div style="background: #F0F9FF; padding: 10px; border-radius: 8px; border-left: 4px solid #06B6D4;">
+                <h5 style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">
+                    <i class="fas fa-map-marker-alt" style="color: #06B6D4; margin-right: 8px;"></i>
+                    Position
+                </h5>
+                <div style="color: #6B7280; font-size: 13px;">
+                    <div style="margin-bottom: 3px;">
+                        <strong>Coordonnées:</strong> ${driver.localisation && driver.localisation.lat && driver.localisation.lng ? 
+                            parseFloat(driver.localisation.lat).toFixed(6) + ', ' + parseFloat(driver.localisation.lng).toFixed(6) : 
+                            'Position non disponible'}
+                    </div>
+                    <div>
+                        <strong>Dernière MAJ:</strong> ${driver.localisation && driver.localisation.derniere_maj ? 
+                            new Date(driver.localisation.derniere_maj).toLocaleString('fr-FR') : 'Jamais'}
+                    </div>
+                </div>
+            </div>
         </div>
     `;
 }
@@ -341,9 +531,13 @@ async function updateDriverLocations() {
         
         // Mettre à jour les marqueurs
         updatedDrivers.forEach(driver => {
-            if (driverMarkers[driver.id]) {
+            if (driverMarkers[driver.id] && driver.position && driver.position.lat && driver.position.lng) {
                 const marker = driverMarkers[driver.id];
-                const newPosition = { lat: driver.position.lat, lng: driver.position.lng };
+                const lat = parseFloat(driver.position.lat);
+                const lng = parseFloat(driver.position.lng);
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    const newPosition = { lat: lat, lng: lng };
                 
                 // Vérifier si la position a changé
                 const currentPosition = marker.getPosition();
@@ -352,11 +546,19 @@ async function updateDriverLocations() {
                     Math.abs(currentPosition.lng() - newPosition.lng) > 0.00001) {
                     
                     marker.setPosition(newPosition);
-                    marker.setIcon(getDriverIcon(driver.statut));
+                        marker.setIcon(getDriverIcon(driver.statut, driver.is_online));
+                        
+                        // Animation pour les mouvements seulement si le chauffeur est en ligne
+                        if (driver.is_online) {
+                            marker.setAnimation(google.maps.Animation.BOUNCE);
+                            setTimeout(() => marker.setAnimation(null), 1000);
+                        }
+                    }
                     
-                    // Animation pour les mouvements
-                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                    setTimeout(() => marker.setAnimation(null), 1000);
+                    // Mettre à jour l'icône selon le statut en ligne/hors ligne
+                    marker.setIcon(getDriverIcon(driver.statut, driver.is_online));
+                } else {
+                    console.warn("Coordonnées invalides pour la mise à jour du chauffeur:", driver.nom);
                 }
             }
         });
@@ -423,13 +625,36 @@ document.getElementById('refreshBtn').addEventListener('click', function() {
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
-    initMap();
+    // La fonction initMap sera appelée automatiquement par Google Maps
+    // grâce au paramètre callback=initMap dans l'URL
     
     // Initialiser l'indicateur de statut
     updateStatusIndicator('success');
     
-    // Démarrer la mise à jour automatique
-    updateDriverLocations();
+    // Fallback : si Google Maps ne se charge pas dans les 10 secondes
+    setTimeout(function() {
+        if (!map) {
+            console.warn("⚠️ Google Maps ne s'est pas chargé, tentative de fallback...");
+            // Essayer d'appeler initMap manuellement
+            if (typeof google !== 'undefined' && google.maps) {
+                window.initMap();
+            } else {
+                console.error("❌ Google Maps n'est pas disponible");
+                document.getElementById("map").innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #6c757d;">
+                        <div style="text-align: center;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <h4>Erreur de chargement de Google Maps</h4>
+                            <p>Vérifiez votre connexion internet et votre clé API Google Maps.</p>
+                            <button onclick="location.reload()" class="btn btn-primary mt-3">Réessayer</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    }, 10000);
+    
+    console.log("✅ Page de localisation des chauffeurs chargée");
 });
 
 // Styles CSS pour les indicateurs de statut

@@ -41,7 +41,7 @@ class DriverLocationMiddleware
     {
         // Mettre à jour si :
         // 1. Aucune position n'est enregistrée
-        // 2. La dernière mise à jour date de plus de 5 minutes
+        // 2. La dernière mise à jour date de plus de 2 minutes
         // 3. L'utilisateur vient de se connecter (session récente)
         
         if (!$user->current_lat || !$user->current_lng) {
@@ -52,8 +52,8 @@ class DriverLocationMiddleware
             return true;
         }
         
-        // Si la dernière mise à jour date de plus de 5 minutes
-        if ($user->location_updated_at->diffInMinutes(now()) > 5) {
+        // Si la dernière mise à jour date de plus de 2 minutes
+        if ($user->location_updated_at->diffInMinutes(now()) > 2) {
             return true;
         }
         
@@ -108,7 +108,7 @@ class DriverLocationMiddleware
                         }
                     );
                     
-                    // Surveiller les changements de position toutes les 5 secondes
+                    // Surveiller les changements de position toutes les 30 secondes
                     navigator.geolocation.watchPosition(
                         updateDriverLocation,
                         function(error) {
@@ -116,12 +116,12 @@ class DriverLocationMiddleware
                         },
                         {
                             enableHighAccuracy: true,
-                            timeout: 10000,
-                            maximumAge: 5000 // Mise à jour toutes les 5 secondes
+                            timeout: 15000,
+                            maximumAge: 30000 // Mise à jour toutes les 30 secondes
                         }
                     );
                     
-                    console.log("✅ Géolocalisation activée - mise à jour toutes les 5 secondes");
+                    console.log("✅ Géolocalisation activée - mise à jour toutes les 30 secondes");
                 } else {
                     console.error("❌ Géolocalisation non supportée par ce navigateur");
                 }

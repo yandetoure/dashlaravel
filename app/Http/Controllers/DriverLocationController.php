@@ -114,14 +114,24 @@ class DriverLocationController extends Controller
             ->select(['id', 'first_name', 'last_name', 'current_lat', 'current_lng', 'location_updated_at'])
             ->get()
             ->map(function ($chauffeur) {
+                // Déterminer le statut du chauffeur
+                $statut = $this->getDriverStatus($chauffeur);
+                
+                // Vérifier si la position est récente (moins de 10 minutes)
+                $isLocationRecent = $chauffeur->location_updated_at && 
+                    $chauffeur->location_updated_at->diffInMinutes(now()) < 10;
+                
                 return [
                     'id' => $chauffeur->id,
                     'nom' => $chauffeur->first_name . ' ' . $chauffeur->last_name,
+                    'statut' => $statut,
                     'position' => [
                         'lat' => $chauffeur->current_lat ?? 14.6928,
                         'lng' => $chauffeur->current_lng ?? -17.4467,
                     ],
                     'derniere_maj' => $chauffeur->location_updated_at,
+                    'is_location_recent' => $isLocationRecent,
+                    'is_online' => $isLocationRecent, // Considéré en ligne si position récente
                 ];
             });
 
@@ -144,63 +154,26 @@ class DriverLocationController extends Controller
             return response()->json(['error' => 'Accès non autorisé'], 403);
         }
 
-        // Vérifier si la position a vraiment changé
-        $hasChanged = false;
-        if (!$chauffeur->current_lat || !$chauffeur->current_lng) {
-            $hasChanged = true;
-        } else {
-            $distance = $this->calculateDistance(
-                $chauffeur->current_lat, 
-                $chauffeur->current_lng, 
-                $request->lat, 
-                $request->lng
-            );
-            
-            // Mettre à jour seulement si le chauffeur a bougé de plus de 10 mètres
-            if ($distance > 10) {
-                $hasChanged = true;
-            }
-        }
+        // Vérifier si la position a vraiment changé (éviter les mises à jour inutiles)
+        $hasPositionChanged = !$chauffeur->current_lat || !$chauffeur->current_lng ||
+            abs($chauffeur->current_lat - $request->lat) > 0.00001 ||
+            abs($chauffeur->current_lng - $request->lng) > 0.00001;
 
-        if ($hasChanged) {
-            $chauffeur->update([
-                'current_lat' => $request->lat,
-                'current_lng' => $request->lng,
-                'location_updated_at' => now(),
-            ]);
-
-            \Log::info("Position chauffeur {$chauffeur->id} mise à jour", [
-                'lat' => $request->lat,
-                'lng' => $request->lng,
-                'timestamp' => now()
-            ]);
-        }
+        $chauffeur->update([
+            'current_lat' => $request->lat,
+            'current_lng' => $request->lng,
+            'location_updated_at' => now(),
+        ]);
 
         return response()->json([
             'success' => true, 
             'message' => 'Position mise à jour',
-            'updated' => $hasChanged,
-            'timestamp' => now()->toISOString()
+            'updated' => $hasPositionChanged,
+            'position' => [
+                'lat' => $request->lat,
+                'lng' => $request->lng
+            ]
         ]);
-    }
-
-    /**
-     * Calculer la distance entre deux points GPS en mètres
-     */
-    private function calculateDistance($lat1, $lng1, $lat2, $lng2)
-    {
-        $earthRadius = 6371000; // Rayon de la Terre en mètres
-        
-        $dLat = deg2rad($lat2 - $lat1);
-        $dLng = deg2rad($lng2 - $lng1);
-        
-        $a = sin($dLat/2) * sin($dLat/2) +
-             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-             sin($dLng/2) * sin($dLng/2);
-             
-        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
-        
-        return $earthRadius * $c;
     }
 
     /**
