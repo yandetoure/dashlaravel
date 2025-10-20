@@ -105,6 +105,10 @@ Route::middleware('auth:')->group(function () {
 
     // Route de suppression d'utilisateur
     Route::delete('/users/{id}', [AuthController::class, 'destroy'])->name('users.destroy');
+    
+    // Routes pour la gestion des mots de passe
+    Route::post('/users/{user}/generate-temp-password', [AuthController::class, 'generateTempPassword'])->name('users.generate-temp-password');
+    Route::post('/users/{user}/reset-password', [AuthController::class, 'resetPassword'])->name('users.reset-password');
 
 
 });

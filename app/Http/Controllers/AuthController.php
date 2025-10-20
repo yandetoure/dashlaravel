@@ -7,11 +7,11 @@ use App\Models\DriverGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use App\Mail\AccountCreatedMail;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -374,6 +374,76 @@ public function listAllUsers(Request $request)
 public function showUser(User $user)
 {
     return view('users.show', compact('user'));
+}
+
+/**
+ * Générer un mot de passe temporaire pour un utilisateur
+ */
+public function generateTempPassword(User $user)
+{
+    // Vérifier que l'utilisateur actuel est un admin ou superadmin
+    $currentUser = Auth::user();
+    if (!$currentUser->hasAnyRole(['admin', 'superadmin'])) {
+        return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
+    }
+
+    // Générer un mot de passe temporaire sécurisé
+    $tempPassword = $this->generateSecurePassword();
+    
+    // Mettre à jour le mot de passe de l'utilisateur
+    $user->password = bcrypt($tempPassword);
+    $user->save();
+
+    return response()->json([
+        'success' => true,
+        'temp_password' => $tempPassword,
+        'message' => 'Mot de passe temporaire généré avec succès'
+    ]);
+}
+
+/**
+ * Réinitialiser le mot de passe d'un utilisateur
+ */
+public function resetPassword(User $user)
+{
+    // Vérifier que l'utilisateur actuel est un admin ou superadmin
+    $currentUser = Auth::user();
+    if (!$currentUser->hasAnyRole(['admin', 'superadmin'])) {
+        return response()->json(['success' => false, 'message' => 'Non autorisé'], 403);
+    }
+
+    try {
+        // Générer un token de réinitialisation
+        $token = app('auth.password.broker')->createToken($user);
+        
+        // Envoyer l'email de réinitialisation
+        $user->sendPasswordResetNotification($token);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Email de réinitialisation envoyé avec succès'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Erreur lors de l\'envoi de l\'email: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+/**
+ * Générer un mot de passe sécurisé
+ */
+private function generateSecurePassword($length = 12)
+{
+    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    $password = '';
+    
+    for ($i = 0; $i < $length; $i++) {
+        $password .= $characters[random_int(0, strlen($characters) - 1)];
+    }
+    
+    return $password;
 }
 
 /**
