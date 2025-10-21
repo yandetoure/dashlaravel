@@ -210,6 +210,14 @@
                                 <i class="fas fa-sync-alt me-2"></i>
                         Actualiser
                     </button>
+                            <button id="toggleTrajectoriesBtn" class="btn btn-light btn-lg">
+                                <i class="fas fa-route me-2"></i>
+                        Trajectoires
+                    </button>
+                            <button id="toggleAllCarsBtn" class="btn btn-light btn-lg">
+                                <i class="fas fa-car me-2"></i>
+                        Toutes les Voitures
+                    </button>
                             <div class="badge bg-white bg-opacity-20 fs-6 px-4 py-3 text-white">
                                 <i class="fas fa-circle text-success me-2" id="statusIndicator"></i>
                         <span id="updateStatus">En temps réel</span>
@@ -262,7 +270,29 @@
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <div class="list-group list-group-flush" id="driversList" style="max-height: 500px; overflow-y: auto;">
+                    <!-- Légende des marqueurs -->
+                    <div class="p-3 border-bottom">
+                        <h6 class="fw-bold mb-2">Légende des Marqueurs :</h6>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="d-flex align-items-center">
+                                <img src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" width="20" height="20" class="me-2">
+                                <small class="text-muted">Disponible</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://maps.google.com/mapfiles/ms/icons/blue-dot.png" width="20" height="20" class="me-2">
+                                <small class="text-muted">En Course</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://maps.google.com/mapfiles/ms/icons/yellow-dot.png" width="20" height="20" class="me-2">
+                                <small class="text-muted">En Attente</small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="https://maps.google.com/mapfiles/ms/icons/car.png" width="20" height="20" class="me-2">
+                                <small class="text-muted">Voiture</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group list-group-flush" id="driversList" style="max-height: 450px; overflow-y: auto;">
                         @foreach($chauffeurs as $chauffeur)
                             <div class="list-group-item border-0 px-2 py-1 driver-item" data-driver-id="{{ $chauffeur['id'] }}">
                                 <div class="d-flex align-items-center justify-content-between">
@@ -373,6 +403,10 @@
 let map;
 let drivers = @json($chauffeurs);
 let driverMarkers = {};
+let driverTrajectories = {}; // Pour stocker les trajectoires des chauffeurs
+let trajectoriesVisible = false; // État de l'affichage des trajectoires
+let allCarsVisible = false; // État de l'affichage de toutes les voitures
+let allCarsMarkers = {}; // Marqueurs pour toutes les voitures
 
 // Vérifier que initMap est bien définie globalement
 console.log("🔍 Vérification de la fonction initMap:", typeof window.initMap);
@@ -402,8 +436,8 @@ window.initMap = function() {
     // Ajouter les marqueurs des chauffeurs
     addDriverMarkers();
     
-        // Actualiser les positions toutes les 30 secondes
-        setInterval(updateDriverLocations, 30000);
+        // Actualiser les positions toutes les secondes pour le suivi en temps réel
+        setInterval(updateDriverLocations, 1000);
     
     // Mettre à jour l'heure de dernière actualisation
     updateLastUpdateTime();
@@ -463,6 +497,94 @@ function addDriverMarkers() {
             console.warn("Données de localisation manquantes pour le chauffeur:", driver.nom);
         }
     });
+}
+
+// Charger et afficher toutes les voitures
+async function loadAllCars() {
+    try {
+        const response = await fetch('/admin/all-cars');
+        const cars = await response.json();
+        
+        // Supprimer les anciens marqueurs de voitures
+        clearAllCarsMarkers();
+        
+        // Ajouter les nouveaux marqueurs
+        cars.forEach(car => {
+            if (car.latitude && car.longitude) {
+                const lat = parseFloat(car.latitude);
+                const lng = parseFloat(car.longitude);
+                
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    const marker = new google.maps.Marker({
+                        position: { lat: lat, lng: lng },
+                        map: allCarsVisible ? map : null,
+                        title: car.marque + ' ' + car.modele + ' - ' + car.immatriculation,
+                        icon: {
+                            url: 'https://maps.google.com/mapfiles/ms/icons/car.png',
+                            scaledSize: new google.maps.Size(30, 30)
+                        }
+                    });
+                    
+                    // InfoWindow pour chaque voiture
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: createCarInfoWindowContent(car)
+                    });
+                    
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                    
+                    allCarsMarkers[car.id] = marker;
+                }
+            }
+        });
+        
+        console.log(`✅ ${cars.length} voitures chargées sur la carte`);
+    } catch (error) {
+        console.error('Erreur lors du chargement des voitures:', error);
+    }
+}
+
+// Créer le contenu de l'InfoWindow pour les voitures
+function createCarInfoWindowContent(car) {
+    return `
+        <div style="padding: 8px; min-width: 200px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="text-align: center;">
+                <h4 style="margin: 0 0 5px 0; color: #1F2937; font-weight: 600; font-size: 14px;">
+                    <i class="fas fa-car" style="color: #3B82F6; margin-right: 5px;"></i>
+                    ${car.marque} ${car.modele}
+                </h4>
+                <div style="color: #6B7280; font-size: 11px; margin-bottom: 5px;">
+                    <strong>Immatriculation:</strong> ${car.immatriculation}
+                </div>
+                <div style="color: #6B7280; font-size: 11px;">
+                    <strong>Statut:</strong> ${car.statut || 'Non assignée'}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Supprimer tous les marqueurs de voitures
+function clearAllCarsMarkers() {
+    Object.values(allCarsMarkers).forEach(marker => {
+        marker.setMap(null);
+    });
+    allCarsMarkers = {};
+}
+
+// Basculer l'affichage de toutes les voitures
+function toggleAllCars() {
+    allCarsVisible = !allCarsVisible;
+    
+    Object.values(allCarsMarkers).forEach(marker => {
+        marker.setMap(allCarsVisible ? map : null);
+    });
+    
+    // Si on active l'affichage et qu'il n'y a pas de marqueurs, les charger
+    if (allCarsVisible && Object.keys(allCarsMarkers).length === 0) {
+        loadAllCars();
+    }
 }
 
 // Obtenir l'icône selon le statut et l'état en ligne
@@ -536,6 +658,65 @@ function getStatusText(status) {
     return statusTexts[status] || 'Inconnu';
 }
 
+// Mettre à jour la trajectoire d'un chauffeur
+function updateDriverTrajectory(driverId, newPosition, oldPosition) {
+    // Initialiser la trajectoire si elle n'existe pas
+    if (!driverTrajectories[driverId]) {
+        driverTrajectories[driverId] = [];
+    }
+    
+    // Ajouter le nouveau point à la trajectoire
+    driverTrajectories[driverId].push(newPosition);
+    
+    // Limiter la trajectoire à 100 points pour éviter la surcharge
+    if (driverTrajectories[driverId].length > 100) {
+        driverTrajectories[driverId].shift();
+    }
+    
+    // Dessiner ou mettre à jour la ligne de trajectoire
+    drawDriverTrajectory(driverId);
+}
+
+// Dessiner la trajectoire d'un chauffeur
+function drawDriverTrajectory(driverId) {
+    const trajectory = driverTrajectories[driverId];
+    if (!trajectory || trajectory.length < 2) return;
+    
+    // Supprimer l'ancienne ligne de trajectoire si elle existe
+    if (driverTrajectories[driverId].line) {
+        driverTrajectories[driverId].line.setMap(null);
+    }
+    
+    // Créer une nouvelle ligne de trajectoire
+    const polyline = new google.maps.Polyline({
+        path: trajectory,
+        geodesic: true,
+        strokeColor: getTrajectoryColor(driverId),
+        strokeOpacity: 0.7,
+        strokeWeight: 3
+    });
+    
+    polyline.setMap(trajectoriesVisible ? map : null);
+    driverTrajectories[driverId].line = polyline;
+}
+
+// Obtenir la couleur de la trajectoire selon le statut du chauffeur
+function getTrajectoryColor(driverId) {
+    const driver = drivers.find(d => d.id === driverId);
+    if (!driver) return '#666666';
+    
+    switch(driver.statut) {
+        case 'disponible':
+            return '#10B981'; // Vert
+        case 'en_course':
+            return '#3B82F6'; // Bleu
+        case 'en_attente':
+            return '#F59E0B'; // Orange
+        default:
+            return '#666666'; // Gris
+    }
+}
+
 // Centrer la carte sur un chauffeur
 function centerOnDriver(driverId) {
     const marker = driverMarkers[driverId];
@@ -560,7 +741,7 @@ async function updateDriverLocations() {
         const response = await fetch('/admin/driver-locations');
         const updatedDrivers = await response.json();
         
-        // Mettre à jour les marqueurs
+        // Mettre à jour les marqueurs et trajectoires
         updatedDrivers.forEach(driver => {
             if (driverMarkers[driver.id] && driver.position && driver.position.lat && driver.position.lng) {
                 const marker = driverMarkers[driver.id];
@@ -576,13 +757,26 @@ async function updateDriverLocations() {
                     Math.abs(currentPosition.lat() - newPosition.lat) > 0.00001 || 
                     Math.abs(currentPosition.lng() - newPosition.lng) > 0.00001) {
                     
+                    // Sauvegarder l'ancienne position pour la trajectoire
+                    const oldPosition = currentPosition ? { 
+                        lat: currentPosition.lat(), 
+                        lng: currentPosition.lng() 
+                    } : null;
+                    
                     marker.setPosition(newPosition);
                         marker.setIcon(getDriverIcon(driver.statut, driver.is_online));
+                        
+                        // Ajouter le point à la trajectoire si le chauffeur est en ligne et en mouvement
+                        if (driver.is_online && oldPosition && 
+                            (Math.abs(oldPosition.lat - newPosition.lat) > 0.0001 || 
+                             Math.abs(oldPosition.lng - newPosition.lng) > 0.0001)) {
+                            updateDriverTrajectory(driver.id, newPosition, oldPosition);
+                        }
                         
                         // Animation pour les mouvements seulement si le chauffeur est en ligne
                         if (driver.is_online) {
                             marker.setAnimation(google.maps.Animation.BOUNCE);
-                            setTimeout(() => marker.setAnimation(null), 1000);
+                            setTimeout(() => marker.setAnimation(null), 500);
                         }
                     }
                     
@@ -652,6 +846,51 @@ document.getElementById('refreshBtn').addEventListener('click', function() {
     setTimeout(() => {
         this.innerHTML = '<i class="fas fa-sync-alt me-1"></i>Actualiser';
     }, 1000);
+});
+
+// Bouton de basculement des trajectoires
+document.getElementById('toggleTrajectoriesBtn').addEventListener('click', function() {
+    trajectoriesVisible = !trajectoriesVisible;
+    
+    // Basculer l'affichage de toutes les trajectoires
+    Object.keys(driverTrajectories).forEach(driverId => {
+        if (driverTrajectories[driverId].line) {
+            driverTrajectories[driverId].line.setMap(trajectoriesVisible ? map : null);
+        }
+    });
+    
+    // Mettre à jour le texte du bouton
+    this.innerHTML = trajectoriesVisible ? 
+        '<i class="fas fa-eye-slash me-2"></i>Masquer Trajectoires' :
+        '<i class="fas fa-route me-2"></i>Trajectoires';
+    
+    // Mettre à jour la classe du bouton
+    if (trajectoriesVisible) {
+        this.classList.remove('btn-light');
+        this.classList.add('btn-success');
+    } else {
+        this.classList.remove('btn-success');
+        this.classList.add('btn-light');
+    }
+});
+
+// Bouton de basculement de toutes les voitures
+document.getElementById('toggleAllCarsBtn').addEventListener('click', function() {
+    toggleAllCars();
+    
+    // Mettre à jour le texte du bouton
+    this.innerHTML = allCarsVisible ? 
+        '<i class="fas fa-eye-slash me-2"></i>Masquer Voitures' :
+        '<i class="fas fa-car me-2"></i>Toutes les Voitures';
+    
+    // Mettre à jour la classe du bouton
+    if (allCarsVisible) {
+        this.classList.remove('btn-light');
+        this.classList.add('btn-info');
+    } else {
+        this.classList.remove('btn-info');
+        this.classList.add('btn-light');
+    }
 });
 
 // Initialisation
