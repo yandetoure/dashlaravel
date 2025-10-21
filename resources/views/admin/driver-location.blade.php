@@ -1,3 +1,4 @@
+<?php declare(strict_types=1); ?>
 @extends('layouts.app')
 
 @section('content')
@@ -6,7 +7,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Courses</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Mes Réservations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -22,7 +24,23 @@
             }
         }
     </script>
+    
     <style>
+        /* Styles modernes pour la page */
+        body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            min-height: 100vh;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            margin: 20px;
+            padding: 30px;
+        }
+        
         .course-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
@@ -34,11 +52,15 @@
         
         /* Styles personnalisés pour la page de localisation */
         .bg-gradient-primary {
-            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(30, 58, 138, 0.3);
         }
         
         .bg-gradient-secondary {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.3);
         }
         
         .driver-item {
@@ -49,9 +71,10 @@
         }
         
         .driver-item:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1);
-            background-color: #f8fafc !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+            border-left: 4px solid #667eea;
         }
         
         .badge-sm {
@@ -110,27 +133,62 @@
         }
         
         .card {
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
         }
         
         .card-header {
-            border-radius: 16px 16px 0 0 !important;
+            border-radius: 20px 20px 0 0 !important;
+            border: none;
         }
         
         .btn {
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
         
         .badge {
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
+        }
+        
+        /* Styles pour les cartes de statistiques */
+        .stats-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            color: white;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.3);
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .stats-icon {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        span{
+            color: black;
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-<div class="container-fluid px-3 py-4">
+<body>
+<div class="main-container">
     <!-- En-tête amélioré -->
     <div class="row mb-4">
         <div class="col-12">
@@ -138,11 +196,11 @@
                 <div class="card-body p-4">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <div class="mb-3 mb-md-0">
-                            <h1 class="h4 mb-2 fw-bold text-white">
+                            <h1 class="h4 mb-2 fw-bold text-black">
                         <i class="fas fa-map-marked-alt me-2"></i>
                         Chauffeurs
                     </h1>
-                            <p class="text-white-50 mb-0 fs-6">
+                            <p class="text-black-50 mb-0 fs-6">
                                 <i class="fas fa-eye me-1"></i>
                                 Suivi temps réel
                             </p>
@@ -244,14 +302,14 @@
     <!-- Statistiques générales améliorées -->
     <div class="row g-4 mt-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center h-100">
+            <div class="stats-card text-center h-100">
                 <div class="card-body p-4">
-                    <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <div class="stats-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
                         <i class="fas fa-user-check text-white fs-3"></i>
                     </div>
-                    <h3 class="fw-bold text-success mb-1" id="availableDrivers">{{ $chauffeurs->where('statut', 'disponible')->count() }}</h3>
-                    <p class="text-muted mb-2 fw-semibold">Disponibles</p>
-                    <small class="text-success">
+                    <h3 class="fw-bold text-white mb-1" id="availableDrivers">{{ $chauffeurs->where('statut', 'disponible')->count() }}</h3>
+                    <p class="text-white-50 mb-2 fw-semibold">Disponibles</p>
+                    <small class="text-white">
                         <i class="fas fa-circle me-1"></i>
                         Prêts à prendre des courses
                     </small>
@@ -259,14 +317,14 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center h-100">
+            <div class="stats-card text-center h-100">
                 <div class="card-body p-4">
-                    <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <div class="stats-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
                         <i class="fas fa-route text-white fs-3"></i>
                     </div>
-                    <h3 class="fw-bold text-primary mb-1" id="activeDrivers">{{ $chauffeurs->where('statut', 'en_course')->count() }}</h3>
-                    <p class="text-muted mb-2 fw-semibold">En Course</p>
-                    <small class="text-primary">
+                    <h3 class="fw-bold text-white mb-1" id="activeDrivers">{{ $chauffeurs->where('statut', 'en_course')->count() }}</h3>
+                    <p class="text-white-50 mb-2 fw-semibold">En Course</p>
+                    <small class="text-white">
                         <i class="fas fa-circle me-1"></i>
                         Actuellement en service
                     </small>
@@ -274,14 +332,14 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center h-100">
+            <div class="stats-card text-center h-100">
                 <div class="card-body p-4">
-                    <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <div class="stats-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
                         <i class="fas fa-clock text-white fs-3"></i>
                     </div>
-                    <h3 class="fw-bold text-warning mb-1" id="waitingDrivers">{{ $chauffeurs->where('statut', 'en_attente')->count() }}</h3>
-                    <p class="text-muted mb-2 fw-semibold">En Attente</p>
-                    <small class="text-warning">
+                    <h3 class="fw-bold text-white mb-1" id="waitingDrivers">{{ $chauffeurs->where('statut', 'en_attente')->count() }}</h3>
+                    <p class="text-white-50 mb-2 fw-semibold">En Attente</p>
+                    <small class="text-white">
                         <i class="fas fa-circle me-1"></i>
                         En attente de client
                     </small>
@@ -289,14 +347,14 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm text-center h-100">
+            <div class="stats-card text-center h-100">
                 <div class="card-body p-4">
-                    <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                    <div class="stats-icon rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
                         <i class="fas fa-users text-white fs-3"></i>
                     </div>
-                    <h3 class="fw-bold text-info mb-1">{{ $chauffeurs->count() }}</h3>
-                    <p class="text-muted mb-2 fw-semibold">Total</p>
-                    <small class="text-info">
+                    <h3 class="fw-bold text-white mb-1">{{ $chauffeurs->count() }}</h3>
+                    <p class="text-white-50 mb-2 fw-semibold">Total</p>
+                    <small class="text-white">
                         <i class="fas fa-circle me-1"></i>
                         Chauffeurs enregistrés
                     </small>
