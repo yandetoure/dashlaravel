@@ -44,8 +44,8 @@
         .driver-item {
             transition: all 0.3s ease;
             border-radius: 8px !important;
-            margin-bottom: 0.5rem;
-            padding: 0.75rem !important;
+            margin-bottom: 0.2rem;
+            padding: 0.4rem !important;
         }
         
         .driver-item:hover {
@@ -55,8 +55,27 @@
         }
         
         .badge-sm {
-            font-size: 0.7rem;
-            padding: 0.25rem 0.5rem;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+        }
+        
+        /* Style pour la liste scrollable */
+        #driversList::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #driversList::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        #driversList::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        #driversList::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
         }
         
         
@@ -119,13 +138,13 @@
                 <div class="card-body p-4">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <div class="mb-3 mb-md-0">
-                            <h1 class="h3 mb-2 fw-bold text-white">
+                            <h1 class="h4 mb-2 fw-bold text-white">
                         <i class="fas fa-map-marked-alt me-2"></i>
-                        Localisation des Chauffeurs
+                        Chauffeurs
                     </h1>
-                            <p class="text-white-50 mb-0 fs-5">
+                            <p class="text-white-50 mb-0 fs-6">
                                 <i class="fas fa-eye me-1"></i>
-                                Suivi en temps réel de la position de tous les chauffeurs
+                                Suivi temps réel
                             </p>
                 </div>
                 <div class="d-flex flex-wrap gap-2">
@@ -184,34 +203,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush" id="driversList">
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush" id="driversList" style="max-height: 500px; overflow-y: auto;">
                         @foreach($chauffeurs as $chauffeur)
-                            <div class="list-group-item border-0 px-0 py-2 driver-item" data-driver-id="{{ $chauffeur['id'] }}">
+                            <div class="list-group-item border-0 px-2 py-1 driver-item" data-driver-id="{{ $chauffeur['id'] }}">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
-                                    <div class="driver-status-indicator me-3" data-status="{{ $chauffeur['statut'] }}"></div>
+                                        <div class="driver-status-indicator me-2" data-status="{{ $chauffeur['statut'] }}"></div>
                                         <div>
                                             <div class="d-flex align-items-center mb-1">
-                                                <h6 class="mb-0 fw-bold text-dark me-2">{{ $chauffeur['nom'] }}</h6>
-                                                <span class="badge bg-{{ $chauffeur['statut'] === 'disponible' ? 'success' : ($chauffeur['statut'] === 'en_course' ? 'primary' : 'warning') }} badge-sm">
+                                                <h6 class="mb-0 fw-bold text-dark me-2" style="font-size: 0.8rem;">{{ $chauffeur['nom'] }}</h6>
+                                                <span class="badge bg-{{ $chauffeur['statut'] === 'disponible' ? 'success' : ($chauffeur['statut'] === 'en_course' ? 'primary' : 'warning') }}" style="font-size: 0.6rem; padding: 0.15rem 0.3rem;">
                                                     {{ ucfirst(str_replace('_', ' ', $chauffeur['statut'])) }}
                                                 </span>
                                             </div>
                                             <div class="d-flex align-items-center">
-                                                <small class="text-muted me-3">
-                                            <i class="fas fa-car me-1"></i>
+                                                <small class="text-muted me-2" style="font-size: 0.65rem;">
+                                                    <i class="fas fa-car me-1"></i>
                                                     {{ $chauffeur['immatriculation'] ?? 'N/A' }}
                                                 </small>
-                                                <small class="text-muted">
+                                                <small class="text-muted" style="font-size: 0.65rem;">
                                                     <i class="fas fa-clock me-1"></i>
                                                     {{ $chauffeur['localisation']['derniere_maj'] ? \Carbon\Carbon::parse($chauffeur['localisation']['derniere_maj'])->diffForHumans() : 'Jamais' }}
                                                 </small>
                                             </div>
                                         </div>
                                     </div>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="centerOnDriver({{ $chauffeur['id'] }})" title="Centrer sur ce chauffeur">
-                                        <i class="fas fa-map-pin"></i>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="centerOnDriver({{ $chauffeur['id'] }})" title="Centrer sur ce chauffeur" style="font-size: 0.7rem; padding: 0.2rem 0.4rem;">
+                                        <i class="fas fa-map-pin" style="font-size: 0.7rem;"></i>
                                     </button>
                                 </div>
                             </div>
