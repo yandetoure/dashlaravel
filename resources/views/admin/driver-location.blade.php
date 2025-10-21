@@ -219,7 +219,7 @@
                                             </div>
                                             <div class="d-flex align-items-center">
                                                 <small class="text-muted me-2" style="font-size: 0.65rem;">
-                                                    <i class="fas fa-car me-1"></i>
+                                            <i class="fas fa-car me-1"></i>
                                                     {{ $chauffeur['immatriculation'] ?? 'N/A' }}
                                                 </small>
                                                 <small class="text-muted" style="font-size: 0.65rem;">
@@ -447,67 +447,21 @@ function getStatusColor(status) {
 
 // Créer le contenu de l'InfoWindow
 function createInfoWindowContent(driver) {
-    const isOnline = driver.is_online !== undefined ? driver.is_online : true;
-    const onlineStatus = isOnline ? 
-        '<span style="color: #10B981; font-weight: bold;">● En ligne</span>' : 
-        '<span style="color: #6B7280; font-weight: bold;">● Hors ligne</span>';
+    // Obtenir l'adresse à partir des coordonnées (si disponible)
+    let address = 'Adresse non disponible';
+    if (driver.localisation && driver.localisation.lat && driver.localisation.lng) {
+        // Pour l'instant, on affiche les coordonnées simplifiées
+        // Dans une vraie application, vous pourriez utiliser l'API Geocoding de Google Maps
+        address = `${parseFloat(driver.localisation.lat).toFixed(4)}, ${parseFloat(driver.localisation.lng).toFixed(4)}`;
+    }
     
     return `
-        <div style="padding: 15px; min-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-            <!-- En-tête -->
-            <div style="border-bottom: 2px solid #E5E7EB; padding-bottom: 10px; margin-bottom: 15px;">
-                <h4 style="margin: 0 0 5px 0; color: #1F2937; font-weight: 700;">${driver.nom}</h4>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span style="background: ${getStatusColor(driver.statut)}; color: white; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;">
-                        ${getStatusText(driver.statut)}
-                    </span>
-                    ${onlineStatus}
-                </div>
-            </div>
-            
-            <!-- Informations de la voiture -->
-            <div style="margin-bottom: 15px;">
-                <h5 style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">
-                    <i class="fas fa-car" style="color: #3B82F6; margin-right: 8px;"></i>
-                    Véhicule
-                </h5>
-                <div style="background: #F9FAFB; padding: 10px; border-radius: 8px; border-left: 4px solid #3B82F6;">
-                    <div style="font-weight: 600; color: #1F2937; margin-bottom: 5px;">${driver.voiture || 'Aucune voiture assignée'}</div>
-                    <div style="color: #6B7280; font-size: 13px;">
-                        <i class="fas fa-id-card" style="margin-right: 5px;"></i>
-                        ${driver.immatriculation || 'N/A'}
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Informations de contact -->
-            <div style="margin-bottom: 15px;">
-                <h5 style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">
-                    <i class="fas fa-phone" style="color: #10B981; margin-right: 8px;"></i>
-                    Contact
-                </h5>
-                <div style="color: #6B7280; font-size: 13px;">
-                    <i class="fas fa-phone" style="margin-right: 5px;"></i>
-                    ${driver.telephone || 'N/A'}
-                </div>
-            </div>
-            
-            <!-- Position et dernière mise à jour -->
-            <div style="background: #F0F9FF; padding: 10px; border-radius: 8px; border-left: 4px solid #06B6D4;">
-                <h5 style="margin: 0 0 8px 0; color: #374151; font-size: 14px; font-weight: 600;">
-                    <i class="fas fa-map-marker-alt" style="color: #06B6D4; margin-right: 8px;"></i>
-                    Position
-                </h5>
-                <div style="color: #6B7280; font-size: 13px;">
-                    <div style="margin-bottom: 3px;">
-                        <strong>Coordonnées:</strong> ${driver.localisation && driver.localisation.lat && driver.localisation.lng ? 
-                            parseFloat(driver.localisation.lat).toFixed(6) + ', ' + parseFloat(driver.localisation.lng).toFixed(6) : 
-                            'Position non disponible'}
-                    </div>
-                    <div>
-                        <strong>Dernière MAJ:</strong> ${driver.localisation && driver.localisation.derniere_maj ? 
-                            new Date(driver.localisation.derniere_maj).toLocaleString('fr-FR') : 'Jamais'}
-                    </div>
+        <div style="padding: 8px; min-width: 150px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="text-align: center;">
+                <h4 style="margin: 0 0 5px 0; color: #1F2937; font-weight: 600; font-size: 14px;">${driver.nom}</h4>
+                <div style="color: #6B7280; font-size: 11px;">
+                    <i class="fas fa-map-marker-alt" style="margin-right: 3px;"></i>
+                    ${address}
                 </div>
             </div>
         </div>
