@@ -21,6 +21,51 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <style>
+        :root { --brand-color: rgb(12, 213, 244); }
+        /* Text */
+        .text-red-50, .text-red-100, .text-red-200, .text-red-300, .text-red-400,
+        .text-red-500, .text-red-600, .text-red-700, .text-red-800, .text-red-900 { color: var(--brand-color) !important; }
+        .hover\:text-red-50:hover, .hover\:text-red-100:hover, .hover\:text-red-200:hover, .hover\:text-red-300:hover,
+        .hover\:text-red-400:hover, .hover\:text-red-500:hover, .hover\:text-red-600:hover, .hover\:text-red-700:hover,
+        .hover\:text-red-800:hover, .hover\:text-red-900:hover { color: var(--brand-color) !important; }
+        /* Background */
+        .bg-red-50, .bg-red-100, .bg-red-200, .bg-red-300, .bg-red-400,
+        .bg-red-500, .bg-red-600, .bg-red-700, .bg-red-800, .bg-red-900 { background-color: var(--brand-color) !important; }
+        .hover\:bg-red-50:hover, .hover\:bg-red-100:hover, .hover\:bg-red-200:hover, .hover\:bg-red-300:hover,
+        .hover\:bg-red-400:hover, .hover\:bg-red-500:hover, .hover\:bg-red-600:hover, .hover\:bg-red-700:hover,
+        .hover\:bg-red-800:hover, .hover\:bg-red-900:hover { background-color: var(--brand-color) !important; }
+        /* Border */
+        .border-red-50, .border-red-100, .border-red-200, .border-red-300, .border-red-400,
+        .border-red-500, .border-red-600, .border-red-700, .border-red-800, .border-red-900 { border-color: var(--brand-color) !important; }
+        .hover\:border-red-50:hover, .hover\:border-red-100:hover, .hover\:border-red-200:hover, .hover\:border-red-300:hover,
+        .hover\:border-red-400:hover, .hover\:border-red-500:hover, .hover\:border-red-600:hover, .hover\:border-red-700:hover,
+        .hover\:border-red-800:hover, .hover\:border-red-900:hover { border-color: var(--brand-color) !important; }
+        /* Ring */
+        .ring-red-50, .ring-red-100, .ring-red-200, .ring-red-300, .ring-red-400,
+        .ring-red-500, .ring-red-600, .ring-red-700, .ring-red-800, .ring-red-900,
+        .focus\:ring-red-50:focus, .focus\:ring-red-100:focus, .focus\:ring-red-200:focus, .focus\:ring-red-300:focus,
+        .focus\:ring-red-400:focus, .focus\:ring-red-500:focus, .focus\:ring-red-600:focus, .focus\:ring-red-700:focus,
+        .focus\:ring-red-800:focus, .focus\:ring-red-900:focus { --tw-ring-color: var(--brand-color) !important; }
+        /* Gradients */
+        .from-red-50, .from-red-100, .from-red-200, .from-red-300, .from-red-400,
+        .from-red-500, .from-red-600, .from-red-700, .from-red-800, .from-red-900 {
+            --tw-gradient-from: var(--brand-color) var(--tw-gradient-from-position);
+            --tw-gradient-to: rgb(12 213 244 / 0) var(--tw-gradient-to-position);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+        }
+        .to-red-50, .to-red-100, .to-red-200, .to-red-300, .to-red-400,
+        .to-red-500, .to-red-600, .to-red-700, .to-red-800, .to-red-900 { --tw-gradient-to: var(--brand-color) var(--tw-gradient-to-position); }
+        .via-red-50, .via-red-100, .via-red-200, .via-red-300, .via-red-400,
+        .via-red-500, .via-red-600, .via-red-700, .via-red-800, .via-red-900 {
+            --tw-gradient-to: rgb(12 213 244 / 0) var(--tw-gradient-to-position);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--brand-color) var(--tw-gradient-via-position), var(--tw-gradient-to);
+        }
+        /* Custom classes in this page */
+        .active { color: var(--brand-color) !important; background-color: rgba(12, 213, 244, 0.1) !important; }
+        .cta-banner { background: linear-gradient(135deg, rgb(12, 213, 244) 0%, rgb(8, 150, 172) 100%) !important; }
+        .flotte-gradient { background: linear-gradient(to right, rgba(12, 213, 244, 0.85), rgba(12, 213, 244, 0.6), transparent) !important; }
+    </style>
+    <style>
         .hero {
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1556388158-158ea5ccacbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
             background-size: cover;
@@ -32,13 +77,7 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
-        .active {
-            color: #ef4444;
-            font-weight: 600;
-            background-color: rgba(239, 68, 68, 0.1);
-            padding: 8px 16px;
-            border-radius: 6px;
-        }
+        
 
         .booking-form {
             background: rgba(255, 255, 255, 0.9);
@@ -46,9 +85,7 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        .cta-banner {
-            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
-        }
+        
 
         .rating-stars {
             color: #f59e0b;
@@ -1119,7 +1156,7 @@
             <!-- Image principale avec overlay -->
             <div class="relative mb-16 rounded-2xl overflow-hidden shadow-2xl">
                 <img src="{{ asset('images/flotte/banner.jpeg') }}" alt="Notre flotte de véhicules" class="w-full h-96 md:h-[500px] object-cover">
-                <div class="absolute inset-0 bg-gradient-to-r from-red-900/80 to-transparent flex items-center">
+                <div class="absolute inset-0 flotte-gradient flex items-center">
                     <div class="text-white p-8 md:p-16">
                         <h3 class="text-3xl md:text-5xl font-bold mb-4">Une flotte moderne et diversifiée</h3>
                         <p class="text-xl md:text-2xl mb-6 max-w-2xl">Des véhicules robustes, spacieux et confortables, garants de votre sécurité</p>
@@ -1203,7 +1240,7 @@
 
             <!-- Call to action -->
             <div class="text-center mt-16">
-                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl p-8 md:p-12 text-white">
+                <div class="bg-gradient-to-r from-[rgb(12,213,244)] to-[rgb(8,150,172)] rounded-2xl p-8 md:p-12 text-white">
                     <h3 class="text-2xl md:text-3xl font-bold mb-4">Besoin d'un véhicule spécifique ?</h3>
                     <p class="text-lg mb-6">Notre équipe est là pour vous conseiller et vous proposer la solution la plus adaptée à vos besoins</p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">

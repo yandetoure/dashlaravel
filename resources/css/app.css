@@ -20,3 +20,79 @@ body {
     flex: 1; /* Prend tout l'espace restant */
 }
 
+/* Brand color override: replace all Tailwind red variants with the brand cyan */
+:root {
+    --brand-color: rgb(12, 213, 244);
+}
+
+/* Text colors */
+.text-red-50, .text-red-100, .text-red-200, .text-red-300, .text-red-400,
+.text-red-500, .text-red-600, .text-red-700, .text-red-800, .text-red-900 {
+    color: var(--brand-color) !important;
+}
+
+/* Background colors */
+.bg-red-50, .bg-red-100, .bg-red-200, .bg-red-300, .bg-red-400,
+.bg-red-500, .bg-red-600, .bg-red-700, .bg-red-800, .bg-red-900 {
+    background-color: var(--brand-color) !important;
+}
+
+/* Border colors */
+.border-red-50, .border-red-100, .border-red-200, .border-red-300, .border-red-400,
+.border-red-500, .border-red-600, .border-red-700, .border-red-800, .border-red-900 {
+    border-color: var(--brand-color) !important;
+}
+
+/* Ring color (focus) */
+.ring-red-50, .ring-red-100, .ring-red-200, .ring-red-300, .ring-red-400,
+.ring-red-500, .ring-red-600, .ring-red-700, .ring-red-800, .ring-red-900,
+.focus\:ring-red-50:focus, .focus\:ring-red-100:focus, .focus\:ring-red-200:focus,
+.focus\:ring-red-300:focus, .focus\:ring-red-400:focus, .focus\:ring-red-500:focus,
+.focus\:ring-red-600:focus, .focus\:ring-red-700:focus, .focus\:ring-red-800:focus,
+.focus\:ring-red-900:focus {
+    --tw-ring-color: var(--brand-color) !important;
+}
+
+/* Hover variants for text */
+.hover\:text-red-50:hover, .hover\:text-red-100:hover, .hover\:text-red-200:hover,
+.hover\:text-red-300:hover, .hover\:text-red-400:hover, .hover\:text-red-500:hover,
+.hover\:text-red-600:hover, .hover\:text-red-700:hover, .hover\:text-red-800:hover,
+.hover\:text-red-900:hover {
+    color: var(--brand-color) !important;
+}
+
+/* Hover variants for background */
+.hover\:bg-red-50:hover, .hover\:bg-red-100:hover, .hover\:bg-red-200:hover,
+.hover\:bg-red-300:hover, .hover\:bg-red-400:hover, .hover\:bg-red-500:hover,
+.hover\:bg-red-600:hover, .hover\:bg-red-700:hover, .hover\:bg-red-800:hover,
+.hover\:bg-red-900:hover {
+    background-color: var(--brand-color) !important;
+}
+
+/* Hover variants for border */
+.hover\:border-red-50:hover, .hover\:border-red-100:hover, .hover\:border-red-200:hover,
+.hover\:border-red-300:hover, .hover\:border-red-400:hover, .hover\:border-red-500:hover,
+.hover\:border-red-600:hover, .hover\:border-red-700:hover, .hover\:border-red-800:hover,
+.hover\:border-red-900:hover {
+    border-color: var(--brand-color) !important;
+}
+
+/* Gradient helpers */
+.from-red-50, .from-red-100, .from-red-200, .from-red-300, .from-red-400,
+.from-red-500, .from-red-600, .from-red-700, .from-red-800, .from-red-900 {
+    --tw-gradient-from: var(--brand-color) var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(12 213 244 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-red-50, .to-red-100, .to-red-200, .to-red-300, .to-red-400,
+.to-red-500, .to-red-600, .to-red-700, .to-red-800, .to-red-900 {
+    --tw-gradient-to: var(--brand-color) var(--tw-gradient-to-position);
+}
+
+.via-red-50, .via-red-100, .via-red-200, .via-red-300, .via-red-400,
+.via-red-500, .via-red-600, .via-red-700, .via-red-800, .via-red-900 {
+    --tw-gradient-to: rgb(12 213 244 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--brand-color) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
