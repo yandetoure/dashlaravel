@@ -66,35 +66,128 @@
         .flotte-gradient { background: linear-gradient(to right, rgba(12, 213, 244, 0.85), rgba(12, 213, 244, 0.6), transparent) !important; }
     </style>
     <style>
+        /* Hero Section - Design moderne avec effet parallaxe */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1556388158-158ea5ccacbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background: linear-gradient(135deg, rgba(12, 213, 244, 0.85) 0%, rgba(8, 150, 172, 0.75) 50%, rgba(0, 0, 0, 0.7) 100%), 
+                        url('https://images.unsplash.com/photo-1556388158-158ea5ccacbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(12, 213, 244, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Cards modernes avec glassmorphism */
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(12, 213, 244, 0.25), 0 0 0 1px rgba(12, 213, 244, 0.1);
         }
 
-        
+        /* Info cards modernes */
+        .info-card, .actu-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
+        .info-card:hover, .actu-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(12, 213, 244, 0.1);
+            border-color: rgba(12, 213, 244, 0.3);
+        }
+
+        /* Booking form moderne */
         .booking-form {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(12, 213, 244, 0.1);
         }
 
-        
-
+        /* Rating stars */
         .rating-stars {
             color: #f59e0b;
         }
 
+        /* Entreprise banner moderne */
         .entreprise-banner {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background: linear-gradient(135deg, rgba(12, 213, 244, 0.9) 0%, rgba(8, 150, 172, 0.85) 100%), 
+                        url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
             background-size: cover;
             background-position: center;
+            position: relative;
+        }
+
+        .entreprise-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 70% 50%, rgba(12, 213, 244, 0.4) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Animations modernes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Gradient moderne pour les boutons */
+        .btn-gradient {
+            background: linear-gradient(135deg, rgb(12, 213, 244) 0%, rgb(8, 150, 172) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, rgb(8, 150, 172) 0%, rgb(12, 213, 244) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(12, 213, 244, 0.4);
         }
 
         /* Personnalisation de la scrollbar pour Webkit (Chrome, Safari, etc.) */
@@ -763,7 +856,7 @@
         }
 
 
-        /* Styles pour la navbar transparente */
+        /* Styles pour la navbar et les boutons de nav */
         .navbar-transparent {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -781,26 +874,20 @@
         }
 
         /* Styles pour les liens de navigation sur fond transparent */
-        .nav-transparent .nav-link {
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
+        .nav-link { padding: 0.375rem 0.875rem; border-radius: 9999px; transition: all 0.2s ease; }
+        .nav-transparent .nav-link { color: rgba(255, 255, 255, 0.92); border: 1px solid rgba(255, 255, 255, 0.16); }
+        .navbar-scrolled .nav-link { color: #0b1a28; border: 1px solid rgba(15, 23, 42, 0.06); }
 
-        .nav-transparent .nav-link:hover {
-            color: #ef4444 !important;
-            background-color: rgba(255, 255, 255, 0.15);
-            text-shadow: none;
-        }
+        .nav-transparent .nav-link:hover { color: rgb(12, 213, 244) !important; background-color: rgba(255, 255, 255, 0.08); box-shadow: 0 0 0 2px rgba(255,255,255,0.06) inset; }
 
-        .navbar-scrolled .nav-link:hover {
-            color: #970808cf !important;
-        }
+        .navbar-scrolled .nav-link:hover { color: rgb(12, 213, 244) !important; background-color: rgba(12, 213, 244, 0.08); box-shadow: 0 0 0 2px rgba(12,213,244,0.10) inset; }
 
-        .nav-transparent .nav-link.active {
-            color: #ef4444 !important;
-            background-color: rgba(255, 255, 255, 0.2);
-            text-shadow: none;
-        }
+        .nav-transparent .nav-link.active { color: rgb(12, 213, 244) !important; background-color: rgba(255, 255, 255, 0.12); }
+        .navbar-scrolled .nav-link.active { color: rgb(12, 213, 244) !important; background-color: rgba(12, 213, 244, 0.12); }
+
+        /* Primary nav CTA */
+        .btn-nav-primary { color: #ffffff !important; background-color: rgb(12, 213, 244) !important; border-color: rgba(12,213,244,0.2) !important; }
+        .btn-nav-primary:hover { background-color: rgb(8, 150, 172) !important; }
 
         .nav-transparent .phone-links a {
             color: rgba(255, 255, 255, 0.8);
@@ -854,20 +941,19 @@
                 <div class="flex items-center">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 100px; width: auto;" class="me-2">
                 </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#accueil" class="nav-link hover:text-red-600 transition">Accueil</a>
-                    <a href="#actualites" class="nav-link hover:text-red-600 transition">Actualités</a>
-                    <a href="#flotte" class="nav-link hover:text-red-600 transition">Flotte</a>
-                    <a href="#tarifs" class="nav-link hover:text-red-600 transition">Tarifs</a>
-                    <a href="#services" class="nav-link hover:text-red-600 transition">Services</a>
-                    <a href="#reservation" class="nav-link hover:text-red-600 transition">Réservation</a>
-                    <a href="#partenaires" class="nav-link hover:text-red-600 transition">Partenaires</a>
-                    <a href="#contact" class="nav-link hover:text-red-600 transition">Contact</a>
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="#accueil" class="nav-link">Accueil</a>
+                    <a href="#flotte" class="nav-link">Flotte</a>
+                    <a href="#tarifs" class="nav-link">Tarifs</a>
+                    <a href="#contact" class="nav-link">Contact</a>
                     @auth
-                        <a href="{{ route('profile.edit') }}" class="nav-link hover:text-red-600 transition">Mon compte</a>
+                        <a href="{{ route('profile.edit') }}" class="nav-link">Mon compte</a>
                     @else
-                        <a href="#compte" class="nav-link hover:text-red-600 transition">Mon compte</a>
+                        <a href="#compte" class="nav-link">Mon compte</a>
                     @endauth
+
+                    <!-- CTA Réservation en bouton rempli -->
+                    <a href="#reservation" class="nav-link btn-nav-primary">Réserver</a>
 
                     <!-- Boutons de contrôle -->
                     <div class="control-buttons">
@@ -920,40 +1006,31 @@
                 </div>
 
                 <!-- Liens de navigation -->
-                <a href="#accueil" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                <a href="#accueil" class="mobile-nav-link block text-gray-700 hover:text-[rgb(12,213,244)] hover:bg-[rgba(12,213,244,0.08)] px-3 py-2 rounded transition-colors">
                     <i class="fas fa-home mr-3"></i>Accueil
                 </a>
-                <a href="#actualites" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
-                    <i class="fas fa-newspaper mr-3"></i>Actualités
-                </a>
-                <a href="#flotte" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                <a href="#flotte" class="mobile-nav-link block text-gray-700 hover:text-[rgb(12,213,244)] hover:bg-[rgba(12,213,244,0.08)] px-3 py-2 rounded transition-colors">
                     <i class="fas fa-car mr-3"></i>Flotte
                 </a>
-                <a href="#tarifs" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                <a href="#tarifs" class="mobile-nav-link block text-gray-700 hover:text-[rgb(12,213,244)] hover:bg-[rgba(12,213,244,0.08)] px-3 py-2 rounded transition-colors">
                     <i class="fas fa-tags mr-3"></i>Tarifs
                 </a>
-                <a href="#services" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
-                    <i class="fas fa-concierge-bell mr-3"></i>Services
-                </a>
-                <a href="#reservation" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
-                    <i class="fas fa-calendar-check mr-3"></i>Réservation
-                </a>
-                <a href="#contact" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                <a href="#contact" class="mobile-nav-link block text-gray-700 hover:text-[rgb(12,213,244)] hover:bg-[rgba(12,213,244,0.08)] px-3 py-2 rounded transition-colors">
                     <i class="fas fa-envelope mr-3"></i>Contact
                 </a>
                 @auth
-                    <a href="{{ route('profile.edit') }}" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <a href="{{ route('profile.edit') }}" class="mobile-nav-link block text-gray-700 hover:text-[rgb(12,213,244)] hover:bg-[rgba(12,213,244,0.08)] px-3 py-2 rounded transition-colors">
                         <i class="fas fa-user mr-3"></i>Mon compte
                     </a>
                 @else
-                    <a href="#compte" class="mobile-nav-link block text-gray-700 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded transition-colors">
+                    <a href="#compte" class="mobile-nav-link block text-gray-700 hover:text-[rgb(12,213,244)] hover:bg-[rgba(12,213,244,0.08)] px-3 py-2 rounded transition-colors">
                         <i class="fas fa-user mr-3"></i>Mon compte
                     </a>
                 @endauth
 
                 <!-- Bouton de réservation rapide -->
                 <div class="pt-3 border-t border-gray-200">
-                    <a href="#reservation" class="block bg-red-600 hover:bg-red-700 text-white text-center py-3 px-4 rounded-lg transition-colors font-semibold">
+                    <a href="#reservation" class="block bg-[rgb(12,213,244)] hover:bg-[rgb(8,150,172)] text-white text-center py-3 px-4 rounded-lg transition-colors font-semibold">
                         <i class="fas fa-car mr-2"></i>Réserver maintenant
                     </a>
                 </div>
@@ -962,46 +1039,23 @@
     </nav>
 
 <!-- Hero Section -->
-    <section id="accueil" class="hero w-full pt-24 pb-32 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="md:flex items-center justify-between mt-10">
-            <div class="md:w-1/2 mb-10 md:mb-0">
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">Nous sommes le Leader du Transfert/Shuttle Aéroportuaire</h1>
-                <p class="text-xl mb-8">Service de navette, location de voiture avec chauffeur et Transferts privés vers l'Aéroport International Blaise Diagne(AIBD).</p>
-                <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 inline-block">Réserver maintenant</a>
-            </div>
-
-            <div class="md:w-1/2">
-                <div class="booking-form p-8 max-w-md mx-auto bg-white rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Réservez votre trajet</h3>
-
-                    <form id="availability-form" class="text-gray-800">
-                        <div class="mb-4">
-                            <label class="block mb-2">Sens du trajet</label>
-                            <select id="trip_id" name="trip_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                                <option value="1">Dakar - AIBD</option>
-                                <option value="1">AIBD - Dakar</option>
-                                <option value="2">AIBD - Saly</option>
-                                <option value="3">Saly - AIBD</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block mb-2">Date</label>
-                            <input type="date" id="date" name="date" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block mb-2">Heure</label>
-                            <input type="time" id="heure_ramassage" name="heure_ramassage" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                        </div>
-
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-                            Vérifier la disponibilité
-                        </button>
-                    </form>
-
-                    <div id="availability-result" class="mt-4 text-center font-semibold"></div>
+    <section id="accueil" class="hero w-full pt-48 pb-56 text-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col items-center text-center mt-10 animate-fade-in-up">
+                <div class="w-full md:w-11/12 lg:w-5/6">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-relaxed drop-shadow-lg">
+                        Nous sommes le Leader du Transfert/Shuttle Aéroportuaire
+                    </h1>
+                    <p class="text-lg md:text-xl lg:text-2xl mb-10 opacity-95 max-w-4xl mx-auto font-light leading-relaxed">
+                        Service de navette, location de voiture avec chauffeur et Transferts privés vers l'Aéroport International Blaise Diagne (AIBD).
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                        <a href="#reservation" class="btn-gradient text-white py-4 px-10 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-calendar-check mr-2"></i>Réserver maintenant
+                        </a>
+                        <a href="#flotte" class="bg-white/10 backdrop-blur-md text-white py-4 px-10 rounded-xl font-semibold text-lg border-2 border-white/30 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-car mr-2"></i>Voir la flotte
+                        </a>
                 </div>
             </div>
         </div>
@@ -1010,37 +1064,298 @@
 
 
     <!-- Section Infos en cards (avant les actualités) -->
-    <section class="bg-white py-8" id="infos">
+    
+    <!-- Reservation Modal -->
+    <div id="booking-modal" class="fixed inset-0 hidden items-center justify-center z-[100] overflow-y-auto">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeBookingModal()"></div>
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl mx-4 my-8 p-6 md:p-10 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <button type="button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors" aria-label="Fermer" onclick="closeBookingModal()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Complétez votre réservation</h3>
+            
+            <!-- Messages de succès -->
+            <div id="success-message-modal" class="hidden bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle text-green-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">
+                            Réservation confirmée ! 🎉
+                        </p>
+                        <p class="text-sm mt-1">
+                            Vous recevrez une confirmation par email et SMS dans quelques minutes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages d'erreur -->
+            <div id="error-message-modal" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium" id="error-text-modal"></p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="reservation-form-modal" action="{{ route('reservations.storeByProspect') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800">
+                @csrf
+                <!-- 1. Prénom -->
+                <div>
+                    <label for="first_name_modal" class="block text-gray-700 mb-2 font-medium">Prénom</label>
+                    <input type="text" name="first_name" id="first_name_modal" value="{{ old('first_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 2. Nom -->
+                <div>
+                    <label for="last_name_modal" class="block text-gray-700 mb-2 font-medium">Nom</label>
+                    <input type="text" name="last_name" id="last_name_modal" value="{{ old('last_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 3. Email -->
+                <div>
+                    <label for="email_modal" class="block text-gray-700 mb-2 font-medium">Email</label>
+                    <input type="email" name="email" id="email_modal" value="{{ old('email') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 4. Téléphone -->
+                <div>
+                    <label for="phone_modal" class="block text-gray-700 mb-2 font-medium">Téléphone</label>
+                    <input type="tel" name="phone" id="phone_modal" value="{{ old('phone') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 5. Point de départ -->
+                <div>
+                    <label for="adresse_rammassage_modal" class="block text-gray-700 mb-2 font-medium">Point de départ</label>
+                    <input type="text" name="adresse_rammassage" id="adresse_rammassage_modal" value="{{ old('adresse_rammassage') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 6. Nombre de passagers -->
+                <div>
+                    <label for="nb_personnes_modal" class="block text-gray-700 mb-2 font-medium">Nombre de passagers</label>
+                    <input type="number" name="nb_personnes" id="nb_personnes_modal" min="1" max="20" value="{{ old('nb_personnes') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 7. Date -->
+                <div>
+                    <label for="date_modal" class="block text-gray-700 mb-2 font-medium">Date</label>
+                    <input type="date" name="date" id="date_modal" value="{{ old('date') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 8. Heure de ramassage -->
+                <div>
+                    <label for="heure_ramassage_modal" class="block text-gray-700 mb-2 font-medium">Heure de ramassage</label>
+                    <input type="time" name="heure_ramassage" id="heure_ramassage_modal" value="{{ old('heure_ramassage') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 9. Nombre de valises -->
+                <div>
+                    <label for="nb_valises_modal" class="block text-gray-700 mb-2 font-medium">Nombre de valises</label>
+                    <input type="number" name="nb_valises" id="nb_valises_modal" min="1" max="20" value="{{ old('nb_valises') }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                </div>
+
+                <!-- 10. Sens du trajet -->
+                <div>
+                    <label for="trip_id_modal" class="block text-gray-700 mb-2 font-medium">Sens du trajet <span class="text-red-500">*</span></label>
+                    <select id="trip_id_modal" name="trip_id" class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[rgb(12,213,244)] focus:border-[rgb(12,213,244)] transition-all" required>
+                        <option value="">-- Sélectionner un trajet --</option>
+                        @foreach($trips as $trip)
+                            <option value="{{ $trip->id }}" {{ old('trip_id') == $trip->id ? 'selected' : '' }}>{{ $trip->departure }} - {{ $trip->destination }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- 11. Tarif estimé -->
+                <div>
+                    <label for="tarif_modal" class="block text-gray-700 mb-2 font-medium">Tarif estimé</label>
+                    <input type="text" id="tarif_modal" class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-100 focus:outline-none cursor-not-allowed" readonly>
+                </div>
+
+                <!-- Bouton -->
+                <div class="md:col-span-2">
+                    <button type="submit" id="submit-btn-modal" class="w-full btn-gradient text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        <span class="submit-text-modal">Finaliser la réservation</span>
+                        <i class="fas fa-spinner fa-spin hidden submit-spinner-modal ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openBookingModal() {
+            const m = document.getElementById('booking-modal');
+            if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+            document.body.style.overflow = 'hidden';
+        }
+        function closeBookingModal() {
+            const m = document.getElementById('booking-modal');
+            if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+            document.body.style.overflow = '';
+            // Réinitialiser le formulaire et les messages
+            const form = document.getElementById('reservation-form-modal');
+            if (form) form.reset();
+            document.getElementById('success-message-modal').classList.add('hidden');
+            document.getElementById('error-message-modal').classList.add('hidden');
+            document.getElementById('tarif_modal').value = '';
+        }
+        
+        // Hook all reservation triggers
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('a[href="#reservation"], .btn-nav-primary').forEach(function(el){
+                el.addEventListener('click', function(e){ e.preventDefault(); openBookingModal(); });
+            });
+
+            // Calcul automatique des tarifs pour le modal
+            function calculateTariffModal() {
+                const nbPersonnes = parseInt(document.getElementById('nb_personnes_modal')?.value) || 0;
+                const nbValises = parseInt(document.getElementById('nb_valises_modal')?.value) || 0;
+                const tarifField = document.getElementById('tarif_modal');
+
+                if (!tarifField) return;
+
+                if (nbPersonnes === 0) {
+                    tarifField.value = '';
+                    return;
+                }
+
+                // Tarif de base pour 1 à 3 personnes
+                let tarif = 32500;
+
+                // Supplément pour personnes supplémentaires (au-delà de 3)
+                if (nbPersonnes > 3) {
+                    tarif += (nbPersonnes - 3) * 5000;
+                }
+
+                // Valises incluses : 2 par personne
+                const valisesIncluses = nbPersonnes * 2;
+                if (nbValises > valisesIncluses) {
+                    tarif += (nbValises - valisesIncluses) * 5000;
+                }
+
+                // Afficher le tarif formaté
+                tarifField.value = tarif.toLocaleString('fr-FR') + ' FCFA';
+            }
+
+            // Écouter les changements pour calculer automatiquement le tarif dans le modal
+            const nbPersonnesModal = document.getElementById('nb_personnes_modal');
+            const nbValisesModal = document.getElementById('nb_valises_modal');
+            if (nbPersonnesModal) {
+                nbPersonnesModal.addEventListener('input', calculateTariffModal);
+            }
+            if (nbValisesModal) {
+                nbValisesModal.addEventListener('input', calculateTariffModal);
+            }
+
+            // Gestion de la soumission du formulaire modal
+            const formModal = document.getElementById('reservation-form-modal');
+            if (formModal) {
+                formModal.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const submitBtn = document.getElementById('submit-btn-modal');
+                    const submitText = submitBtn.querySelector('.submit-text-modal');
+                    const submitSpinner = submitBtn.querySelector('.submit-spinner-modal');
+                    const successMessage = document.getElementById('success-message-modal');
+                    const errorMessage = document.getElementById('error-message-modal');
+                    const errorText = document.getElementById('error-text-modal');
+
+                    // Désactiver le bouton et afficher le spinner
+                    submitBtn.disabled = true;
+                    submitText.textContent = 'Traitement en cours...';
+                    submitSpinner.classList.remove('hidden');
+                    
+                    // Masquer les messages précédents
+                    successMessage.classList.add('hidden');
+                    errorMessage.classList.add('hidden');
+
+                    // Récupérer le token CSRF
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                                    document.querySelector('input[name="_token"]')?.value;
+
+                    // Préparer les données du formulaire
+                    const formData = new FormData(formModal);
+
+                    // Envoyer la requête
+                    fetch(formModal.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Afficher le message de succès
+                            successMessage.classList.remove('hidden');
+                            formModal.reset();
+                            document.getElementById('tarif_modal').value = '';
+                            
+                            // Fermer le modal après 3 secondes
+                            setTimeout(() => {
+                                closeBookingModal();
+                            }, 3000);
+                        } else {
+                            // Afficher les erreurs
+                            errorText.textContent = data.message || 'Une erreur est survenue. Veuillez réessayer.';
+                            errorMessage.classList.remove('hidden');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        errorText.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+                        errorMessage.classList.remove('hidden');
+                    })
+                    .finally(() => {
+                        // Réactiver le bouton
+                        submitBtn.disabled = false;
+                        submitText.textContent = 'Finaliser la réservation';
+                        submitSpinner.classList.add('hidden');
+                    });
+                });
+            }
+        });
+    </script>
+
+    <section class="bg-gradient-to-b from-gray-50 to-white py-16" id="infos">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Infos utiles</h2>
-                <p class="text-base text-gray-600">Les dernières informations importantes</p>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Infos utiles</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Les dernières informations importantes pour votre voyage</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 @foreach($infos as $info)
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col info-card" data-info-id="{{ $info->id }}" data-info-title="{{ $info->title }}" data-info-content="{{ $info->content }}" data-info-category="{{ $info->category?->name ?? 'Non classé' }}" data-info-category-color="{{ $info->category?->color ?? '#3B82F6' }}" data-info-date="{{ $info->created_at->format('d/m/Y') }}" data-info-image="{{ $info->image ? asset('storage/' . $info->image) : '' }}" data-info-link="{{ $info->external_link }}">
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 cursor-pointer actu-card w-full h-full flex flex-col info-card group" data-info-id="{{ $info->id }}" data-info-title="{{ $info->title }}" data-info-content="{{ $info->content }}" data-info-category="{{ $info->category?->name ?? 'Non classé' }}" data-info-category-color="{{ $info->category?->color ?? '#3B82F6' }}" data-info-date="{{ $info->created_at->format('d/m/Y') }}" data-info-image="{{ $info->image ? asset('storage/' . $info->image) : '' }}" data-info-link="{{ $info->external_link }}">
                         @if($info->image)
-                            <div class="relative h-40 flex-shrink-0">
+                            <div class="relative h-48 flex-shrink-0 overflow-hidden">
                                 <img src="{{ asset('storage/' . $info->image) }}"
                                      alt="{{ $info->title }}"
-                                     class="w-full h-full object-cover">
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 <div class="absolute top-3 right-3">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white shadow-lg"
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white shadow-xl backdrop-blur-sm"
                                           style="background-color: {{ $info->category?->color ?? '#3B82F6' }}">
                                         {{ $info->category?->name ?? 'Non classé' }}
                                     </span>
                                 </div>
                             </div>
                         @endif
-                        <div class="p-4 flex-grow flex flex-col">
-                            <h4 class="font-semibold text-gray-900 text-base mb-2 line-clamp-1">{{ $info->title }}</h4>
-                            <p class="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{{ Str::limit($info->content, 100) }}</p>
-                            <div class="flex items-center justify-between mt-auto">
-                                <span class="text-sm text-gray-500">{{ $info->created_at->format('d/m/Y') }}</span>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h4 class="font-bold text-gray-900 text-lg mb-3 line-clamp-1 group-hover:text-[rgb(12,213,244)] transition-colors">{{ $info->title }}</h4>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">{{ Str::limit($info->content, 100) }}</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                                <span class="text-sm text-gray-500 font-medium">{{ $info->created_at->format('d/m/Y') }}</span>
+                                <i class="fas fa-arrow-right text-[rgb(12,213,244)] opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-300"></i>
                             </div>
                             @if($info->external_link)
                                 <div class="mt-4 text-center">
-                                    <a href="{{ $info->external_link }}" target="_blank" onclick="event.stopPropagation();" class="text-blue-600 hover:text-blue-800 underline">
+                                    <a href="{{ $info->external_link }}" target="_blank" onclick="event.stopPropagation();" class="text-[rgb(12,213,244)] hover:text-[rgb(8,150,172)] font-medium underline transition-colors">
                                         Visiter le site
                                     </a>
                                 </div>
@@ -1055,12 +1370,12 @@
 
     <!-- Main Content with Sidebar -->
             <!-- Actualités Carousel Section -->
-    <section id="actualites" class="bg-white py-8">
+    <section id="actualites" class="bg-gradient-to-b from-white to-gray-50 py-16">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Dernières actualités</h2>
-                <p class="text-base text-gray-600">Restez informé de nos actualités</p>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Dernières actualités</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Restez informé de nos actualités et nouveautés</p>
             </div>
 
             <!-- Carousel Container -->
@@ -1069,7 +1384,7 @@
                     <div class="swiper-wrapper">
                         @foreach($actus->take(8) as $actu)
                             <div class="swiper-slide">
-                                <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer actu-card transform hover:scale-105 transition-all duration-300 w-full h-full flex flex-col"
+                                <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 cursor-pointer actu-card w-full h-full flex flex-col group"
                                      data-actu-id="{{ $actu->id }}"
                                      data-actu-title="{{ $actu->title }}"
                                      data-actu-content="{{ $actu->content }}"
@@ -1079,24 +1394,26 @@
                                      data-actu-image="{{ $actu->image ? asset('storage/' . $actu->image) : '' }}"
                                      data-actu-link="{{ $actu->external_link }}">
                                     @if($actu->image)
-                                        <div class="relative h-40 flex-shrink-0">
+                                        <div class="relative h-48 flex-shrink-0 overflow-hidden">
                                             <img src="{{ asset('storage/' . $actu->image) }}"
                                                  alt="{{ $actu->title }}"
-                                                 class="w-full h-full object-cover">
+                                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                             <div class="absolute top-3 right-3">
-                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white shadow-lg"
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white shadow-xl backdrop-blur-sm"
                                                       style="background-color: {{ $actu->category?->color ?? '#3B82F6' }}">
                                                     {{ $actu->category?->name ?? 'Non classé' }}
                                                 </span>
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="p-4 flex-grow flex flex-col">
-                                        <h4 class="font-semibold text-gray-900 text-base mb-2 line-clamp-1">{{ $actu->title }}</h4>
-                                        <p class="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{{ Str::limit($actu->content, 100) }}</p>
-                                        <div class="flex items-center justify-between mt-auto">
-                                            <span class="text-sm text-gray-500">{{ $actu->created_at->format('d/m/Y') }}</span>
-                                            <span class="text-green-600 text-sm font-medium hover:text-green-800 transition-colors duration-200">Voir plus →</span>
+                                    <div class="p-6 flex-grow flex flex-col">
+                                        <h4 class="font-bold text-gray-900 text-lg mb-3 line-clamp-1 group-hover:text-[rgb(12,213,244)] transition-colors">{{ $actu->title }}</h4>
+                                        <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">{{ Str::limit($actu->content, 100) }}</p>
+                                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                                            <span class="text-sm text-gray-500 font-medium">{{ $actu->created_at->format('d/m/Y') }}</span>
+                                            <span class="text-[rgb(12,213,244)] text-sm font-semibold group-hover:text-[rgb(8,150,172)] transition-colors flex items-center gap-2">
+                                                Voir plus <i class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -1106,11 +1423,11 @@
                 </div>
 
                 <!-- Navigation arrows -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next !text-[rgb(12,213,244)] !bg-white !shadow-lg !rounded-full !w-12 !h-12 after:!text-xl"></div>
+                <div class="swiper-button-prev !text-[rgb(12,213,244)] !bg-white !shadow-lg !rounded-full !w-12 !h-12 after:!text-xl"></div>
 
                 <!-- Pagination dots -->
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination !bottom-0"></div>
             </div>
         </div>
     </section>
@@ -1146,29 +1463,29 @@
     </div>
 
     <!-- Section Flotte -->
-    <section id="flotte" class="bg-white py-20">
+    <section id="flotte" class="bg-gradient-to-b from-gray-50 to-white py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Notre Flotte de Véhicules</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Découvrez notre gamme complète de véhicules modernes et confortables pour tous vos besoins de transport</p>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">Notre Flotte de Véhicules</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">Découvrez notre gamme complète de véhicules modernes et confortables pour tous vos besoins de transport</p>
             </div>
 
             <!-- Image principale avec overlay -->
-            <div class="relative mb-16 rounded-2xl overflow-hidden shadow-2xl">
-                <img src="{{ asset('images/flotte/banner.jpeg') }}" alt="Notre flotte de véhicules" class="w-full h-96 md:h-[500px] object-cover">
+            <div class="relative mb-16 rounded-3xl overflow-hidden shadow-2xl group">
+                <img src="{{ asset('images/flotte/banner.jpeg') }}" alt="Notre flotte de véhicules" class="w-full h-96 md:h-[500px] object-cover group-hover:scale-105 transition-transform duration-700">
                 <div class="absolute inset-0 flotte-gradient flex items-center">
-                    <div class="text-white p-8 md:p-16">
-                        <h3 class="text-3xl md:text-5xl font-bold mb-4">Une flotte moderne et diversifiée</h3>
-                        <p class="text-xl md:text-2xl mb-6 max-w-2xl">Des véhicules robustes, spacieux et confortables, garants de votre sécurité</p>
+                    <div class="text-white p-8 md:p-16 relative z-10">
+                        <h3 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-lg">Une flotte moderne et diversifiée</h3>
+                        <p class="text-xl md:text-2xl mb-8 max-w-2xl leading-relaxed">Des véhicules robustes, spacieux et confortables, garants de votre sécurité</p>
                         <div class="flex flex-wrap gap-4">
-                            <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                                <span class="text-white font-semibold">✓ Climatisation</span>
+                            <div class="bg-white/25 backdrop-blur-md rounded-xl px-5 py-3 border border-white/30 shadow-lg hover:bg-white/30 transition-all duration-300">
+                                <span class="text-white font-semibold text-lg"><i class="fas fa-snowflake mr-2"></i>Climatisation</span>
                             </div>
-                            <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                                <span class="text-white font-semibold">✓ GPS intégré</span>
+                            <div class="bg-white/25 backdrop-blur-md rounded-xl px-5 py-3 border border-white/30 shadow-lg hover:bg-white/30 transition-all duration-300">
+                                <span class="text-white font-semibold text-lg"><i class="fas fa-map-marked-alt mr-2"></i>GPS intégré</span>
                             </div>
-                            <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                                <span class="text-white font-semibold">✓ Entretien régulier</span>
+                            <div class="bg-white/25 backdrop-blur-md rounded-xl px-5 py-3 border border-white/30 shadow-lg hover:bg-white/30 transition-all duration-300">
+                                <span class="text-white font-semibold text-lg"><i class="fas fa-tools mr-2"></i>Entretien régulier</span>
                             </div>
                         </div>
                     </div>
@@ -1178,20 +1495,21 @@
             <!-- Grille des véhicules -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Véhicule 1 - Van de luxe -->
-                <div class="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="group bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-400 transform hover:-translate-y-3">
                     <div class="relative overflow-hidden">
-                        <img src="{{ asset('images/flotte/business.jpeg') }}" alt="Van de luxe" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="{{ asset('images/flotte/business.jpeg') }}" alt="Van de luxe" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-800 mb-2">Salon Business</h4>
-                        <p class="text-gray-600 mb-4">Véhicule spacieux et élégant pour bien commencer votre voyage.</p>
-                        <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span><i class="fas fa-users mr-2"></i>Jusqu'à 4 passagers</span>
-                            <span><i class="fas fa-suitcase mr-2"></i>Bagages inclus</span>
+                        <h4 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-[rgb(12,213,244)] transition-colors">Salon Business</h4>
+                        <p class="text-gray-600 mb-5 leading-relaxed">Véhicule spacieux et élégant pour bien commencer votre voyage.</p>
+                        <div class="flex items-center justify-between text-sm text-gray-600 mb-6 pb-5 border-b border-gray-100">
+                            <span class="flex items-center"><i class="fas fa-users mr-2 text-[rgb(12,213,244)]"></i>Jusqu'à 4 passagers</span>
+                            <span class="flex items-center"><i class="fas fa-suitcase mr-2 text-[rgb(12,213,244)]"></i>Bagages inclus</span>
                         </div>
                         <div class="text-center">
-                            <a href="#reservation" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors inline-block">
-                                Réserver
+                            <a href="#reservation" class="btn-gradient text-white px-8 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-block w-full">
+                                Réserver maintenant
                             </a>
                         </div>
                     </div>
@@ -1503,7 +1821,7 @@
                                  <!-- Service 6 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
-                        <img src="images/serv4.jpeg" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                        <img src="{{ asset('images/serv4.jpeg') }}" alt="Transferts Aéroport" class="w-full h-auto object-contain" />
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Transferts Aéroport</h3>
                     <p class="text-gray-600 mb-4">Flotte exclusive de Vans.</p>
@@ -1527,7 +1845,7 @@
                 <!-- Service 5 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
-                        <img src="images/ent.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                        <img src="{{ asset('images/ent.png') }}" alt="Services aux Entreprises" class="w-full h-auto object-contain" />
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Services aux Entreprises</h3>
                     <p class="text-gray-600 mb-4">Solutions de transport professionnelles pour les besoins de mobilité de votre entreprise.</p>
@@ -1551,7 +1869,7 @@
               <!-- Service 4 -->
                 <div class="service-card bg-white p-8 rounded-lg shadow-md transition duration-300">
                        <div class="mb-4 flex justify-center">
-                        <img src="images/meet.png" alt="Icone Service 1" class="w-full h-auto object-contain" />
+                        <img src="{{ asset('images/meet.png') }}" alt="Assistance & Conciergerie" class="w-full h-auto object-contain" />
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-3">Assistance & Conciergerie</h3>
                     <p class="text-gray-600 mb-4">Service de location avec chauffeur pour des trajets longue distance en dehors de Dakar.</p>
@@ -1792,193 +2110,6 @@
         </div>
     </section>
 
-    <!-- Reservation Section -->
-    <section id="reservation" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="md:flex items-center">
-                <div class="md:w-1/2 mb-10 md:mb-0">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Réservez votre transport en quelques clics</h2>
-                    <p class="text-xl text-gray-600 mb-8">Notre plateforme simple et intuitive vous permet de réserver votre transport vers l'aéroport AIBD en moins de 2 minutes.</p>
-
-                    <div class="space-y-6">
-                        <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Réservation instantanée</h4>
-                                <p class="text-gray-600">Confirmation immédiate de votre réservation par email et SMS.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Paiement sécurisé</h4>
-                                <p class="text-gray-600">Payez en ligne de manière sécurisée ou en espèces au chauffeur.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start">
-                            <div class="bg-red-100 text-red-600 rounded-full w-10 h-10 flex items-center justify-center mr-4 mt-1">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Suivi en temps réel</h4>
-                                <p class="text-gray-600">Suivez votre chauffeur en temps réel grâce à notre application mobile.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="md:w-1/2">
-                    <div class="bg-white p-8 rounded-lg shadow-xl max-w-md mx-auto">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6">Complétez votre réservation</h3>
-
-                        <!-- Messages de succès -->
-                        <div id="success-message" class="hidden bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded" role="alert">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-check-circle text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium">
-                                        Réservation confirmée ! 🎉
-                                    </p>
-                                    <p class="text-sm mt-1">
-                                        Vous recevrez une confirmation par email et SMS dans quelques minutes.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Messages d'erreur -->
-                    @if($errors->any())
-                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
-                            <strong>Erreur(s) :</strong>
-                            <ul class="list-disc ml-4">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    @if(isset($error))
-                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded" role="alert">
-                            <strong>Erreur :</strong>
-                            <p>{{ $error }}</p>
-                        </div>
-                    @endif
-                        <form id="reservation-form" action="{{ route('reservations.storeByProspect') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            @csrf
-                            <!-- 1. Nom complet -->
-                            <div>
-                                <label for="first_name" class="block text-gray-700 mb-2">Prénom</label>
-                                <input type="text" name="first_name" value="{{ old('first_name') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('first_name') border-red-500 @enderror" required>
-                                @error('first_name')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="last_name" class="block text-gray-700 mb-2">Nom</label>
-                                <input type="text" name="last_name" value="{{ old('last_name') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('last_name') border-red-500 @enderror" required>
-                                @error('last_name')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- 2. Email -->
-                            <div>
-                                <label for="email" class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" name="email" value="{{ old('email') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('email') border-red-500 @enderror" required>
-                                @error('email')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <!-- 3. Téléphone -->
-                            <div>
-                                <label for="phone" class="block text-gray-700 mb-2">Téléphone</label>
-                                <input type="tel" name="phone" value="{{ old('phone') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('phone') border-red-500 @enderror" required>
-                                @error('phone')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <!-- 4. Point de départ -->
-                            <div>
-                                <label for="adresse_rammassage" class="block text-gray-700 mb-2">Point de départ</label>
-                                <input type="text" name="adresse_rammassage" value="{{ old('adresse_rammassage') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('adresse_rammassage') border-red-500 @enderror" required>
-                                @error('adresse_rammassage')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <!-- 5. Point d'arrivée -->
-                            <div>
-                                <label for="nb_personnes" class="block mb-2">Nombre de passagers</label>
-                                <input type="number" name="nb_personnes" id="nb_personnes" min="1" max="20" value="{{ old('nb_personnes') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('nb_personnes') border-red-500 @enderror" required>
-                                @error('nb_personnes')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="date" class="block mb-2">Date</label>
-                                <input type="date" name="date" value="{{ old('date') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('date') border-red-500 @enderror" required>
-                                @error('date')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <!-- 7. Heure de ramassage -->
-                            <div>
-                                <label for="heure_ramassage" class="block mb-2">Heure de ramassage</label>
-                                <input type="time" name="heure_ramassage" value="{{ old('heure_ramassage') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('heure_ramassage') border-red-500 @enderror" required>
-                                @error('heure_ramassage')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <!-- 8. Nombre de passagers -->
-                            <div>
-                                <label for="nb_valises" class="block mb-2">Nombre de valises</label>
-                                <input type="number" name="nb_valises" id="nb_valises" min="1" max="20" value="{{ old('nb_valises') }}" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 @error('nb_valises') border-red-500 @enderror" required>
-                                @error('nb_valises')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- 9. Type de service -->
-                            <div>
-                                <label for="trip_id_reservation" class="block text-sm font-medium text-gray-700 mb-1">Sens du trajet <span class="text-red-500">*</span></label>
-                                <select id="trip_id_reservation" name="trip_id" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm @error('trip_id') border-red-500 @enderror" required>
-                                    <option value="">-- Sélectionner un trajet --</option>
-                                    @foreach($trips as $trip)
-                                        <option value="{{ $trip->id }}" {{ old('trip_id') == $trip->id ? 'selected' : '' }}>{{ $trip->departure }} - {{ $trip->destination }}</option>
-                                    @endforeach
-                                </select>
-                                @error('trip_id')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="tarif_reservation" class="block text-sm font-medium text-gray-700 mb-1">Tarif estimé</label>
-                                <input type="text" id="tarif_reservation" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100" readonly>
-                            </div>
-
-                            <!-- Bouton -->
-                            <div class="md:col-span-2">
-                                <button type="submit" id="submit-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-                                    <span class="submit-text">Finaliser la réservation</span>
-                                    <i class="fas fa-spinner fa-spin hidden submit-spinner ml-2"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Section Compte Client -->
     <section id="compte" class="py-20 bg-gray-50">
