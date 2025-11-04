@@ -132,7 +132,14 @@ class ReservationController extends Controller
         ]);
 
         // Assurez-vous que la réservation est chargée avec les relations nécessaires
-        $reservation->load(['client']);
+        $reservation->load(['client', 'trip']);
+        // Ajouter au calendrier (même si en attente)
+        try {
+            $this->addReservationToCalendar($reservation);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de l\'ajout au calendrier lors de la création: ' . $e->getMessage());
+            // Continue même si l'ajout au calendrier échoue
+        }
         // Envoi des e-mails de réservation
         $this->envoyerEmailReservation($reservation, 'created');
 
@@ -223,7 +230,14 @@ class ReservationController extends Controller
         ]);
 
          // Assurez-vous que la réservation est chargée avec les relations nécessaires
-        $reservation->load(['client']);
+        $reservation->load(['client', 'trip']);
+        // Ajouter au calendrier (même si en attente)
+        try {
+            $this->addReservationToCalendar($reservation);
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de l\'ajout au calendrier lors de la création par agent: ' . $e->getMessage());
+            // Continue même si l'ajout au calendrier échoue
+        }
         // Envoi des e-mails de réservation
         $this->envoyerEmailReservation($reservation, 'created');
 
@@ -304,7 +318,7 @@ class ReservationController extends Controller
         }
 
         // Recharger les relations après la mise à jour
-        $reservation->load(['client', 'carDriver.chauffeur']);
+        $reservation->load(['client', 'carDriver.chauffeur', 'trip']);
 
         // Créer une Course automatiquement lors de la confirmation
         if (!$reservation->course) {
@@ -317,11 +331,11 @@ class ReservationController extends Controller
         // Envoyer les e-mails lors de la confirmation
         $this->envoyerEmailReservation($reservation, 'confirmée');
 
-        // Ajouter à Google Calendar
+        // Mettre à jour l'événement dans Google Calendar (ajoute les infos du chauffeur)
         try {
-            $this->addToGoogleCalendar($reservation);
+            $this->updateReservationInCalendar($reservation);
         } catch (\Exception $e) {
-            \Log::error('Erreur lors de l\'ajout à Google Calendar: ' . $e->getMessage());
+            \Log::error('Erreur lors de la mise à jour dans Google Calendar: ' . $e->getMessage());
             // Continuer même si Google Calendar échoue
         }
 
@@ -602,90 +616,277 @@ try {
         return view('reservations.confirmed', compact('reservations'));
     }
 
-    private function addToGoogleCalendar($reservation)
+    /**
+     * Ajoute une réservation au calendrier Google Calendar
+     * Fonctionne même si la réservation est en attente (sans chauffeur)
+     */
+    private function addReservationToCalendar($reservation)
     {
-        // Vérifications de sécurité
-        if (!$reservation->client) {
-            \Log::error('Réservation sans client: ' . $reservation->id);
-            return false;
-        }
-
-        if (!$reservation->carDriver || !$reservation->carDriver->chauffeur) {
-            \Log::error('Réservation sans chauffeur assigné: ' . $reservation->id);
-            return false;
+        // Vérifications de base
+        if (!$reservation->date || !$reservation->heure_ramassage) {
+            \Log::error('Réservation sans date ou heure: ' . $reservation->id);
+            return null;
         }
 
         if (!$reservation->trip) {
             \Log::error('Réservation sans trajet: ' . $reservation->id);
-            return false;
+            return null;
         }
 
-        $client = $reservation->client;
-        $chauffeur = $reservation->carDriver->chauffeur;
-        $fly_number = $reservation->numero_vol;
-        $clientName = "{$client->first_name} {$client->last_name}";
-        $clientPhone = $client->phone_number ?? 'Non renseigné';
-        $driverName = "{$chauffeur->first_name}";
-        $nb_personnes = "{$reservation->nb_personnes}";
-        $nb_valises = "{$reservation->nb_valises}";
-        $tarif = "{$reservation->tarif}";
-        $heure_ramassage = "{$reservation->heure_ramassage}";
-        $clientSummary = " $driverName/ {$reservation->trip->departure}{$reservation->trip->destination}/ $heure_ramassage/";
-        $description = "Réservation avec $clientName
-        Téléphone : $clientPhone
-        Numéro vol : $fly_number
-        nb_personnes : $nb_personnes
-        nb_valises : $nb_valises
-        tarif : $tarif";
+        // Récupération des informations
+        $clientName = $reservation->client 
+            ? "{$reservation->client->first_name} {$reservation->client->last_name}" 
+            : ($reservation->first_name && $reservation->last_name 
+                ? "{$reservation->first_name} {$reservation->last_name}" 
+                : "Réservation #{$reservation->id}");
 
-    // Formatage sécurisé des dates
-        $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
-        $end = $start->copy()->addHour();
+        $clientPhone = ($reservation->client && $reservation->client->phone_number) 
+            ? $reservation->client->phone_number 
+            : ($reservation->phone_number ?? 'Non renseigné');
 
-        $googleClient = new \Google_Client();
-        $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
-        $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
-        $googleClient->setAccessType('offline');
-
-        $tokenPath = storage_path('app/google-calendar/token.json');
-        if (!file_exists($tokenPath)) {
-            throw new \Exception("Le fichier de jeton n'existe pas. Veuillez authentifier votre application.");
+        // Si la réservation est confirmée et a un chauffeur, inclure les infos du chauffeur
+        $isConfirmed = in_array(strtolower($reservation->status), ['confirmée', 'confirmee']);
+        $hasDriver = $reservation->carDriver && $reservation->carDriver->chauffeur;
+        
+        if ($isConfirmed && $hasDriver) {
+            $driverName = $reservation->carDriver->chauffeur->first_name;
+            $summary = "{$driverName} / {$reservation->trip->departure} → {$reservation->trip->destination} / {$reservation->heure_ramassage}";
+        } else {
+            // En attente ou sans chauffeur
+            $summary = "Réservation en attente / {$reservation->trip->departure} → {$reservation->trip->destination} / {$reservation->heure_ramassage}";
         }
 
-        $accessToken = json_decode(file_get_contents($tokenPath), true);
-        $googleClient->setAccessToken($accessToken);
+        $description = "Réservation avec {$clientName}\n";
+        $description .= "Téléphone : {$clientPhone}\n";
+        if ($reservation->numero_vol) {
+            $description .= "Numéro vol : {$reservation->numero_vol}\n";
+        }
+        $description .= "Nb personnes : {$reservation->nb_personnes}\n";
+        $description .= "Nb valises : {$reservation->nb_valises}\n";
+        $description .= "Tarif : {$reservation->tarif} FCFA\n";
+        $description .= "Statut : {$reservation->status}";
+        
+        if ($isConfirmed && $hasDriver) {
+            $description .= "\nChauffeur : {$driverName}";
+        }
 
-        if ($googleClient->isAccessTokenExpired()) {
-            if (isset($accessToken['refresh_token'])) {
-                $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
-                file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
-            } else {
-                throw new \Exception("Le jeton d'accès a expiré et aucun refresh token n'est disponible.");
+        // Formatage des dates
+        try {
+            $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
+            $end = $start->copy()->addHour();
+        } catch (\Exception $e) {
+            \Log::error('Erreur formatage date réservation #' . $reservation->id . ': ' . $e->getMessage());
+            return null;
+        }
+
+        try {
+            $googleClient = new \Google_Client();
+            $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+            $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
+            $googleClient->setAccessType('offline');
+
+            $tokenPath = storage_path('app/google-calendar/token.json');
+            if (!file_exists($tokenPath)) {
+                \Log::warning('Token Google Calendar manquant pour réservation #' . $reservation->id);
+                return null;
+            }
+
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $googleClient->setAccessToken($accessToken);
+
+            if ($googleClient->isAccessTokenExpired()) {
+                if (isset($accessToken['refresh_token'])) {
+                    $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
+                    file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
+                } else {
+                    \Log::warning('Token Google Calendar expiré pour réservation #' . $reservation->id);
+                    return null;
+                }
+            }
+
+            $service = new \Google_Service_Calendar($googleClient);
+            $calendarId = config('services.google_calendar.calendar_id');
+
+            $event = new \Google_Service_Calendar_Event([
+                'summary' => $summary,
+                'description' => $description,
+                'start' => [
+                    'dateTime' => $start->toIso8601String(),
+                    'timeZone' => config('services.google_calendar.timezone', 'Africa/Dakar'),
+                ],
+                'end' => [
+                    'dateTime' => $end->toIso8601String(),
+                    'timeZone' => config('services.google_calendar.timezone', 'Africa/Dakar'),
+                ],
+                'extendedProperties' => [
+                    'shared' => [
+                        'reservation_id' => (string)$reservation->id,
+                        'client_id' => $reservation->client_id ? (string)$reservation->client_id : '',
+                        'chauffeur_id' => ($reservation->carDriver && $reservation->carDriver->chauffeur) ? (string)$reservation->carDriver->chauffeur->id : '',
+                    ]
+                ]
+            ]);
+
+            $createdEvent = $service->events->insert($calendarId, $event);
+            
+            // Stocker l'ID de l'événement Google Calendar dans la réservation
+            if ($createdEvent && $createdEvent->getId()) {
+                // On pourrait ajouter un champ google_event_id dans la table reservations si nécessaire
+                // Pour l'instant, on le log
+                \Log::info('Événement Google Calendar créé pour réservation #' . $reservation->id . ' - Event ID: ' . $createdEvent->getId());
+            }
+
+            return $createdEvent ? $createdEvent->getId() : null;
+        } catch (\Google_Service_Exception $e) {
+            \Log::error('Erreur Google Calendar pour réservation #' . $reservation->id . ': ' . $e->getMessage());
+            return null;
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de l\'ajout au calendrier pour réservation #' . $reservation->id . ': ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Met à jour une réservation dans Google Calendar
+     * Utilisé quand on confirme une réservation (ajoute les infos du chauffeur)
+     */
+    private function updateReservationInCalendar($reservation, $googleEventId = null)
+    {
+        // Si pas d'ID d'événement, chercher dans Google Calendar via l'ID de réservation
+        if (!$googleEventId) {
+            try {
+                $googleClient = $this->getGoogleCalendarClient();
+                if (!$googleClient) {
+                    return false;
+                }
+
+                $service = new \Google_Service_Calendar($googleClient);
+                $calendarId = config('services.google_calendar.calendar_id');
+                
+                // Chercher l'événement en parcourant les événements récents (30 derniers jours)
+                $timeMin = Carbon::now()->subDays(30)->toIso8601String();
+                $timeMax = Carbon::now()->addDays(365)->toIso8601String();
+                
+                $events = $service->events->listEvents($calendarId, [
+                    'timeMin' => $timeMin,
+                    'timeMax' => $timeMax,
+                    'maxResults' => 500,
+                ]);
+
+                foreach ($events->getItems() as $event) {
+                    $extendedProps = $event->getExtendedProperties();
+                    $sharedProps = $extendedProps ? $extendedProps->getShared() : [];
+                    if (isset($sharedProps['reservation_id']) && $sharedProps['reservation_id'] == (string)$reservation->id) {
+                        $googleEventId = $event->getId();
+                        break;
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Erreur lors de la recherche de l\'événement pour réservation #' . $reservation->id . ': ' . $e->getMessage());
             }
         }
 
-        $service = new \Google_Service_Calendar($googleClient);
-        $calendarId = config('services.google_calendar.calendar_id');
+        // Si toujours pas d'ID, créer un nouvel événement
+        if (!$googleEventId) {
+            return $this->addReservationToCalendar($reservation) !== null;
+        }
 
-        $event = new \Google_Service_Calendar_Event([
-            'summary' => $clientSummary,
-            'description' => $description,
-        'start' => [
-                'dateTime' => $start->toIso8601String(),
-                'timeZone' => config('services.google_calendar.timezone'),
-            ],
-        'end' => [
-                'dateTime' => $end->toIso8601String(),
-                'timeZone' => config('services.google_calendar.timezone'),
-            ],
-        ]);
-
+        // Mettre à jour l'événement existant
         try {
-            $service->events->insert($calendarId, $event);
+            $googleClient = $this->getGoogleCalendarClient();
+            if (!$googleClient) {
+                return false;
+            }
+
+            $service = new \Google_Service_Calendar($googleClient);
+            $calendarId = config('services.google_calendar.calendar_id');
+            
+            // Récupérer l'événement existant
+            $event = $service->events->get($calendarId, $googleEventId);
+
+            // Mettre à jour les informations
+            $clientName = $reservation->client 
+                ? "{$reservation->client->first_name} {$reservation->client->last_name}" 
+                : ($reservation->first_name && $reservation->last_name 
+                    ? "{$reservation->first_name} {$reservation->last_name}" 
+                    : "Réservation #{$reservation->id}");
+
+            $driverName = ($reservation->carDriver && $reservation->carDriver->chauffeur)
+                ? $reservation->carDriver->chauffeur->first_name
+                : 'Non assigné';
+
+            $summary = "{$driverName} / {$reservation->trip->departure} → {$reservation->trip->destination} / {$reservation->heure_ramassage}";
+
+            $clientPhone = ($reservation->client && $reservation->client->phone_number) 
+                ? $reservation->client->phone_number 
+                : ($reservation->phone_number ?? 'Non renseigné');
+
+            $description = "Réservation avec {$clientName}\n";
+            $description .= "Téléphone : {$clientPhone}\n";
+            if ($reservation->numero_vol) {
+                $description .= "Numéro vol : {$reservation->numero_vol}\n";
+            }
+            $description .= "Nb personnes : {$reservation->nb_personnes}\n";
+            $description .= "Nb valises : {$reservation->nb_valises}\n";
+            $description .= "Tarif : {$reservation->tarif} FCFA\n";
+            $description .= "Statut : {$reservation->status}\n";
+            $description .= "Chauffeur : {$driverName}";
+
+            $event->setSummary($summary);
+            $event->setDescription($description);
+            
+            // Mettre à jour le chauffeur_id dans extendedProperties
+            $extendedProps = $event->getExtendedProperties();
+            if (!$extendedProps) {
+                $extendedProps = new \Google_Service_Calendar_EventExtendedProperties();
+            }
+            $sharedProps = $extendedProps->getShared() ?: [];
+            if ($reservation->carDriver && $reservation->carDriver->chauffeur) {
+                $sharedProps['chauffeur_id'] = (string)$reservation->carDriver->chauffeur->id;
+            }
+            $extendedProps->setShared($sharedProps);
+            $event->setExtendedProperties($extendedProps);
+
+            $service->events->update($calendarId, $googleEventId, $event);
             return true;
-        } catch (\Google_Service_Exception $e) {
-            \Log::error('Erreur Google Calendar : ' . $e->getMessage());
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors de la mise à jour de l\'événement pour réservation #' . $reservation->id . ': ' . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Helper pour obtenir le client Google Calendar
+     */
+    private function getGoogleCalendarClient()
+    {
+        try {
+            $googleClient = new \Google_Client();
+            $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+            $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
+            $googleClient->setAccessType('offline');
+
+            $tokenPath = storage_path('app/google-calendar/token.json');
+            if (!file_exists($tokenPath)) {
+                return null;
+            }
+
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $googleClient->setAccessToken($accessToken);
+
+            if ($googleClient->isAccessTokenExpired()) {
+                if (isset($accessToken['refresh_token'])) {
+                    $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
+                    file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
+                } else {
+                    return null;
+                }
+            }
+
+            return $googleClient;
+        } catch (\Exception $e) {
+            \Log::error('Erreur création client Google Calendar: ' . $e->getMessage());
+            return null;
         }
     }
 
@@ -936,57 +1137,144 @@ public function showCalendar()
 {
     $user = auth()->user();
 
-    $googleClient = new \Google_Client();
-    $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
-    $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
-    $googleClient->setAccessType('offline');
-
-    $tokenPath = storage_path('app/google-calendar/token.json');
-    if (!file_exists($tokenPath)) {
-        throw new \Exception("Token manquant.");
-    }
-
-    $accessToken = json_decode(file_get_contents($tokenPath), true);
-    $googleClient->setAccessToken($accessToken);
-
-    if ($googleClient->isAccessTokenExpired()) {
-        if (isset($accessToken['refresh_token'])) {
-            $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
-            file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
-        } else {
-            throw new \Exception("Jeton expiré.");
-        }
-    }
-
-    $service = new \Google_Service_Calendar($googleClient);
-    $calendarId = config('services.google_calendar.calendar_id');
-    $googleEvents = $service->events->listEvents($calendarId);
-
     $events = [];
-    foreach ($googleEvents->getItems() as $event) {
-        // Récupérer les propriétés customisées
-        $extendedProps = $event->getExtendedProperties();
-        $sharedProps = $extendedProps ? $extendedProps->getShared() : [];
 
-        // Extraire client_id ou chauffeur_id si présents
-        $clientId = isset($sharedProps['client_id']) ? $sharedProps['client_id'] : null;
-        $chauffeurId = isset($sharedProps['chauffeur_id']) ? $sharedProps['chauffeur_id'] : null;
+    // Récupérer les événements depuis Google Calendar si possible
+    try {
+        $googleClient = new \Google_Client();
+        $googleClient->setAuthConfig(storage_path('app/google-calendar/credentials.json'));
+        $googleClient->addScope(\Google_Service_Calendar::CALENDAR);
+        $googleClient->setAccessType('offline');
 
-        // Filtrage selon l'utilisateur connecté
-        if ($user->hasRole('chauffeur') && $chauffeurId != $user->id) {
-            continue; // Non concerné
+        $tokenPath = storage_path('app/google-calendar/token.json');
+        if (file_exists($tokenPath)) {
+            $accessToken = json_decode(file_get_contents($tokenPath), true);
+            $googleClient->setAccessToken($accessToken);
+
+            if ($googleClient->isAccessTokenExpired()) {
+                if (isset($accessToken['refresh_token'])) {
+                    $googleClient->fetchAccessTokenWithRefreshToken($accessToken['refresh_token']);
+                    file_put_contents($tokenPath, json_encode($googleClient->getAccessToken()));
+                }
+            }
+
+            if (!$googleClient->isAccessTokenExpired()) {
+                $service = new \Google_Service_Calendar($googleClient);
+                $calendarId = config('services.google_calendar.calendar_id');
+                $googleEvents = $service->events->listEvents($calendarId);
+
+                foreach ($googleEvents->getItems() as $event) {
+                    // Récupérer les propriétés customisées
+                    $extendedProps = $event->getExtendedProperties();
+                    $sharedProps = $extendedProps ? $extendedProps->getShared() : [];
+
+                    // Extraire client_id ou chauffeur_id si présents
+                    $clientId = isset($sharedProps['client_id']) ? $sharedProps['client_id'] : null;
+                    $chauffeurId = isset($sharedProps['chauffeur_id']) ? $sharedProps['chauffeur_id'] : null;
+
+                    // Filtrage selon l'utilisateur connecté
+                    if ($user->hasRole('chauffeur') && $chauffeurId != $user->id) {
+                        continue; // Non concerné
+                    }
+                    if ($user->hasRole('client') && $clientId != $user->id) {
+                        continue; // Non concerné
+                    } 
+                    // Si c'est un admin ou autre, affiche tout
+
+                    $events[] = [
+                        'title' => $event->getSummary(),
+                        'start' => $event->getStart()->getDateTime() ?: $event->getStart()->getDate(),
+                        'end' => $event->getEnd()->getDateTime() ?: $event->getEnd()->getDate(),
+                        'description' => $event->getDescription(),
+                    ];
+                }
+            }
         }
-        if ($user->hasRole('client') && $clientId != $user->id) {
-            continue; // Non concerné
-        }
-        // Si c'est un admin ou autre, affiche tout
+    } catch (\Exception $e) {
+        \Log::error('Erreur lors de la récupération des événements Google Calendar: ' . $e->getMessage());
+        // Continue même si Google Calendar échoue
+    }
 
-        $events[] = [
-            'title' => $event->getSummary(),
-            'start' => $event->getStart()->getDateTime() ?: $event->getStart()->getDate(),
-            'end' => $event->getEnd()->getDateTime() ?: $event->getEnd()->getDate(),
-            'description' => $event->getDescription(),
-        ];
+    // Récupérer les réservations (confirmées ET en attente) depuis la base de données
+    $query = Reservation::with(['client', 'carDriver.chauffeur', 'trip'])
+        ->where(function($q) {
+            $q->where('status', 'confirmée')
+              ->orWhere('status', 'Confirmée')
+              ->orWhere('status', 'En_attente');
+        });
+
+    // Filtrage selon l'utilisateur connecté
+    if ($user->hasRole('chauffeur')) {
+        $carDriverIds = CarDriver::where('chauffeur_id', $user->id)->pluck('id');
+        $query->whereIn('cardriver_id', $carDriverIds);
+    } elseif ($user->hasRole('client')) {
+        $query->where('client_id', $user->id);
+    }
+    // Si c'est un admin ou autre, affiche tout
+
+    $reservations = $query->get();
+
+    // Ajouter les réservations (confirmées ET en attente) aux événements
+    foreach ($reservations as $reservation) {
+        if (!$reservation->date || !$reservation->heure_ramassage) {
+            continue;
+        }
+
+        $clientName = $reservation->client 
+            ? "{$reservation->client->first_name} {$reservation->client->last_name}" 
+            : ($reservation->first_name && $reservation->last_name 
+                ? "{$reservation->first_name} {$reservation->last_name} (Prospect)" 
+                : "Réservation #{$reservation->id}");
+
+        $isConfirmed = in_array(strtolower($reservation->status), ['confirmée', 'confirmee']);
+        $hasDriver = $reservation->carDriver && $reservation->carDriver->chauffeur;
+
+        $driverName = $hasDriver
+            ? $reservation->carDriver->chauffeur->first_name
+            : 'Non assigné';
+
+        $tripInfo = $reservation->trip
+            ? "{$reservation->trip->departure} → {$reservation->trip->destination}"
+            : 'Trajet non défini';
+
+        // Titre différent selon le statut
+        if ($isConfirmed && $hasDriver) {
+            $title = "{$driverName} / {$tripInfo} / {$reservation->heure_ramassage}";
+        } else {
+            $title = "Réservation en attente / {$tripInfo} / {$reservation->heure_ramassage}";
+        }
+
+        $description = "Réservation avec {$clientName}\n";
+        if ($reservation->client && $reservation->client->phone_number) {
+            $description .= "Téléphone : {$reservation->client->phone_number}\n";
+        } elseif ($reservation->phone_number) {
+            $description .= "Téléphone : {$reservation->phone_number}\n";
+        }
+        if ($reservation->numero_vol) {
+            $description .= "Numéro vol : {$reservation->numero_vol}\n";
+        }
+        $description .= "Nb personnes : {$reservation->nb_personnes}\n";
+        $description .= "Nb valises : {$reservation->nb_valises}\n";
+        $description .= "Tarif : {$reservation->tarif} FCFA\n";
+        $description .= "Statut : {$reservation->status}";
+        
+        if ($isConfirmed && $hasDriver) {
+            $description .= "\nChauffeur : {$driverName}";
+        }
+
+        try {
+            $start = Carbon::parse("{$reservation->date} {$reservation->heure_ramassage}");
+            $end = $start->copy()->addHour();
+
+            $events[] = [
+                'title' => $title,
+                'start' => $start->toIso8601String(),
+                'end' => $end->toIso8601String(),
+                'description' => $description,
+            ];
+        } catch (\Exception $e) {
+            \Log::error('Erreur lors du formatage de la réservation #' . $reservation->id . ': ' . $e->getMessage());
+        }
     }
 
     return view('calendars.calendar', compact('events'));
@@ -1040,6 +1328,15 @@ public function showCalendar()
                 'cardriver_id' => null, // PAS DE CHAUFFEUR ASSIGNÉ ENCORE
             ]);
 
+            // Charger les relations nécessaires
+            $reservation->load(['trip']);
+            // Ajouter au calendrier (même si en attente)
+            try {
+                $this->addReservationToCalendar($reservation);
+            } catch (\Exception $e) {
+                \Log::error('Erreur lors de l\'ajout au calendrier lors de la création par prospect: ' . $e->getMessage());
+                // Continue même si l'ajout au calendrier échoue
+            }
             // Envoi des e-mails de notification pour prospects
             $this->envoyerEmailProspect($reservation);
 
